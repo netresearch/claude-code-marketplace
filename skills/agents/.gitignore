@@ -1,0 +1,19 @@
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Temporary
+*.tmp
+*.bak
+.cache/
+
+# Test output
+test-output/
+*.test.md
