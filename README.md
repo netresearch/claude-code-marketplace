@@ -10,6 +10,23 @@ Claude Code plugins for TYPO3 development and technical documentation.
 
 Then use `/plugin` to browse and install plugins.
 
+## Architecture
+
+This marketplace uses **git submodules** to reference individual skill repositories. Each skill is maintained in its own repository and linked here via submodules in the `skills/` directory.
+
+**Benefits:**
+- ✅ Single source of truth - each skill in its own repository
+- ✅ Independent versioning and releases
+- ✅ No duplicate code
+- ✅ Easy to update individual skills
+- ✅ Proper version tracking via submodule commits
+
+**Skill Repositories:**
+- [typo3-docs-skill](https://github.com/netresearch/typo3-docs-skill)
+- [typo3-testing-skill](https://github.com/netresearch/typo3-testing-skill)
+- [typo3-conformance-skill](https://github.com/netresearch/typo3-conformance-skill)
+- [netresearch-branding-skill](https://github.com/netresearch/netresearch-branding-skill)
+
 ## Available Plugins
 
 ### TYPO3 Documentation
