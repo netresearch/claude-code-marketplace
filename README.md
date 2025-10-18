@@ -22,6 +22,20 @@ Create and maintain TYPO3 extension documentation following official TYPO3 stand
 - Local rendering and validation
 - TYPO3 Intercept deployment setup
 
+### TYPO3 Testing
+Create and manage TYPO3 extension tests with comprehensive testing infrastructure.
+
+**Repository:** https://github.com/netresearch/typo3-testing-skill
+
+**Features:**
+- Unit, functional, and acceptance testing support
+- PHPUnit configurations with strict quality settings
+- Docker Compose for acceptance tests
+- Automated test generation scripts
+- CI/CD templates (GitHub Actions, GitLab CI)
+- AGENTS.md templates for test context
+- Quality tools integration (PHPStan, Rector, php-cs-fixer)
+
 ---
 
 **Maintained by:** Netresearch DTT GmbH, Leipzig
