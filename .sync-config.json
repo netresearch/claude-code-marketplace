@@ -1,0 +1,39 @@
+{
+  "skills": [
+    {
+      "name": "typo3-docs",
+      "repository": "https://github.com/netresearch/typo3-docs-skill.git",
+      "target_path": "skills/typo3-docs",
+      "marketplace_name": "typo3-docs"
+    },
+    {
+      "name": "typo3-conformance",
+      "repository": "https://github.com/netresearch/typo3-conformance-skill.git",
+      "target_path": "skills/typo3-conformance",
+      "marketplace_name": "typo3-conformance"
+    },
+    {
+      "name": "typo3-testing",
+      "repository": "https://github.com/netresearch/typo3-testing-skill.git",
+      "target_path": "skills/typo3-testing",
+      "marketplace_name": "typo3-testing"
+    },
+    {
+      "name": "netresearch-branding",
+      "repository": "https://github.com/netresearch/netresearch-branding-skill.git",
+      "target_path": "skills/netresearch-branding",
+      "marketplace_name": "netresearch-branding"
+    }
+  ],
+  "sync_settings": {
+    "exclude_patterns": [
+      ".git",
+      ".github",
+      "node_modules",
+      ".DS_Store"
+    ],
+    "version_source": "SKILL.md",
+    "version_pattern": "## Skill Metadata",
+    "marketplace_manifest": ".claude-plugin/marketplace.json"
+  }
+}

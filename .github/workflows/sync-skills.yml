@@ -1,0 +1,209 @@
+name: Sync Skills from Source Repositories
+
+on:
+  # Primary trigger: Immediate sync when skill repositories update
+  repository_dispatch:
+    types: [skill-updated]
+
+  # Backup trigger: Weekly sync to catch any missed updates
+  schedule:
+    - cron: '0 2 * * 1'  # Every Monday at 2 AM UTC
+
+  # Manual trigger: For testing or emergency sync
+  workflow_dispatch:
+    inputs:
+      force_sync:
+        description: 'Force sync even if no changes detected'
+        required: false
+        default: 'false'
+
+jobs:
+  sync-skills:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout marketplace repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+
+      - name: Configure Git
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+
+      - name: Load sync configuration
+        id: config
+        run: |
+          echo "config<<EOF" >> $GITHUB_OUTPUT
+          cat .sync-config.json >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: Sync typo3-docs skill
+        run: |
+          echo "=== Syncing typo3-docs-skill ==="
+
+          # Clone skill repository to temp directory
+          git clone --depth 1 https://github.com/netresearch/typo3-docs-skill.git .sync-temp/typo3-docs
+
+          # Remove .git directory to avoid nested repos
+          rm -rf .sync-temp/typo3-docs/.git
+
+          # Remove existing skill directory contents (keep directory)
+          rm -rf skills/typo3-docs/*
+          rm -rf skills/typo3-docs/.[!.]*
+
+          # Copy skill contents to marketplace
+          cp -r .sync-temp/typo3-docs/* skills/typo3-docs/
+          cp -r .sync-temp/typo3-docs/.[!.]* skills/typo3-docs/ 2>/dev/null || true
+
+          # Extract version from SKILL.md
+          if [ -f skills/typo3-docs/SKILL.md ]; then
+            VERSION=$(grep -A 5 "## Skill Metadata" skills/typo3-docs/SKILL.md | grep "version:" | sed 's/.*version: *//' | tr -d '"' || echo "1.0.0")
+            echo "TYPO3_DOCS_VERSION=$VERSION" >> $GITHUB_ENV
+          else
+            echo "TYPO3_DOCS_VERSION=1.0.0" >> $GITHUB_ENV
+          fi
+
+          echo "✓ typo3-docs synced (version: $VERSION)"
+
+      - name: Sync typo3-conformance skill
+        run: |
+          echo "=== Syncing typo3-conformance-skill ==="
+
+          git clone --depth 1 https://github.com/netresearch/typo3-conformance-skill.git .sync-temp/typo3-conformance
+          rm -rf .sync-temp/typo3-conformance/.git
+          rm -rf skills/typo3-conformance/*
+          rm -rf skills/typo3-conformance/.[!.]*
+          cp -r .sync-temp/typo3-conformance/* skills/typo3-conformance/
+          cp -r .sync-temp/typo3-conformance/.[!.]* skills/typo3-conformance/ 2>/dev/null || true
+
+          if [ -f skills/typo3-conformance/SKILL.md ]; then
+            VERSION=$(grep -A 5 "## Skill Metadata" skills/typo3-conformance/SKILL.md | grep "version:" | sed 's/.*version: *//' | tr -d '"' || echo "1.0.0")
+            echo "TYPO3_CONFORMANCE_VERSION=$VERSION" >> $GITHUB_ENV
+          else
+            echo "TYPO3_CONFORMANCE_VERSION=1.0.0" >> $GITHUB_ENV
+          fi
+
+          echo "✓ typo3-conformance synced (version: $VERSION)"
+
+      - name: Sync typo3-testing skill
+        run: |
+          echo "=== Syncing typo3-testing-skill ==="
+
+          git clone --depth 1 https://github.com/netresearch/typo3-testing-skill.git .sync-temp/typo3-testing
+          rm -rf .sync-temp/typo3-testing/.git
+          rm -rf skills/typo3-testing/*
+          rm -rf skills/typo3-testing/.[!.]*
+          cp -r .sync-temp/typo3-testing/* skills/typo3-testing/
+          cp -r .sync-temp/typo3-testing/.[!.]* skills/typo3-testing/ 2>/dev/null || true
+
+          if [ -f skills/typo3-testing/SKILL.md ]; then
+            VERSION=$(grep -A 5 "## Skill Metadata" skills/typo3-testing/SKILL.md | grep "version:" | sed 's/.*version: *//' | tr -d '"' || echo "1.0.0")
+            echo "TYPO3_TESTING_VERSION=$VERSION" >> $GITHUB_ENV
+          else
+            echo "TYPO3_TESTING_VERSION=1.0.0" >> $GITHUB_ENV
+          fi
+
+          echo "✓ typo3-testing synced (version: $VERSION)"
+
+      - name: Sync netresearch-branding skill
+        run: |
+          echo "=== Syncing netresearch-branding-skill ==="
+
+          git clone --depth 1 https://github.com/netresearch/netresearch-branding-skill.git .sync-temp/netresearch-branding
+          rm -rf .sync-temp/netresearch-branding/.git
+          rm -rf skills/netresearch-branding/*
+          rm -rf skills/netresearch-branding/.[!.]*
+          cp -r .sync-temp/netresearch-branding/* skills/netresearch-branding/
+          cp -r .sync-temp/netresearch-branding/.[!.]* skills/netresearch-branding/ 2>/dev/null || true
+
+          if [ -f skills/netresearch-branding/SKILL.md ]; then
+            VERSION=$(grep -A 5 "## Skill Metadata" skills/netresearch-branding/SKILL.md | grep "version:" | sed 's/.*version: *//' | tr -d '"' || echo "1.0.0")
+            echo "NETRESEARCH_BRANDING_VERSION=$VERSION" >> $GITHUB_ENV
+          else
+            echo "NETRESEARCH_BRANDING_VERSION=1.0.0" >> $GITHUB_ENV
+          fi
+
+          echo "✓ netresearch-branding synced (version: $VERSION)"
+
+      - name: Update marketplace.json versions
+        run: |
+          echo "=== Updating marketplace.json with latest versions ==="
+
+          # Use jq to update versions in marketplace.json
+          jq --arg v1 "$TYPO3_DOCS_VERSION" \
+             --arg v2 "$TYPO3_CONFORMANCE_VERSION" \
+             --arg v3 "$TYPO3_TESTING_VERSION" \
+             --arg v4 "$NETRESEARCH_BRANDING_VERSION" \
+             '(.plugins[] | select(.name == "typo3-docs") | .version) = $v1 |
+              (.plugins[] | select(.name == "typo3-conformance") | .version) = $v2 |
+              (.plugins[] | select(.name == "typo3-testing") | .version) = $v3 |
+              (.plugins[] | select(.name == "netresearch-branding") | .version) = $v4' \
+             .claude-plugin/marketplace.json > .claude-plugin/marketplace.json.tmp
+
+          mv .claude-plugin/marketplace.json.tmp .claude-plugin/marketplace.json
+
+          echo "✓ marketplace.json updated"
+          echo "  - typo3-docs: $TYPO3_DOCS_VERSION"
+          echo "  - typo3-conformance: $TYPO3_CONFORMANCE_VERSION"
+          echo "  - typo3-testing: $TYPO3_TESTING_VERSION"
+          echo "  - netresearch-branding: $NETRESEARCH_BRANDING_VERSION"
+
+      - name: Cleanup temporary directories
+        run: |
+          rm -rf .sync-temp
+          echo "✓ Temporary directories cleaned"
+
+      - name: Check for changes
+        id: changes
+        run: |
+          git add -A
+          if git diff --staged --quiet; then
+            echo "has_changes=false" >> $GITHUB_OUTPUT
+            echo "ℹ️  No changes detected"
+          else
+            echo "has_changes=true" >> $GITHUB_OUTPUT
+            echo "✓ Changes detected, will commit"
+            git diff --staged --stat
+          fi
+
+      - name: Commit and push changes
+        if: steps.changes.outputs.has_changes == 'true' || github.event.inputs.force_sync == 'true'
+        run: |
+          COMMIT_MSG="chore: sync skills from source repositories
+
+Synced versions:
+- typo3-docs: $TYPO3_DOCS_VERSION
+- typo3-conformance: $TYPO3_CONFORMANCE_VERSION
+- typo3-testing: $TYPO3_TESTING_VERSION
+- netresearch-branding: $NETRESEARCH_BRANDING_VERSION"
+
+          if [ "${{ github.event_name }}" = "repository_dispatch" ]; then
+            COMMIT_MSG="$COMMIT_MSG
+
+Triggered by: repository_dispatch event"
+          elif [ "${{ github.event_name }}" = "schedule" ]; then
+            COMMIT_MSG="$COMMIT_MSG
+
+Triggered by: scheduled weekly sync"
+          else
+            COMMIT_MSG="$COMMIT_MSG
+
+Triggered by: manual workflow dispatch"
+          fi
+
+          git commit -m "$COMMIT_MSG"
+          git push origin main
+
+          echo "✓ Changes committed and pushed to main"
+
+      - name: Summary
+        run: |
+          echo "=== Skill Sync Complete ==="
+          echo "✓ All 4 skills synchronized successfully"
+          echo ""
+          echo "Next steps:"
+          echo "1. Skills are now available in marketplace"
+          echo "2. Users will receive updates on next Claude Code marketplace refresh"

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../../vendor/phpunit/phpunit.xsd"
+    bootstrap="FunctionalTestsBootstrap.php"
+    cacheResult="false"
+    beStrictAboutTestsThatDoNotTestAnything="true"
+    beStrictAboutOutputDuringTests="true"
+    failOnDeprecation="true"
+    failOnNotice="true"
+    failOnWarning="true"
+    failOnRisky="true"
+    colors="true">
+    <testsuites>
+        <testsuite name="Functional tests">
+            <directory>../../Tests/Functional/</directory>
+        </testsuite>
+    </testsuites>
+    <php>
+        <const name="TYPO3_TESTING_FUNCTIONAL_REMOVE_ERROR_HANDLER" value="true" />
+        <env name="TYPO3_CONTEXT" value="Testing"/>
+        <env name="typo3DatabaseDriver" value="mysqli" force="true"/>
+        <env name="typo3DatabaseHost" value="localhost" force="true"/>
+        <env name="typo3DatabasePort" value="3306" force="true"/>
+        <env name="typo3DatabaseName" value="typo3_test" force="true"/>
+        <env name="typo3DatabaseUsername" value="root" force="true"/>
+        <env name="typo3DatabasePassword" value="" force="true"/>
+    </php>
+    <coverage>
+        <report>
+            <clover outputFile="../../var/log/coverage/clover.xml"/>
+            <html outputDirectory="../../var/log/coverage/html"/>
+            <text outputFile="php://stdout" showOnlySummary="true"/>
+        </report>
+    </coverage>
+</phpunit>

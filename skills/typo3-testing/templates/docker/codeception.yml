@@ -1,0 +1,39 @@
+paths:
+    tests: Tests/Acceptance
+    output: var/log/acceptance
+    data: Tests/Acceptance/_data
+    support: Tests/Acceptance/_support
+    envs: Tests/Acceptance/_envs
+
+actor_suffix: Tester
+
+extensions:
+    enabled:
+        - Codeception\Extension\RunFailed
+
+suites:
+    acceptance:
+        actor: AcceptanceTester
+        path: .
+        modules:
+            enabled:
+                - WebDriver:
+                    url: http://web:8000
+                    browser: chrome
+                    host: selenium
+                    port: 4444
+                    wait: 2
+                    window_size: 1920x1080
+                    capabilities:
+                        chromeOptions:
+                            args: ["--no-sandbox", "--disable-dev-shm-usage"]
+                - \\Helper\\Acceptance
+            config:
+                WebDriver:
+                    browser: '%BROWSER%'
+
+settings:
+    shuffle: false
+    lint: true
+    colors: true
+    memory_limit: 1024M
