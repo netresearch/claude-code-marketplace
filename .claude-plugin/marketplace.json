@@ -1,0 +1,23 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "netresearch-claude-code-marketplace",
+  "version": "1.0.0",
+  "description": "Curated Claude Code plugins for TYPO3 development and technical documentation workflows",
+  "owner": {
+    "name": "Netresearch DTT GmbH",
+    "email": "info@netresearch.de"
+  },
+  "plugins": [
+    {
+      "name": "typo3-docs",
+      "description": "Create and maintain TYPO3 extension documentation following official TYPO3 documentation standards. Includes RST syntax reference, TYPO3-specific directives, local rendering, validation, and TYPO3 Intercept deployment setup.",
+      "version": "1.0.0",
+      "author": {
+        "name": "Netresearch DTT GmbH",
+        "email": "info@netresearch.de"
+      },
+      "source": "https://github.com/netresearch/typo3-docs-skill.git",
+      "category": "development"
+    }
+  ]
+}
