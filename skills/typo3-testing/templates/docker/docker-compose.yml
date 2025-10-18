@@ -22,7 +22,7 @@ services:
       - typo3-test
 
   db:
-    image: mysql:8.0
+    image: mysql:9.4
     container_name: typo3-test-db
     environment:
       MYSQL_ROOT_PASSWORD: root
