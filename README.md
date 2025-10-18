@@ -39,6 +39,20 @@ Create and manage TYPO3 extension tests with comprehensive testing infrastructur
 - AGENTS.md templates for test context
 - Quality tools integration (PHPStan, Rector, php-cs-fixer)
 
+### TYPO3 Conformance Checker
+Evaluate TYPO3 extensions for conformance to official TYPO3 standards and best practices.
+
+**Repository:** https://github.com/netresearch/typo3-conformance-skill
+
+**Features:**
+- Automated validation against TYPO3 Extension Architecture standards
+- PSR-12 and TYPO3-specific code style enforcement
+- PHP architecture patterns validation (DI, events, Extbase)
+- Testing infrastructure assessment
+- Comprehensive conformance scoring (0-100)
+- Priority-based action items with migration guides
+- Detailed reports with specific file:line references
+
 ---
 
 **Maintained by:** Netresearch DTT GmbH, Leipzig
