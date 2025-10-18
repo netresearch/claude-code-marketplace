@@ -18,6 +18,9 @@ Create and maintain TYPO3 extension documentation following official TYPO3 stand
 **Repository:** https://github.com/netresearch/typo3-docs-skill
 
 **Features:**
+- Automated documentation extraction from code and configs
+- Priority-weighted gap analysis based on TYPO3 architecture
+- Smart documentation recommendations sorted by importance
 - RST syntax and TYPO3-specific directives
 - Local rendering and validation
 - TYPO3 Intercept deployment setup
