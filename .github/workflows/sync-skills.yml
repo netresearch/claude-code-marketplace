@@ -175,31 +175,17 @@ jobs:
       - name: Commit and push changes
         if: steps.changes.outputs.has_changes == 'true' || github.event.inputs.force_sync == 'true'
         run: |
-          COMMIT_MSG="chore: sync skills from source repositories
+          git commit -m "chore: sync skills from source repositories
 
-Synced versions:
-- typo3-docs: $TYPO3_DOCS_VERSION
-- typo3-conformance: $TYPO3_CONFORMANCE_VERSION
-- typo3-testing: $TYPO3_TESTING_VERSION
-- netresearch-branding: $NETRESEARCH_BRANDING_VERSION"
+          Synced versions:
+          - typo3-docs: $TYPO3_DOCS_VERSION
+          - typo3-conformance: $TYPO3_CONFORMANCE_VERSION
+          - typo3-testing: $TYPO3_TESTING_VERSION
+          - netresearch-branding: $NETRESEARCH_BRANDING_VERSION
 
-          if [ "${{ github.event_name }}" = "repository_dispatch" ]; then
-            COMMIT_MSG="$COMMIT_MSG
+          Triggered by: ${{ github.event_name }}"
 
-Triggered by: repository_dispatch event"
-          elif [ "${{ github.event_name }}" = "schedule" ]; then
-            COMMIT_MSG="$COMMIT_MSG
-
-Triggered by: scheduled weekly sync"
-          else
-            COMMIT_MSG="$COMMIT_MSG
-
-Triggered by: manual workflow dispatch"
-          fi
-
-          git commit -m "$COMMIT_MSG"
           git push origin main
-
           echo "✓ Changes committed and pushed to main"
 
       - name: Summary
