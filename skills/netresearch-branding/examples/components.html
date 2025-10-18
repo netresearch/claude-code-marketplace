@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Netresearch Brand Components</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;600;700&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../templates/styles.css">
+  <style>
+    .component-showcase {
+      padding: 48px 24px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .component-section {
+      margin-bottom: 64px;
+      padding: 32px;
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    }
+    .component-section h2 {
+      border-bottom: 3px solid #2F99A4;
+      padding-bottom: 12px;
+      margin-bottom: 24px;
+    }
+    .component-demo {
+      margin: 24px 0;
+      padding: 24px;
+      background: #F5F5F5;
+      border-radius: 4px;
+    }
+    .code-block {
+      background: #585961;
+      color: #fff;
+      padding: 16px;
+      border-radius: 4px;
+      overflow-x: auto;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      margin-top: 16px;
+    }
+  </style>
+</head>
+<body>
+  <div class="component-showcase">
+    <h1 style="text-align: center; margin-bottom: 48px;">Netresearch Brand Components</h1>
+
+    <!-- Buttons -->
+    <div class="component-section">
+      <h2>Buttons</h2>
+
+      <div class="component-demo">
+        <h3>Primary Buttons</h3>
+        <button class="btn-primary btn-small">Small Button</button>
+        <button class="btn-primary">Default Button</button>
+        <button class="btn-primary btn-large">Large Button</button>
+      </div>
+
+      <div class="component-demo">
+        <h3>Secondary Buttons</h3>
+        <button class="btn-secondary btn-small">Small Button</button>
+        <button class="btn-secondary">Default Button</button>
+        <button class="btn-secondary btn-large">Large Button</button>
+      </div>
+
+      <div class="component-demo" style="background: #2F99A4; color: white;">
+        <h3 style="color: white;">Outline Buttons (on dark background)</h3>
+        <button class="btn-outline btn-small">Small Button</button>
+        <button class="btn-outline">Default Button</button>
+        <button class="btn-outline btn-large">Large Button</button>
+      </div>
+
+      <div class="code-block">
+&lt;button class="btn-primary"&gt;Primary Action&lt;/button&gt;
+&lt;button class="btn-secondary"&gt;Secondary Action&lt;/button&gt;
+&lt;button class="btn-outline"&gt;Tertiary Action&lt;/button&gt;
+
+&lt;!-- Sizes --&gt;
+&lt;button class="btn-primary btn-small"&gt;Small&lt;/button&gt;
+&lt;button class="btn-primary"&gt;Default&lt;/button&gt;
+&lt;button class="btn-primary btn-large"&gt;Large&lt;/button&gt;
+      </div>
+    </div>
+
+    <!-- Cards -->
+    <div class="component-section">
+      <h2>Cards</h2>
+
+      <div class="component-demo">
+        <div class="three-column">
+          <div class="card">
+            <div class="card-content">
+              <h3 class="card-title">Simple Card</h3>
+              <p class="card-text">This is a basic card with title and text content.</p>
+              <a href="#" class="link-standalone">Learn more</a>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-content">
+              <h3 class="card-title">Card with Footer</h3>
+              <p class="card-text">This card includes a footer section with metadata.</p>
+            </div>
+            <div class="card-footer">
+              <span class="card-meta">Published: Jan 1, 2025</span>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-content">
+              <h3 class="card-title">Card with Button</h3>
+              <p class="card-text">This card has a primary action button.</p>
+              <button class="btn-primary">Take Action</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="code-block">
+&lt;div class="card"&gt;
+  &lt;div class="card-content"&gt;
+    &lt;h3 class="card-title"&gt;Card Title&lt;/h3&gt;
+    &lt;p class="card-text"&gt;Card description.&lt;/p&gt;
+    &lt;a href="#" class="link-standalone"&gt;Learn more&lt;/a&gt;
+  &lt;/div&gt;
+  &lt;div class="card-footer"&gt;
+    &lt;span class="card-meta"&gt;Metadata&lt;/span&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+      </div>
+    </div>
+
+    <!-- Typography -->
+    <div class="component-section">
+      <h2>Typography</h2>
+
+      <div class="component-demo">
+        <h1>Heading 1 - Raleway Bold 48px</h1>
+        <h2>Heading 2 - Raleway Bold 36px</h2>
+        <h3>Heading 3 - Raleway SemiBold 28px</h3>
+        <h4>Heading 4 - Raleway SemiBold 22px</h4>
+        <p class="lead">Lead paragraph - Open Sans Regular 20px with comfortable line height for improved readability.</p>
+        <p>Body text - Open Sans Regular 16px. This is the standard paragraph text used throughout the website. It maintains excellent readability with a line-height of 1.6.</p>
+        <p><small>Small text - Open Sans Regular 14px for captions and metadata.</small></p>
+      </div>
+
+      <div class="code-block">
+&lt;h1&gt;Heading 1&lt;/h1&gt;
+&lt;h2&gt;Heading 2&lt;/h2&gt;
+&lt;h3&gt;Heading 3&lt;/h3&gt;
+&lt;p class="lead"&gt;Lead paragraph&lt;/p&gt;
+&lt;p&gt;Body text&lt;/p&gt;
+&lt;small&gt;Small text&lt;/small&gt;
+      </div>
+    </div>
+
+    <!-- Links -->
+    <div class="component-section">
+      <h2>Links</h2>
+
+      <div class="component-demo">
+        <p>This is a paragraph with an <a href="#">inline link</a> within the text.</p>
+        <p><a href="#" class="link-standalone">Standalone link with arrow</a></p>
+        <p><a href="document.pdf" download>Download link with icon</a></p>
+        <p><a href="https://example.com" target="_blank">External link with icon</a></p>
+      </div>
+
+      <div class="code-block">
+&lt;!-- Inline link --&gt;
+&lt;a href="#"&gt;Link text&lt;/a&gt;
+
+&lt;!-- Standalone link with arrow --&gt;
+&lt;a href="#" class="link-standalone"&gt;Learn more&lt;/a&gt;
+
+&lt;!-- Download link --&gt;
+&lt;a href="file.pdf" download&gt;Download PDF&lt;/a&gt;
+
+&lt;!-- External link --&gt;
+&lt;a href="https://example.com" target="_blank"&gt;External&lt;/a&gt;
+      </div>
+    </div>
+
+    <!-- Forms -->
+    <div class="component-section">
+      <h2>Forms</h2>
+
+      <div class="component-demo">
+        <form style="max-width: 600px;">
+          <div class="form-group">
+            <label for="demo-name" class="form-label">Name*</label>
+            <input type="text" id="demo-name" class="form-input" placeholder="Your name" required>
+          </div>
+
+          <div class="form-group">
+            <label for="demo-email" class="form-label">Email*</label>
+            <input type="email" id="demo-email" class="form-input" placeholder="your@email.com" required>
+          </div>
+
+          <div class="form-group">
+            <label for="demo-message" class="form-label">Message*</label>
+            <textarea id="demo-message" class="form-textarea" placeholder="Your message" required></textarea>
+          </div>
+
+          <button type="submit" class="btn-primary">Submit Form</button>
+        </form>
+      </div>
+
+      <div class="code-block">
+&lt;form&gt;
+  &lt;div class="form-group"&gt;
+    &lt;label for="name" class="form-label"&gt;Name*&lt;/label&gt;
+    &lt;input type="text" id="name" class="form-input"
+           placeholder="Your name" required&gt;
+  &lt;/div&gt;
+
+  &lt;div class="form-group"&gt;
+    &lt;label for="message" class="form-label"&gt;Message*&lt;/label&gt;
+    &lt;textarea id="message" class="form-textarea"
+              placeholder="Your message" required&gt;&lt;/textarea&gt;
+  &lt;/div&gt;
+
+  &lt;button type="submit" class="btn-primary"&gt;Submit&lt;/button&gt;
+&lt;/form&gt;
+      </div>
+    </div>
+
+    <!-- Color Palette -->
+    <div class="component-section">
+      <h2>Color Palette</h2>
+
+      <div class="component-demo">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px;">
+          <div style="text-align: center;">
+            <div style="background: #2F99A4; height: 100px; border-radius: 8px; margin-bottom: 8px;"></div>
+            <strong>Turquoise Primary</strong><br>
+            <code>#2F99A4</code>
+          </div>
+          <div style="text-align: center;">
+            <div style="background: #FF4D00; height: 100px; border-radius: 8px; margin-bottom: 8px;"></div>
+            <strong>Orange Accent</strong><br>
+            <code>#FF4D00</code>
+          </div>
+          <div style="text-align: center;">
+            <div style="background: #585961; height: 100px; border-radius: 8px; margin-bottom: 8px;"></div>
+            <strong>Anthracite Text</strong><br>
+            <code>#585961</code>
+          </div>
+          <div style="text-align: center;">
+            <div style="background: #CCCDCC; height: 100px; border-radius: 8px; margin-bottom: 8px;"></div>
+            <strong>Light Grey</strong><br>
+            <code>#CCCDCC</code>
+          </div>
+          <div style="text-align: center;">
+            <div style="background: #FFFFFF; height: 100px; border-radius: 8px; margin-bottom: 8px; border: 1px solid #E5E5E5;"></div>
+            <strong>White</strong><br>
+            <code>#FFFFFF</code>
+          </div>
+        </div>
+      </div>
+
+      <div class="code-block">
+/* CSS Custom Properties */
+:root {
+  --color-primary: #2F99A4;
+  --color-accent: #FF4D00;
+  --color-text-primary: #585961;
+  --color-border: #CCCDCC;
+  --color-background: #FFFFFF;
+}
+      </div>
+    </div>
+
+    <!-- Grid Layouts -->
+    <div class="component-section">
+      <h2>Grid Layouts</h2>
+
+      <div class="component-demo">
+        <h3>Two-Column Layout</h3>
+        <div class="two-column" style="margin-bottom: 32px;">
+          <div style="background: #F5F5F5; padding: 24px; border-radius: 4px;">Column 1</div>
+          <div style="background: #F5F5F5; padding: 24px; border-radius: 4px;">Column 2</div>
+        </div>
+
+        <h3>Three-Column Layout</h3>
+        <div class="three-column">
+          <div style="background: #F5F5F5; padding: 24px; border-radius: 4px;">Column 1</div>
+          <div style="background: #F5F5F5; padding: 24px; border-radius: 4px;">Column 2</div>
+          <div style="background: #F5F5F5; padding: 24px; border-radius: 4px;">Column 3</div>
+        </div>
+      </div>
+
+      <div class="code-block">
+&lt;!-- Two-column layout --&gt;
+&lt;div class="two-column"&gt;
+  &lt;div&gt;Content 1&lt;/div&gt;
+  &lt;div&gt;Content 2&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;!-- Three-column layout --&gt;
+&lt;div class="three-column"&gt;
+  &lt;div&gt;Content 1&lt;/div&gt;
+  &lt;div&gt;Content 2&lt;/div&gt;
+  &lt;div&gt;Content 3&lt;/div&gt;
+&lt;/div&gt;
+      </div>
+    </div>
+
+  </div>
+</body>
+</html>

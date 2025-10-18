@@ -16,7 +16,7 @@
         "name": "Netresearch DTT GmbH",
         "email": "info@netresearch.de"
       },
-      "source": "https://github.com/netresearch/typo3-docs-skill.git",
+      "source": "./skills/typo3-docs",
       "category": "development"
     },
     {
@@ -27,7 +27,7 @@
         "name": "Netresearch DTT GmbH",
         "email": "info@netresearch.de"
       },
-      "source": "https://github.com/netresearch/typo3-testing-skill.git",
+      "source": "./skills/typo3-testing",
       "category": "development"
     },
     {
@@ -38,7 +38,7 @@
         "name": "Netresearch DTT GmbH",
         "email": "info@netresearch.de"
       },
-      "source": "https://github.com/netresearch/typo3-conformance-skill.git",
+      "source": "./skills/typo3-conformance",
       "category": "development"
     },
     {
@@ -49,7 +49,7 @@
         "name": "Netresearch DTT GmbH",
         "email": "info@netresearch.de"
       },
-      "source": "https://github.com/netresearch/netresearch-branding-skill.git",
+      "source": "./skills/netresearch-branding",
       "category": "design"
     }
   ]
