@@ -131,6 +131,26 @@ jobs:
 
           echo "✓ netresearch-branding synced (version: $VERSION)"
 
+      - name: Sync agents skill
+        run: |
+          echo "=== Syncing agents-skill ==="
+
+          git clone --depth 1 https://github.com/netresearch/agents-skill.git .sync-temp/agents
+          rm -rf .sync-temp/agents/.git
+          rm -rf skills/agents/*
+          rm -rf skills/agents/.[!.]*
+          cp -r .sync-temp/agents/* skills/agents/
+          cp -r .sync-temp/agents/.[!.]* skills/agents/ 2>/dev/null || true
+
+          if [ -f skills/agents/SKILL.md ]; then
+            VERSION=$(grep -A 5 "## Skill Metadata" skills/agents/SKILL.md | grep "version:" | sed 's/.*version: *//' | tr -d '"' || echo "1.0.0")
+            echo "AGENTS_VERSION=$VERSION" >> $GITHUB_ENV
+          else
+            echo "AGENTS_VERSION=1.0.0" >> $GITHUB_ENV
+          fi
+
+          echo "✓ agents synced (version: $VERSION)"
+
       - name: Update marketplace.json versions
         run: |
           echo "=== Updating marketplace.json with latest versions ==="
@@ -140,10 +160,12 @@ jobs:
              --arg v2 "$TYPO3_CONFORMANCE_VERSION" \
              --arg v3 "$TYPO3_TESTING_VERSION" \
              --arg v4 "$NETRESEARCH_BRANDING_VERSION" \
+             --arg v5 "$AGENTS_VERSION" \
              '(.plugins[] | select(.name == "typo3-docs") | .version) = $v1 |
               (.plugins[] | select(.name == "typo3-conformance") | .version) = $v2 |
               (.plugins[] | select(.name == "typo3-testing") | .version) = $v3 |
-              (.plugins[] | select(.name == "netresearch-branding") | .version) = $v4' \
+              (.plugins[] | select(.name == "netresearch-branding") | .version) = $v4 |
+              (.plugins[] | select(.name == "agents") | .version) = $v5' \
              .claude-plugin/marketplace.json > .claude-plugin/marketplace.json.tmp
 
           mv .claude-plugin/marketplace.json.tmp .claude-plugin/marketplace.json
@@ -153,6 +175,7 @@ jobs:
           echo "  - typo3-conformance: $TYPO3_CONFORMANCE_VERSION"
           echo "  - typo3-testing: $TYPO3_TESTING_VERSION"
           echo "  - netresearch-branding: $NETRESEARCH_BRANDING_VERSION"
+          echo "  - agents: $AGENTS_VERSION"
 
       - name: Cleanup temporary directories
         run: |
@@ -182,6 +205,7 @@ jobs:
           - typo3-conformance: $TYPO3_CONFORMANCE_VERSION
           - typo3-testing: $TYPO3_TESTING_VERSION
           - netresearch-branding: $NETRESEARCH_BRANDING_VERSION
+          - agents: $AGENTS_VERSION
 
           Triggered by: ${{ github.event_name }}"
 

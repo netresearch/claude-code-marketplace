@@ -23,6 +23,12 @@
       "repository": "https://github.com/netresearch/netresearch-branding-skill.git",
       "target_path": "skills/netresearch-branding",
       "marketplace_name": "netresearch-branding"
+    },
+    {
+      "name": "agents",
+      "repository": "https://github.com/netresearch/agents-skill.git",
+      "target_path": "skills/agents",
+      "marketplace_name": "agents"
     }
   ],
   "sync_settings": {

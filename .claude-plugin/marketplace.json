@@ -51,6 +51,17 @@
       },
       "source": "./skills/netresearch-branding",
       "category": "design"
+    },
+    {
+      "name": "agents",
+      "description": "Generate and maintain AGENTS.md files following the public agents.md convention. Creates thin root files with precedence rules, scoped files for subsystems, auto-extracts commands from build tools, and supports Go, PHP, TypeScript, and Python projects with language-specific templates.",
+      "version": "1.0.0",
+      "author": {
+        "name": "Netresearch DTT GmbH",
+        "email": "info@netresearch.de"
+      },
+      "source": "./skills/agents",
+      "category": "development"
     }
   ]
 }
