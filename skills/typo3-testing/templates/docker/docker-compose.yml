@@ -1,0 +1,53 @@
+version: '3.8'
+
+services:
+  web:
+    image: php:8.2-apache
+    container_name: typo3-test-web
+    volumes:
+      - ../../../:/var/www/html
+    ports:
+      - "8000:80"
+    environment:
+      - TYPO3_CONTEXT=Testing
+      - typo3DatabaseDriver=mysqli
+      - typo3DatabaseHost=db
+      - typo3DatabaseName=typo3_test
+      - typo3DatabaseUsername=typo3
+      - typo3DatabasePassword=typo3
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - typo3-test
+
+  db:
+    image: mysql:8.0
+    container_name: typo3-test-db
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: typo3_test
+      MYSQL_USER: typo3
+      MYSQL_PASSWORD: typo3
+    ports:
+      - "3306:3306"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - typo3-test
+
+  selenium:
+    image: selenium/standalone-chrome:latest
+    container_name: typo3-test-selenium
+    ports:
+      - "4444:4444"
+    shm_size: 2gb
+    networks:
+      - typo3-test
+
+networks:
+  typo3-test:
+    driver: bridge

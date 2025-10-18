@@ -12,6 +12,3 @@ Thumbs.db
 # Temporary
 *.tmp
 *.bak
-
-# Skill sync temporary directories
-.sync-temp/

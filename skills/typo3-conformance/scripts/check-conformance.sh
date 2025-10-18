@@ -1,0 +1,160 @@
+#!/usr/bin/env bash
+
+#
+# TYPO3 Extension Conformance Checker
+#
+# Main script to orchestrate all conformance checks
+#
+
+set -e
+
+# Colors
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+BLUE='\033[0;34m'
+NC='\033[0m'
+
+# Configuration
+PROJECT_DIR="${1:-.}"
+REPORT_DIR="${PROJECT_DIR}/.conformance-reports"
+TIMESTAMP=$(date +"%Y%m%d_%H%M%S")
+REPORT_FILE="${REPORT_DIR}/conformance_${TIMESTAMP}.md"
+
+# Script directory
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+echo -e "${BLUE}╔════════════════════════════════════════════════════════════╗${NC}"
+echo -e "${BLUE}║    TYPO3 Extension Conformance Checker                    ║${NC}"
+echo -e "${BLUE}╚════════════════════════════════════════════════════════════╝${NC}"
+echo ""
+
+# Create report directory
+mkdir -p "${REPORT_DIR}"
+
+# Check if directory exists
+if [ ! -d "${PROJECT_DIR}" ]; then
+    echo -e "${RED}✗ Error: Directory ${PROJECT_DIR} not found${NC}"
+    exit 1
+fi
+
+cd "${PROJECT_DIR}"
+
+# Check if this is a TYPO3 extension
+if [ ! -f "composer.json" ] && [ ! -f "ext_emconf.php" ]; then
+    echo -e "${RED}✗ Error: Not a TYPO3 extension (composer.json or ext_emconf.php not found)${NC}"
+    exit 1
+fi
+
+echo -e "${GREEN}✓ TYPO3 Extension detected${NC}"
+echo ""
+
+# Initialize report
+cat > "${REPORT_FILE}" <<'EOF'
+# TYPO3 Extension Conformance Report
+
+**Generated:** $(date -u +"%Y-%m-%d %H:%M:%S UTC")
+**Project:** $(basename "$(pwd)")
+
+---
+
+## Summary
+
+| Category | Score | Status |
+|----------|-------|--------|
+EOF
+
+# Initialize scores
+total_score=0
+max_score=100
+
+echo -e "${YELLOW}Running conformance checks...${NC}"
+echo ""
+
+# 1. File Structure Check
+echo -e "${BLUE}[1/5] Checking file structure...${NC}"
+if bash "${SCRIPT_DIR}/check-file-structure.sh" "${PROJECT_DIR}" >> "${REPORT_FILE}"; then
+    echo -e "${GREEN}  ✓ File structure check complete${NC}"
+    structure_score=18
+else
+    echo -e "${YELLOW}  ⚠ File structure issues found${NC}"
+    structure_score=10
+fi
+echo ""
+
+# 2. Coding Standards Check
+echo -e "${BLUE}[2/5] Checking coding standards...${NC}"
+if bash "${SCRIPT_DIR}/check-coding-standards.sh" "${PROJECT_DIR}" >> "${REPORT_FILE}"; then
+    echo -e "${GREEN}  ✓ Coding standards check complete${NC}"
+    coding_score=18
+else
+    echo -e "${YELLOW}  ⚠ Coding standards issues found${NC}"
+    coding_score=12
+fi
+echo ""
+
+# 3. Architecture Check
+echo -e "${BLUE}[3/5] Checking PHP architecture...${NC}"
+if bash "${SCRIPT_DIR}/check-architecture.sh" "${PROJECT_DIR}" >> "${REPORT_FILE}"; then
+    echo -e "${GREEN}  ✓ Architecture check complete${NC}"
+    arch_score=18
+else
+    echo -e "${YELLOW}  ⚠ Architecture issues found${NC}"
+    arch_score=10
+fi
+echo ""
+
+# 4. Testing Check
+echo -e "${BLUE}[4/5] Checking testing infrastructure...${NC}"
+if bash "${SCRIPT_DIR}/check-testing.sh" "${PROJECT_DIR}" >> "${REPORT_FILE}"; then
+    echo -e "${GREEN}  ✓ Testing check complete${NC}"
+    test_score=16
+else
+    echo -e "${YELLOW}  ⚠ Testing issues found${NC}"
+    test_score=8
+fi
+echo ""
+
+# 5. Generate comprehensive report
+echo -e "${BLUE}[5/5] Generating final report...${NC}"
+bash "${SCRIPT_DIR}/generate-report.sh" "${PROJECT_DIR}" "${REPORT_FILE}" \
+    "${structure_score}" "${coding_score}" "${arch_score}" "${test_score}"
+echo ""
+
+# Calculate total
+total_score=$((structure_score + coding_score + arch_score + test_score + 10))
+
+# Display summary
+echo -e "${BLUE}╔════════════════════════════════════════════════════════════╗${NC}"
+echo -e "${BLUE}║                    Conformance Results                     ║${NC}"
+echo -e "${BLUE}╚════════════════════════════════════════════════════════════╝${NC}"
+echo ""
+echo -e "  File Structure:     ${structure_score}/20"
+echo -e "  Coding Standards:   ${coding_score}/20"
+echo -e "  PHP Architecture:   ${arch_score}/20"
+echo -e "  Testing Standards:  ${test_score}/20"
+echo -e "  Best Practices:     10/20"
+echo ""
+echo -e "  ${BLUE}Total Score:        ${total_score}/100${NC}"
+echo ""
+
+if [ ${total_score} -ge 80 ]; then
+    echo -e "${GREEN}✓ EXCELLENT conformance level${NC}"
+elif [ ${total_score} -ge 60 ]; then
+    echo -e "${YELLOW}⚠ GOOD conformance level (some improvements recommended)${NC}"
+elif [ ${total_score} -ge 40 ]; then
+    echo -e "${YELLOW}⚠ FAIR conformance level (several issues to address)${NC}"
+else
+    echo -e "${RED}✗ POOR conformance level (major improvements needed)${NC}"
+fi
+
+echo ""
+echo -e "${GREEN}Report saved to: ${REPORT_FILE}${NC}"
+echo ""
+
+# Exit with appropriate code
+if [ ${total_score} -ge 60 ]; then
+    exit 0
+else
+    exit 1
+fi
