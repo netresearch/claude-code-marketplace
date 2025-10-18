@@ -1,7 +1,7 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "netresearch-claude-code-marketplace",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Curated Claude Code plugins for TYPO3 development and technical documentation workflows",
   "owner": {
     "name": "Netresearch DTT GmbH",
@@ -40,6 +40,17 @@
       },
       "source": "https://github.com/netresearch/typo3-conformance-skill.git",
       "category": "development"
+    },
+    {
+      "name": "netresearch-branding",
+      "description": "Implement Netresearch brand guidelines in web projects with comprehensive color system, typography standards (Raleway, Open Sans, Calibri), responsive component library, and production-ready templates. Includes WCAG AA accessibility compliance, social media specifications, and complete web design patterns.",
+      "version": "1.0.0",
+      "author": {
+        "name": "Netresearch DTT GmbH",
+        "email": "info@netresearch.de"
+      },
+      "source": "https://github.com/netresearch/netresearch-branding-skill.git",
+      "category": "design"
     }
   ]
 }

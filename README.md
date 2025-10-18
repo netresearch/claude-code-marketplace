@@ -53,6 +53,21 @@ Evaluate TYPO3 extensions for conformance to official TYPO3 standards and best p
 - Priority-based action items with migration guides
 - Detailed reports with specific file:line references
 
+### Netresearch Branding
+Implement Netresearch brand guidelines in web projects with complete design system.
+
+**Repository:** https://github.com/netresearch/netresearch-branding-skill
+
+**Features:**
+- Complete color system (Turquoise, Orange, Anthracite)
+- Typography standards (Raleway, Open Sans, Calibri)
+- Responsive component library (buttons, forms, cards, navigation)
+- Production-ready HTML/CSS templates
+- WCAG AA accessibility compliance
+- Social media specifications
+- Web design patterns and best practices
+- Interactive component showcase
+
 ---
 
 **Maintained by:** Netresearch DTT GmbH, Leipzig
