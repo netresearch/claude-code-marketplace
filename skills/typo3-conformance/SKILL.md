@@ -14,6 +14,16 @@ This skill provides systematic evaluation of TYPO3 extensions against official T
 4. **Testing Standards** - Unit, functional, and acceptance testing requirements
 5. **Best Practices** - Real-world patterns from Tea extension and core standards
 
+## Version Compatibility
+
+**Target Standards:**
+- **TYPO3:** 12.4 LTS / 13.x
+- **PHP:** 8.1 / 8.2 / 8.3 / 8.4
+- **TYPO3 12 LTS:** Supports PHP 8.1 - 8.4
+- **TYPO3 13 LTS:** Requires PHP 8.2 - 8.4
+
+**Reference:** See `references/version-requirements.md` for complete version compatibility matrix and migration paths.
+
 ## Evaluation Workflow
 
 ### Step 1: Initial Assessment

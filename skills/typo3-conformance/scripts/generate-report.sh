@@ -40,9 +40,9 @@ cat >> "${REPORT_FILE}" <<EOF
 - **.gitignore:** $(if [ -f ".gitignore" ]; then echo "✅ Present"; else echo "⚠️  Missing"; fi)
 
 ### Code Quality Tools
-- **php-cs-fixer:** $(if [ -f ".php-cs-fixer.dist.php" ] || [ -f ".php-cs-fixer.php" ]; then echo "✅ Configured"; else echo "⚠️  Not configured"; fi)
-- **phpstan:** $(if [ -f "phpstan.neon" ] || [ -f "phpstan.neon.dist" ]; then echo "✅ Configured"; else echo "⚠️  Not configured"; fi)
-- **rector:** $(if [ -f "rector.php" ]; then echo "✅ Configured"; else echo "ℹ️  Not configured"; fi)
+- **php-cs-fixer:** $(if [ -f ".php-cs-fixer.dist.php" ] || [ -f ".php-cs-fixer.php" ] || [ -f "Build/.php-cs-fixer.dist.php" ] || [ -f "Build/.php-cs-fixer.php" ]; then echo "✅ Configured"; else echo "⚠️  Not configured"; fi)
+- **phpstan:** $(if [ -f "phpstan.neon" ] || [ -f "phpstan.neon.dist" ] || [ -f "Build/phpstan.neon" ] || [ -f "Build/phpstan.neon.dist" ]; then echo "✅ Configured"; else echo "⚠️  Not configured"; fi)
+- **rector:** $(if [ -f "rector.php" ] || [ -f "Build/rector.php" ]; then echo "✅ Configured"; else echo "ℹ️  Not configured"; fi)
 
 ### CI/CD Pipeline
 - **GitHub Actions:** $(if [ -d ".github/workflows" ]; then echo "✅ Configured"; else echo "⚠️  Not found"; fi)
@@ -119,8 +119,8 @@ $(if [ ${TEST_SCORE} -lt 15 ]; then echo "- [ ] Add unit tests for untested clas
 $(if [ ! -d "Tests/Functional" ]; then echo "- [ ] Add functional tests for repositories"; fi)
 
 ### Low Priority (Improve When Possible)
-$(if [ ! -f ".php-cs-fixer.dist.php" ]; then echo "- [ ] Configure PHP CS Fixer"; fi)
-$(if [ ! -f "phpstan.neon" ]; then echo "- [ ] Configure PHPStan for static analysis"; fi)
+$(if [ ! -f ".php-cs-fixer.dist.php" ] && [ ! -f ".php-cs-fixer.php" ] && [ ! -f "Build/.php-cs-fixer.dist.php" ] && [ ! -f "Build/.php-cs-fixer.php" ]; then echo "- [ ] Configure PHP CS Fixer"; fi)
+$(if [ ! -f "phpstan.neon" ] && [ ! -f "phpstan.neon.dist" ] && [ ! -f "Build/phpstan.neon" ] && [ ! -f "Build/phpstan.neon.dist" ]; then echo "- [ ] Configure PHPStan for static analysis"; fi)
 $(if [ ! -d ".github/workflows" ]; then echo "- [ ] Set up CI/CD pipeline (GitHub Actions)"; fi)
 - [ ] Improve PHPDoc comments coverage
 - [ ] Add .editorconfig for consistent formatting

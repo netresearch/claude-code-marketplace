@@ -4,7 +4,20 @@ A comprehensive Claude Code skill for evaluating TYPO3 extensions against offici
 
 ## Overview
 
-This skill enables systematic evaluation of TYPO3 extensions for conformance to:
+This skill enables systematic evaluation of TYPO3 extensions for conformance to official TYPO3 standards.
+
+### Standards Checked
+
+| Standard | Version/Specification |
+|----------|----------------------|
+| **TYPO3 Core** | 12.4 LTS / 13.x |
+| **PHP** | 8.1 / 8.2 / 8.3 / 8.4 |
+| **Coding Style** | PSR-12 (Extended Coding Style) |
+| **Architecture** | Dependency Injection (PSR-11), PSR-14 Events, PSR-15 Middleware |
+| **Testing** | PHPUnit 10+, TYPO3 Testing Framework |
+| **Documentation** | reStructuredText (RST), TYPO3 Documentation Standards |
+
+### Conformance Areas
 
 - **Extension Architecture** - File structure, naming conventions, required files
 - **Coding Guidelines** - PSR-12 compliance, TYPO3-specific code style
@@ -25,6 +38,7 @@ This skill enables systematic evaluation of TYPO3 extensions for conformance to:
 
 ### Reference Documentation
 
+- **version-requirements.md** - Official TYPO3 and PHP version compatibility matrix
 - **extension-architecture.md** - TYPO3 file structure standards
 - **coding-guidelines.md** - PSR-12 and TYPO3 code style guide
 - **php-architecture.md** - Dependency injection and architectural patterns
