@@ -1,7 +1,7 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "netresearch-claude-code-marketplace",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Curated Claude Code plugins for TYPO3 development and technical documentation workflows",
   "owner": {
     "name": "Netresearch DTT GmbH",
@@ -28,6 +28,17 @@
         "email": "info@netresearch.de"
       },
       "source": "https://github.com/netresearch/typo3-testing-skill.git",
+      "category": "development"
+    },
+    {
+      "name": "typo3-conformance",
+      "description": "Evaluate TYPO3 extensions for conformance to official TYPO3 coding standards, architecture patterns, and best practices. Includes automated validation scripts for file structure, PSR-12 compliance, dependency injection, testing infrastructure, and comprehensive conformance scoring with priority-based action items.",
+      "version": "1.0.0",
+      "author": {
+        "name": "Netresearch DTT GmbH",
+        "email": "info@netresearch.de"
+      },
+      "source": "https://github.com/netresearch/typo3-conformance-skill.git",
       "category": "development"
     }
   ]
