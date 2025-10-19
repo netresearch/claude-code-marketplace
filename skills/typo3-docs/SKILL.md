@@ -1,6 +1,7 @@
 ---
-name: typo3-docs
-description: This skill should be used when creating or updating TYPO3 extension documentation. It provides comprehensive guidance for working with reStructuredText (RST) format, TYPO3-specific directives, official documentation standards, local rendering with Docker, and TYPO3 Intercept deployment. Use this skill for documentation tasks in TYPO3 extension projects, especially when encountering RST files, Documentation/ directories, or when asked to follow TYPO3 documentation guidelines.
+name: TYPO3 Documentation
+description: "Create and maintain TYPO3 extension documentation following official standards. Use when working with reStructuredText (RST) files, TYPO3-specific directives (confval, versionadded, php:method, card-grid), Documentation/ directories, or TYPO3 documentation guidelines. Covers: RST syntax, TYPO3 directives, local rendering with Docker, validation procedures, and TYPO3 Intercept deployment. Ensures documentation meets official TYPO3 quality standards and renders correctly on docs.typo3.org."
+license: Complete terms in LICENSE.txt
 ---
 
 # TYPO3 Documentation

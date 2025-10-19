@@ -27,7 +27,7 @@ includes:
     - vendor/saschaegerer/phpstan-typo3/extension.neon
 
 parameters:
-    level: 9
+    level: max  # Level 10 - maximum strictness
     paths:
         - Classes
         - Tests
@@ -54,12 +54,21 @@ vendor/bin/phpstan analyze --generate-baseline Build/phpstan-baseline.neon
 vendor/bin/phpstan clear-result-cache
 ```
 
-### Common Rules
+### PHPStan Rule Levels
 
-**Level 0-9**: Increasing strictness
-- Level 0: Basic checks (undefined variables)
-- Level 5: Type checks, unknown properties
-- Level 9: Maximum strictness (mixed types, unused code)
+**Level 0-10** (use `max` for level 10): Increasing strictness
+- **Level 0**: Basic checks (undefined variables, unknown functions)
+- **Level 5**: Type checks, unknown properties, unknown methods
+- **Level 9**: Strict mixed types, unused parameters
+- **Level 10 (max)**: Maximum strictness - explicit mixed types, pure functions
+
+**Recommendation**: Start with level 5, aim for level 10 (max) in modern TYPO3 13 projects.
+
+**Why Level 10?**
+- Enforces explicit type declarations (`mixed` must be declared, not implicit)
+- Catches more potential bugs at development time
+- Aligns with TYPO3 13 strict typing standards (`declare(strict_types=1)`)
+- Required for PHPStan Level 10 compliant extensions
 
 ### Ignoring Errors
 
@@ -288,6 +297,7 @@ vendor/bin/phplint Classes/
         "ci:test:php:phpstan": "phpstan analyze --configuration Build/phpstan.neon --no-progress",
         "ci:test:php:rector": "rector process --dry-run",
         "ci:test:php:cgl": "php-cs-fixer fix --config Build/php-cs-fixer.php --dry-run --diff",
+        "ci:test:php:security": "composer audit",
 
         "fix:cgl": "php-cs-fixer fix --config Build/php-cs-fixer.php",
         "fix:rector": "rector process",
@@ -296,11 +306,14 @@ vendor/bin/phplint Classes/
             "@ci:test:php:lint",
             "@ci:test:php:phpstan",
             "@ci:test:php:rector",
-            "@ci:test:php:cgl"
+            "@ci:test:php:cgl",
+            "@ci:test:php:security"
         ]
     }
 }
 ```
+
+> **Security Note**: `composer audit` checks for known security vulnerabilities in dependencies. Run this regularly and especially before releases.
 
 ## Pre-commit Hook
 
@@ -334,12 +347,13 @@ quality:
     - uses: actions/checkout@v4
     - uses: shivammathur/setup-php@v2
       with:
-        php-version: '8.2'
+        php-version: '8.4'  # Use latest PHP for quality tools
     - run: composer install
     - run: composer ci:test:php:lint
     - run: composer ci:test:php:phpstan
     - run: composer ci:test:php:cgl
     - run: composer ci:test:php:rector
+    - run: composer ci:test:php:security
 ```
 
 ## IDE Integration
@@ -364,12 +378,14 @@ quality:
 
 ## Best Practices
 
-1. **Start with Lower Levels**: Begin with PHPStan level 5, increase gradually
-2. **Baseline for Legacy**: Use baselines to track existing issues
-3. **Auto-fix in CI**: Run fixes automatically, fail on violations
-4. **Consistent Rules**: Share config across team
-5. **Pre-commit Checks**: Catch issues before commit
-6. **Regular Updates**: Keep tools and rules updated
+1. **PHPStan Level 10**: Aim for `level: max` in modern TYPO3 13 projects
+2. **Baseline for Legacy**: Use baselines to track existing issues during migration
+3. **Security Audits**: Run `composer audit` regularly and in CI
+4. **Auto-fix in CI**: Run fixes automatically, fail on violations
+5. **Consistent Rules**: Share config across team
+6. **Pre-commit Checks**: Catch issues before commit (lint, PHPStan, CGL, security)
+7. **Latest PHP**: Run quality tools with latest PHP version (8.4+)
+8. **Regular Updates**: Keep tools and rules updated
 
 ## Resources
 

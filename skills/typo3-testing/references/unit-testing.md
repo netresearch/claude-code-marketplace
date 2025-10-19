@@ -4,11 +4,21 @@ Unit tests are fast, isolated tests that verify individual components without ex
 
 ## When to Use Unit Tests
 
+✅ **Ideal for:**
 - Testing pure business logic
 - Validators, calculators, transformers
 - Value objects and DTOs
 - Utilities and helper functions
 - Domain models without persistence
+- **Controllers with dependency injection** (new in TYPO3 13)
+- **Services with injected dependencies**
+
+❌ **Not suitable for:**
+- Database operations (use functional tests)
+- File system operations
+- Methods using `BackendUtility` or global state
+- Complex TYPO3 framework integration
+- Parent class behavior from framework classes
 
 ## Base Class
 
@@ -21,12 +31,18 @@ declare(strict_types=1);
 
 namespace Vendor\Extension\Tests\Unit\Domain\Validator;
 
+use PHPUnit\Framework\Attributes\Test;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 use Vendor\Extension\Domain\Validator\EmailValidator;
 
+/**
+ * Unit tests for EmailValidator.
+ *
+ * @covers \Vendor\Extension\Domain\Validator\EmailValidator
+ */
 final class EmailValidatorTest extends UnitTestCase
 {
-    protected EmailValidator $subject;
+    private EmailValidator $subject;
 
     protected function setUp(): void
     {
@@ -34,25 +50,26 @@ final class EmailValidatorTest extends UnitTestCase
         $this->subject = new EmailValidator();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function validEmailPassesValidation(): void
     {
         $result = $this->subject->validate('user@example.com');
+
         self::assertFalse($result->hasErrors());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function invalidEmailFailsValidation(): void
     {
         $result = $this->subject->validate('invalid-email');
+
         self::assertTrue($result->hasErrors());
     }
 }
 ```
+
+> **Note:** TYPO3 13+ with PHPUnit 11/12 uses PHP attributes (`#[Test]`) instead of `@test` annotations.
+> Use `private` instead of `protected` for properties when possible (better encapsulation).
 
 ## Key Principles
 
@@ -119,37 +136,252 @@ protected function tearDown(): void
 }
 ```
 
-## Mocking Dependencies
+## Testing with Dependency Injection (TYPO3 13+)
 
-Use Prophecy (included in TYPO3 testing framework) for mocking:
+Modern TYPO3 13 controllers and services use constructor injection. Here's how to test them:
+
+### Basic Constructor Injection Test
 
 ```php
-use Prophecy\PhpUnit\ProphecyTrait;
+<?php
 
-final class UserServiceTest extends UnitTestCase
+declare(strict_types=1);
+
+namespace Vendor\Extension\Tests\Unit\Controller;
+
+use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\MockObject\MockObject;
+use TYPO3\CMS\Core\Resource\ResourceFactory;
+use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
+use Vendor\Extension\Controller\ImageController;
+
+final class ImageControllerTest extends UnitTestCase
 {
-    use ProphecyTrait;
+    private ImageController $subject;
 
-    /**
-     * @test
-     */
-    public function findsUserByEmail(): void
+    /** @var ResourceFactory&MockObject */
+    private ResourceFactory $resourceFactoryMock;
+
+    protected function setUp(): void
     {
-        // Create mock repository
-        $repository = $this->prophesize(UserRepository::class);
-        $repository->findByEmail('test@example.com')
-            ->willReturn(new User('John'));
+        parent::setUp();
 
-        // Inject mock into service
-        $service = new UserService($repository->reveal());
+        /** @var ResourceFactory&MockObject $resourceFactoryMock */
+        $resourceFactoryMock = $this->createMock(ResourceFactory::class);
 
-        // Test service
-        $user = $service->getUserByEmail('test@example.com');
+        $this->resourceFactoryMock = $resourceFactoryMock;
+        $this->subject             = new ImageController($this->resourceFactoryMock);
+    }
 
-        self::assertSame('John', $user->getName());
+    #[Test]
+    public function getFileRetrievesFileFromFactory(): void
+    {
+        $fileId = 123;
+        $fileMock = $this->createMock(\TYPO3\CMS\Core\Resource\File::class);
+
+        $this->resourceFactoryMock
+            ->expects(self::once())
+            ->method('getFileObject')
+            ->with($fileId)
+            ->willReturn($fileMock);
+
+        $result = $this->subject->getFile($fileId);
+
+        self::assertSame($fileMock, $result);
     }
 }
 ```
+
+### Multiple Dependencies with Intersection Types
+
+PHPUnit mocks require proper type hints using intersection types for PHPStan compliance:
+
+```php
+<?php
+
+declare(strict_types=1);
+
+namespace Vendor\Extension\Tests\Unit\Controller;
+
+use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\MockObject\MockObject;
+use TYPO3\CMS\Core\Log\LogManager;
+use TYPO3\CMS\Core\Resource\ResourceFactory;
+use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
+use Vendor\Extension\Controller\ImageController;
+use Vendor\Extension\Utils\ImageProcessor;
+
+final class ImageControllerTest extends UnitTestCase
+{
+    private ImageController $subject;
+
+    /** @var ResourceFactory&MockObject */
+    private ResourceFactory $resourceFactoryMock;
+
+    /** @var ImageProcessor&MockObject */
+    private ImageProcessor $imageProcessorMock;
+
+    /** @var LogManager&MockObject */
+    private LogManager $logManagerMock;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        /** @var ResourceFactory&MockObject $resourceFactoryMock */
+        $resourceFactoryMock = $this->createMock(ResourceFactory::class);
+
+        /** @var ImageProcessor&MockObject $imageProcessorMock */
+        $imageProcessorMock = $this->createMock(ImageProcessor::class);
+
+        /** @var LogManager&MockObject $logManagerMock */
+        $logManagerMock = $this->createMock(LogManager::class);
+
+        $this->resourceFactoryMock = $resourceFactoryMock;
+        $this->imageProcessorMock  = $imageProcessorMock;
+        $this->logManagerMock      = $logManagerMock;
+
+        $this->subject = new ImageController(
+            $this->resourceFactoryMock,
+            $this->imageProcessorMock,
+            $this->logManagerMock,
+        );
+    }
+
+    #[Test]
+    public function processImageUsesInjectedProcessor(): void
+    {
+        $fileMock = $this->createMock(\TYPO3\CMS\Core\Resource\File::class);
+        $processedFileMock = $this->createMock(\TYPO3\CMS\Core\Resource\ProcessedFile::class);
+
+        $this->imageProcessorMock
+            ->expects(self::once())
+            ->method('process')
+            ->with($fileMock, ['width' => 800])
+            ->willReturn($processedFileMock);
+
+        $result = $this->subject->processImage($fileMock, ['width' => 800]);
+
+        self::assertSame($processedFileMock, $result);
+    }
+}
+```
+
+**Key Points:**
+- Use intersection types: `ResourceFactory&MockObject` for proper PHPStan type checking
+- Assign mocks to properly typed variables before passing to constructor
+- This pattern works with PHPUnit 11/12 and PHPStan Level 10
+
+### Handling $GLOBALS and Singleton State
+
+Some TYPO3 components still use global state. Handle this properly:
+
+```php
+final class BackendControllerTest extends UnitTestCase
+{
+    protected bool $resetSingletonInstances = true;
+
+    #[Test]
+    public function checksBackendUserPermissions(): void
+    {
+        // Mock backend user
+        $backendUserMock = $this->createMock(BackendUserAuthentication::class);
+        $backendUserMock->method('isAdmin')->willReturn(true);
+
+        $GLOBALS['BE_USER'] = $backendUserMock;
+
+        $result = $this->subject->hasAccess();
+
+        self::assertTrue($result);
+    }
+
+    #[Test]
+    public function returnsFalseWhenNoBackendUser(): void
+    {
+        $GLOBALS['BE_USER'] = null;
+
+        $result = $this->subject->hasAccess();
+
+        self::assertFalse($result);
+    }
+}
+```
+
+**Important:** Set `protected bool $resetSingletonInstances = true;` when tests interact with TYPO3 singletons to prevent test pollution.
+
+## Mocking Dependencies
+
+Use PHPUnit's built-in mocking (PHPUnit 11/12):
+
+```php
+<?php
+
+declare(strict_types=1);
+
+namespace Vendor\Extension\Tests\Unit\Service;
+
+use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\MockObject\MockObject;
+use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
+use Vendor\Extension\Domain\Model\User;
+use Vendor\Extension\Domain\Repository\UserRepository;
+use Vendor\Extension\Service\UserService;
+
+final class UserServiceTest extends UnitTestCase
+{
+    private UserService $subject;
+
+    /** @var UserRepository&MockObject */
+    private UserRepository $repositoryMock;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        /** @var UserRepository&MockObject $repositoryMock */
+        $repositoryMock = $this->createMock(UserRepository::class);
+
+        $this->repositoryMock = $repositoryMock;
+        $this->subject        = new UserService($this->repositoryMock);
+    }
+
+    #[Test]
+    public function findsUserByEmail(): void
+    {
+        $email = 'test@example.com';
+        $user  = new User('John');
+
+        $this->repositoryMock
+            ->expects(self::once())
+            ->method('findByEmail')
+            ->with($email)
+            ->willReturn($user);
+
+        $result = $this->subject->getUserByEmail($email);
+
+        self::assertSame('John', $result->getName());
+    }
+
+    #[Test]
+    public function throwsExceptionWhenUserNotFound(): void
+    {
+        $email = 'nonexistent@example.com';
+
+        $this->repositoryMock
+            ->method('findByEmail')
+            ->with($email)
+            ->willReturn(null);
+
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('User not found');
+
+        $this->subject->getUserByEmail($email);
+    }
+}
+```
+
+> **Note:** TYPO3 13+ with PHPUnit 11/12 uses `createMock()` instead of Prophecy.
+> Prophecy is deprecated and should not be used in new tests.
 
 ## Assertions
 
@@ -226,19 +458,68 @@ public static function validEmailProvider(): array
 
 ## Testing Private/Protected Methods
 
-Don't test private methods directly. Test them through public API:
+**Preferred Approach**: Test through public API whenever possible:
 
 ```php
-// ❌ Don't do this
-$reflection = new \ReflectionClass($subject);
-$method = $reflection->getMethod('privateMethod');
-$method->setAccessible(true);
-$result = $method->invoke($subject);
-
-// ✅ Do this instead
+// ✅ Best approach - test through public interface
 $result = $subject->publicMethodThatUsesPrivateMethod();
 self::assertSame($expected, $result);
 ```
+
+**When Reflection is Acceptable**: Sometimes protected methods contain complex logic that deserves dedicated testing (e.g., URL validation, attribute resolution). In these cases, use a helper method:
+
+```php
+<?php
+
+declare(strict_types=1);
+
+namespace Vendor\Extension\Tests\Unit\Controller;
+
+use PHPUnit\Framework\Attributes\Test;
+use ReflectionMethod;
+use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
+use Vendor\Extension\Controller\ImageController;
+
+final class ImageControllerTest extends UnitTestCase
+{
+    private ImageController $subject;
+
+    /**
+     * Helper method to access protected methods.
+     *
+     * @param array<int, mixed> $args
+     */
+    private function callProtectedMethod(string $methodName, array $args): mixed
+    {
+        $reflection = new ReflectionMethod($this->subject, $methodName);
+        $reflection->setAccessible(true);
+
+        return $reflection->invokeArgs($this->subject, $args);
+    }
+
+    #[Test]
+    public function isExternalImageReturnsTrueForHttpsUrls(): void
+    {
+        $result = $this->callProtectedMethod('isExternalImage', ['https://example.com/image.jpg']);
+
+        self::assertTrue($result);
+    }
+
+    #[Test]
+    public function isExternalImageReturnsFalseForLocalPaths(): void
+    {
+        $result = $this->callProtectedMethod('isExternalImage', ['/fileadmin/images/test.jpg']);
+
+        self::assertFalse($result);
+    }
+}
+```
+
+**Important Considerations**:
+- Only use reflection when testing protected methods with complex logic worth testing independently
+- Never test private methods - refactor to protected if testing is needed
+- Prefer testing through public API when the logic is simple
+- Document why reflection testing is used for a specific method
 
 ## Configuration
 
@@ -325,8 +606,122 @@ vendor/bin/phpunit Tests/Unit/Domain/Validator/EmailValidatorTest.php
 vendor/bin/phpunit --filter testValidEmail
 ```
 
+## Troubleshooting Common Issues
+
+### PHPStan Errors with Mocks
+
+**Problem**: PHPStan complains about mock type mismatches.
+```
+Method expects ResourceFactory but got ResourceFactory&MockObject
+```
+
+**Solution**: Use intersection type annotations:
+```php
+/** @var ResourceFactory&MockObject */
+private ResourceFactory $resourceFactoryMock;
+
+protected function setUp(): void
+{
+    parent::setUp();
+
+    /** @var ResourceFactory&MockObject $resourceFactoryMock */
+    $resourceFactoryMock = $this->createMock(ResourceFactory::class);
+
+    $this->resourceFactoryMock = $resourceFactoryMock;
+    $this->subject = new MyController($this->resourceFactoryMock);
+}
+```
+
+### Undefined Array Key Warnings
+
+**Problem**: Tests throw warnings about missing array keys.
+```
+Undefined array key "fileId"
+```
+
+**Solution**: Always provide all required keys in mock arrays:
+```php
+// ❌ Incomplete mock data
+$requestMock->method('getQueryParams')->willReturn([
+    'fileId' => 123,
+]);
+
+// ✅ Complete mock data
+$requestMock->method('getQueryParams')->willReturn([
+    'fileId' => 123,
+    'table'  => 'tt_content',
+    'P'      => [],
+]);
+```
+
+### Tests Requiring Functional Setup
+
+**Problem**: Unit tests fail with cache or framework errors.
+```
+NoSuchCacheException: A cache with identifier "runtime" does not exist.
+```
+
+**Solution**: Identify methods that require TYPO3 framework infrastructure and move them to functional tests:
+- Methods using `BackendUtility::getPagesTSconfig()`
+- Methods calling parent class framework behavior
+- Methods requiring global state like `$GLOBALS['TYPO3_CONF_VARS']`
+
+Add comments explaining the limitation:
+```php
+// Note: getMaxDimensions tests require functional test setup due to BackendUtility dependency
+// These are better tested in functional tests
+```
+
+### Singleton State Pollution
+
+**Problem**: Tests interfere with each other due to singleton state.
+
+**Solution**: Enable singleton reset in your test class:
+```php
+final class MyControllerTest extends UnitTestCase
+{
+    protected bool $resetSingletonInstances = true;
+
+    #[Test]
+    public function testWithGlobals(): void
+    {
+        $GLOBALS['BE_USER'] = $this->createMock(BackendUserAuthentication::class);
+        // Test will clean up automatically
+    }
+}
+```
+
+### Exception Flow Issues
+
+**Problem**: Catching and re-throwing exceptions masks the original error.
+```php
+// ❌ Inner exception caught by outer catch
+try {
+    $file = $this->factory->getFile($id);
+    if ($file->isDeleted()) {
+        throw new RuntimeException('Deleted', 1234);
+    }
+} catch (Exception $e) {
+    throw new RuntimeException('Not found', 5678);
+}
+```
+
+**Solution**: Separate concerns - catch only what you need:
+```php
+// ✅ Proper exception flow
+try {
+    $file = $this->factory->getFile($id);
+} catch (Exception $e) {
+    throw new RuntimeException('Not found', 5678, $e);
+}
+
+if ($file->isDeleted()) {
+    throw new RuntimeException('Deleted', 1234);
+}
+```
+
 ## Resources
 
 - [TYPO3 Unit Testing Documentation](https://docs.typo3.org/m/typo3/reference-coreapi/main/en-us/Testing/UnitTests.html)
 - [PHPUnit Documentation](https://phpunit.de/documentation.html)
-- [Prophecy Documentation](https://github.com/phpspec/prophecy)
+- [PHPUnit 11 Migration Guide](https://phpunit.de/announcements/phpunit-11.html)

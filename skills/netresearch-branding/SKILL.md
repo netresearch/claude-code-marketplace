@@ -1,3 +1,9 @@
+---
+name: Netresearch Branding
+description: "Apply Netresearch brand identity and design standards to web projects, documentation, presentations, and digital content. Use when creating branded materials, designing web interfaces, building presentations, or ensuring brand consistency. Covers: color system (turquoise #40B4B4, orange #F08C1F), typography (Raleway, Open Sans, Calibri), logo usage, web design patterns, social media templates, and image guidelines. Ensures professional, unified Netresearch appearance across all digital touchpoints."
+license: Complete terms in LICENSE.txt
+---
+
 # Netresearch Brand Guidelines
 
 **Purpose:** Apply Netresearch brand identity and design standards to web projects, documentation, presentations, and digital content.
@@ -314,10 +320,13 @@ strong, .emphasis {
 - Use for main branding applications
 - Maintain minimum size: 120px width (digital), 30mm (print)
 
-**Symbol Only**
-- Standalone symbol
-- Use for: favicons, social media profiles, app icons
+**Symbol Only "[n]"**
+- Standalone symbol (brackets represent the frame)
+- Use for: favicons, social media profiles, app icons, minimal branding
 - Minimum size: 32px × 32px (digital)
+- **Official SVG:** `assets/logos/netresearch-symbol-only.svg`
+- **Format:** SVG 1.2 tiny-ps (optimized for web and print)
+- **Colors:** Turquoise #2999A4 (frame) + Grey #595A62 (letter "n")
 
 **Logo Colors:**
 - **Standard:** Turquoise symbol + grey text (#2F99A4 + #585961)
@@ -348,6 +357,36 @@ strong, .emphasis {
 - Use outdated logo versions
 - Use team logos in external communications
 - Create custom logo variations
+
+### Using the Symbol Only Logo
+
+**HTML Implementation:**
+```html
+<!-- Inline SVG for maximum control -->
+<svg viewBox="-75 -75 440 440" width="32" height="32">
+  <title>Netresearch DTT GmbH</title>
+  <g>
+    <path fill="#2999a4" d="M209.6,0V31.62h32.77a26.38,26.38,0,0,1,26.44,26.43V242a26.38,26.38,0,0,1-26.44,26.44H209.6V300h47.93a42.77,42.77,0,0,0,42.86-42.86V42.89A42.76,42.76,0,0,0,257.53,0ZM43.25,0A42.76,42.76,0,0,0,.39,42.89V257.18A42.76,42.76,0,0,0,43.25,300H91.18V268.46H58.4A26.38,26.38,0,0,1,32,242v-184A26.37,26.37,0,0,1,58.4,31.62H91.18V0Z" transform="translate(-0.39 -0.04)"/>
+    <path fill="#595a62" d="M221.44,120.41c0-34.48-13.94-57.82-48.93-57.82-26.62,0-48.54,7.74-64.17,26.56l-.7-22.06-28.31.06V232.94h31.59V124.69c7.14-18.38,32.14-34.8,53-34.5,27.38.4,25.2,26.24,26,45.81v96.94h31.58" transform="translate(-0.39 -0.04)"/>
+  </g>
+</svg>
+
+<!-- Or reference the asset file -->
+<img src="assets/logos/netresearch-symbol-only.svg" alt="Netresearch" width="32" height="32">
+```
+
+**Common Use Cases:**
+- **Favicon:** 32×32px or 64×64px (SVG or PNG export)
+- **App Icon:** 512×512px (high-resolution export)
+- **Social Media Avatar:** Platform-specific sizes (typically 400×400px minimum)
+- **Footer/Header Icon:** Flexible sizing with CSS
+- **Loading Indicators:** Animated with CSS transforms
+- **Email Signatures:** 48×48px to 64×64px
+
+**Accessibility:**
+- Always include `<title>Netresearch DTT GmbH</title>` in SVG
+- Use `alt="Netresearch"` for img tags
+- Ensure sufficient contrast on backgrounds
 
 ### Social Media Profile Images
 

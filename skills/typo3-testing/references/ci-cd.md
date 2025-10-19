@@ -27,7 +27,7 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.2'
+          php-version: '8.4'
 
       - name: Install dependencies
         run: composer install --no-progress
@@ -44,7 +44,7 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.2'
+          php-version: '8.4'
 
       - name: Install dependencies
         run: composer install --no-progress
@@ -57,7 +57,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php: ['8.1', '8.2', '8.3']
+        php: ['8.1', '8.2', '8.3', '8.4']
 
     steps:
       - uses: actions/checkout@v4
@@ -75,7 +75,7 @@ jobs:
         run: composer ci:test:php:unit
 
       - name: Upload coverage
-        if: matrix.php == '8.2'
+        # Upload coverage for all PHP versions
         uses: codecov/codecov-action@v3
 
   functional:
@@ -83,7 +83,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php: ['8.1', '8.2', '8.3']
+        php: ['8.1', '8.2', '8.3', '8.4']
         database: ['mysqli', 'pdo_mysql', 'postgres', 'sqlite']
 
     services:
@@ -143,7 +143,7 @@ Test multiple PHP and TYPO3 versions:
 strategy:
   fail-fast: false
   matrix:
-    php: ['8.1', '8.2', '8.3']
+    php: ['8.1', '8.2', '8.3', '8.4']
     typo3: ['12.4', '13.0']
     exclude:
       - php: '8.1'
@@ -340,7 +340,7 @@ stages:
 strategy:
   fail-fast: true  # Stop on first failure
   matrix:
-    php: ['8.1', '8.2', '8.3']
+    php: ['8.1', '8.2', '8.3', '8.4']
 ```
 
 ### 3. Parallel Execution
@@ -511,7 +511,7 @@ jobs:
   tests:
     strategy:
       matrix:
-        php: ['8.1', '8.2', '8.3']
+        php: ['8.1', '8.2', '8.3', '8.4']
         database: ['mysqli', 'postgres']
 ```
 

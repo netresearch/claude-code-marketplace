@@ -156,7 +156,7 @@ PROJECT_DIR="$(cd "${SCRIPT_DIR}/../.." && pwd)"
 # Default values
 TEST_SUITE=""
 DATABASE_DRIVER="mysqli"
-PHP_VERSION="8.2"
+PHP_VERSION="8.4"
 VERBOSE=""
 
 # Parse arguments
@@ -289,7 +289,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php: ['8.1', '8.2', '8.3']
+        php: '8.2', '8.2', '8.3']
         suite: ['unit', 'functional', 'lint', 'phpstan']
 
     steps:

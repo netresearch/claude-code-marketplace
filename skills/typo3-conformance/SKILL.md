@@ -1,3 +1,9 @@
+---
+name: TYPO3 Conformance
+description: "Evaluate TYPO3 extensions for conformance to official TYPO3 12/13 LTS standards, coding guidelines (PSR-12, TYPO3 CGL), and architecture patterns. Use when assessing extension quality, generating conformance reports, identifying technical debt, or planning modernization efforts. Evaluates: extension architecture, dependency injection, services configuration, testing coverage, Extbase patterns, and best practices alignment. Supports PHP 8.1-8.4 and provides actionable improvement recommendations with scoring."
+license: Complete terms in LICENSE.txt
+---
+
 # TYPO3 Extension Conformance Checker
 
 **Purpose:** Evaluate TYPO3 extensions for conformance to official TYPO3 coding standards, architecture patterns, and best practices.
