@@ -1,6 +1,6 @@
 ---
 name: TYPO3 Conformance
-description: "Evaluate TYPO3 extensions for conformance to official TYPO3 12/13 LTS standards, coding guidelines (PSR-12, TYPO3 CGL), and architecture patterns. Use when assessing extension quality, generating conformance reports, identifying technical debt, or planning modernization efforts. Evaluates: extension architecture, dependency injection, services configuration, testing coverage, Extbase patterns, and best practices alignment. Supports PHP 8.1-8.4 and provides actionable improvement recommendations with scoring."
+description: "Evaluate TYPO3 extensions for conformance to official TYPO3 12/13 LTS standards, coding guidelines (PSR-12, TYPO3 CGL), and architecture patterns. Use when assessing extension quality, generating conformance reports, identifying technical debt, or planning modernization efforts. Evaluates: extension architecture, dependency injection, services configuration, testing coverage, Extbase patterns, and best practices alignment. Supports PHP 8.1-8.4 and provides actionable improvement recommendations with dual scoring (0-100 base + 0-20 excellence). Orchestrates specialized skills: delegates to typo3-tests for deep testing analysis and typo3-docs for comprehensive documentation validation when available."
 license: Complete terms in LICENSE.txt
 ---
 
@@ -20,6 +20,30 @@ This skill provides systematic evaluation of TYPO3 extensions against official T
 4. **Testing Standards** - Unit, functional, and acceptance testing requirements
 5. **Best Practices** - Real-world patterns from Tea extension and core standards
 
+### Skill Ecosystem Integration
+
+This skill acts as an **orchestrator** that delegates to specialized skills for deep domain analysis:
+
+**🔧 typo3-tests** (https://github.com/netresearch/typo3-testing-skill)
+- Deep PHPUnit configuration analysis
+- Test quality patterns (AAA, mocking, fixtures)
+- TYPO3 Testing Framework validation
+- Accurate coverage calculation
+- Test anti-pattern detection
+
+**📚 typo3-docs** (https://github.com/netresearch/typo3-docs-skill)
+- RST syntax and TYPO3 directive validation
+- Documentation rendering with Docker
+- Modern tooling detection (guides.xml, screenshots.json)
+- Cross-reference integrity checks
+- Official TYPO3 documentation standards
+
+**Delegation Strategy:**
+- **Surface-level checks:** Performed directly by this skill
+- **Deep analysis:** Delegated to specialized skills when available
+- **Fallback:** Basic validation if specialized skills unavailable
+- **Integration:** Results incorporated into conformance scoring
+
 ## Version Compatibility
 
 **Target Standards:**
@@ -29,6 +53,15 @@ This skill provides systematic evaluation of TYPO3 extensions against official T
 - **TYPO3 13 LTS:** Requires PHP 8.2 - 8.4
 
 **Reference:** See `references/version-requirements.md` for complete version compatibility matrix and migration paths.
+
+## Critical Validation References
+
+**New Advanced Validation Guides:**
+- **`references/runtests-validation.md`** - Validate Build/Scripts/runTests.sh against Tea extension reference
+- **`references/development-environment.md`** - Validate DDEV/Docker development environment setup
+- **`references/directory-structure.md`** - Validate .Build/ vs Build/ directory separation
+
+These guides provide line-by-line validation strategies, automated validation scripts, and scoring methodologies to ensure comprehensive conformance checks.
 
 ## Evaluation Workflow
 
@@ -229,6 +262,25 @@ grep -r "inject[A-Z]" Classes/  # Method injection (check if justified)
 
 **Reference:** `references/testing-standards.md`
 
+**DELEGATION STRATEGY: For Deep Testing Analysis**
+
+When Testing Standards category needs comprehensive validation, use skill delegation:
+
+```
+🔧 Use /skill typo3-tests (if available) for deep analysis:
+  - PHPUnit configuration quality and best practices
+  - Test code patterns (AAA, proper mocking, fixtures)
+  - TYPO3 Testing Framework usage validation
+  - Functional test database handling
+  - Accurate test coverage calculation
+  - Test quality metrics and anti-patterns
+  - Integration with TYPO3 core testing infrastructure
+
+  Return: Detailed testing conformance report with specific issues
+```
+
+**Fallback: If typo3-tests skill unavailable, perform basic validation:**
+
 **Test Coverage Analysis:**
 
 ```bash
@@ -244,7 +296,7 @@ find Tests/Unit/ -name "*Test.php" | wc -l
 find Tests/Functional/ -name "*Test.php" | wc -l
 ```
 
-**Evaluate:**
+**Basic Evaluation Checklist:**
 - [ ] Tests/Unit/ mirrors Classes/ structure
 - [ ] Tests/Functional/ present with fixtures
 - [ ] PHPUnit configuration files present
@@ -252,6 +304,8 @@ find Tests/Functional/ -name "*Test.php" | wc -l
 - [ ] Functional tests extend FunctionalTestCase
 - [ ] Acceptance tests configured (Codeception)
 - [ ] Test coverage >70% for new code
+
+**Note:** Basic validation provides surface-level checks. For production-ready conformance reports, delegate to typo3-tests skill for comprehensive analysis
 
 **Sample Test Inspection:**
 ```php
@@ -288,7 +342,35 @@ cat Tests/Functional/Domain/Repository/ProductRepositoryTest.php
 
 **Reference:** `references/best-practices.md`
 
-**Project Infrastructure:**
+**CRITICAL: New Comprehensive Validation Areas**
+
+**1. Build Scripts Validation** (`references/runtests-validation.md`)
+- [ ] Build/Scripts/runTests.sh exists and matches Tea reference
+- [ ] PHP_VERSION default matches composer.json minimum
+- [ ] TYPO3_VERSION default matches composer.json target
+- [ ] PHP version regex includes only supported versions
+- [ ] Database version lists are current (not EOL)
+- [ ] Network name customized (not "friendsoftypo3-tea")
+- [ ] Test suite paths match actual directory structure
+
+**2. Development Environment** (`references/development-environment.md`)
+- [ ] DDEV configuration (.ddev/config.yaml) present
+- [ ] DDEV type set to 'typo3'
+- [ ] DDEV PHP version matches composer.json minimum
+- [ ] DDEV docroot matches composer.json web-dir
+- [ ] Database is MariaDB 10.11+ or MySQL 8.0+
+- [ ] OR Docker Compose (docker-compose.yml) as alternative
+- [ ] DevContainer configuration (optional but recommended)
+
+**3. Directory Structure** (`references/directory-structure.md`)
+- [ ] Build/ directory exists with committed configuration
+- [ ] .Build/ properly gitignored (entire directory)
+- [ ] No .Build/ files committed to git
+- [ ] Cache files in .Build/, not Build/
+- [ ] Composer paths reference .Build/ (bin-dir, vendor-dir, web-dir)
+- [ ] Quality tool configs reference .Build/ for cache
+
+**4. Project Infrastructure**
 - [ ] .editorconfig present
 - [ ] .gitignore properly configured
 - [ ] CI/CD pipeline (.github/workflows/ or .gitlab-ci.yml)
@@ -305,11 +387,40 @@ grep -r "GeneralUtility::validEmail" Classes/  # Email validation
 ```
 
 **Documentation Quality:**
+
+**DELEGATION STRATEGY: For Deep Documentation Analysis**
+
+When Documentation Excellence validation is needed, use skill delegation:
+
+```
+📚 Use /skill typo3-docs (if available) for deep analysis:
+  - RST syntax validation and TYPO3 directive compliance
+  - Documentation structure conformance (Index.rst, Settings.cfg)
+  - TYPO3 documentation standards (guides.xml, screenshots.json)
+  - Rendering validation with Docker (official TYPO3 render-guides)
+  - Intersphinx references validation
+  - Code example syntax validation
+  - Cross-reference integrity
+  - Modern documentation tooling detection
+
+  Return: Comprehensive documentation conformance report
+```
+
+**Fallback: If typo3-docs skill unavailable, perform basic validation:**
+
 ```bash
 # Check documentation completeness
 ls -1 Documentation/ | wc -l
 cat Documentation/Index.rst | head -50
+
+# Check for required files
+ls Documentation/Settings.cfg Documentation/guides.xml 2>/dev/null
+
+# Count RST files for excellence scoring
+find Documentation/ -name "*.rst" | wc -l
 ```
+
+**Note:** Basic validation only checks file existence. For production-ready documentation conformance, delegate to typo3-docs skill for comprehensive RST validation and rendering checks
 
 **Output Format:**
 ```markdown
@@ -349,13 +460,22 @@ cat Documentation/Index.rst | head -50
 
 ## Executive Summary
 
-**Overall Conformance Score:** {score}/100
+**Base Conformance Score:** {score}/100
+**Excellence Indicators:** {excellence_score}/20 (Bonus)
+**Total Score:** {total_score}/120
 
+### Base Conformance Breakdown (0-100 points)
 - Extension Architecture: {score}/20
 - Coding Guidelines: {score}/20
 - PHP Architecture: {score}/20
 - Testing Standards: {score}/20
 - Best Practices: {score}/20
+
+### Excellence Indicators (0-20 bonus points)
+- Community & Internationalization: {score}/6
+- Advanced Quality Tooling: {score}/7
+- Documentation Excellence: {score}/4
+- Extension Configuration: {score}/3
 
 **Priority Issues:** {count_critical}
 **Recommendations:** {count_recommendations}
@@ -492,6 +612,9 @@ Use this checklist to track conformance improvements:
 - [ ] Acceptance tests (if applicable)
 
 **Best Practices**
+- [ ] Development environment (DDEV or Docker Compose) configured
+- [ ] Build/Scripts/runTests.sh present and accurate
+- [ ] Directory structure (.Build/ vs Build/) correct
 - [ ] Code quality tools configured
 - [ ] CI/CD pipeline setup
 - [ ] Security best practices followed
@@ -539,10 +662,112 @@ Each category (Architecture, Coding, PHP Architecture, Testing, Best Practices) 
 - Configuration files present: 4 points
 
 **Best Practices (20 points)**
-- Quality tools configured: 6 points
-- CI/CD pipeline: 6 points
-- Security practices: 4 points
-- Documentation complete: 4 points
+- Development environment (DDEV/Docker): 6 points
+  - DDEV configuration present: 4 points
+  - Configuration matches extension requirements: 2 points
+  - OR Docker Compose alternative: 3 points
+- Build scripts (runTests.sh): 6 points
+  - Script present and executable: 2 points
+  - PHP/TYPO3 versions match extension: 3 points
+  - Database versions current: 1 point
+- Directory structure (.Build/ vs Build/): 4 points
+  - .Build/ properly gitignored: 2 points
+  - Cache files in correct location: 1 point
+  - Composer paths aligned: 1 point
+- Quality tools configured: 2 points
+- Documentation complete: 2 points
+
+**Note:** Previously this category scored only quality tools (6) and documentation (4). The new comprehensive approach validates development environment setup, build script accuracy, and directory structure standards, providing more thorough conformance assessment.
+
+### Excellence Indicators (Bonus 0-20 points)
+
+**Reference:** `references/excellence-indicators.md`
+
+Excellence indicators are **optional features** that demonstrate exceptional quality and community engagement. Extensions are NOT penalized for missing these features - they provide bonus points only.
+
+**Total Possible Score: 120 points** (100 base conformance + 20 excellence bonus)
+
+**Category 1: Community & Internationalization (0-6 points)**
+- Crowdin integration (crowdin.yml): +2 points
+- GitHub issue templates (.github/ISSUE_TEMPLATE/): +1 point
+- .gitattributes with export-ignore: +1 point
+- Professional README badges (stability, versions, downloads, CI): +2 points
+
+**Category 2: Advanced Quality Tooling (0-7 points)**
+- Fractor configuration (Build/fractor/fractor.php): +2 points
+- TYPO3 CodingStandards package (typo3/coding-standards in composer.json): +2 points
+- StyleCI integration (.styleci.yml): +1 point
+- Makefile with self-documenting help: +1 point
+- CI testing matrix (multiple PHP/TYPO3 versions): +1 point
+
+**Category 3: Documentation Excellence (0-4 points)**
+- 50-99 RST files in Documentation/: +1 point
+- 100-149 RST files: +2 points
+- 150+ RST files: +3 points
+- Modern documentation tooling (guides.xml, screenshots.json): +1 point
+
+**Category 4: Extension Configuration (0-3 points)**
+- ext_conf_template.txt with proper categorization: +1 point
+- Composer documentation scripts (doc-init, doc-make, doc-watch): +1 point
+- Multiple Configuration/Sets/ presets (for different use cases): +1 point
+
+**Excellence Score Interpretation:**
+- **0-5 points:** Standard extension (meets requirements)
+- **6-10 points:** Good practices (actively maintained)
+- **11-15 points:** Excellent quality (community reference level)
+- **16-20 points:** Outstanding (georgringer/news level)
+
+**Example Report Format:**
+
+```markdown
+## TYPO3 Extension Conformance Report
+
+**Extension:** my_extension (v2.0.0)
+
+---
+
+### Score Summary
+
+**Base Conformance:** 94/100
+- Extension Architecture: 18/20
+- Coding Guidelines: 20/20
+- PHP Architecture: 18/20
+- Testing Standards: 18/20
+- Best Practices: 20/20
+
+**Excellence Indicators:** 12/20 (Bonus)
+- Community & Internationalization: 4/6
+  - ✅ Crowdin integration (+2)
+  - ✅ Professional README badges (+2)
+  - ❌ No GitHub issue templates
+  - ❌ No .gitattributes export-ignore
+
+- Advanced Quality Tooling: 5/7
+  - ✅ Fractor configuration (+2)
+  - ✅ TYPO3 CodingStandards (+2)
+  - ✅ Makefile with help (+1)
+  - ❌ No StyleCI
+  - ❌ No CI testing matrix
+
+- Documentation Excellence: 2/4
+  - ✅ 75 RST files (+1)
+  - ✅ Modern tooling (guides.xml) (+1)
+
+- Extension Configuration: 1/3
+  - ✅ Composer doc scripts (+1)
+  - ❌ No ext_conf_template.txt
+  - ❌ Only one Configuration/Sets/ preset
+
+**Total Score:** 106/120
+
+**Rating:** Excellent - This extension demonstrates strong conformance and excellent quality practices.
+```
+
+**Important Notes:**
+- Base conformance (0-100) is MANDATORY - this is pass/fail criteria
+- Excellence indicators (0-20) are OPTIONAL - bonus points for exceptional quality
+- Extensions scoring 100/100 base are fully conformant, regardless of excellence score
+- Excellence indicators identify community reference extensions
 
 ### Severity Levels
 

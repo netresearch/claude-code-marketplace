@@ -261,6 +261,328 @@ services:
         method: '__invoke'
 ```
 
+### PSR-14 Event Class Standards (TYPO3 13+)
+
+Modern event classes should follow these quality standards:
+
+```php
+// ✅ Right: Modern event class with final keyword and readonly properties
+<?php
+declare(strict_types=1);
+
+namespace Vendor\ExtensionKey\Event;
+
+use Psr\Http\Message\ServerRequestInterface;
+
+final class NewsListActionEvent  // ✅ Use 'final' keyword
+{
+    public function __construct(
+        private NewsController $newsController,
+        private array $assignedValues,
+        private readonly ServerRequestInterface $request  // ✅ Use 'readonly' for immutable properties
+    ) {}
+
+    public function getNewsController(): NewsController
+    {
+        return $this->newsController;
+    }
+
+    public function getAssignedValues(): array
+    {
+        return $this->assignedValues;
+    }
+
+    public function setAssignedValues(array $assignedValues): void
+    {
+        $this->assignedValues = $assignedValues;
+    }
+
+    public function getRequest(): ServerRequestInterface
+    {
+        return $this->request;  // Read-only, no setter
+    }
+}
+```
+
+**Event Class Quality Checklist:**
+- [ ] Use `final` keyword (prevents inheritance, ensures immutability)
+- [ ] Use `readonly` for properties that should never change after construction
+- [ ] Provide getters for all properties
+- [ ] Provide setters ONLY for properties that should be modifiable
+- [ ] Type hint all properties and methods
+- [ ] Document the purpose and usage of the event
+
+**Why `final` for Events?**
+- Events are data carriers, not meant to be extended
+- Prevents unexpected behavior from inheritance
+- Makes event behavior predictable and testable
+- Follows modern PHP best practices
+
+**Why `readonly` for Properties?**
+- Some event data should never change (e.g., original request, user context)
+- Explicit immutability prevents accidental modifications
+- Clearly communicates intent to event listeners
+- Available in PHP 8.1+ (TYPO3 13 minimum is PHP 8.1)
+
+## TYPO3 13 Site Sets
+
+**Purpose:** Modern configuration distribution system replacing static TypoScript includes
+
+### Site Sets Structure
+
+```
+Configuration/Sets/
+├── MyExtension/           # Base configuration set
+│   ├── config.yaml        # Set metadata and dependencies
+│   ├── setup.typoscript   # Frontend TypoScript
+│   ├── constants.typoscript
+│   └── settings.definitions.yaml  # Setting definitions for extension configuration
+├── RecordLinks/           # Optional feature set
+│   ├── config.yaml
+│   └── setup.typoscript
+└── Bootstrap5/            # Frontend framework preset
+    ├── config.yaml
+    ├── setup.typoscript
+    └── settings.yaml
+```
+
+### config.yaml Structure
+
+```yaml
+# ✅ Right: Proper Site Set configuration
+name: vendor/extension-key
+label: Extension Name Base Configuration
+
+# Dependencies on other sets
+dependencies:
+  - typo3/fluid-styled-content
+  - vendor/extension-key-styles
+
+# Load order priority (optional)
+priority: 50
+
+# Settings that can be overridden
+settings:
+  mySetting:
+    value: 'default value'
+    type: string
+    label: 'My Setting Label'
+    description: 'Description of what this setting does'
+```
+
+### settings.definitions.yaml
+
+```yaml
+# ✅ Right: Define extension settings with validation
+settings:
+  # Text input
+  mySetting:
+    type: string
+    default: 'default value'
+    label: 'LLL:EXT:extension_key/Resources/Private/Language/locallang.xlf:settings.mySetting'
+    description: 'LLL:EXT:extension_key/Resources/Private/Language/locallang.xlf:settings.mySetting.description'
+
+  # Boolean checkbox
+  enableFeature:
+    type: bool
+    default: false
+    label: 'Enable Feature'
+
+  # Integer input
+  itemsPerPage:
+    type: int
+    default: 10
+    label: 'Items per page'
+    validators:
+      - name: NumberRange
+        options:
+          minimum: 1
+          maximum: 100
+
+  # Select dropdown
+  layout:
+    type: string
+    default: 'default'
+    label: 'Layout'
+    enum:
+      default: 'Default'
+      compact: 'Compact'
+      detailed: 'Detailed'
+```
+
+### Benefits of Site Sets
+
+1. **Modular Configuration**: Split configuration into focused, reusable sets
+2. **Dependency Management**: Declare dependencies on other sets
+3. **Override Capability**: Sites can override set settings without editing files
+4. **Type Safety**: Settings are validated with defined types
+5. **Better UX**: Settings UI auto-generated from definitions
+6. **Version Control**: Configuration changes tracked properly
+
+### Migration from Static TypoScript
+
+```php
+// ❌ Old: Static TypoScript includes (TYPO3 12 and earlier)
+Configuration/TCA/Overrides/sys_template.php:
+<?php
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addStaticFile(
+    'extension_key',
+    'Configuration/TypoScript',
+    'Extension Name'
+);
+```
+
+```yaml
+# ✅ New: Site Sets (TYPO3 13+)
+Configuration/Sets/ExtensionKey/config.yaml:
+name: vendor/extension-key
+label: Extension Name
+```
+
+**Site Sets Conformance Checklist:**
+- [ ] Configuration/Sets/ directory exists
+- [ ] At least one base set with config.yaml
+- [ ] settings.definitions.yaml defines all extension settings
+- [ ] Set names follow vendor/package naming convention
+- [ ] Dependencies declared in config.yaml
+- [ ] Labels use LLL: references for translations
+- [ ] Settings have appropriate type validation
+
+## Advanced Services.yaml Patterns
+
+Beyond basic service registration, modern TYPO3 extensions use advanced Services.yaml patterns.
+
+### Event Listeners
+
+```yaml
+# ✅ Right: Event listener registration
+services:
+  Vendor\ExtensionKey\EventListener\HrefLangEventListener:
+    tags:
+      - name: event.listener
+        identifier: 'ext-extension-key/modify-hreflang'
+        event: TYPO3\CMS\Frontend\Event\ModifyHrefLangTagsEvent
+        method: '__invoke'
+
+  # Multiple listeners for same event
+  Vendor\ExtensionKey\EventListener\PageCacheListener:
+    tags:
+      - name: event.listener
+        identifier: 'ext-extension-key/cache-before'
+        event: TYPO3\CMS\Core\Cache\Event\BeforePageCacheIdentifierIsHashedEvent
+      - name: event.listener
+        identifier: 'ext-extension-key/cache-after'
+        event: TYPO3\CMS\Core\Cache\Event\AfterPageCacheIdentifierIsHashedEvent
+```
+
+### Console Commands
+
+```yaml
+# ✅ Right: Console command registration
+services:
+  Vendor\ExtensionKey\Command\ProxyClassRebuildCommand:
+    tags:
+      - name: 'console.command'
+        command: 'extension:rebuildProxyClasses'
+        description: 'Rebuild Extbase proxy classes'
+        schedulable: false  # Cannot be run via scheduler
+
+  Vendor\ExtensionKey\Command\CleanupCommand:
+    tags:
+      - name: 'console.command'
+        command: 'extension:cleanup'
+        description: 'Clean up old records'
+        schedulable: true  # Can be run via scheduler
+        hidden: false      # Visible in command list
+```
+
+### Data Processors
+
+```yaml
+# ✅ Right: Data processor registration for Fluid templates
+services:
+  Vendor\ExtensionKey\DataProcessing\AddNewsToMenuProcessor:
+    tags:
+      - name: 'data.processor'
+        identifier: 'add-news-to-menu'
+
+  Vendor\ExtensionKey\DataProcessing\CategoryProcessor:
+    tags:
+      - name: 'data.processor'
+        identifier: 'category-processor'
+```
+
+### Cache Services
+
+```yaml
+# ✅ Right: Cache service configuration
+services:
+  cache.extension_custom:
+    class: TYPO3\CMS\Core\Cache\Frontend\VariableFrontend
+    factory:
+      - '@TYPO3\CMS\Core\Cache\CacheManager'
+      - 'getCache'
+    arguments:
+      - 'extension_custom'
+```
+
+### Advanced Service Patterns
+
+```yaml
+# ✅ Right: Comprehensive Services.yaml with advanced patterns
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+    public: false
+
+  # Auto-register all classes
+  Vendor\ExtensionKey\:
+    resource: '../Classes/*'
+    exclude:
+      - '../Classes/Domain/Model/*'  # Exclude Extbase models
+
+  # Event Listeners
+  Vendor\ExtensionKey\EventListener\NewsListActionListener:
+    tags:
+      - name: event.listener
+        identifier: 'ext-extension-key/news-list'
+        event: Vendor\ExtensionKey\Event\NewsListActionEvent
+
+  # Console Commands
+  Vendor\ExtensionKey\Command\ImportCommand:
+    tags:
+      - name: 'console.command'
+        command: 'news:import'
+        description: 'Import news from external source'
+        schedulable: true
+
+  # Data Processors
+  Vendor\ExtensionKey\DataProcessing\MenuProcessor:
+    tags:
+      - name: 'data.processor'
+        identifier: 'news-menu-processor'
+
+  # Cache Factory
+  cache.news_category:
+    class: TYPO3\CMS\Core\Cache\Frontend\VariableFrontend
+    factory: ['@TYPO3\CMS\Core\Cache\CacheManager', 'getCache']
+    arguments: ['news_category']
+
+  # ViewHelper registration (if needed for testing)
+  Vendor\ExtensionKey\ViewHelpers\FormatViewHelper:
+    public: true
+```
+
+**Advanced Services.yaml Conformance Checklist:**
+- [ ] Event listeners registered with proper tags
+- [ ] Console commands tagged with schedulable flag
+- [ ] Data processors registered with unique identifiers
+- [ ] Cache services use factory pattern
+- [ ] ViewHelpers marked public if needed externally
+- [ ] Service tags include all required attributes (identifier, event, method)
+- [ ] Commands have meaningful names and descriptions
+
 ## PSR-15 Middleware
 
 ### Middleware Structure
@@ -553,18 +875,44 @@ public function __construct(
 
 ## Conformance Checklist
 
+### Basic Dependency Injection
 - [ ] Constructor injection used for all dependencies
 - [ ] Services registered in Configuration/Services.yaml
-- [ ] PSR-14 events used instead of hooks
-- [ ] Event classes are immutable with proper getters/setters
-- [ ] Event listeners use #[AsEventListener] attribute
-- [ ] PSR-15 middlewares registered in RequestMiddlewares.php
 - [ ] No direct class instantiation (new MyClass())
 - [ ] No GeneralUtility::makeInstance() for new services
+- [ ] PSR interfaces used (ResponseInterface, LoggerInterface, etc.)
+- [ ] No global state access ($GLOBALS)
+
+### PSR-14 Events (Mandatory)
+- [ ] PSR-14 events used instead of hooks
+- [ ] Event classes are immutable with proper getters/setters
+- [ ] Event listeners use #[AsEventListener] attribute or Services.yaml tags
+- [ ] Event classes use `final` keyword (TYPO3 13+)
+- [ ] Event classes use `readonly` for immutable properties (TYPO3 13+)
+
+### TYPO3 13 Site Sets (Mandatory for TYPO3 13)
+- [ ] Configuration/Sets/ directory exists
+- [ ] Base set has config.yaml with proper metadata
+- [ ] settings.definitions.yaml defines extension settings with types
+- [ ] Set names follow vendor/package convention
+- [ ] Dependencies declared in config.yaml
+
+### Advanced Services.yaml (Mandatory)
+- [ ] Event listeners registered with proper tags
+- [ ] Console commands tagged with schedulable flag
+- [ ] Data processors registered with unique identifiers
+- [ ] Cache services use factory pattern
+- [ ] Service tags include all required attributes
+
+### PSR-15 Middleware
+- [ ] PSR-15 middlewares registered in RequestMiddlewares.php
+- [ ] Middleware ordering defined with before/after
+
+### Extbase Architecture
 - [ ] Extbase models extend AbstractEntity
 - [ ] Repositories extend Repository base class
 - [ ] Controllers use constructor injection
 - [ ] Validators extend AbstractValidator
-- [ ] PSR interfaces used (ResponseInterface, LoggerInterface, etc.)
-- [ ] No global state access ($GLOBALS)
-- [ ] Factory pattern for complex object creation
+
+### Factory Pattern
+- [ ] Factory pattern for complex object creation (e.g., Connection objects)

@@ -6,6 +6,31 @@ A comprehensive Claude Code skill for evaluating TYPO3 extensions against offici
 
 This skill enables systematic evaluation of TYPO3 extensions for conformance to official TYPO3 standards.
 
+### Skill Ecosystem Integration
+
+This conformance checker acts as an **orchestrator** that delegates to specialized skills for deep domain analysis:
+
+**🔧 Testing Analysis: typo3-tests**
+- Repository: https://github.com/netresearch/typo3-testing-skill
+- Expertise: Deep PHPUnit configuration analysis, test quality patterns, TYPO3 Testing Framework validation
+- Integration: Delegated for Testing Standards category (20 points)
+
+**📚 Documentation Analysis: typo3-docs**
+- Repository: https://github.com/netresearch/typo3-docs-skill
+- Expertise: RST validation, TYPO3 documentation standards, rendering validation with Docker
+- Integration: Delegated for Documentation Excellence (bonus category)
+
+**Delegation Benefits:**
+- **Depth:** Each skill provides domain expertise beyond surface-level checks
+- **Accuracy:** Specialized validation reduces false positives/negatives
+- **Modularity:** Skills can be used independently or together
+- **Maintainability:** Each skill focuses on single responsibility
+
+**Fallback Strategy:**
+- Surface-level checks performed if specialized skills unavailable
+- Basic validation ensures conformance reports always generate
+- Full accuracy requires all ecosystem skills installed
+
 ### Standards Checked
 
 | Standard | Version/Specification |
@@ -38,12 +63,28 @@ This skill enables systematic evaluation of TYPO3 extensions for conformance to 
 
 ### Reference Documentation
 
+**Core Standards:**
 - **version-requirements.md** - Official TYPO3 and PHP version compatibility matrix
 - **extension-architecture.md** - TYPO3 file structure standards
 - **coding-guidelines.md** - PSR-12 and TYPO3 code style guide
 - **php-architecture.md** - Dependency injection and architectural patterns
 - **testing-standards.md** - Unit, functional, and acceptance testing
 - **best-practices.md** - Real-world patterns and project infrastructure
+
+**Advanced Validation Guides:**
+- **runtests-validation.md** - Validate Build/Scripts/runTests.sh against Tea extension reference
+- **development-environment.md** - Validate DDEV/Docker development environment setup
+- **directory-structure.md** - Validate .Build/ vs Build/ directory separation and organization
+
+**Excellence Indicators:**
+- **excellence-indicators.md** - Optional quality features for exceptional extensions (0-20 bonus points)
+  - Community & Internationalization: Crowdin, issue templates, .gitattributes, README badges
+  - Advanced Quality Tooling: Fractor, TYPO3 CodingStandards, StyleCI, Makefile, CI matrix
+  - Documentation Excellence: 100+ RST files, modern tooling (guides.xml, screenshots.json)
+  - Extension Configuration: ext_conf_template.txt, composer doc scripts, multiple Sets
+
+**Secondary References:**
+- **georgringer/news** - Community reference extension demonstrating excellence patterns
 
 ### Quality Tool Configuration Templates
 
@@ -840,6 +881,23 @@ mv ~/.claude/skills/typo3-conformance-skill-main ~/.claude/skills/typo3-conforma
 git clone https://github.com/netresearch/typo3-conformance-skill.git ~/.claude/skills/typo3-conformance
 ```
 
+### Install Ecosystem Skills (Recommended)
+
+For comprehensive conformance analysis, install specialized skills:
+
+```bash
+# Install typo3-tests for deep testing analysis
+git clone https://github.com/netresearch/typo3-testing-skill.git ~/.claude/skills/typo3-tests
+
+# Install typo3-docs for comprehensive documentation validation
+git clone https://github.com/netresearch/typo3-docs-skill.git ~/.claude/skills/typo3-docs
+```
+
+**Skill Dependencies:**
+- **Standalone:** typo3-conformance works independently with basic validation
+- **Enhanced:** Install typo3-tests and typo3-docs for production-ready conformance reports
+- **Automatic Delegation:** Conformance skill auto-detects and uses ecosystem skills when available
+
 ### Verify Installation
 
 The skill automatically activates when analyzing TYPO3 extensions for standards compliance.
@@ -929,14 +987,28 @@ Claude: [Activates typo3-conformance skill]
 
 ## Conformance Report
 
-The skill generates comprehensive markdown reports with:
+The skill generates comprehensive markdown reports with dual scoring system:
 
-### Overall Score (0-100)
+### Dual Scoring System (0-120 Total)
+
+**Base Conformance (0-100 points) - MANDATORY**
 - Extension Architecture: 0-20 points
 - Coding Guidelines: 0-20 points
 - PHP Architecture: 0-20 points
 - Testing Standards: 0-20 points
 - Best Practices: 0-20 points
+
+**Excellence Indicators (0-20 points) - OPTIONAL BONUS**
+- Community & Internationalization: 0-6 points
+- Advanced Quality Tooling: 0-7 points
+- Documentation Excellence: 0-4 points
+- Extension Configuration: 0-3 points
+
+**Interpretation:**
+- Base conformance (0-100): Core TYPO3 standards compliance (pass/fail criteria)
+- Excellence indicators (0-20): Bonus points for exceptional quality (NEVER penalized if missing)
+- Extensions scoring 100/100 base are fully conformant, regardless of excellence score
+- Excellence indicators identify community reference-level extensions
 
 ### Detailed Analysis
 - ✅ Strengths and passed checks
@@ -944,11 +1016,13 @@ The skill generates comprehensive markdown reports with:
 - ⚠️  Warnings and recommendations
 - 📊 Test coverage estimates
 - 💡 Migration guides and examples
+- 🌟 Excellence features detected (bonus category)
 
 ### Priority Action Items
 - **High Priority** - Critical issues blocking functionality or security
 - **Medium Priority** - Important conformance issues
 - **Low Priority** - Minor style and optimization improvements
+- **Excellence Opportunities** - Optional advanced features for reference-level quality
 
 ## Example Report Output
 
@@ -956,9 +1030,16 @@ The skill generates comprehensive markdown reports with:
 # TYPO3 Extension Conformance Report
 
 **Extension:** my_extension (v1.0.0)
-**Overall Score:** 75/100
 
-## Summary
+---
+
+## Score Summary
+
+**Base Conformance:** 75/100
+**Excellence Indicators:** 8/20 (Bonus)
+**Total Score:** 83/120
+
+### Base Conformance Breakdown
 | Category | Score | Status |
 |----------|-------|--------|
 | Extension Architecture | 18/20 | ✅ Passed |
@@ -966,6 +1047,21 @@ The skill generates comprehensive markdown reports with:
 | PHP Architecture | 16/20 | ✅ Passed |
 | Testing Standards | 14/20 | ⚠️  Issues |
 | Best Practices | 12/20 | ⚠️  Issues |
+
+### Excellence Indicators (Bonus)
+| Category | Score | Status |
+|----------|-------|--------|
+| Community & Internationalization | 4/6 | 🌟 Good |
+| Advanced Quality Tooling | 2/7 | ⚡ Basic |
+| Documentation Excellence | 1/4 | 📝 Standard |
+| Extension Configuration | 1/3 | ⚙️  Minimal |
+
+**Excellence Highlights:**
+- ✅ Crowdin integration (+2)
+- ✅ Professional README badges (+2)
+- ✅ Fractor configuration (+2)
+- ✅ 65 RST files (+1)
+- ✅ Composer doc scripts (+1)
 
 ## Critical Issues
 - ❌ 15 files missing declare(strict_types=1)
@@ -976,6 +1072,12 @@ The skill generates comprehensive markdown reports with:
 1. Add declare(strict_types=1) to all PHP files
 2. Migrate to constructor injection
 3. Increase unit test coverage
+
+## Excellence Opportunities
+- 🌟 Add TYPO3 CodingStandards package (+2 points)
+- 🌟 Implement CI testing matrix (+1 point)
+- 🌟 Add modern documentation tooling (+1 point)
+- 🌟 Create multiple Configuration/Sets/ presets (+1 point)
 ```
 
 ## Reference Standards
@@ -990,34 +1092,69 @@ This skill is based on official TYPO3 documentation:
 
 ## Scoring System
 
-### Extension Architecture (20 points)
+### Base Conformance (0-100 points)
+
+**Extension Architecture (20 points)**
 - Required files present: 8 points
 - Directory structure conformant: 6 points
 - Naming conventions followed: 4 points
 - No critical violations: 2 points
 
-### Coding Guidelines (20 points)
+**Coding Guidelines (20 points)**
 - PSR-12 compliance: 8 points
 - Type declarations: 4 points
 - PHPDoc completeness: 4 points
 - Naming conventions: 4 points
 
-### PHP Architecture (20 points)
+**PHP Architecture (20 points)**
 - Dependency injection: 8 points
 - No deprecated patterns: 6 points
 - Modern event system: 4 points
 - Service configuration: 2 points
 
-### Testing Standards (20 points)
+**Testing Standards (20 points)**
 - Test coverage >70%: 10 points
 - Proper test structure: 6 points
 - Configuration files present: 4 points
 
-### Best Practices (20 points)
-- Quality tools configured: 6 points
-- CI/CD pipeline: 6 points
-- Security practices: 4 points
-- Documentation complete: 4 points
+**Best Practices (20 points)**
+- Development environment (DDEV/Docker): 6 points
+- Build scripts (runTests.sh): 6 points
+- Directory structure (.Build/ vs Build/): 4 points
+- Quality tools configured: 2 points
+- Documentation complete: 2 points
+
+### Excellence Indicators (0-20 bonus points)
+
+**Community & Internationalization (0-6 points)**
+- Crowdin integration: +2 points
+- GitHub issue templates: +1 point
+- .gitattributes export-ignore: +1 point
+- Professional README badges: +2 points
+
+**Advanced Quality Tooling (0-7 points)**
+- Fractor configuration: +2 points
+- TYPO3 CodingStandards package: +2 points
+- StyleCI integration: +1 point
+- Makefile with self-documenting help: +1 point
+- CI testing matrix: +1 point
+
+**Documentation Excellence (0-4 points)**
+- 50-99 RST files: +1 point
+- 100-149 RST files: +2 points
+- 150+ RST files: +3 points
+- Modern tooling (guides.xml, screenshots.json): +1 point
+
+**Extension Configuration (0-3 points)**
+- ext_conf_template.txt: +1 point
+- Composer documentation scripts: +1 point
+- Multiple Configuration/Sets/ presets: +1 point
+
+**Excellence Interpretation:**
+- 0-5 points: Standard extension (meets requirements)
+- 6-10 points: Good practices (actively maintained)
+- 11-15 points: Excellent quality (community reference level)
+- 16-20 points: Outstanding (georgringer/news level)
 
 ## Common Issues Detected
 
