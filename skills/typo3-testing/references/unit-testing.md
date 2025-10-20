@@ -720,8 +720,210 @@ if ($file->isDeleted()) {
 }
 ```
 
+## Testing DataHandler Hooks
+
+DataHandler hooks (`processDatamap_*`, `processCmdmap_*`) require careful testing as they interact with TYPO3 globals.
+
+### Example: Testing processDatamap_postProcessFieldArray
+
+```php
+<?php
+
+declare(strict_types=1);
+
+namespace Vendor\Extension\Tests\Unit\Database;
+
+use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\MockObject\MockObject;
+use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
+use TYPO3\CMS\Core\Context\Context;
+use TYPO3\CMS\Core\DataHandling\DataHandler;
+use TYPO3\CMS\Core\Http\RequestFactory;
+use TYPO3\CMS\Core\Log\LogManager;
+use TYPO3\CMS\Core\Log\Logger;
+use TYPO3\CMS\Core\Resource\DefaultUploadFolderResolver;
+use TYPO3\CMS\Core\Resource\ResourceFactory;
+use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
+use Vendor\Extension\Database\MyDataHandlerHook;
+
+/**
+ * Unit tests for MyDataHandlerHook.
+ *
+ * @covers \Vendor\Extension\Database\MyDataHandlerHook
+ */
+final class MyDataHandlerHookTest extends UnitTestCase
+{
+    protected bool $resetSingletonInstances = true;
+
+    private MyDataHandlerHook $subject;
+
+    /** @var ExtensionConfiguration&MockObject */
+    private ExtensionConfiguration $extensionConfigurationMock;
+
+    /** @var LogManager&MockObject */
+    private LogManager $logManagerMock;
+
+    /** @var ResourceFactory&MockObject */
+    private ResourceFactory $resourceFactoryMock;
+
+    /** @var Context&MockObject */
+    private Context $contextMock;
+
+    /** @var RequestFactory&MockObject */
+    private RequestFactory $requestFactoryMock;
+
+    /** @var DefaultUploadFolderResolver&MockObject */
+    private DefaultUploadFolderResolver $uploadFolderResolverMock;
+
+    /** @var Logger&MockObject */
+    private Logger $loggerMock;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        // Create all required mocks with intersection types for PHPStan compliance
+        /** @var ExtensionConfiguration&MockObject $extensionConfigurationMock */
+        $extensionConfigurationMock = $this->createMock(ExtensionConfiguration::class);
+
+        /** @var LogManager&MockObject $logManagerMock */
+        $logManagerMock = $this->createMock(LogManager::class);
+
+        /** @var ResourceFactory&MockObject $resourceFactoryMock */
+        $resourceFactoryMock = $this->createMock(ResourceFactory::class);
+
+        /** @var Context&MockObject $contextMock */
+        $contextMock = $this->createMock(Context::class);
+
+        /** @var RequestFactory&MockObject $requestFactoryMock */
+        $requestFactoryMock = $this->createMock(RequestFactory::class);
+
+        /** @var DefaultUploadFolderResolver&MockObject $uploadFolderResolverMock */
+        $uploadFolderResolverMock = $this->createMock(DefaultUploadFolderResolver::class);
+
+        /** @var Logger&MockObject $loggerMock */
+        $loggerMock = $this->createMock(Logger::class);
+
+        // Configure extension configuration mock with willReturnCallback
+        $extensionConfigurationMock
+            ->method('get')
+            ->willReturnCallback(function ($extension, $key) {
+                if ($extension === 'my_extension') {
+                    return match ($key) {
+                        'enableFeature' => true,
+                        'timeout'       => 30,
+                        default         => null,
+                    };
+                }
+
+                return null;
+            });
+
+        // Configure log manager to return logger mock
+        $logManagerMock
+            ->method('getLogger')
+            ->with(MyDataHandlerHook::class)
+            ->willReturn($loggerMock);
+
+        // Assign mocks to properties
+        $this->extensionConfigurationMock = $extensionConfigurationMock;
+        $this->logManagerMock             = $logManagerMock;
+        $this->resourceFactoryMock        = $resourceFactoryMock;
+        $this->contextMock                = $contextMock;
+        $this->requestFactoryMock         = $requestFactoryMock;
+        $this->uploadFolderResolverMock   = $uploadFolderResolverMock;
+        $this->loggerMock                 = $loggerMock;
+
+        // Create subject with all dependencies
+        $this->subject = new MyDataHandlerHook(
+            $this->extensionConfigurationMock,
+            $this->logManagerMock,
+            $this->resourceFactoryMock,
+            $this->contextMock,
+            $this->requestFactoryMock,
+            $this->uploadFolderResolverMock,
+        );
+    }
+
+    #[Test]
+    public function constructorInitializesWithDependencyInjection(): void
+    {
+        // Verify subject was created successfully with all dependencies
+        self::assertInstanceOf(MyDataHandlerHook::class, $this->subject);
+    }
+
+    #[Test]
+    public function processDatamapPostProcessFieldArrayHandlesFieldCorrectly(): void
+    {
+        $status     = 'update';
+        $table      = 'tt_content';
+        $id         = '123';
+        $fieldArray = ['bodytext' => '<p>Content with processing</p>'];
+
+        /** @var DataHandler&MockObject $dataHandlerMock */
+        $dataHandlerMock = $this->createMock(DataHandler::class);
+
+        // Mock TCA configuration for RTE field
+        $GLOBALS['TCA']['tt_content']['columns']['bodytext']['config'] = [
+            'type'        => 'text',
+            'enableRichtext' => true,
+        ];
+
+        // Test the hook processes the field
+        $this->subject->processDatamap_postProcessFieldArray(
+            $status,
+            $table,
+            $id,
+            $fieldArray,
+            $dataHandlerMock,
+        );
+
+        // Assert field was processed (actual assertion depends on implementation)
+        self::assertNotEmpty($fieldArray['bodytext']);
+    }
+
+    #[Test]
+    public function constructorLoadsExtensionConfiguration(): void
+    {
+        /** @var ExtensionConfiguration&MockObject $configMock */
+        $configMock = $this->createMock(ExtensionConfiguration::class);
+        $configMock
+            ->expects(self::exactly(2))
+            ->method('get')
+            ->willReturnCallback(function ($extension, $key) {
+                self::assertSame('my_extension', $extension);
+
+                return match ($key) {
+                    'enableFeature' => true,
+                    'timeout'       => 30,
+                    default         => null,
+                };
+            });
+
+        new MyDataHandlerHook(
+            $configMock,
+            $this->logManagerMock,
+            $this->resourceFactoryMock,
+            $this->contextMock,
+            $this->requestFactoryMock,
+            $this->uploadFolderResolverMock,
+        );
+    }
+}
+```
+
+**Key Testing Patterns for DataHandler Hooks:**
+
+1. **Intersection Types for PHPStan**: Use `ResourceFactory&MockObject` for strict type compliance
+2. **TCA Globals**: Set `$GLOBALS['TCA']` in tests to simulate TYPO3 table configuration
+3. **Extension Configuration**: Use `willReturnCallback` with `match` expressions for flexible config mocking
+4. **DataHandler Mock**: Create mock for `$dataHandler` parameter (required in hook signature)
+5. **Reset Singletons**: Always set `protected bool $resetSingletonInstances = true;`
+6. **Constructor DI**: Inject all dependencies via constructor (TYPO3 13+ best practice)
+
 ## Resources
 
 - [TYPO3 Unit Testing Documentation](https://docs.typo3.org/m/typo3/reference-coreapi/main/en-us/Testing/UnitTests.html)
 - [PHPUnit Documentation](https://phpunit.de/documentation.html)
 - [PHPUnit 11 Migration Guide](https://phpunit.de/announcements/phpunit-11.html)
+- [TYPO3 DataHandler Hooks](https://docs.typo3.org/m/typo3/reference-coreapi/main/en-us/ApiOverview/Hooks/DataHandler/Index.html)

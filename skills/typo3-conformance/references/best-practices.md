@@ -176,6 +176,130 @@ parameters:
         - vendor
 ```
 
+#### PHPStan Level 10 Best Practices for TYPO3
+
+**Handling $GLOBALS['TCA'] in Tests:**
+
+PHPStan cannot infer types for runtime-configured `$GLOBALS` arrays. Use ignore annotations:
+
+```php
+// ✅ Right: Suppress offsetAccess warnings for $GLOBALS['TCA']
+/** @var array<string, mixed> $tcaConfig */
+$tcaConfig = [
+    'type'           => 'text',
+    'enableRichtext' => true,
+];
+// @phpstan-ignore-next-line offsetAccess.nonOffsetAccessible
+$GLOBALS['TCA']['tt_content']['columns']['bodytext']['config'] = $tcaConfig;
+
+// ❌ Wrong: No type annotation or suppression
+$GLOBALS['TCA']['tt_content']['columns']['bodytext']['config'] = [
+    'type' => 'text',
+]; // PHPStan error: offsetAccess.nonOffsetAccessible
+```
+
+**Factory Methods vs Property Initialization:**
+
+Avoid uninitialized property errors in test classes:
+
+```php
+// ❌ Wrong: PHPStan warns about uninitialized property
+final class MyServiceTest extends UnitTestCase
+{
+    private MyService $subject; // Uninitialized property
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->subject = new MyService();
+    }
+}
+
+// ✅ Right: Use factory method
+final class MyServiceTest extends UnitTestCase
+{
+    private function createSubject(): MyService
+    {
+        return new MyService();
+    }
+
+    #[Test]
+    public function testSomething(): void
+    {
+        $subject = $this->createSubject();
+        // Use $subject
+    }
+}
+```
+
+**Type Assertions for Dynamic Arrays:**
+
+When testing arrays modified by reference:
+
+```php
+// ❌ Wrong: PHPStan cannot verify type after modification
+public function testFieldProcessing(): void
+{
+    $fieldArray = ['bodytext' => '<p>Test</p>'];
+    $this->subject->processFields($fieldArray);
+
+    // PHPStan error: Cannot access offset on mixed
+    self::assertStringContainsString('Test', $fieldArray['bodytext']);
+}
+
+// ✅ Right: Add type assertions
+public function testFieldProcessing(): void
+{
+    $fieldArray = ['bodytext' => '<p>Test</p>'];
+    $this->subject->processFields($fieldArray);
+
+    self::assertArrayHasKey('bodytext', $fieldArray);
+    self::assertIsString($fieldArray['bodytext']);
+    self::assertStringContainsString('Test', $fieldArray['bodytext']);
+}
+```
+
+**Intersection Types for Mocks:**
+
+Use intersection types for proper PHPStan analysis of mocks:
+
+```php
+// ✅ Right: Intersection type for mock
+/** @var ResourceFactory&MockObject $resourceFactoryMock */
+$resourceFactoryMock = $this->createMock(ResourceFactory::class);
+
+// Alternative: @phpstan-var annotation
+$resourceFactoryMock = $this->createMock(ResourceFactory::class);
+/** @phpstan-var ResourceFactory&MockObject $resourceFactoryMock */
+```
+
+**Common PHPStan Suppressions for TYPO3:**
+
+```php
+// Suppress $GLOBALS['TCA'] access
+// @phpstan-ignore-next-line offsetAccess.nonOffsetAccessible
+$GLOBALS['TCA']['table']['columns']['field'] = $config;
+
+// Suppress $GLOBALS['TYPO3_CONF_VARS'] access
+// @phpstan-ignore-next-line offsetAccess.nonOffsetAccessible
+$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['key'] = MyClass::class;
+
+// Suppress mixed type from legacy code
+// @phpstan-ignore-next-line argument.type
+$this->view->assign('data', $legacyArray);
+```
+
+**Type Hints for Service Container Retrieval:**
+
+```php
+// ✅ Right: Type hint service retrieval
+/** @var DataHandler $dataHandler */
+$dataHandler = $this->get(DataHandler::class);
+
+/** @var ResourceFactory $resourceFactory */
+$resourceFactory = $this->get(ResourceFactory::class);
+```
+
 ### 3. Service Configuration
 
 **Configuration/Services.yaml:**
