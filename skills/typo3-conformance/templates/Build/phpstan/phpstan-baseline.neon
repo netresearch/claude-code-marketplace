@@ -1,0 +1,14 @@
+# PHPStan Baseline - TYPO3 Extension
+# This file contains known issues that are temporarily accepted.
+# Regenerate with: composer phpstan:baseline
+#
+# IMPORTANT: The baseline should SHRINK over time, not grow.
+# New code should NOT add to the baseline.
+
+parameters:
+  ignoreErrors:
+    # Example baseline entry (delete this and add your actual errors)
+    # -
+    #   message: "#^Parameter \\#1 \\$string of function strlen expects string, string\\|null given\\.$#"
+    #   count: 1
+    #   path: ../Classes/Service/MyService.php

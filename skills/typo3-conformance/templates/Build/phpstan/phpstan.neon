@@ -1,0 +1,103 @@
+# PHPStan Configuration - TYPO3 Extension
+# Based on TYPO3 Best Practices: https://github.com/TYPO3BestPractices/tea
+#
+# This configuration enforces:
+# - Level 10 (bleeding-edge strictness with future PHPStan features)
+# - 100% type coverage for parameters and return types
+# - Cognitive complexity limits
+# - Security-focused disallowed calls and superglobals
+
+includes:
+  - phpstan-baseline.neon
+  - ../../.Build/vendor/spaze/phpstan-disallowed-calls/disallowed-dangerous-calls.neon
+  - ../../.Build/vendor/spaze/phpstan-disallowed-calls/disallowed-execution-calls.neon
+  - ../../.Build/vendor/spaze/phpstan-disallowed-calls/disallowed-insecure-calls.neon
+  - ../../.Build/vendor/spaze/phpstan-disallowed-calls/disallowed-loose-calls.neon
+
+parameters:
+  # Minimum PHP version (adjust based on your ext_emconf.php)
+  phpVersion: 80200  # PHP 8.2+
+
+  # Parallel execution (optimize for your CI environment)
+  parallel:
+    # Don't be overly greedy on machines with more CPUs
+    maximumNumberOfProcesses: 5
+
+  # Analysis level (0-10, higher is stricter)
+  level: 10
+
+  # Paths to analyze
+  paths:
+    - ../../Classes
+    - ../../Configuration
+    - ../../Tests
+    - ../../ext_localconf.php
+    # - ../../ext_tables.php  # Uncomment if you still use this (deprecated)
+
+  # Type coverage enforcement - ensures type safety
+  type_coverage:
+    return_type: 100  # All functions must have return types
+    param_type: 100   # All parameters must have types
+    property_type: 95 # 95% of properties must have types
+
+  # Cognitive complexity limits - prevents over-complex code
+  cognitive_complexity:
+    class: 10     # Maximum complexity per class
+    function: 5   # Maximum complexity per function
+
+  # Type perfection - enforce best practices for type usage
+  type_perfect:
+    no_mixed_property: true  # Disallow mixed types in properties
+    no_mixed_caller: true    # Disallow mixed types in callers
+    null_over_false: true    # Prefer null over false
+    narrow_param: true       # Use most specific parameter types
+    narrow_return: true      # Use most specific return types
+
+  # Security: Disallow debugging functions in production code
+  disallowedFunctionCalls:
+    -
+      function:
+        - 'var_dump()'
+        - 'xdebug_break()'
+        - 'debug()'
+        - 'dd()'
+        - 'dump()'
+      message: 'Use logging instead or remove if it was for debugging purposes.'
+    -
+      function: 'header()'
+      message: 'Use PSR-7 API instead (ResponseInterface::withHeader())'
+    -
+      function:
+        - 'print_r()'
+        - 'var_export()'
+      message: 'Use logging instead for production code'
+
+  # Security: Disallow TYPO3 debugging utilities
+  disallowedStaticCalls:
+    -
+      method:
+        - 'TYPO3\CMS\Extbase\Utility\DebuggerUtility::var_dump()'
+        - 'TYPO3\CMS\Core\Utility\DebugUtility::debug()'
+      message: 'Use logging instead or remove if it was for debugging purposes.'
+
+  # Security: Enforce PSR-7 - disallow superglobals
+  disallowedSuperglobals:
+    -
+      superglobal:
+        - '$_GET'
+        - '$_POST'
+        - '$_FILES'
+        - '$_SERVER'
+        - '$_COOKIE'
+        - '$_REQUEST'
+      message: 'Use PSR-7 ServerRequestInterface instead. Access via $request->getQueryParams(), $request->getParsedBody(), etc.'
+
+  # Ignore known PHPUnit false positives
+  ignoreErrors:
+    -
+      message: '#^Call to static method PHPUnit\\Framework\\Assert\:\:assertInstanceOf\(\) .* will always evaluate to#'
+      path: '../../Tests/'
+    # Add your project-specific ignores here
+    # -
+    #   message: '#specific error pattern#'
+    #   path: '../../Classes/Specific/File.php'

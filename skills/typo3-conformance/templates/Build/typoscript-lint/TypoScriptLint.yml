@@ -1,0 +1,37 @@
+---
+# TypoScript Linting Configuration - TYPO3 Extension
+# Based on TYPO3 Best Practices: https://github.com/TYPO3BestPractices/tea
+#
+# This configuration ensures consistent TypoScript formatting and detects common issues.
+
+sniffs:
+  # Indentation - enforce consistent formatting
+  - class: Indentation
+    parameters:
+      indentConditions: true
+      indentPerLevel: 2  # 2 spaces per level (TYPO3 standard)
+      useSpaces: true    # Use spaces, not tabs
+
+  # Dead Code Detection - find unused TypoScript
+  - class: DeadCode
+
+  # Operator Whitespace - consistent spacing around operators
+  - class: Operator
+
+Whitespace
+
+  # Repeating RValue - detect duplicate values (can be noisy, disabled by default)
+  - class: RepeatingRValue
+    disabled: true
+
+  # Duplicate Assignment - detect duplicate property assignments
+  - class: DuplicateAssignment
+
+  # Empty Section - warn about empty sections (can be intentional, disabled by default)
+  - class: EmptySection
+    disabled: true
+
+  # Nesting Consistency - ensure consistent object nesting
+  - class: NestingConsistency
+    parameters:
+      commonPathPrefixThreshold: 1
