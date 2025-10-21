@@ -1,6 +1,6 @@
 ---
 name: Netresearch Branding
-description: "Apply Netresearch brand identity and design standards to web projects, documentation, presentations, and digital content. Use when creating branded materials, designing web interfaces, building presentations, or ensuring brand consistency. Covers: color system (turquoise #40B4B4, orange #F08C1F), typography (Raleway, Open Sans, Calibri), logo usage, web design patterns, social media templates, and image guidelines. Ensures professional, unified Netresearch appearance across all digital touchpoints."
+description: "Apply Netresearch brand identity and design standards to web projects, documentation, presentations, digital content, and open source projects. Use when creating branded materials, designing web interfaces, building presentations, ensuring brand consistency, or setting up OSS project attribution. Covers: color system (turquoise #2F99A4, orange #FF4D00), typography (Raleway, Open Sans, Calibri), logo usage, web design patterns, social media templates, image guidelines, and minimal OSS project branding. Ensures professional, unified Netresearch appearance across all digital touchpoints while maintaining subtle, professional attribution for open source projects."
 license: Complete terms in LICENSE.txt
 ---
 
@@ -848,6 +848,177 @@ Tablet:  768px
 Desktop: 1024px
 Large:   1440px
 ```
+
+## Open Source Project Branding Guidelines
+
+**Reference:** `references/oss-projects.md`
+
+### Activation
+
+This section applies to **Netresearch open source projects** hosted on GitHub under `github.com/netresearch/*`.
+
+**When to apply:**
+- Creating or updating README.md for OSS projects
+- Setting up new public repositories
+- Refreshing project documentation
+- Ensuring company attribution in public projects
+
+**When NOT to apply:**
+- Internal/private repositories
+- Technical documentation (unless it's the main README)
+- API documentation, code comments
+- Test files, configuration files
+
+### Minimal Branding Philosophy
+
+OSS projects require **subtle professional attribution** - not marketing materials. The goal is:
+
+✅ **Clear company attribution** - Users know who maintains the project
+✅ **Professional appearance** - Credible, well-maintained impression
+✅ **Minimal noise** - Branding footprint <5% of total README content
+❌ **No marketing language** - Avoid taglines, promotional copy, superlatives
+❌ **No visual branding in content** - No brand colors in technical documentation
+❌ **No commercial feel** - Keep focus on technical value, not company promotion
+
+### README Structure for OSS Projects
+
+**Reference file:** `references/oss-projects.md` contains complete templates and examples.
+
+#### 1. Logo Placement (Top of README)
+
+```markdown
+<p align="center">
+  <img src="https://raw.githubusercontent.com/netresearch/[repo-name]/main/.github/netresearch-symbol.svg" alt="Netresearch" width="48" height="48">
+</p>
+
+<h1 align="center">[Project Name]</h1>
+<p align="center"><em>Built by <a href="https://www.netresearch.de/">Netresearch DTT GmbH</a></em></p>
+```
+
+**Logo guidelines:**
+- Use symbol-only variant (48px × 48px)
+- Center-aligned at top
+- Store logo in `.github/` directory of repository
+- Use `netresearch-symbol.svg` from skill assets
+- Alternative: Link to raw.githubusercontent.com if logo already in repo
+
+#### 2. Main Content (Technical Focus)
+
+After logo and subtitle, proceed with standard OSS documentation:
+- Project description
+- Features
+- Installation
+- Usage
+- API documentation
+- Configuration
+- Contributing guidelines
+- etc.
+
+**Important:** No brand colors, no marketing language, no promotional content in technical sections.
+
+#### 3. About Section (Bottom of README)
+
+Add minimal About section at the very bottom, before License:
+
+```markdown
+## About
+
+[Project Name] is developed and maintained by [Netresearch DTT GmbH](https://www.netresearch.de/), a technology company specializing in [relevant domain like "e-commerce solutions" or "web development"].
+
+For professional support, custom development, or consulting services, please contact us through our website.
+```
+
+**Guidelines:**
+- Single paragraph maximum
+- Neutral, professional tone
+- One-line description of company relevance
+- Optional: Link to contact or services page
+- No taglines, no marketing speak
+
+#### 4. License Section (Copyright Attribution)
+
+In LICENSE or README license section:
+
+```markdown
+## License
+
+This project is licensed under the [License Name] - see the [LICENSE](LICENSE) file for details.
+
+Copyright © [Year] Netresearch DTT GmbH
+```
+
+### What to Include
+
+✅ **Logo** - 48px symbol, center-aligned, top of README
+✅ **Subtitle** - "Built by Netresearch DTT GmbH" with link
+✅ **About section** - 1 paragraph at bottom, neutral tone
+✅ **Copyright** - In license section
+✅ **Company URL** - https://www.netresearch.de/ (with www)
+
+### What to AVOID
+
+❌ **Brand colors** - No turquoise/orange in README content
+❌ **Marketing taglines** - No "innovative solutions", "cutting-edge", etc.
+❌ **Promotional content** - No service offerings in main sections
+❌ **Large logos** - Maximum 48px, no full wordmark
+❌ **Multiple mentions** - Logo + subtitle + about section is sufficient
+❌ **Visual styling** - No brand-specific CSS, HTML styling
+❌ **Badges for branding** - Badges are for status/metrics, not branding
+
+### Example Minimal Footprint
+
+**Good OSS branding (total: ~8 lines across entire README):**
+```
+[48px logo]
+# Project Name
+Built by Netresearch DTT GmbH
+
+[...400 lines of technical documentation...]
+
+## About
+This project is maintained by Netresearch DTT GmbH.
+
+## License
+Copyright © 2024 Netresearch DTT GmbH
+```
+
+**Bad OSS branding (too much marketing):**
+```
+[Large logo with full wordmark]
+# Project Name
+Brought to you by Netresearch - Your innovative partner for cutting-edge solutions!
+
+## Why Choose This Project?
+Built by industry leaders with 20+ years of experience...
+[...promotional content...]
+
+[Turquoise-colored sections]
+[Company badge graphics]
+[Multiple logo placements]
+```
+
+### Repository Assets
+
+Add logo to repository:
+1. Create `.github/` directory in repository root
+2. Copy `netresearch-symbol.svg` from skill assets: `/home/cybot/.claude/plugins/marketplaces/netresearch-claude-code-marketplace/skills/netresearch-branding/assets/logos/netresearch-symbol-only.svg`
+3. Place as `.github/netresearch-symbol.svg`
+4. Reference in README: `<img src=".github/netresearch-symbol.svg"...>` or via raw.githubusercontent.com
+
+### Quality Check
+
+Before finalizing OSS project README, verify:
+
+- [ ] Logo is 48px maximum, center-aligned
+- [ ] Subtitle uses correct URL: https://www.netresearch.de/
+- [ ] No brand colors in technical content
+- [ ] No marketing language or taglines
+- [ ] About section is ≤2 sentences, bottom placement
+- [ ] Total branding footprint <5% of README
+- [ ] Main content is technical, not promotional
+- [ ] Copyright in license section
+- [ ] No badges for branding purposes
+- [ ] Professional, maintainer-focused tone
 
 ---
 
