@@ -16,6 +16,7 @@ Then use `/plugin` to browse and install plugins.
 |-------|---------|--------------|-------------|
 | TYPO3 Documentation | 1.0.0-20251021 | 2025-10-21 | Create TYPO3 extension documentation |
 | TYPO3 Testing | 1.0.0-20251021 | 2025-10-21 | Manage TYPO3 extension tests |
+| TYPO3 DDEV Setup | 1.0.0-20251021 | 2025-10-21 | Automate DDEV environment setup |
 | TYPO3 Conformance | 1.0.0-20251021 | 2025-10-21 | Evaluate TYPO3 standards compliance |
 | Netresearch Branding | 1.0.0-20251021 | 2025-10-21 | Apply Netresearch brand guidelines |
 | AGENTS.md Generator | 1.0.0-20251021 | 2025-10-21 | Generate AGENTS.md documentation |
@@ -46,6 +47,7 @@ This marketplace uses an **automated sync workflow** to maintain skills from ind
 **Source Repositories:**
 - [typo3-docs-skill](https://github.com/netresearch/typo3-docs-skill)
 - [typo3-testing-skill](https://github.com/netresearch/typo3-testing-skill)
+- [typo3-ddev-skill](https://github.com/netresearch/typo3-ddev-skill)
 - [typo3-conformance-skill](https://github.com/netresearch/typo3-conformance-skill)
 - [netresearch-branding-skill](https://github.com/netresearch/netresearch-branding-skill)
 - [agents-skill](https://github.com/netresearch/agents-skill)
@@ -78,6 +80,21 @@ Create and manage TYPO3 extension tests with comprehensive testing infrastructur
 - CI/CD templates (GitHub Actions, GitLab CI)
 - AGENTS.md templates for test context
 - Quality tools integration (PHPStan, Rector, php-cs-fixer)
+
+### TYPO3 DDEV Setup
+Automate DDEV environment setup for TYPO3 extension development with multi-version testing.
+
+**Repository:** https://github.com/netresearch/typo3-ddev-skill
+
+**Features:**
+- Automated DDEV configuration generation for TYPO3 extensions
+- Multi-version TYPO3 testing environment (11.5, 12.4, 13.4 LTS)
+- Custom DDEV commands for one-command installation
+- Intelligent extension metadata detection
+- Apache vhost configuration for all TYPO3 versions
+- Docker volume management for persistent data
+- Pre-configured development settings (debug, trusted hosts)
+- Complete automation from detection to ready-to-use backend
 
 ### TYPO3 Conformance Checker
 Evaluate TYPO3 extensions for conformance to official TYPO3 standards and best practices.

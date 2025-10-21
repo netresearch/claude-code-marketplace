@@ -19,6 +19,12 @@
       "marketplace_name": "typo3-testing"
     },
     {
+      "name": "typo3-ddev",
+      "repository": "https://github.com/netresearch/typo3-ddev-skill.git",
+      "target_path": "skills/typo3-ddev",
+      "marketplace_name": "typo3-ddev"
+    },
+    {
       "name": "netresearch-branding",
       "repository": "https://github.com/netresearch/netresearch-branding-skill.git",
       "target_path": "skills/netresearch-branding",
