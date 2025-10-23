@@ -130,7 +130,7 @@ fi
 echo ""
 
 # 4. Testing Check
-echo -e "${BLUE}[4/5] Checking testing infrastructure...${NC}"
+echo -e "${BLUE}[4/6] Checking testing infrastructure...${NC}"
 if bash "${SCRIPT_DIR}/check-testing.sh" "${PROJECT_DIR}" >> "${REPORT_FILE}"; then
     echo -e "${GREEN}  ✓ Testing check complete${NC}"
     test_score=16
@@ -140,27 +140,39 @@ else
 fi
 echo ""
 
-# 5. Generate comprehensive report
-echo -e "${BLUE}[5/5] Generating final report...${NC}"
+# 5. PHPStan Baseline Check
+echo -e "${BLUE}[5/6] Checking PHPStan baseline hygiene...${NC}"
+if bash "${SCRIPT_DIR}/check-phpstan-baseline.sh" "${PROJECT_DIR}"; then
+    echo -e "${GREEN}  ✓ PHPStan baseline hygiene check passed${NC}"
+    baseline_score=10
+else
+    echo -e "${RED}  ✗ PHPStan baseline violation detected${NC}"
+    baseline_score=0
+fi
+echo ""
+
+# 6. Generate comprehensive report
+echo -e "${BLUE}[6/6] Generating final report...${NC}"
 bash "${SCRIPT_DIR}/generate-report.sh" "${PROJECT_DIR}" "${REPORT_FILE}" \
     "${structure_score}" "${coding_score}" "${arch_score}" "${test_score}"
 echo ""
 
-# Calculate total
-total_score=$((structure_score + coding_score + arch_score + test_score + 10))
+# Calculate total (including baseline hygiene score)
+total_score=$((structure_score + coding_score + arch_score + test_score + baseline_score))
 
 # Display summary
 echo -e "${BLUE}╔════════════════════════════════════════════════════════════╗${NC}"
 echo -e "${BLUE}║                    Conformance Results                     ║${NC}"
 echo -e "${BLUE}╚════════════════════════════════════════════════════════════╝${NC}"
 echo ""
-echo -e "  File Structure:     ${structure_score}/20"
-echo -e "  Coding Standards:   ${coding_score}/20"
-echo -e "  PHP Architecture:   ${arch_score}/20"
-echo -e "  Testing Standards:  ${test_score}/20"
-echo -e "  Best Practices:     10/20"
+echo -e "  File Structure:       ${structure_score}/20"
+echo -e "  Coding Standards:     ${coding_score}/20"
+echo -e "  PHP Architecture:     ${arch_score}/20"
+echo -e "  Testing Standards:    ${test_score}/20"
+echo -e "  Baseline Hygiene:     ${baseline_score}/10"
+echo -e "  Best Practices:       10/10"
 echo ""
-echo -e "  ${BLUE}Total Score:        ${total_score}/100${NC}"
+echo -e "  ${BLUE}Total Score:          ${total_score}/100${NC}"
 echo ""
 
 if [ ${total_score} -ge 80 ]; then

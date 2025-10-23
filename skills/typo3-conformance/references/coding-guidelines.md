@@ -495,6 +495,97 @@ class Product extends AbstractEntity
 }
 ```
 
+## PHPStan and Static Analysis
+
+TYPO3 extensions should use **PHPStan level 10** (strictest) for maximum type safety and code quality.
+
+### PHPStan Baseline Hygiene
+
+**Critical Rule:** New code must NEVER add errors to `phpstan-baseline.neon`.
+
+The baseline file exists only for legacy code that hasn't been refactored yet. All new code must pass PHPStan level 10 without baseline suppression.
+
+**Validation:**
+```bash
+# Check if your changes added to baseline
+git diff HEAD~1 Build/phpstan-baseline.neon
+
+# If count increased, you MUST fix the underlying issues
+# Example: count: 8 → count: 9 means you added 1 new error
+```
+
+### Type-Safe Mixed Value Handling
+
+**Common PHPStan Error:** "Cannot cast mixed to int/string/bool"
+
+**Occurs with:** TypoScript configuration, user input, API responses
+
+**❌ Wrong (adds to baseline):**
+```php
+// PHPStan: Cannot cast mixed to int
+$maxSize = (int) ($conf['maxSize'] ?? 0);
+```
+
+**✅ Right (passes level 10):**
+```php
+// Type-guard before casting
+$value = $conf['maxSize'] ?? 0;
+if (is_numeric($value)) {
+    $maxSize = (int) $value;
+} else {
+    $maxSize = 0;
+}
+```
+
+### Common Mixed Type Patterns
+
+**Arrays from configuration:**
+```php
+// ❌ Wrong
+$items = (array) $conf['items'];
+
+// ✅ Right
+$items = [];
+if (isset($conf['items']) && is_array($conf['items'])) {
+    $items = $conf['items'];
+}
+```
+
+**Strings from user input:**
+```php
+// ❌ Wrong
+$name = (string) $_POST['name'];
+
+// ✅ Right
+$name = '';
+if (isset($_POST['name']) && is_string($_POST['name'])) {
+    $name = $_POST['name'];
+}
+```
+
+**Boolean from configuration:**
+```php
+// ❌ Wrong
+$enabled = (bool) $conf['enabled'];
+
+// ✅ Right
+$enabled = isset($conf['enabled']) && (bool) $conf['enabled'];
+```
+
+### Pre-Commit PHPStan Check
+
+Always run PHPStan before committing:
+
+```bash
+# Run PHPStan
+composer ci:php:stan
+
+# Verify no new baseline entries
+git diff Build/phpstan-baseline.neon
+
+# If baseline changed, fix the issues instead of committing the baseline
+```
+
 ## Conformance Checklist
 
 - [ ] All PHP files use 4 spaces for indentation (NO tabs)
@@ -514,3 +605,6 @@ class Product extends AbstractEntity
 - [ ] Type declarations on all properties and method parameters
 - [ ] Maximum line length 120 characters
 - [ ] Unix line endings (LF)
+- [ ] PHPStan level 10 passes with zero errors
+- [ ] No new errors added to phpstan-baseline.neon
+- [ ] Type-guards before casting mixed values (is_numeric, is_string, is_array)

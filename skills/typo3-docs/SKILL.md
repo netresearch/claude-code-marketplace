@@ -1,5 +1,6 @@
 ---
 name: TYPO3 Documentation
+version: 1.0.0
 description: "Create and maintain TYPO3 extension documentation following official standards. Use when working with reStructuredText (RST) files, TYPO3-specific directives (confval, versionadded, php:method, card-grid), Documentation/ directories, or TYPO3 documentation guidelines. Covers: RST syntax, TYPO3 directives, local rendering with Docker, validation procedures, and TYPO3 Intercept deployment. Ensures documentation meets official TYPO3 quality standards and renders correctly on docs.typo3.org."
 license: Complete terms in LICENSE.txt
 ---

@@ -58,6 +58,106 @@ Document configuration options with structured metadata.
    image plugin. Overrides global TYPO3 image extension settings.
 ```
 
+### Two-Level Configuration Pattern
+
+**Pattern:** Site-wide configuration with per-item override capability
+
+Many TYPO3 features support two-level configuration:
+1. **Site-wide default** via TypoScript
+2. **Per-item override** via attributes or UI
+
+**When to use:**
+- Features where editors need item-specific control
+- Mixed content pages (some items use site-wide, others override)
+- Configuration that varies by context or workflow
+
+**Documentation Structure:**
+
+```rst
+## Configuration
+
+The noScale feature can be configured at two levels:
+
+1. **Site-wide (TypoScript)** - Default behavior for all images
+2. **Per-image (Editor)** - Override for specific images
+
+### Site-Wide Configuration
+
+.. confval:: noScale
+
+   :type: boolean
+   :Default: false (auto-optimization enabled)
+   :Path: lib.parseFunc_RTE.tags.img.noScale
+
+   Controls whether images are automatically optimized or used as original files.
+   When enabled, all images skip TYPO3's image processing.
+
+   **Configuration Priority:**
+
+   - **Per-image setting** (data-noscale attribute) takes precedence
+   - **Site-wide setting** (TypoScript) is the fallback
+   - **Default behavior** when neither is set
+
+   **Enable for all images:**
+
+   .. code-block:: typoscript
+      :caption: setup.typoscript
+
+      lib.parseFunc_RTE {
+          tags.img {
+              noScale = 1  # All images use original files
+          }
+      }
+
+### Per-Image Override
+
+.. versionadded:: 13.0.0
+   Editors can now enable noScale for individual images using the CKEditor
+   image dialog, overriding the site-wide TypoScript setting.
+
+**How to Use:**
+
+1. Insert or edit an image in CKEditor
+2. Open the image dialog (double-click or select + click insert image button)
+3. Check "Use original file (noScale)" checkbox
+4. Save the image
+
+**Configuration Priority:**
+
+- **Per-image setting** (data-noscale attribute) overrides site-wide configuration
+- If unchecked: Falls back to site-wide TypoScript setting
+- If no site-wide setting: Default behavior (auto-optimization)
+
+**Workflow Benefits:**
+
+- **Mixed Content**: Some images original, others optimized on same page
+- **Editorial Control**: Editors decide per-image without developer intervention
+- **Flexibility**: Override site-wide settings for specific images
+- **Newsletter Integration**: Mark high-quality images for email
+
+**Technical Implementation:**
+
+.. code-block:: html
+
+   <!-- Per-image override via data attribute -->
+   <img src="image.jpg" data-noscale="true" />
+```
+
+**Example from t3x-rte_ckeditor_image:**
+
+The noScale feature uses this pattern:
+- **Site-wide**: `lib.parseFunc_RTE.tags.img.noScale = 1` in TypoScript
+- **Per-image**: Checkbox in CKEditor dialog sets `data-noscale` attribute
+- **Priority**: Per-image attribute overrides TypoScript setting
+
+**Documentation Benefits:**
+
+✅ Clear separation of site-wide vs per-item configuration
+✅ Explicit priority/precedence rules documented
+✅ Workflow guidance for editors
+✅ Technical implementation details for developers
+✅ Use case explanations (mixed content, newsletters)
+
 ## Version Information
 
 Document version-specific changes with proper directives.

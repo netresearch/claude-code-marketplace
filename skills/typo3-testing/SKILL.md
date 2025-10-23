@@ -1,5 +1,6 @@
 ---
 name: TYPO3 Testing
+version: 1.0.0
 description: Create, configure, and manage TYPO3 extension tests (unit, functional, acceptance) following official TYPO3 testing framework patterns. Use when setting up tests, writing test cases, configuring PHPUnit, managing fixtures, or integrating CI/CD pipelines for TYPO3 extensions. Covers PHPUnit 11/12, TYPO3 v12/v13 LTS, modern dependency injection testing patterns, and comprehensive quality tooling (PHPStan level 10, Rector, php-cs-fixer).
 license: Complete terms in LICENSE.txt
 ---
@@ -152,6 +153,7 @@ Detailed documentation for each testing aspect:
 - [Unit Testing](references/unit-testing.md) - UnitTestCase patterns, mocking, assertions
 - [Functional Testing](references/functional-testing.md) - FunctionalTestCase, fixtures, database
 - [Acceptance Testing](references/acceptance-testing.md) - Codeception, Selenium, page objects
+- [JavaScript Testing](references/javascript-testing.md) - CKEditor plugins, data-* attributes, frontend tests
 - [Test Runners](references/test-runners.md) - runTests.sh orchestration patterns
 - [CI/CD Integration](references/ci-cd.md) - GitHub Actions, GitLab CI workflows
 - [Quality Tools](references/quality-tools.md) - PHPStan, Rector, php-cs-fixer
