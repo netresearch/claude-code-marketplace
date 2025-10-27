@@ -1,12 +1,13 @@
+---
+name: agents
+version: 1.0.0
+description: Generate and maintain AGENTS.md files following the public agents.md convention. Use when creating documentation for AI agent workflows, onboarding guides, or when standardizing agent interaction patterns across projects.
+license: Complete terms in LICENSE.txt
+---
+
 # AGENTS.md Generator Skill
 
 Generate and maintain AGENTS.md files following the public agents.md convention.
-
-## Skill Metadata
-
-- **version**: 1.0.0
-- **category**: development
-- **tags**: documentation, agents, onboarding, standards, productivity
 
 ## What This Skill Does
 

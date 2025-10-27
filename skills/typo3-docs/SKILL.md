@@ -1,5 +1,5 @@
 ---
-name: TYPO3 Documentation
+name: typo3-docs
 version: 1.0.0
 description: >
   Create and maintain TYPO3 extension documentation following official standards.
