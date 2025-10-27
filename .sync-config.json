@@ -35,6 +35,12 @@
       "repository": "https://github.com/netresearch/agents-skill.git",
       "target_path": "skills/agents",
       "marketplace_name": "agents"
+    },
+    {
+      "name": "typo3-core-contributions",
+      "repository": "https://github.com/netresearch/typo3-core-contributions-skill.git",
+      "target_path": "skills/typo3-core-contributions",
+      "marketplace_name": "typo3-core-contributions"
     }
   ],
   "sync_settings": {
