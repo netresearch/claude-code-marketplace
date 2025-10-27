@@ -1,30 +1,110 @@
 ---
 name: TYPO3 Documentation
 version: 1.0.0
-description: "Create and maintain TYPO3 extension documentation following official standards. Use when working with reStructuredText (RST) files, TYPO3-specific directives (confval, versionadded, php:method, card-grid), Documentation/ directories, or TYPO3 documentation guidelines. Covers: RST syntax, TYPO3 directives, local rendering with Docker, validation procedures, and TYPO3 Intercept deployment. Ensures documentation meets official TYPO3 quality standards and renders correctly on docs.typo3.org."
+description: >
+  Create and maintain TYPO3 extension documentation following official standards.
+
+  Trigger when: editing Documentation/**/*.rst files or README.md (keep in sync!), using TYPO3 directives
+  (confval, versionadded, versionchanged, php:method, card-grid), rendering documentation locally (ddev docs,
+  render_docs.sh), extracting documentation data (extract-all.sh, analyze-docs.sh), or working with TYPO3
+  documentation guidelines.
+
+  Covers: RST syntax, TYPO3-specific directives, documentation extraction/analysis, local Docker rendering,
+  validation procedures, and TYPO3 Intercept deployment. Ensures documentation meets official TYPO3 quality
+  standards and renders correctly on docs.typo3.org.
 license: Complete terms in LICENSE.txt
 ---
 
 # TYPO3 Documentation
 
-## Overview
-
-This skill enables creation and maintenance of TYPO3 extension documentation following official TYPO3 documentation standards. It covers RST syntax, TYPO3-specific directives (confval, versionadded, php:method, card-grid), local rendering with Docker, validation procedures, and automated deployment through TYPO3 Intercept.
-
 ## When to Use This Skill
 
-Use this skill when:
+Invoke this skill when working with TYPO3 extension documentation:
 
+**File Patterns:**
+- Editing `Documentation/**/*.rst` files
+- Creating new RST files in Documentation/ directory
+- Updating `Documentation/Settings.cfg`
+- Editing `README.md` (requires syncing with Documentation/)
+
+**Keywords/Commands:**
+- Using TYPO3 directives: `confval`, `versionadded`, `versionchanged`, `php:method`, `card-grid`
+- Running: `ddev docs`, `scripts/validate_docs.sh`, `scripts/render_docs.sh`
+- Extraction: `scripts/extract-all.sh`, `scripts/analyze-docs.sh`
+- Mentions of: "TYPO3 documentation standards", "docs.typo3.org"
+
+**Tasks:**
 - Creating new TYPO3 extension documentation
-- Updating existing Documentation/*.rst files
+- Extracting documentation data from code and configs
+- Analyzing documentation coverage and identifying gaps
 - Adding configuration documentation with confval directives
-- Documenting version-specific changes with versionadded/versionchanged
+- Documenting version-specific changes (new features, behavior changes, deprecations)
 - Creating visual navigation with card-grid layouts
 - Documenting PHP APIs with php:method directives
 - Validating RST syntax and cross-references
 - Rendering documentation locally for verification
 - Troubleshooting broken cross-references or rendering warnings
 - Following TYPO3 documentation best practices
+
+## Workflow
+
+**Before editing Documentation/*.rst files or README.md:**
+1. Invoke this skill if not already active
+2. Optional: Run `scripts/extract-all.sh` and `scripts/analyze-docs.sh` for gap analysis
+3. Review the workflow decision tree below
+4. Use appropriate TYPO3 directives (not plain text equivalents)
+5. Validate: `scripts/validate_docs.sh` or `ddev docs`
+6. Check rendered output for warnings
+7. **Verify synchronization:** If editing README.md, update Documentation/ accordingly (and vice versa)
+8. Commit both README.md and Documentation/ together in atomic commits
+
+**Common Mistakes to Avoid:**
+- ❌ Writing "Since v13.0.0" instead of `.. versionadded:: 13.0.0`
+- ❌ Using card-grid without `stretched-link` class
+- ❌ Skipping local rendering before committing
+- ❌ Creating markdown files in Documentation/ (RST only)
+- ❌ Missing `:type:`, `:Default:`, or `:Path:` in confval directives
+- ❌ Using external links for internal documentation (use `:ref:` instead)
+- ❌ **Updating README.md without updating Documentation/** (or vice versa)
+
+## Documentation Synchronization
+
+**Critical Rule:** README.md and Documentation/ must stay synchronized.
+
+**When to sync:**
+- Installation instructions changed → Update both README.md and Documentation/Introduction/Index.rst
+- Feature descriptions changed → Update both README.md and Documentation/Index.rst
+- Configuration examples changed → Update both README.md and Documentation/Integration/
+- Button names or UI elements mentioned → Verify consistency across all docs
+
+**Synchronization checklist:**
+1. ✅ Installation steps match between README.md and Documentation/Introduction/
+2. ✅ Feature descriptions consistent between README.md and Documentation/Index.rst
+3. ✅ Code examples identical (button names, configuration, TypoScript)
+4. ✅ Version numbers consistent (README.md badges match Documentation/Settings.cfg)
+5. ✅ Links to external resources point to same destinations
+
+**Example from real bug:**
+```markdown
+# README.md (WRONG)
+toolbar: [typo3image]  # Wrong button name
+
+# Documentation/Integration/RTE-Setup.rst (WRONG)
+toolbar: [typo3image]  # Wrong button name
+
+# Actual JavaScript code (CORRECT)
+editor.ui.componentFactory.add('insertimage', ...)  # Correct button name
+```
+
+**Fix approach:**
+1. Find source of truth (usually the actual code)
+2. Update README.md with correct information
+3. Update all Documentation/*.rst files with same information
+4. Commit both in same atomic commit
+
+## Overview
+
+This skill enables creation and maintenance of TYPO3 extension documentation following official TYPO3 documentation standards. It covers RST syntax, TYPO3-specific directives (confval, versionadded, php:method, card-grid), documentation extraction and analysis tools, local rendering with Docker, validation procedures, and automated deployment through TYPO3 Intercept.
 
 ## Documentation Structure
 
@@ -331,6 +411,21 @@ To document PHP classes and methods, use the PHP domain directives:
    :throws \\RuntimeException: When file is not found
 ```
 
+**Return Type Annotations:**
+
+Include return type annotations in method signatures (after closing parenthesis) to improve documentation clarity and follow Sphinx best practices:
+
+```rst
+✅ Correct:   .. php:method:: getImage(int $fileUid): File|null
+❌ Incorrect: .. php:method:: getImage(int $fileUid)
+```
+
+**Return Type Format:**
+- Use short class names when unambiguous: `File|null`, `ProcessedFile|null`
+- Use fully qualified names when needed: `\\TYPO3\\CMS\\Core\\Resource\\File|null`
+- Use union types for nullable returns: `string|null` or `?string`
+- Match the style used in parameter type hints for consistency
+
 **Class:**
 ```rst
 .. php:class:: SelectImageController
@@ -498,6 +593,7 @@ xdg-open Documentation-GENERATED-temp/Index.html
 - ✅ Code blocks specify language
 - ✅ Proper heading hierarchy
 - ✅ No trailing whitespace
+- ✅ PHP method signatures include return types
 
 **Documentation Coverage:**
 - All public APIs documented

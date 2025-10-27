@@ -11,7 +11,7 @@
     {
       "name": "typo3-docs",
       "description": "Create and maintain TYPO3 extension documentation following official TYPO3 documentation standards. Includes automated documentation extraction with priority-weighted gap analysis based on TYPO3 architecture, RST syntax reference, TYPO3-specific directives, local rendering, validation, and TYPO3 Intercept deployment setup.",
-      "version": "1.0.0-20251021",
+      "version": "1.0.0-20251025",
       "author": {
         "name": "Netresearch DTT GmbH",
         "email": "info@netresearch.de"
