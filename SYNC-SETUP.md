@@ -2,6 +2,20 @@
 
 This marketplace uses automated GitHub Actions to sync skills from their individual source repositories. This document explains how to set up and maintain the sync automation.
 
+## ⚠️ CURRENT STATUS (2025-10-29)
+
+**Sync Mechanism**: ✅ Fixed and operational
+- All 7 skills configured in sync workflow
+- Directory creation issue fixed
+- Weekly schedule working (Monday 2 AM UTC)
+
+**Immediate Sync**: ❌ NOT WORKING
+- Source repositories missing `.github/workflows/notify-marketplace.yml`
+- No repository_dispatch events being sent
+- Skills only sync once per week via cron
+
+**Action Required**: Add notify workflow to all 7 source repositories (see step 3 below)
+
 ## Overview
 
 **Problem**: Claude Code does not checkout git submodules when cloning marketplaces
@@ -84,7 +98,30 @@ For **each skill repository** (typo3-docs-skill, typo3-conformance-skill, typo3-
 
 #### Step 3: Create Workflow in Each Skill Repository
 
-Create `.github/workflows/notify-marketplace.yml` in each skill repository:
+**Quick Deploy**: Use the template file `notify-marketplace.yml` at the root of this repository.
+
+For each skill repository, copy the workflow:
+
+```bash
+# For each repository:
+cd /path/to/skill-repo
+mkdir -p .github/workflows
+cp /path/to/claude-code-marketplace/notify-marketplace.yml .github/workflows/
+git add .github/workflows/notify-marketplace.yml
+git commit -m "add marketplace sync notification workflow"
+git push origin main
+```
+
+**Repositories that need this workflow**:
+- [ ] typo3-docs-skill
+- [ ] typo3-conformance-skill
+- [ ] typo3-testing-skill
+- [ ] typo3-ddev-skill
+- [ ] typo3-core-contributions-skill
+- [ ] netresearch-branding-skill
+- [ ] agents-skill
+
+Or manually create `.github/workflows/notify-marketplace.yml` in each skill repository:
 
 ```yaml
 name: Notify Marketplace on Update
