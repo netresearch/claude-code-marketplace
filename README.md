@@ -10,16 +10,23 @@ Claude Code plugins for TYPO3 development and technical documentation.
 
 Then use `/plugin` to browse and install plugins.
 
+## Sync Status
+
+**Last Sync:** 2025-10-27 (via scheduled weekly sync)
+**Sync Frequency:** Weekly (Monday 2 AM UTC)
+**Immediate Sync:** ⚠️ Not configured (requires notify workflow in source repos - see [SYNC-SETUP.md](SYNC-SETUP.md))
+
 ## Installed Skills
 
 | Skill | Version | Last Updated | Description |
 |-------|---------|--------------|-------------|
-| TYPO3 Documentation | 1.0.0-20251021 | 2025-10-21 | Create TYPO3 extension documentation |
-| TYPO3 Testing | 1.0.0-20251021 | 2025-10-21 | Manage TYPO3 extension tests |
-| TYPO3 DDEV Setup | 1.0.0-20251021 | 2025-10-21 | Automate DDEV environment setup |
-| TYPO3 Conformance | 1.0.0-20251021 | 2025-10-21 | Evaluate TYPO3 standards compliance |
-| Netresearch Branding | 1.0.0-20251021 | 2025-10-21 | Apply Netresearch brand guidelines |
-| AGENTS.md Generator | 1.0.0-20251021 | 2025-10-21 | Generate AGENTS.md documentation |
+| TYPO3 Documentation | 1.0.0-20251027 | 2025-10-27 | Create TYPO3 extension documentation |
+| TYPO3 Testing | 1.0.0-20251027 | 2025-10-27 | Manage TYPO3 extension tests |
+| TYPO3 DDEV Setup | 1.0.0 | Pending | Automate DDEV environment setup |
+| TYPO3 Core Contributions | 1.0.0 | Pending | Guide TYPO3 core contributions |
+| TYPO3 Conformance | 1.0.0-20251027 | 2025-10-27 | Evaluate TYPO3 standards compliance |
+| Netresearch Branding | 1.0.0-20251027 | 2025-10-27 | Apply Netresearch brand guidelines |
+| AGENTS.md Generator | 1.0.0-20251027 | 2025-10-27 | Generate AGENTS.md documentation |
 
 > **Version Format:** `MAJOR.MINOR.PATCH-YYYYMMDD` (semantic version + last commit date)
 >
@@ -48,6 +55,7 @@ This marketplace uses an **automated sync workflow** to maintain skills from ind
 - [typo3-docs-skill](https://github.com/netresearch/typo3-docs-skill)
 - [typo3-testing-skill](https://github.com/netresearch/typo3-testing-skill)
 - [typo3-ddev-skill](https://github.com/netresearch/typo3-ddev-skill)
+- [typo3-core-contributions-skill](https://github.com/netresearch/typo3-core-contributions-skill)
 - [typo3-conformance-skill](https://github.com/netresearch/typo3-conformance-skill)
 - [netresearch-branding-skill](https://github.com/netresearch/netresearch-branding-skill)
 - [agents-skill](https://github.com/netresearch/agents-skill)
@@ -110,6 +118,20 @@ Evaluate TYPO3 extensions for conformance to official TYPO3 standards and best p
 - Priority-based action items with migration guides
 - Detailed reports with specific file:line references
 
+### TYPO3 Core Contributions
+Guide contributions to TYPO3 core following official contribution guidelines.
+
+**Repository:** https://github.com/netresearch/typo3-core-contributions-skill
+
+**Features:**
+- Patch creation and Gerrit workflow
+- TYPO3 coding guidelines compliance
+- Testing requirements for core contributions
+- Review process guidance
+- Forge issue integration
+- Commit message formatting
+- Change request best practices
+
 ### Netresearch Branding
 Implement Netresearch brand guidelines in web projects with complete design system.
 
@@ -125,6 +147,21 @@ Implement Netresearch brand guidelines in web projects with complete design syst
 - Web design patterns and best practices
 - Interactive component showcase
 
+### AGENTS.md Generator
+Generate and maintain AGENTS.md files following the public agents.md convention.
+
+**Repository:** https://github.com/netresearch/agents-skill
+
+**Features:**
+- Thin root files with precedence rules
+- Scoped files for subsystems
+- Auto-extract commands from build tools
+- Language-specific templates (Go, PHP, TypeScript, Python)
+- Standard conventions adherence
+- Build system integration
+
 ---
 
 **Maintained by:** Netresearch DTT GmbH, Leipzig
+
+**For Sync Setup & Maintenance:** See [SYNC-SETUP.md](SYNC-SETUP.md)
