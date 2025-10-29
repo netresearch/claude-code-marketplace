@@ -58,7 +58,8 @@ jobs:
           # Remove .git directory to avoid nested repos
           rm -rf .sync-temp/typo3-docs/.git
 
-          # Remove existing skill directory contents (keep directory)
+          # Ensure skill directory exists and remove existing contents
+          mkdir -p skills/typo3-docs
           rm -rf skills/typo3-docs/*
           rm -rf skills/typo3-docs/.[!.]*
 
@@ -95,6 +96,7 @@ jobs:
           cd ../..
 
           rm -rf .sync-temp/typo3-conformance/.git
+          mkdir -p skills/typo3-conformance
           rm -rf skills/typo3-conformance/*
           rm -rf skills/typo3-conformance/.[!.]*
           cp -r .sync-temp/typo3-conformance/* skills/typo3-conformance/
@@ -125,6 +127,7 @@ jobs:
           cd ../..
 
           rm -rf .sync-temp/typo3-testing/.git
+          mkdir -p skills/typo3-testing
           rm -rf skills/typo3-testing/*
           rm -rf skills/typo3-testing/.[!.]*
           cp -r .sync-temp/typo3-testing/* skills/typo3-testing/
@@ -155,6 +158,7 @@ jobs:
           cd ../..
 
           rm -rf .sync-temp/netresearch-branding/.git
+          mkdir -p skills/netresearch-branding
           rm -rf skills/netresearch-branding/*
           rm -rf skills/netresearch-branding/.[!.]*
           cp -r .sync-temp/netresearch-branding/* skills/netresearch-branding/
@@ -185,6 +189,7 @@ jobs:
           cd ../..
 
           rm -rf .sync-temp/agents/.git
+          mkdir -p skills/agents
           rm -rf skills/agents/*
           rm -rf skills/agents/.[!.]*
           cp -r .sync-temp/agents/* skills/agents/
@@ -215,6 +220,7 @@ jobs:
           cd ../..
 
           rm -rf .sync-temp/typo3-ddev/.git
+          mkdir -p skills/typo3-ddev
           rm -rf skills/typo3-ddev/*
           rm -rf skills/typo3-ddev/.[!.]*
           cp -r .sync-temp/typo3-ddev/* skills/typo3-ddev/
@@ -245,6 +251,7 @@ jobs:
           cd ../..
 
           rm -rf .sync-temp/typo3-core-contributions/.git
+          mkdir -p skills/typo3-core-contributions
           rm -rf skills/typo3-core-contributions/*
           rm -rf skills/typo3-core-contributions/.[!.]*
           cp -r .sync-temp/typo3-core-contributions/* skills/typo3-core-contributions/
