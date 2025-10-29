@@ -1,0 +1,17 @@
+name: {{DDEV_SITENAME}}
+type: php
+docroot: ""
+no_project_mount: true
+php_version: "8.2"
+composer_version: "2"
+webserver_type: apache-fpm
+router_http_port: "80"
+router_https_port: "443"
+xdebug_enabled: false
+additional_hostnames:
+    - docs.{{DDEV_SITENAME}}
+    - v11.{{DDEV_SITENAME}}
+    - v12.{{DDEV_SITENAME}}
+    - v13.{{DDEV_SITENAME}}
+additional_fqdns: []
+use_dns_when_possible: true

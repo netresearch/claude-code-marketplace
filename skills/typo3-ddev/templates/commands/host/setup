@@ -1,0 +1,41 @@
+#!/bin/bash
+
+## Description: Complete setup - docs, install TYPO3, configure extension
+## Usage: setup
+## Example: "ddev setup"
+
+set -e
+
+echo "🚀 Complete DDEV Environment Setup"
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo ""
+
+# Step 1: Render documentation
+echo "📚 Step 1/3: Rendering documentation..."
+if [ -d "/var/www/${EXTENSION_KEY}/Documentation" ]; then
+    ddev docs
+else
+    echo "⚠️  No Documentation/ directory found, skipping docs rendering"
+fi
+echo ""
+
+# Step 2: Install TYPO3
+echo "🌐 Step 2/3: Installing TYPO3..."
+ddev exec /mnt/ddev_config/commands/web/install-all
+echo ""
+
+# Done
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo "✅ Setup Complete!"
+echo ""
+echo "🌐 Access Your Environment:"
+echo "   Overview:       https://${DDEV_SITENAME}.ddev.site/"
+echo "   Documentation:  https://docs.${DDEV_SITENAME}.ddev.site/"
+echo "   TYPO3 v11:      https://v11.${DDEV_SITENAME}.ddev.site/"
+echo "   TYPO3 v12:      https://v12.${DDEV_SITENAME}.ddev.site/"
+echo "   TYPO3 v13:      https://v13.${DDEV_SITENAME}.ddev.site/"
+echo ""
+echo "🔑 Backend Login:"
+echo "   Username: admin"
+echo "   Password: Password:joh316"
+echo ""

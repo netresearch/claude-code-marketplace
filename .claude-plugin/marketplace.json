@@ -33,7 +33,7 @@
     {
       "name": "typo3-ddev",
       "description": "Set up and manage TYPO3 development environments using DDEV. Includes DDEV configuration, local development workflows, container management, database handling, and integration with TYPO3-specific tooling.",
-      "version": "1.0.0",
+      "version": "1.0.0-20251029",
       "author": {
         "name": "Netresearch DTT GmbH",
         "email": "info@netresearch.de"
@@ -44,7 +44,7 @@
     {
       "name": "typo3-core-contributions",
       "description": "Guide contributions to TYPO3 core following official contribution guidelines. Includes patch creation, Gerrit workflow, coding guidelines, testing requirements, and review processes for contributing to the TYPO3 core.",
-      "version": "1.0.0",
+      "version": "1.3.0-20251029",
       "author": {
         "name": "Netresearch DTT GmbH",
         "email": "info@netresearch.de"

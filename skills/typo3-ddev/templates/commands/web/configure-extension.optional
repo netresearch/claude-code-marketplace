@@ -1,0 +1,113 @@
+#!/bin/bash
+
+## Description: Auto-configure your TYPO3 extension with demo content and settings
+## Usage: configure-extension [VERSION]
+## Example: ddev configure-extension v13
+
+VERSION=${1:-v13}
+INSTALL_DIR=/var/www/html/$VERSION
+
+echo "🔧 Configuring {{EXTENSION_KEY}} extension for $VERSION..."
+
+# Install Introduction Package for demo content
+echo "📦 Installing TYPO3 Introduction Package..."
+composer require typo3/cms-introduction --no-progress -d $INSTALL_DIR
+
+# Activate Introduction extension
+echo "✅ Activating Introduction extension..."
+cd $INSTALL_DIR
+vendor/bin/typo3 extension:setup --extension=introduction
+
+# Remove default "main" site created by typo3 setup (Introduction creates its own site)
+echo "🧹 Removing default site (Introduction package provides its own)..."
+rm -rf $INSTALL_DIR/config/sites/main
+
+# Optional: Create site package for extension-specific configuration
+# Uncomment and customize for extensions needing RTE, TsConfig, or TypoScript setup
+
+# echo "📝 Creating site configuration package..."
+# mkdir -p $INSTALL_DIR/public/typo3conf/ext/site_config/Configuration
+#
+# cat > $INSTALL_DIR/public/typo3conf/ext/site_config/ext_emconf.php << 'EOF'
+# <?php
+# $EM_CONF[$_EXTKEY] = [
+#     'title' => 'Site Configuration',
+#     'description' => 'Configuration for {{EXTENSION_KEY}}',
+#     'category' => 'templates',
+#     'state' => 'stable',
+#     'version' => '1.0.0',
+#     'constraints' => [
+#         'depends' => [
+#             'typo3' => '13.4.0-13.4.99',
+#             '{{EXTENSION_KEY}}' => '',
+#         ],
+#     ],
+# ];
+# EOF
+
+# Example: RTE configuration for CKEditor plugins
+# IMPORTANT: When defining editor.config, YAML replaces the entire block instead of merging!
+# DO NOT override importModules or externalPlugins - let Plugin.yaml handle them.
+#
+# mkdir -p $INSTALL_DIR/public/typo3conf/ext/site_config/Configuration/RTE
+#
+# cat > $INSTALL_DIR/public/typo3conf/ext/site_config/Configuration/RTE/Default.yaml << 'EOF'
+# imports:
+#   - { resource: "EXT:rte_ckeditor/Configuration/RTE/Default.yaml" }
+#   - { resource: "EXT:{{EXTENSION_KEY}}/Configuration/RTE/Plugin.yaml" }
+#
+# editor:
+#   config:
+#     # IMPORTANT: DO NOT override importModules here!
+#     # Plugin.yaml provides: importModules: ['@vendor/extension/Plugins/myplugin.js']
+#     # Plugin.yaml provides: externalPlugins: { myplugin: { route: ... } }
+#     # If you need html-support, add it to Plugin.yaml or merge arrays properly
+#
+#     toolbar:
+#       items:
+#         - heading
+#         - '|'
+#         - bold
+#         - italic
+#         # Add your custom toolbar buttons here
+# EOF
+
+# Example: Page TSConfig
+# mkdir -p $INSTALL_DIR/public/typo3conf/ext/site_config/Configuration/TsConfig/Page
+#
+# cat > $INSTALL_DIR/public/typo3conf/ext/site_config/Configuration/TsConfig/Page/Config.tsconfig << 'EOF'
+# # Add your Page TSConfig here
+# # Example: RTE.default.preset = default
+# EOF
+
+# IMPORTANT: If creating site_config extension, you must register it!
+# Since site_config is not a composer-installed extension, ext_localconf.php
+# and ext_tables.php won't be loaded automatically. Instead:
+#
+# 1. Register RTE preset in AdditionalConfiguration.php:
+# cat >> $INSTALL_DIR/config/system/additional.php << 'EOF'
+#
+# // Register custom RTE preset
+# $GLOBALS['TYPO3_CONF_VARS']['RTE']['Presets']['default'] = 'EXT:site_config/Configuration/RTE/Default.yaml';
+# EOF
+#
+# 2. Add Page TSConfig to site configuration:
+# cat >> $INSTALL_DIR/config/sites/introduction/config.yaml << 'EOF'
+# pagesTsConfig:
+#   'RTE.default.preset': 'default'
+# EOF
+
+# Flush caches
+echo "🧹 Flushing caches..."
+cd $INSTALL_DIR
+vendor/bin/typo3 cache:flush
+
+echo "✅ Extension configuration complete!"
+echo ""
+echo "📌 Access your TYPO3 installation:"
+echo "   Frontend: https://$VERSION.{{DDEV_SITENAME}}.ddev.site/"
+echo "   Backend:  https://$VERSION.{{DDEV_SITENAME}}.ddev.site/typo3/"
+echo "   Username: admin"
+echo "   Password: Password:joh316"
+echo ""
+echo "🎨 Your extension is now configured and ready to test!"

@@ -1,0 +1,17 @@
+#!/bin/bash
+
+## Description: Generate index.html overview page
+## Usage: generate-index
+## Example: ddev generate-index
+
+EXTENSION_KEY=$(basename "$(pwd)")
+DDEV_PROJECT=$(ddev describe -j | jq -r '.name' 2>/dev/null || echo "$EXTENSION_KEY")
+
+# Simple sed-based substitution
+sed -e "s/{{EXTENSION_NAME}}/$EXTENSION_KEY/g" \
+    -e "s/{{EXTENSION_KEY}}/$EXTENSION_KEY/g" \
+    -e "s/{{DDEV_PROJECT}}/$DDEV_PROJECT/g" \
+    /var/www/html/.ddev/index.html.template > /var/www/html/index.html
+
+echo "✅ index.html generated successfully!"
+echo "Access your project at: http://$DDEV_PROJECT.ddev.site/"

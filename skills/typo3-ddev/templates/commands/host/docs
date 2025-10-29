@@ -1,0 +1,74 @@
+#!/bin/bash
+
+## Description: Render TYPO3 extension documentation to HTML
+## Usage: docs
+## Example: "ddev docs"
+
+set -e
+
+PROJECT_DIR="$(pwd)"
+DOC_SOURCE="${PROJECT_DIR}/Documentation"
+DOC_OUTPUT="${PROJECT_DIR}/Documentation-GENERATED-temp"
+
+echo "📚 Rendering TYPO3 Extension Documentation"
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+
+# Check if Documentation directory exists
+if [ ! -d "$DOC_SOURCE" ]; then
+    echo "❌ Error: Documentation directory not found"
+    echo "💡 Tip: Create a Documentation/ directory with Index.rst to get started"
+    exit 1
+fi
+
+# Check if Index.rst exists
+if [ ! -f "$DOC_SOURCE/Index.rst" ]; then
+    echo "❌ Error: Index.rst not found in Documentation/"
+    echo "💡 Tip: Create Documentation/Index.rst as the main entry point"
+    exit 1
+fi
+
+echo "📖 Source:  Documentation/"
+echo "📦 Output:  Documentation-GENERATED-temp/"
+echo ""
+
+# Clean previous output
+if [ -d "$DOC_OUTPUT" ]; then
+    echo "🧹 Cleaning previous documentation build..."
+    rm -rf "$DOC_OUTPUT"
+fi
+
+# Render documentation using TYPO3's official docker image
+echo "🔨 Rendering documentation with TYPO3 render-guides..."
+echo ""
+
+docker run --rm \
+    -v "${PROJECT_DIR}:/project" \
+    --user "$(id -u):$(id -g)" \
+    ghcr.io/typo3-documentation/render-guides:latest \
+    --no-progress \
+    --output=/project/Documentation-GENERATED-temp \
+    /project/Documentation 2>&1
+
+if [ $? -eq 0 ]; then
+    # Check for output files (structure may vary)
+    if [ -f "$DOC_OUTPUT/Result/project/0.0.0/Index.html" ] || \
+       [ -f "$DOC_OUTPUT/Index.html" ] || \
+       [ -d "$DOC_OUTPUT" ]; then
+        echo ""
+        echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+        echo "✅ Documentation rendered successfully!"
+        echo ""
+        echo "🌐 View at: https://docs.$(ddev describe -j | jq -r .raw.name).ddev.site/"
+        echo "📁 Output:  Documentation-GENERATED-temp/"
+        echo ""
+    else
+        echo ""
+        echo "⚠️  Build completed but output structure unclear"
+        echo "📁 Check: Documentation-GENERATED-temp/"
+    fi
+else
+    echo ""
+    echo "❌ Documentation rendering failed"
+    echo "💡 Check your .rst files for syntax errors"
+    exit 1
+fi

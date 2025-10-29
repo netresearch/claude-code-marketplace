@@ -1,0 +1,15 @@
+# TYPO3 Scheduler Aliases
+alias t3-scheduler-v11='cd /var/www/html/v11 && vendor/bin/typo3 scheduler:run'
+alias t3-scheduler-v12='cd /var/www/html/v12 && vendor/bin/typo3 scheduler:run'
+alias t3-scheduler-v13='cd /var/www/html/v13 && vendor/bin/typo3 scheduler:run'
+alias t3-scheduler-all='t3-scheduler-v11 && t3-scheduler-v12 && t3-scheduler-v13'
+
+# Redis CLI access
+alias redis='redis-cli -h redis'
+
+# Cache management
+alias t3-cache-flush-v13='cd /var/www/html/v13 && vendor/bin/typo3 cache:flush'
+alias t3-cache-warmup-v13='cd /var/www/html/v13 && vendor/bin/typo3 cache:warmup'
+
+# Quick TYPO3 commands
+alias t3='cd /var/www/html/v13 && vendor/bin/typo3'

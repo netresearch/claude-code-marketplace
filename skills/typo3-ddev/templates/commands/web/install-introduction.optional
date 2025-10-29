@@ -1,0 +1,33 @@
+#!/bin/bash
+
+## Description: Install TYPO3 Introduction Package with demo content
+## Usage: install-introduction [VERSION]
+## Example: ddev install-introduction
+## Example: ddev install-introduction v13
+
+VERSION=${1:-v13}
+
+echo "Installing Introduction Package for $VERSION..."
+
+cd /var/www/html/$VERSION
+
+# Install introduction package
+composer require typo3/cms-introduction --no-progress
+
+# Setup extension
+vendor/bin/typo3 extension:setup --extension=introduction
+
+# Flush caches
+vendor/bin/typo3 cache:flush
+
+echo "✅ Introduction Package installed successfully!"
+echo ""
+echo "Demo content includes:"
+echo "  - 86+ pages with example content"
+echo "  - 226+ content elements"
+echo "  - Multi-language support (EN, DE, DA)"
+echo "  - Bootstrap Package theme"
+echo ""
+echo "Access your demo site at:"
+echo "  Frontend: https://${DDEV_SITENAME}.ddev.site/"
+echo "  Backend:  https://${DDEV_SITENAME}.ddev.site/typo3/"

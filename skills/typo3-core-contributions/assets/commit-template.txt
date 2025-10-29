@@ -1,0 +1,78 @@
+[BUGFIX|TASK|FEATURE|DOCS|SECURITY] Subject line (max 52 chars, imperative)
+
+# Detailed description explaining how and why (not what):
+# - Lines wrapped at 72 characters
+# - Explain context and reasoning
+# - Don't repeat Forge issue content
+# - Don't describe reproduction steps
+#
+# Use bullet points for lists:
+# * First item
+# * Second item
+# * Third item
+
+Resolves: #
+Releases: main, 13.4, 12.4
+# Change-Id will be added automatically by git hook - DO NOT edit manually!
+
+# ============================================================================
+# TYPO3 Commit Message Format Guide
+# ============================================================================
+#
+# SUBJECT LINE
+# ------------
+# Format: [TYPE] Description
+#
+# Types:
+#   [BUGFIX]   - Bug fixes
+#   [FEATURE]  - New features (main branch only)
+#   [TASK]     - Refactoring, cleanup, miscellaneous
+#   [DOCS]     - Documentation changes
+#   [SECURITY] - Security vulnerability fixes
+#
+# Breaking changes: [!!!][TYPE] Description
+#
+# Rules:
+#   - Imperative mood (Fix, Add, Remove - not Fixed, Added, Removed)
+#   - Start with uppercase letter
+#   - Max 52 characters (recommended), 72 absolute limit
+#   - No period at end
+#   - Describe what now works, not what was broken
+#
+# DESCRIPTION BODY
+# ----------------
+#   - Explain HOW and WHY, not WHAT (code shows what)
+#   - Leave blank line after subject
+#   - Wrap at 72 characters (URLs can be longer)
+#   - Use asterisks (*) for bullet points
+#
+# FOOTER TAGS
+# -----------
+#   Resolves: #12345     - Closes issue on merge (features/tasks)
+#   Related: #12345      - Links issue without closing (bugfixes)
+#   Releases: main, 13.4 - Target versions (comma-separated)
+#   Change-Id: I...      - Auto-generated, DO NOT modify!
+#
+# EXAMPLES
+# --------
+# Good:
+#   [BUGFIX] Fix null pointer in indexed search
+#   [FEATURE] Add WebP image format support
+#   [TASK] Refactor cache manager for better performance
+#   [!!!][TASK] Drop support for PHP 7.4
+#
+# Bad:
+#   [BUGFIX] fixed bug                        (past tense)
+#   [FEATURE] Adds webp support               (wrong tense)
+#   [TASK] refactoring cache                  (lowercase)
+#   [BUGFIX] Fix null pointer exception.      (period at end)
+#
+# VALIDATION
+# ----------
+# Run: ./scripts/validate-commit-message.py
+#
+# MORE INFO
+# ---------
+# See: references/commit-message-format.md
+# Docs: https://docs.typo3.org/m/typo3/guide-contributionworkflow/
+# ============================================================================

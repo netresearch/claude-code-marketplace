@@ -1,0 +1,62 @@
+services:
+  # Redis 7 for TYPO3 caching (alternative to Valkey for legacy production parity)
+  # See docs/adr/0001-valkey-default-with-redis-alternative.md for context
+  #
+  # Use this template if:
+  # - Your production environment explicitly uses Redis 7.x
+  # - Corporate policy requires battle-tested technology only
+  # - You need exact production-development parity with existing infrastructure
+  #
+  # To use this instead of Valkey:
+  # 1. Copy this file: cp docker-compose.services-redis.yaml.optional docker-compose.services.yaml
+  # 2. Restart DDEV: ddev restart
+  redis:
+    container_name: ddev-${DDEV_SITENAME}-redis
+    image: redis:7-alpine
+    restart: unless-stopped
+    ports:
+      - "6379"
+    volumes:
+      - redis-data:/data
+    labels:
+      com.ddev.site-name: ${DDEV_SITENAME}
+      com.ddev.approot: $DDEV_APPROOT
+    environment:
+      - REDIS_MAXMEMORY=256mb
+      - REDIS_MAXMEMORY_POLICY=allkeys-lru
+    command: redis-server --appendonly yes --maxmemory 256mb --maxmemory-policy allkeys-lru
+
+  # MailPit for email testing
+  mailpit:
+    container_name: ddev-${DDEV_SITENAME}-mailpit
+    image: axllent/mailpit:latest
+    restart: unless-stopped
+    ports:
+      - "1025"  # SMTP port
+      - "8025"  # Web UI port
+    labels:
+      com.ddev.site-name: ${DDEV_SITENAME}
+      com.ddev.approot: $DDEV_SITENAME
+    environment:
+      MP_SMTP_BIND_ADDR: 0.0.0.0:1025
+      MP_UI_BIND_ADDR: 0.0.0.0:8025
+
+  # Ofelia for cron jobs (TYPO3 scheduler)
+  ofelia:
+    container_name: ddev-${DDEV_SITENAME}-ofelia
+    image: ghcr.io/netresearch/ofelia:latest
+    restart: unless-stopped
+    depends_on:
+      - web
+    labels:
+      com.ddev.site-name: ${DDEV_SITENAME}
+      com.ddev.approot: $DDEV_APPROOT
+      ofelia.enabled: "true"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - .:/src
+    command: daemon --docker-events
+
+volumes:
+  redis-data:
+    name: "${DDEV_SITENAME}-redis-data"

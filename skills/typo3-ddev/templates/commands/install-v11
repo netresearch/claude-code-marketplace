@@ -1,0 +1,46 @@
+#!/bin/bash
+
+## Description: Install TYPO3 11.5 LTS with your extension
+## Usage: install-v11
+## Example: ddev install-v11
+
+VERSION=v11
+
+rm -rf /var/www/html/$VERSION/*
+mkdir -p /var/www/html/$VERSION/
+echo "{}" > /var/www/html/$VERSION/composer.json
+composer config extra.typo3/cms.web-dir public -d /var/www/html/$VERSION
+composer config repositories.$EXTENSION_KEY path ../../$EXTENSION_KEY -d /var/www/html/$VERSION
+composer config --no-plugins allow-plugins.typo3/cms-composer-installers true -d /var/www/html/$VERSION
+composer config --no-plugins allow-plugins.typo3/class-alias-loader true -d /var/www/html/$VERSION
+composer req t3/cms:'^11' $PACKAGE_NAME:'*@dev' --no-progress -n -d /var/www/html/$VERSION
+
+
+cd /var/www/html/$VERSION
+
+TYPO3_INSTALL_DB_DBNAME=$VERSION
+vendor/bin/typo3cms install:setup -n --database-name $VERSION
+vendor/bin/typo3cms configuration:set 'BE/debug' 1
+vendor/bin/typo3cms configuration:set 'FE/debug' 1
+vendor/bin/typo3cms configuration:set 'SYS/devIPmask' '*'
+vendor/bin/typo3cms configuration:set 'SYS/displayErrors' 1
+vendor/bin/typo3cms configuration:set 'SYS/trustedHostsPattern' '.*.*'
+vendor/bin/typo3cms configuration:set 'MAIL/transport' 'smtp'
+vendor/bin/typo3cms configuration:set 'MAIL/transport_smtp_server' 'localhost:1025'
+vendor/bin/typo3cms configuration:set 'GFX/processor' 'ImageMagick'
+vendor/bin/typo3cms configuration:set 'GFX/processor_path' '/usr/bin/'
+vendor/bin/typo3cms configuration:set 'GFX/processor_path_lzw' '/usr/bin/'
+
+sed -i "/'deprecations'/,/^[[:space:]]*'disabled' => true,/s/'disabled' => true,/'disabled' => false,/" /var/www/html/$VERSION/public/typo3conf/LocalConfiguration.php
+
+sed -i -e "s/base: ht\//base: \//g" /var/www/html/$VERSION/config/sites/main/config.yaml
+sed -i -e 's/base: \/en\//base: \//g' /var/www/html/$VERSION/config/sites/main/config.yaml
+
+vendor/bin/typo3cms cache:flush
+
+# Auto-configure extension if configure script exists
+if [ -f "/mnt/ddev_config/commands/web/configure-{{EXTENSION_KEY}}" ]; then
+    echo ""
+    echo "🔧 Auto-configuring {{EXTENSION_KEY}} extension..."
+    /mnt/ddev_config/commands/web/configure-{{EXTENSION_KEY}} $VERSION
+fi
