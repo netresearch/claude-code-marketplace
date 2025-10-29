@@ -31,6 +31,28 @@
       "category": "development"
     },
     {
+      "name": "typo3-ddev",
+      "description": "Set up and manage TYPO3 development environments using DDEV. Includes DDEV configuration, local development workflows, container management, database handling, and integration with TYPO3-specific tooling.",
+      "version": "1.0.0",
+      "author": {
+        "name": "Netresearch DTT GmbH",
+        "email": "info@netresearch.de"
+      },
+      "source": "./skills/typo3-ddev",
+      "category": "development"
+    },
+    {
+      "name": "typo3-core-contributions",
+      "description": "Guide contributions to TYPO3 core following official contribution guidelines. Includes patch creation, Gerrit workflow, coding guidelines, testing requirements, and review processes for contributing to the TYPO3 core.",
+      "version": "1.0.0",
+      "author": {
+        "name": "Netresearch DTT GmbH",
+        "email": "info@netresearch.de"
+      },
+      "source": "./skills/typo3-core-contributions",
+      "category": "development"
+    },
+    {
       "name": "typo3-conformance",
       "description": "Evaluate TYPO3 extensions for conformance to official TYPO3 coding standards, architecture patterns, and best practices. Includes automated validation scripts for file structure, PSR-12 compliance, dependency injection, testing infrastructure, and comprehensive conformance scoring with priority-based action items.",
       "version": "1.0.0-20251027",

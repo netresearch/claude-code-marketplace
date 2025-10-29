@@ -204,6 +204,66 @@ jobs:
 
           echo "✓ agents synced (version: $VERSION)"
 
+      - name: Sync typo3-ddev skill
+        run: |
+          echo "=== Syncing typo3-ddev-skill ==="
+
+          git clone https://github.com/netresearch/typo3-ddev-skill.git .sync-temp/typo3-ddev
+
+          cd .sync-temp/typo3-ddev
+          COMMIT_DATE=$(git log -1 --format=%cd --date=format:%Y%m%d)
+          cd ../..
+
+          rm -rf .sync-temp/typo3-ddev/.git
+          rm -rf skills/typo3-ddev/*
+          rm -rf skills/typo3-ddev/.[!.]*
+          cp -r .sync-temp/typo3-ddev/* skills/typo3-ddev/
+          cp -r .sync-temp/typo3-ddev/.[!.]* skills/typo3-ddev/ 2>/dev/null || true
+
+          if [ -f skills/typo3-ddev/SKILL.md ]; then
+            SEMVER=$(grep "^version:" skills/typo3-ddev/SKILL.md | head -1 | sed 's/^version: *//' | tr -d '"' || echo "")
+            if [ -z "$SEMVER" ]; then
+              SEMVER=$(grep -A 5 "## Skill Metadata" skills/typo3-ddev/SKILL.md | grep "version:" | sed 's/.*version: *//' | tr -d '"' || echo "1.0.0")
+            fi
+            VERSION="${SEMVER}-${COMMIT_DATE}"
+            echo "TYPO3_DDEV_VERSION=$VERSION" >> $GITHUB_ENV
+          else
+            echo "TYPO3_DDEV_VERSION=1.0.0-${COMMIT_DATE}" >> $GITHUB_ENV
+            VERSION="1.0.0-${COMMIT_DATE}"
+          fi
+
+          echo "✓ typo3-ddev synced (version: $VERSION)"
+
+      - name: Sync typo3-core-contributions skill
+        run: |
+          echo "=== Syncing typo3-core-contributions-skill ==="
+
+          git clone https://github.com/netresearch/typo3-core-contributions-skill.git .sync-temp/typo3-core-contributions
+
+          cd .sync-temp/typo3-core-contributions
+          COMMIT_DATE=$(git log -1 --format=%cd --date=format:%Y%m%d)
+          cd ../..
+
+          rm -rf .sync-temp/typo3-core-contributions/.git
+          rm -rf skills/typo3-core-contributions/*
+          rm -rf skills/typo3-core-contributions/.[!.]*
+          cp -r .sync-temp/typo3-core-contributions/* skills/typo3-core-contributions/
+          cp -r .sync-temp/typo3-core-contributions/.[!.]* skills/typo3-core-contributions/ 2>/dev/null || true
+
+          if [ -f skills/typo3-core-contributions/SKILL.md ]; then
+            SEMVER=$(grep "^version:" skills/typo3-core-contributions/SKILL.md | head -1 | sed 's/^version: *//' | tr -d '"' || echo "")
+            if [ -z "$SEMVER" ]; then
+              SEMVER=$(grep -A 5 "## Skill Metadata" skills/typo3-core-contributions/SKILL.md | grep "version:" | sed 's/.*version: *//' | tr -d '"' || echo "1.0.0")
+            fi
+            VERSION="${SEMVER}-${COMMIT_DATE}"
+            echo "TYPO3_CORE_CONTRIBUTIONS_VERSION=$VERSION" >> $GITHUB_ENV
+          else
+            echo "TYPO3_CORE_CONTRIBUTIONS_VERSION=1.0.0-${COMMIT_DATE}" >> $GITHUB_ENV
+            VERSION="1.0.0-${COMMIT_DATE}"
+          fi
+
+          echo "✓ typo3-core-contributions synced (version: $VERSION)"
+
       - name: Update marketplace.json versions
         run: |
           echo "=== Updating marketplace.json with latest versions ==="
@@ -214,11 +274,15 @@ jobs:
              --arg v3 "$TYPO3_TESTING_VERSION" \
              --arg v4 "$NETRESEARCH_BRANDING_VERSION" \
              --arg v5 "$AGENTS_VERSION" \
+             --arg v6 "$TYPO3_DDEV_VERSION" \
+             --arg v7 "$TYPO3_CORE_CONTRIBUTIONS_VERSION" \
              '(.plugins[] | select(.name == "typo3-docs") | .version) = $v1 |
               (.plugins[] | select(.name == "typo3-conformance") | .version) = $v2 |
               (.plugins[] | select(.name == "typo3-testing") | .version) = $v3 |
               (.plugins[] | select(.name == "netresearch-branding") | .version) = $v4 |
-              (.plugins[] | select(.name == "agents") | .version) = $v5' \
+              (.plugins[] | select(.name == "agents") | .version) = $v5 |
+              (.plugins[] | select(.name == "typo3-ddev") | .version) = $v6 |
+              (.plugins[] | select(.name == "typo3-core-contributions") | .version) = $v7' \
              .claude-plugin/marketplace.json > .claude-plugin/marketplace.json.tmp
 
           mv .claude-plugin/marketplace.json.tmp .claude-plugin/marketplace.json
@@ -229,6 +293,8 @@ jobs:
           echo "  - typo3-testing: $TYPO3_TESTING_VERSION"
           echo "  - netresearch-branding: $NETRESEARCH_BRANDING_VERSION"
           echo "  - agents: $AGENTS_VERSION"
+          echo "  - typo3-ddev: $TYPO3_DDEV_VERSION"
+          echo "  - typo3-core-contributions: $TYPO3_CORE_CONTRIBUTIONS_VERSION"
 
       - name: Cleanup temporary directories
         run: |
@@ -257,6 +323,8 @@ jobs:
           - typo3-docs: $TYPO3_DOCS_VERSION
           - typo3-conformance: $TYPO3_CONFORMANCE_VERSION
           - typo3-testing: $TYPO3_TESTING_VERSION
+          - typo3-ddev: $TYPO3_DDEV_VERSION
+          - typo3-core-contributions: $TYPO3_CORE_CONTRIBUTIONS_VERSION
           - netresearch-branding: $NETRESEARCH_BRANDING_VERSION
           - agents: $AGENTS_VERSION
 
@@ -268,7 +336,7 @@ jobs:
       - name: Summary
         run: |
           echo "=== Skill Sync Complete ==="
-          echo "✓ All 4 skills synchronized successfully"
+          echo "✓ All 7 skills synchronized successfully"
           echo ""
           echo "Next steps:"
           echo "1. Skills are now available in marketplace"
