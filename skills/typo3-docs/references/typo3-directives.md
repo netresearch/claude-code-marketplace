@@ -409,6 +409,123 @@ Create tabbed content for multiple options.
 7. **PHP domain for APIs**: Document all public methods with php:method
 8. **Intersphinx for core**: Reference TYPO3 core docs with intersphinx
 
+## Common Mistakes & Validation
+
+### Configuration Documentation Violations
+
+**NEVER use plain field lists for configuration - ALWAYS use confval directive:**
+
+❌ **WRONG:**
+```rst
+setting.name
+------------
+
+:Type: string
+:Default: ``value``
+:Category: General
+
+Description here.
+```
+
+✅ **CORRECT:**
+```rst
+.. confval:: setting.name
+
+   :type: string
+   :Default: ``value``
+   :Path: $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['ext_key']['setting']['name']
+
+   Description here.
+```
+
+### Field Naming Violations
+
+**Case sensitivity matters:**
+
+❌ **WRONG:** `:Type:`, `:PATH:`, `:default:`
+✅ **CORRECT:** `:type:`, `:Path:`, `:Default:`
+
+**Required fields for confval:**
+- `:type:` (lowercase) - Data type
+- `:Default:` (capitalized) - Default value
+- `:Path:` (capitalized) - Full TYPO3 config path
+
+**Non-standard fields to remove:**
+- `:Category:` - Not part of TYPO3 standard
+- `:Scope:` - Optional, use only if officially documented
+
+### Version Annotation Mistakes
+
+**Remove version annotations when feature is implemented:**
+
+❌ **WRONG:**
+```rst
+.. versionadded:: 1.2.0
+   Feature will be available in version 1.2.0
+
+[Feature is already in current version 1.2.0]
+```
+
+✅ **CORRECT:**
+```rst
+.. versionadded:: 1.2.0
+   Feature added for monitoring custom tables.
+
+[Use only if documenting past release, remove if currently implemented]
+```
+
+**Be specific about implementation status:**
+
+❌ **WRONG:**
+```rst
+Feature will be available soon.
+Configuration option coming in future release.
+```
+
+✅ **CORRECT:**
+```rst
+.. versionadded:: 1.3.0
+   Configuration option for auto-rounding will include backend form integration.
+
+Currently: Configuration setting exists and is read, but backend form integration is pending.
+```
+
+### Verification Strategy
+
+**Before documenting "not implemented" or "coming soon":**
+
+1. Check `ext_conf_template.txt` - Source of truth for configuration
+2. Search codebase with Grep - Look for actual usage
+3. Check Configuration service class - Verify setting is read
+4. Look for test files - Tests indicate functional features
+5. Verify in dependency injection - Check Services.yaml registration
+
+**Cross-reference pattern:**
+```bash
+# Check if config exists
+grep "setting.name" ext_conf_template.txt
+
+# Check if config is used
+grep -r "getSetting" Classes/
+
+# Check configuration class
+grep "getSetting" Classes/Configuration/ExtensionConfiguration.php
+```
+
+### Documentation Contradiction Detection
+
+**Look for these patterns:**
+- "Planned for version X.Y" when code exists
+- "Coming soon" without version numbers
+- "Not yet implemented" contradicting test coverage
+- "Future versions will support" with existing code
+
+**Resolution process:**
+1. Investigate actual implementation status
+2. Update documentation to reflect reality
+3. Remove stale version annotations
+4. Clarify partial implementations explicitly
+
 ## Quality Checklist
 
 ✅ All configuration options documented with confval

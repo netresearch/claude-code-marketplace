@@ -84,6 +84,21 @@
       },
       "source": "./skills/agents",
       "category": "development"
+    },
+    {
+      "name": "netresearch-skills-bundle",
+      "description": "Temporary container plugin for skill visibility workaround (Claude Code issue #10568)",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/typo3-docs",
+        "./skills/typo3-testing",
+        "./skills/typo3-ddev",
+        "./skills/typo3-core-contributions",
+        "./skills/typo3-conformance",
+        "./skills/netresearch-branding",
+        "./skills/agents"
+      ]
     }
   ]
 }
