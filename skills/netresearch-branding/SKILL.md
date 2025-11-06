@@ -740,6 +740,7 @@ Use consistent icons for:
 - [ ] Test typography rendering
 - [ ] Validate responsive behavior
 - [ ] Run accessibility audit
+- [ ] Verify inclusive language in all content
 - [ ] Cross-browser testing
 - [ ] Performance optimization
 
@@ -756,6 +757,7 @@ Use consistent icons for:
 - Is messaging clear and professional?
 - Is the "one Netresearch" principle maintained?
 - Are team/sub-brand logos avoided externally?
+- Is inclusive language used throughout all content?
 
 **Technical Standards:**
 - Is accessibility compliance verified (WCAG AA)?
@@ -811,6 +813,20 @@ Use consistent icons for:
 - Avoid jargon when possible
 - Technical accuracy when needed
 - Active voice preferred
+
+**Inclusive Language:**
+- Use respectful, professional terminology
+- Follow community values and code of conduct standards
+- Avoid problematic terms that exclude or offend
+
+**Terms to Avoid and Alternatives:**
+- ❌ "master/slave" → ✅ "primary/replica", "leader/follower", "main/secondary"
+- ❌ "blacklist/whitelist" → ✅ "blocklist/allowlist", "denylist/permitlist", "exclusion list/inclusion list"
+- ❌ "sanity check" → ✅ "confidence check", "validation check", "coherence check"
+- ❌ "dummy" → ✅ "placeholder", "sample", "test"
+- ❌ "grandfathered" → ✅ "legacy status", "existing entitlement"
+
+These guidelines apply to all written content: code, documentation, presentations, marketing materials, and internal communications.
 
 ## Quick Reference
 

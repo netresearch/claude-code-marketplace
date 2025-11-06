@@ -178,6 +178,24 @@ cat Classes/Domain/Repository/ProductRepository.php
 - [ ] Correct use statements (sorted and grouped)
 - [ ] Descriptive method names with verbs
 - [ ] Proper indentation (4 spaces, no tabs)
+- [ ] **Inclusive language** - no problematic terminology
+
+**Inclusive Language Check:**
+
+```bash
+# Check for non-inclusive terminology
+grep -ri "master\|slave\|blacklist\|whitelist\|sanity" Classes/ Documentation/ --include="*.php" --include="*.rst" --include="*.md"
+```
+
+**Problematic Terms to Avoid:**
+- ❌ "master/slave" → ✅ "primary/replica", "leader/follower", "main/secondary"
+- ❌ "blacklist/whitelist" → ✅ "blocklist/allowlist", "denylist/permitlist", "exclusion list/inclusion list"
+- ❌ "sanity check" → ✅ "confidence check", "validation check", "coherence check"
+- ❌ "dummy" → ✅ "placeholder", "sample", "test"
+- ❌ "grandfathered" → ✅ "legacy status", "existing entitlement"
+
+**TYPO3 Community Values:**
+The TYPO3 community is committed to inclusive language that welcomes all contributors. Code, comments, and documentation should use terminology that is respectful and professional.
 
 **Output Format:**
 ```markdown
@@ -197,6 +215,10 @@ cat Classes/Domain/Repository/ProductRepository.php
   - Classes/Domain/Model/Product.php:78
 - 3 methods missing PHPDoc comments
   - Classes/Service/EmailService.php:calculate()
+- **5 instances of non-inclusive terminology**
+  - Classes/Service/FilterService.php:12 - "whitelist" → use "inclusion list" or "allowlist"
+  - Classes/Service/FilterService.php:45 - "blacklist" → use "exclusion list" or "blocklist"
+  - Documentation/Configuration/Index.rst:78 - "master configuration" → use "primary configuration" or "main configuration"
 
 ### ⚠️  Style Issues
 - Inconsistent spacing around concatenation operators (12 instances)
