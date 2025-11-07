@@ -86,11 +86,12 @@
       "category": "development"
     },
     {
-      "name": "jira-skill",
+      "name": "jira-integration",
       "source": {
         "source": "github",
         "repo": "netresearch/jira-skill"
-      }
+      },
+      "description": "Comprehensive Jira integration with two specialized skills: jira-mcp for API operations via mcp-atlassian MCP server, and jira-syntax for wiki markup validation and templates. Covers issue CRUD operations, JQL searching, project management, worklog management, attachment handling, issue linking, and enforced Jira wiki markup syntax standards."
     },
     {
       "name": "netresearch-skills-bundle",
