@@ -14,7 +14,9 @@ composer config repositories.$EXTENSION_KEY path ../../$EXTENSION_KEY -d /var/ww
 composer config --no-plugins allow-plugins.typo3/cms-composer-installers true -d /var/www/html/$VERSION
 composer config --no-plugins allow-plugins.typo3/class-alias-loader true -d /var/www/html/$VERSION
 composer req t3/cms:'^11' $PACKAGE_NAME:'*@dev' --no-progress -n -d /var/www/html/$VERSION
-
+composer req typo3/cms-extensionmanager --no-progress -n -d /var/www/html/$VERSION
+composer req --dev typo3/cms-styleguide --no-progress -n -d /var/www/html/$VERSION
+composer req typo3/cms-introduction --no-progress -n -d /var/www/html/$VERSION
 
 cd /var/www/html/$VERSION
 
@@ -37,6 +39,12 @@ sed -i -e "s/base: ht\//base: \//g" /var/www/html/$VERSION/config/sites/main/con
 sed -i -e 's/base: \/en\//base: \//g' /var/www/html/$VERSION/config/sites/main/config.yaml
 
 vendor/bin/typo3cms cache:flush
+
+echo ""
+echo "✅ TYPO3 $VERSION installation complete!"
+echo "📦 Your extension is activated and ready to use"
+echo "📐 TYPO3 Styleguide is available for UI pattern reference"
+echo "📦 Introduction Package installed with demo content (86+ pages, 226+ content elements)"
 
 # Auto-configure extension if configure script exists
 if [ -f "/mnt/ddev_config/commands/web/configure-{{EXTENSION_KEY}}" ]; then

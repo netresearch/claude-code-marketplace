@@ -115,7 +115,7 @@ Before beginning any contribution work, verify the user has:
    - Git configured with TYPO3 settings
    - TYPO3 Core repository cloned
    - DDEV-based development environment (preferred)
-   - Git hooks installed (commit-msg, pre-commit)
+   - Git hooks installed (commit-msg, pre-commit) - see `references/commit-msg-hook.md` for validation details
 
 3. **Skill Integrations**:
    - `typo3-ddev-skill` for environment management

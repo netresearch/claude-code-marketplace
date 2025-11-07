@@ -1,0 +1,17 @@
+#!/bin/bash
+
+## Description: Capture git info for landing page before container build
+## Usage: Runs automatically before ddev start
+## Example: "ddev start"
+
+# Get git info from host
+GIT_BRANCH=$(git rev-parse --abbrev-ref HEAD 2>/dev/null || echo "unknown")
+GIT_COMMIT=$(git rev-parse --short HEAD 2>/dev/null || echo "unknown")
+GIT_PR=$(gh pr view --json number 2>/dev/null | jq -r '.number // "unknown"' || echo "unknown")
+
+# Export for docker-compose to use
+export DDEV_GIT_BRANCH="$GIT_BRANCH"
+export DDEV_GIT_COMMIT="$GIT_COMMIT"
+export DDEV_GIT_PR="$GIT_PR"
+
+echo "Git info captured: $GIT_BRANCH @ $GIT_COMMIT (PR: $GIT_PR)"

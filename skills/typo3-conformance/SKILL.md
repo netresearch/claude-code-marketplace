@@ -17,7 +17,7 @@ This skill provides systematic evaluation of TYPO3 extensions against official T
 
 1. **Extension Architecture** - File structure, naming conventions, required files
 2. **Coding Guidelines** - PSR-12 compliance, TYPO3-specific code style
-3. **PHP Architecture** - Dependency injection, services, events, Extbase patterns
+3. **PHP Architecture** - Dependency injection, services, events, Extbase patterns (see `references/hooks-and-events.md`)
 4. **Testing Standards** - Unit, functional, and acceptance testing requirements
 5. **Best Practices** - Real-world patterns from Tea extension and core standards
 

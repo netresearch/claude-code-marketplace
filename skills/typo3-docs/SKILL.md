@@ -50,7 +50,7 @@ Invoke this skill when working with TYPO3 extension documentation:
 
 **Before editing Documentation/*.rst files or README.md:**
 1. Invoke this skill if not already active
-2. Optional: Run `scripts/extract-all.sh` and `scripts/analyze-docs.sh` for gap analysis
+2. Optional: Run `scripts/extract-all.sh` and `scripts/analyze-docs.sh` for gap analysis (see `references/typo3-extension-architecture.md` for extraction priorities)
 3. Review the workflow decision tree below
 4. Use appropriate TYPO3 directives (not plain text equivalents)
 5. Validate: `scripts/validate_docs.sh` or `ddev docs`
