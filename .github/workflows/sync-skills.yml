@@ -69,11 +69,19 @@ jobs:
 
           # Extract semantic version from SKILL.md (YAML frontmatter or metadata section)
           if [ -f skills/typo3-docs/SKILL.md ]; then
-            # Try YAML frontmatter first
+            # Try top-level YAML frontmatter first (^version:)
             SEMVER=$(grep "^version:" skills/typo3-docs/SKILL.md | head -1 | sed 's/^version: *//' | tr -d '"' || echo "")
-            # Fall back to metadata section
+            # Fall back to nested metadata.version (  version:)
             if [ -z "$SEMVER" ]; then
-              SEMVER=$(grep -A 5 "## Skill Metadata" skills/typo3-docs/SKILL.md | grep "version:" | sed 's/.*version: *//' | tr -d '"' || echo "1.0.0")
+              SEMVER=$(grep "^  version:" skills/typo3-docs/SKILL.md | head -1 | sed 's/^  version: *//' | tr -d '"' || echo "")
+            fi
+            # Fall back to ## Skill Metadata section
+            if [ -z "$SEMVER" ]; then
+              SEMVER=$(grep -A 5 "## Skill Metadata" skills/typo3-docs/SKILL.md | grep "version:" | sed 's/.*version: *//' | tr -d '"' || echo "")
+            fi
+            # Final fallback to 1.0.0
+            if [ -z "$SEMVER" ]; then
+              SEMVER="1.0.0"
             fi
             # Combine semver + date
             VERSION="${SEMVER}-${COMMIT_DATE}"
@@ -103,9 +111,19 @@ jobs:
           cp -r .sync-temp/typo3-conformance/.[!.]* skills/typo3-conformance/ 2>/dev/null || true
 
           if [ -f skills/typo3-conformance/SKILL.md ]; then
+            # Try top-level YAML frontmatter first (^version:)
             SEMVER=$(grep "^version:" skills/typo3-conformance/SKILL.md | head -1 | sed 's/^version: *//' | tr -d '"' || echo "")
+            # Fall back to nested metadata.version (  version:)
             if [ -z "$SEMVER" ]; then
-              SEMVER=$(grep -A 5 "## Skill Metadata" skills/typo3-conformance/SKILL.md | grep "version:" | sed 's/.*version: *//' | tr -d '"' || echo "1.0.0")
+              SEMVER=$(grep "^  version:" skills/typo3-conformance/SKILL.md | head -1 | sed 's/^  version: *//' | tr -d '"' || echo "")
+            fi
+            # Fall back to ## Skill Metadata section
+            if [ -z "$SEMVER" ]; then
+              SEMVER=$(grep -A 5 "## Skill Metadata" skills/typo3-conformance/SKILL.md | grep "version:" | sed 's/.*version: *//' | tr -d '"' || echo "")
+            fi
+            # Final fallback to 1.0.0
+            if [ -z "$SEMVER" ]; then
+              SEMVER="1.0.0"
             fi
             VERSION="${SEMVER}-${COMMIT_DATE}"
             echo "TYPO3_CONFORMANCE_VERSION=$VERSION" >> $GITHUB_ENV
@@ -134,9 +152,19 @@ jobs:
           cp -r .sync-temp/typo3-testing/.[!.]* skills/typo3-testing/ 2>/dev/null || true
 
           if [ -f skills/typo3-testing/SKILL.md ]; then
+            # Try top-level YAML frontmatter first (^version:)
             SEMVER=$(grep "^version:" skills/typo3-testing/SKILL.md | head -1 | sed 's/^version: *//' | tr -d '"' || echo "")
+            # Fall back to nested metadata.version (  version:)
             if [ -z "$SEMVER" ]; then
-              SEMVER=$(grep -A 5 "## Skill Metadata" skills/typo3-testing/SKILL.md | grep "version:" | sed 's/.*version: *//' | tr -d '"' || echo "1.0.0")
+              SEMVER=$(grep "^  version:" skills/typo3-testing/SKILL.md | head -1 | sed 's/^  version: *//' | tr -d '"' || echo "")
+            fi
+            # Fall back to ## Skill Metadata section
+            if [ -z "$SEMVER" ]; then
+              SEMVER=$(grep -A 5 "## Skill Metadata" skills/typo3-testing/SKILL.md | grep "version:" | sed 's/.*version: *//' | tr -d '"' || echo "")
+            fi
+            # Final fallback to 1.0.0
+            if [ -z "$SEMVER" ]; then
+              SEMVER="1.0.0"
             fi
             VERSION="${SEMVER}-${COMMIT_DATE}"
             echo "TYPO3_TESTING_VERSION=$VERSION" >> $GITHUB_ENV
@@ -165,9 +193,19 @@ jobs:
           cp -r .sync-temp/netresearch-branding/.[!.]* skills/netresearch-branding/ 2>/dev/null || true
 
           if [ -f skills/netresearch-branding/SKILL.md ]; then
+            # Try top-level YAML frontmatter first (^version:)
             SEMVER=$(grep "^version:" skills/netresearch-branding/SKILL.md | head -1 | sed 's/^version: *//' | tr -d '"' || echo "")
+            # Fall back to nested metadata.version (  version:)
             if [ -z "$SEMVER" ]; then
-              SEMVER=$(grep -A 5 "## Skill Metadata" skills/netresearch-branding/SKILL.md | grep "version:" | sed 's/.*version: *//' | tr -d '"' || echo "1.0.0")
+              SEMVER=$(grep "^  version:" skills/netresearch-branding/SKILL.md | head -1 | sed 's/^  version: *//' | tr -d '"' || echo "")
+            fi
+            # Fall back to ## Skill Metadata section
+            if [ -z "$SEMVER" ]; then
+              SEMVER=$(grep -A 5 "## Skill Metadata" skills/netresearch-branding/SKILL.md | grep "version:" | sed 's/.*version: *//' | tr -d '"' || echo "")
+            fi
+            # Final fallback to 1.0.0
+            if [ -z "$SEMVER" ]; then
+              SEMVER="1.0.0"
             fi
             VERSION="${SEMVER}-${COMMIT_DATE}"
             echo "NETRESEARCH_BRANDING_VERSION=$VERSION" >> $GITHUB_ENV
@@ -196,9 +234,19 @@ jobs:
           cp -r .sync-temp/agents/.[!.]* skills/agents/ 2>/dev/null || true
 
           if [ -f skills/agents/SKILL.md ]; then
+            # Try top-level YAML frontmatter first (^version:)
             SEMVER=$(grep "^version:" skills/agents/SKILL.md | head -1 | sed 's/^version: *//' | tr -d '"' || echo "")
+            # Fall back to nested metadata.version (  version:)
             if [ -z "$SEMVER" ]; then
-              SEMVER=$(grep -A 5 "## Skill Metadata" skills/agents/SKILL.md | grep "version:" | sed 's/.*version: *//' | tr -d '"' || echo "1.0.0")
+              SEMVER=$(grep "^  version:" skills/agents/SKILL.md | head -1 | sed 's/^  version: *//' | tr -d '"' || echo "")
+            fi
+            # Fall back to ## Skill Metadata section
+            if [ -z "$SEMVER" ]; then
+              SEMVER=$(grep -A 5 "## Skill Metadata" skills/agents/SKILL.md | grep "version:" | sed 's/.*version: *//' | tr -d '"' || echo "")
+            fi
+            # Final fallback to 1.0.0
+            if [ -z "$SEMVER" ]; then
+              SEMVER="1.0.0"
             fi
             VERSION="${SEMVER}-${COMMIT_DATE}"
             echo "AGENTS_VERSION=$VERSION" >> $GITHUB_ENV
@@ -227,9 +275,19 @@ jobs:
           cp -r .sync-temp/typo3-ddev/.[!.]* skills/typo3-ddev/ 2>/dev/null || true
 
           if [ -f skills/typo3-ddev/SKILL.md ]; then
+            # Try top-level YAML frontmatter first (^version:)
             SEMVER=$(grep "^version:" skills/typo3-ddev/SKILL.md | head -1 | sed 's/^version: *//' | tr -d '"' || echo "")
+            # Fall back to nested metadata.version (  version:)
             if [ -z "$SEMVER" ]; then
-              SEMVER=$(grep -A 5 "## Skill Metadata" skills/typo3-ddev/SKILL.md | grep "version:" | sed 's/.*version: *//' | tr -d '"' || echo "1.0.0")
+              SEMVER=$(grep "^  version:" skills/typo3-ddev/SKILL.md | head -1 | sed 's/^  version: *//' | tr -d '"' || echo "")
+            fi
+            # Fall back to ## Skill Metadata section
+            if [ -z "$SEMVER" ]; then
+              SEMVER=$(grep -A 5 "## Skill Metadata" skills/typo3-ddev/SKILL.md | grep "version:" | sed 's/.*version: *//' | tr -d '"' || echo "")
+            fi
+            # Final fallback to 1.0.0
+            if [ -z "$SEMVER" ]; then
+              SEMVER="1.0.0"
             fi
             VERSION="${SEMVER}-${COMMIT_DATE}"
             echo "TYPO3_DDEV_VERSION=$VERSION" >> $GITHUB_ENV
@@ -258,9 +316,19 @@ jobs:
           cp -r .sync-temp/typo3-core-contributions/.[!.]* skills/typo3-core-contributions/ 2>/dev/null || true
 
           if [ -f skills/typo3-core-contributions/SKILL.md ]; then
+            # Try top-level YAML frontmatter first (^version:)
             SEMVER=$(grep "^version:" skills/typo3-core-contributions/SKILL.md | head -1 | sed 's/^version: *//' | tr -d '"' || echo "")
+            # Fall back to nested metadata.version (  version:)
             if [ -z "$SEMVER" ]; then
-              SEMVER=$(grep -A 5 "## Skill Metadata" skills/typo3-core-contributions/SKILL.md | grep "version:" | sed 's/.*version: *//' | tr -d '"' || echo "1.0.0")
+              SEMVER=$(grep "^  version:" skills/typo3-core-contributions/SKILL.md | head -1 | sed 's/^  version: *//' | tr -d '"' || echo "")
+            fi
+            # Fall back to ## Skill Metadata section
+            if [ -z "$SEMVER" ]; then
+              SEMVER=$(grep -A 5 "## Skill Metadata" skills/typo3-core-contributions/SKILL.md | grep "version:" | sed 's/.*version: *//' | tr -d '"' || echo "")
+            fi
+            # Final fallback to 1.0.0
+            if [ -z "$SEMVER" ]; then
+              SEMVER="1.0.0"
             fi
             VERSION="${SEMVER}-${COMMIT_DATE}"
             echo "TYPO3_CORE_CONTRIBUTIONS_VERSION=$VERSION" >> $GITHUB_ENV
