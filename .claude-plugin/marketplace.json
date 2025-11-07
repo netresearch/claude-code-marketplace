@@ -86,6 +86,13 @@
       "category": "development"
     },
     {
+      "name": "jira-skill",
+      "source": {
+        "source": "github",
+        "repo": "netresearch/jira-skill"
+      }
+    },
+    {
       "name": "netresearch-skills-bundle",
       "description": "Temporary container plugin for skill visibility workaround (Claude Code issue #10568)",
       "source": "./",
