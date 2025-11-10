@@ -1,17 +1,17 @@
 ---
 name: typo3-docs
-version: 1.0.0
+version: 1.1.0
 description: >
-  Create and maintain TYPO3 extension documentation following official standards.
+  Create and maintain TYPO3 extension documentation following official TYPO3 13.x standards.
 
-  Trigger when: editing Documentation/**/*.rst files or README.md (keep in sync!), using TYPO3 directives
+  Trigger when: creating/editing Documentation/**/*.rst files or README.md (keep in sync!), using TYPO3 directives
   (confval, versionadded, versionchanged, php:method, card-grid), rendering documentation locally (ddev docs,
-  render_docs.sh), extracting documentation data (extract-all.sh, analyze-docs.sh), or working with TYPO3
-  documentation guidelines.
+  render_docs.sh), extracting documentation data (extract-all.sh, analyze-docs.sh), deploying to docs.typo3.org
+  (webhook setup, publish documentation), or working with TYPO3 documentation guidelines.
 
   Covers: RST syntax, TYPO3-specific directives, documentation extraction/analysis, local Docker rendering,
-  validation procedures, and TYPO3 Intercept deployment. Ensures documentation meets official TYPO3 quality
-  standards and renders correctly on docs.typo3.org.
+  validation procedures, webhook setup (gh CLI + manual), and TYPO3 Intercept deployment. Ensures documentation
+  meets modern TYPO3 13.x quality standards with card-grid navigation and renders correctly on docs.typo3.org.
 license: Complete terms in LICENSE.txt
 ---
 
@@ -28,10 +28,12 @@ Invoke this skill when working with TYPO3 extension documentation:
 - Editing `README.md` (requires syncing with Documentation/)
 
 **Keywords/Commands:**
+- Creating: "create Documentation/", "generate documentation", "new docs"
 - Using TYPO3 directives: `confval`, `versionadded`, `versionchanged`, `php:method`, `card-grid`
 - Running: `ddev docs`, `scripts/validate_docs.sh`, `scripts/render_docs.sh`
 - Extraction: `scripts/extract-all.sh`, `scripts/analyze-docs.sh`
-- Mentions of: "TYPO3 documentation standards", "docs.typo3.org"
+- Deployment: "setup webhook", "deploy docs", "publish to docs.typo3.org", "docs.typo3.org"
+- Mentions of: "TYPO3 documentation standards", "card-grid navigation", "confval directive"
 
 **Tasks:**
 - Creating new TYPO3 extension documentation
@@ -334,6 +336,113 @@ For complete extraction patterns and examples, see: `references/extraction-patte
 - Run scripts/render_docs.sh
 - Check for warnings and broken references
 
+## Modern TYPO3 13.x Standards
+
+### Default Patterns for New Documentation
+
+When creating new TYPO3 extension documentation, use these MODERN defaults:
+
+**1. Card-Grid Navigation (DEFAULT for Index.rst)**
+
+Always use card-grid instead of plain toctree lists:
+
+```rst
+.. toctree::
+   :hidden:
+   :maxdepth: 2
+
+   Introduction/Index
+   Installation/Index
+   Configuration/Index
+
+.. card-grid::
+   :columns: 1
+   :columns-md: 2
+   :gap: 4
+   :card-height: 100
+
+   .. card:: 📘 Introduction
+
+      Learn what the extension does and key features.
+
+      .. card-footer:: :ref:`Read more <introduction>`
+         :button-style: btn btn-primary stretched-link
+```
+
+**2. confval Directives (MANDATORY for Configuration)**
+
+Always use confval directive, never plain text:
+
+```rst
+✅ Correct:
+.. confval:: settingName
+   :type: boolean
+   :Default: true
+   :Path: $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['ext_key']['settingName']
+
+❌ Wrong:
+settingName
+~~~~~~~~~~~
+Type: boolean
+Default: true
+```
+
+**3. guides.xml (AVOID - Usually Not Needed)**
+
+**Do NOT create guides.xml unless specifically needed!**
+
+- guides.xml is OPTIONAL and often causes rendering problems
+- Modern TYPO3 docs use `Settings.cfg` + RST files (sufficient for 99% of cases)
+- Only create guides.xml for advanced use cases (custom themes, special rendering)
+- If rendering fails with guides.xml errors, delete it and try again
+
+**4. Missing Images Handling**
+
+When documentation references non-existent images:
+
+**Best Practice:** Remove figure directives, add descriptive content:
+
+```rst
+❌ Wrong (causes rendering errors):
+.. figure:: /Images/screenshot.png
+   :alt: Screenshot description
+
+✅ Correct:
+..  note::
+    Screenshots will be added in a future update.
+
+The backend module provides:
+- Feature 1: Description
+- Feature 2: Description
+
+..  todo::
+    Add screenshot showing the backend module interface
+```
+
+**Alternative:** Create `.gitkeep` in `Documentation/Images/` for future additions
+
+### Common Pitfalls and Fixes
+
+**Pitfall 1: Plain Toctree Instead of Card-Grid**
+- ❌ Creates plain bulleted list (outdated)
+- ✅ Use card-grid with emoji icons (modern standard)
+
+**Pitfall 2: Plain Text Configuration**
+- ❌ Uses "Type:", "Default:" format
+- ✅ Use confval directive with `:type:`, `:Default:`, `:Path:`
+
+**Pitfall 3: Creating guides.xml By Default**
+- ❌ Adds guides.xml → often causes rendering errors
+- ✅ Omit guides.xml unless specifically needed
+
+**Pitfall 4: Image References Without Images**
+- ❌ Leaves broken figure directives
+- ✅ Remove directives, add descriptive content + todo notes
+
+**Pitfall 5: Missing stretched-link in Card Footer**
+- ❌ Only button text is clickable
+- ✅ Add `stretched-link` class for full card clickability
+
 ## Configuration Documentation
 
 To document configuration values, use the `confval` directive:
@@ -630,6 +739,38 @@ Before enabling automatic deployment:
 3. Triggers: Push events + Tag push events
 4. Enable SSL verification
 
+### Automated Webhook Setup (GitHub CLI)
+
+**Faster alternative for GitHub repositories:**
+
+If you have `gh` CLI installed, automate webhook creation:
+
+```bash
+# Create webhook
+gh api repos/{owner}/{repo}/hooks \
+  --method POST \
+  --field name=web \
+  --field "config[url]=https://docs-hook.typo3.org" \
+  --field "config[content_type]=json" \
+  --field "config[insecure_ssl]=0" \
+  --raw-field "events[]=push" \
+  --field active=true
+
+# Trigger test delivery
+gh api repos/{owner}/{repo}/hooks/{hook_id}/tests --method POST
+
+# Verify delivery status
+gh api repos/{owner}/{repo}/hooks/{hook_id}/deliveries \
+  --jq '.[] | {id: .id, status: .status, status_code: .status_code, delivered_at: .delivered_at}'
+```
+
+**Expected response:** Status 200 or 204 indicates successful webhook delivery.
+
+**Check webhook ID:**
+```bash
+gh api repos/{owner}/{repo}/hooks --jq '.[] | {id: .id, url: .config.url, events: .events}'
+```
+
 ### First-Time Approval
 
 First webhook trigger requires manual approval by TYPO3 Documentation Team:
@@ -688,15 +829,47 @@ If needed:
 - Check for broken cross-references
 - Verify UTF-8 encoding
 
+**Common Rendering Errors:**
+
+1. **guides.xml Extension Class Path Error**
+   ```
+   Extension "\T3Docs\GuidesExtension\..." does not exist
+   ```
+   **Fix:** Delete `guides.xml` - it's usually not needed for TYPO3 extensions
+
+2. **Missing Image Errors**
+   ```
+   WARNING: image file not found: Images/screenshot.png
+   ```
+   **Fix:** Remove figure directives, add descriptive content + todo notes (see "Missing Images Handling" above)
+
+3. **confval Directive Missing Required Fields**
+   ```
+   WARNING: confval directive missing :type: field
+   ```
+   **Fix:** Add all required fields: `:type:`, `:Default:`, `:Path:`
+
+4. **Broken Cross-References**
+   ```
+   WARNING: undefined label: my-section
+   ```
+   **Fix:** Verify label exists with `.. _my-section:` syntax, check spelling
+
+5. **stretched-link Class Missing**
+   ```
+   Card footer buttons not making full card clickable
+   ```
+   **Fix:** Add `stretched-link` class to card-footer button-style
+
 **Webhook Not Triggering:**
 - Verify webhook URL: `https://docs-hook.typo3.org`
 - Check SSL verification enabled
 - Verify webhook marked as Active
-- Check Recent Deliveries for errors
+- Check Recent Deliveries for errors (use `gh api` commands above)
 
 **First Build On Hold:**
 - Expected for new repositories
-- Wait for Documentation Team approval
+- Wait for Documentation Team approval (1-3 business days)
 - Post in TYPO3 Slack #typo3-documentation to expedite
 
 For comprehensive webhook setup, troubleshooting, and best practices, see: `references/intercept-deployment.md`
@@ -704,22 +877,26 @@ For comprehensive webhook setup, troubleshooting, and best practices, see: `refe
 ## Best Practices
 
 **DO:**
-- Edit existing RST files to update content
-- Add new RST files following existing structure
-- Use TYPO3-specific directives (confval, versionadded, php:method)
-- Include UTF-8 emoji icons in card titles
-- Use card-grid layouts with stretched-link
-- Cross-reference using `:ref:` labels
-- Render locally before committing
-- Follow TYPO3 documentation standards
+- ✅ Use card-grid navigation for Index.rst (modern default)
+- ✅ Use confval directive for ALL configuration options (mandatory)
+- ✅ Include UTF-8 emoji icons in card titles (📘 📦 ⚙️ 👤 etc.)
+- ✅ Add stretched-link class to card footers (full card clickability)
+- ✅ Omit guides.xml unless specifically needed (avoid rendering issues)
+- ✅ Use TYPO3-specific directives (confval, versionadded, php:method)
+- ✅ Cross-reference using `:ref:` labels (internal links)
+- ✅ Render locally before committing (catch issues early)
+- ✅ Follow modern TYPO3 13.x standards
 
 **DON'T:**
-- Create markdown files in Documentation/ (RST only)
-- Commit claudedocs/ to version control (gitignored)
-- Break cross-references by renaming labels
-- Use external links for internal docs (use :ref:)
-- Skip local rendering
-- Mix documentation formats
+- ❌ Create plain toctree lists (use card-grid instead)
+- ❌ Use plain text for configuration (must use confval directive)
+- ❌ Create guides.xml by default (causes rendering errors)
+- ❌ Leave broken image references (remove or add descriptive content)
+- ❌ Skip stretched-link in card footers (poor UX)
+- ❌ Create markdown files in Documentation/ (RST only)
+- ❌ Commit claudedocs/ to version control (gitignored)
+- ❌ Use external links for internal docs (use :ref:)
+- ❌ Skip local rendering (blind commits = broken docs)
 
 ## Resources
 

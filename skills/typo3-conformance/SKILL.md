@@ -1,7 +1,7 @@
 ---
 name: typo3-conformance
-version: 1.0.0
-description: "Evaluate TYPO3 extensions for conformance to official TYPO3 12/13 LTS standards, coding guidelines (PSR-12, TYPO3 CGL), and architecture patterns. Use when assessing extension quality, generating conformance reports, identifying technical debt, or planning modernization efforts. Evaluates: extension architecture, dependency injection, services configuration, testing coverage, Extbase patterns, and best practices alignment. Supports PHP 8.1-8.4 and provides actionable improvement recommendations with dual scoring (0-100 base + 0-20 excellence). Orchestrates specialized skills: delegates to typo3-tests for deep testing analysis and typo3-docs for comprehensive documentation validation when available."
+version: 1.1.0
+description: "Evaluate TYPO3 extensions for conformance to official TYPO3 12/13 LTS standards, coding guidelines (PSR-12, TYPO3 CGL), and architecture patterns. Use when assessing extension quality, generating conformance reports, identifying technical debt, or planning modernization efforts. Evaluates: extension architecture, dependency injection, services configuration, testing coverage, Extbase patterns, and best practices alignment. Supports PHP 8.1-8.4 and provides actionable improvement recommendations with dual scoring (0-100 base + 0-20 excellence). Orchestrates specialized skills: delegates to typo3-tests for deep testing analysis and typo3-docs for comprehensive documentation creation/validation. Now includes guidance for addressing the most common gap: missing documentation (typically 0/4 points)."
 license: Complete terms in LICENSE.txt
 ---
 
@@ -791,6 +791,25 @@ Excellence indicators are **optional features** that demonstrate exceptional qua
 - Excellence indicators (0-20) are OPTIONAL - bonus points for exceptional quality
 - Extensions scoring 100/100 base are fully conformant, regardless of excellence score
 - Excellence indicators identify community reference extensions
+
+**📚 When Documentation/ is Missing or Incomplete:**
+
+If conformance check reveals missing or incomplete documentation (0-1 points in Documentation Excellence):
+
+**Recommended Next Step:**
+```
+📚 Use typo3-docs skill to create comprehensive documentation:
+   - Creates complete Documentation/ structure (8 sections)
+   - Follows modern TYPO3 13.x standards
+   - Uses card-grid navigation (not plain toctree)
+   - Applies confval directives for configuration
+   - Includes Settings.cfg and proper RST structure
+   - Ready for docs.typo3.org deployment
+
+   After creation: Re-run conformance check to verify improvement
+```
+
+**Documentation is the most common conformance gap** - extensions often score 90-95/100 with 0/4 documentation. Creating proper documentation typically improves score to 94-99/100 base + 1-2/20 excellence.
 
 ### Severity Levels
 
