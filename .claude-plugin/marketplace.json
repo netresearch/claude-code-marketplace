@@ -11,7 +11,7 @@
     {
       "name": "typo3-docs",
       "description": "Create and maintain TYPO3 extension documentation following official TYPO3 documentation standards. Includes automated documentation extraction with priority-weighted gap analysis based on TYPO3 architecture, RST syntax reference, TYPO3-specific directives, local rendering, validation, and TYPO3 Intercept deployment setup.",
-      "version": "1.1.0-20251107",
+      "version": "1.1.0-20251111",
       "author": {
         "name": "Netresearch DTT GmbH",
         "email": "info@netresearch.de"
@@ -55,7 +55,7 @@
     {
       "name": "typo3-conformance",
       "description": "Evaluate TYPO3 extensions for conformance to official TYPO3 coding standards, architecture patterns, and best practices. Includes automated validation scripts for file structure, PSR-12 compliance, dependency injection, testing infrastructure, and comprehensive conformance scoring with priority-based action items.",
-      "version": "1.1.0-20251107",
+      "version": "1.2.0-20251111",
       "author": {
         "name": "Netresearch DTT GmbH",
         "email": "info@netresearch.de"

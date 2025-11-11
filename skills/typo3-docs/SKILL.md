@@ -24,7 +24,8 @@ Invoke this skill when working with TYPO3 extension documentation:
 **File Patterns:**
 - Editing `Documentation/**/*.rst` files
 - Creating new RST files in Documentation/ directory
-- Updating `Documentation/Settings.cfg`
+- Updating `Documentation/guides.xml` (modern PHP-based rendering)
+- Updating `Documentation/Settings.cfg` (legacy Sphinx rendering - migrate to guides.xml)
 - Editing `README.md` (requires syncing with Documentation/)
 
 **Keywords/Commands:**
@@ -83,7 +84,7 @@ Invoke this skill when working with TYPO3 extension documentation:
 1. ✅ Installation steps match between README.md and Documentation/Introduction/
 2. ✅ Feature descriptions consistent between README.md and Documentation/Index.rst
 3. ✅ Code examples identical (button names, configuration, TypoScript)
-4. ✅ Version numbers consistent (README.md badges match Documentation/Settings.cfg)
+4. ✅ Version numbers consistent (README.md badges match Documentation/guides.xml or Settings.cfg)
 5. ✅ Links to external resources point to same destinations
 
 **Example from real bug:**
@@ -137,7 +138,8 @@ TYPO3 extensions use a three-tier documentation structure:
 ```
 Documentation/
 ├── Index.rst           # Main entry point (required)
-├── Settings.cfg        # Documentation metadata (required)
+├── guides.xml          # Documentation metadata (required - modern PHP-based rendering)
+├── Settings.cfg        # LEGACY - migrate to guides.xml (Sphinx-based, deprecated)
 ├── Introduction/       # Getting started content
 ├── Integration/        # Configuration guides
 ├── CKEditor/          # Feature-specific docs
@@ -387,14 +389,57 @@ Type: boolean
 Default: true
 ```
 
-**3. guides.xml (AVOID - Usually Not Needed)**
+**3. guides.xml (PREFERRED - Modern PHP-Based Rendering)**
 
-**Do NOT create guides.xml unless specifically needed!**
+**ALWAYS use guides.xml for new extensions!**
 
-- guides.xml is OPTIONAL and often causes rendering problems
-- Modern TYPO3 docs use `Settings.cfg` + RST files (sufficient for 99% of cases)
-- Only create guides.xml for advanced use cases (custom themes, special rendering)
-- If rendering fails with guides.xml errors, delete it and try again
+- guides.xml is the **modern standard** for TYPO3 documentation (PHP-based rendering)
+- Settings.cfg is **LEGACY** (Sphinx-based) and being phased out
+- guides.xml provides better GitHub integration, cross-extension interlinking, and maintainability
+- For existing extensions with Settings.cfg: **migrate to guides.xml**
+
+**Minimum guides.xml Structure:**
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<guides xmlns="https://www.phpdoc.org/guides"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="https://www.phpdoc.org/guides https://www.phpdoc.org/guides/guides.xsd"
+        default-code-language="php"
+        max-menu-depth="3"
+>
+    <project title="Extension Name"
+             version="1.0.0"
+             copyright="since 2024 by Author Name"/>
+
+    <extension class="\T3Docs\Typo3DocsTheme\DependencyInjection\Typo3DocsThemeExtension"
+               edit-on-github="vendor/extension-key"
+               edit-on-github-branch="main"
+               edit-on-github-directory="Documentation"
+               project-home="https://github.com/vendor/extension-key"
+               project-repository="https://github.com/vendor/extension-key"
+               project-issues="https://github.com/vendor/extension-key/issues"
+    />
+
+    <!-- Cross-Documentation References -->
+    <inventory id="t3coreapi" url="https://docs.typo3.org/m/typo3/reference-coreapi/main/en-us/"/>
+    <inventory id="t3tsref" url="https://docs.typo3.org/m/typo3/reference-typoscript/main/en-us/"/>
+</guides>
+```
+
+**Migration from Settings.cfg to guides.xml:**
+
+1. Create guides.xml with above structure
+2. Map Settings.cfg values:
+   - `[general] project` → `<project title="">`
+   - `[general] version` → `<project version="">`
+   - `[general] copyright` → `<project copyright="">`
+   - `[html_theme_options] github_repository` → `edit-on-github=""`
+   - `[html_theme_options] github_branch` → `edit-on-github-branch=""`
+   - `[html_theme_options] project_*` → corresponding `project-*` attributes
+   - `[intersphinx_mapping]` → `<inventory>` elements
+3. Test build: `ddev docs`
+4. Delete Settings.cfg after successful migration
 
 **4. Missing Images Handling**
 
@@ -431,9 +476,9 @@ The backend module provides:
 - ❌ Uses "Type:", "Default:" format
 - ✅ Use confval directive with `:type:`, `:Default:`, `:Path:`
 
-**Pitfall 3: Creating guides.xml By Default**
-- ❌ Adds guides.xml → often causes rendering errors
-- ✅ Omit guides.xml unless specifically needed
+**Pitfall 3: Using Settings.cfg Instead of guides.xml**
+- ❌ Uses Settings.cfg → legacy Sphinx-based rendering
+- ✅ Use guides.xml for modern PHP-based rendering (preferred)
 
 **Pitfall 4: Image References Without Images**
 - ❌ Leaves broken figure directives
@@ -520,20 +565,37 @@ To document PHP classes and methods, use the PHP domain directives:
    :throws \\RuntimeException: When file is not found
 ```
 
-**Return Type Annotations:**
+**Return Type Strategy (Hybrid Rule):**
 
-Include return type annotations in method signatures (after closing parenthesis) to improve documentation clarity and follow Sphinx best practices:
+Use context-appropriate return type documentation based on complexity:
 
-```rst
-✅ Correct:   .. php:method:: getImage(int $fileUid): File|null
-❌ Incorrect: .. php:method:: getImage(int $fileUid)
-```
+1. **Simple types (string, int, bool, array):** Include in signature only
+   ```rst
+   .. php:method:: isEnabled(): bool
 
-**Return Type Format:**
-- Use short class names when unambiguous: `File|null`, `ProcessedFile|null`
-- Use fully qualified names when needed: `\\TYPO3\\CMS\\Core\\Resource\\File|null`
-- Use union types for nullable returns: `string|null` or `?string`
-- Match the style used in parameter type hints for consistency
+      Checks if the configuration is valid.
+   ```
+
+2. **TYPO3 types with clear meaning:** Include in signature + `:returntype:` for FQN
+   ```rst
+   .. php:method:: getFile(int $uid): File|null
+
+      Retrieves file by UID.
+
+      :returntype: ``\\TYPO3\\CMS\\Core\\Resource\\File|null``
+   ```
+
+3. **Complex union types (>2 types or long FQNs):** Use `:returntype:` field only
+   ```rst
+   .. php:method:: processImage(File $file, array $options)
+
+      Processes image with multiple return possibilities.
+
+      :returns: Processed file, original file if no processing needed, or null on error
+      :returntype: ``\\TYPO3\\CMS\\Core\\Resource\\ProcessedFile|\\TYPO3\\CMS\\Core\\Resource\\File|null``
+   ```
+
+**Rationale:** Balance readability (signature for quick scan) with precision (field for complex types)
 
 **Class:**
 ```rst
@@ -835,7 +897,11 @@ If needed:
    ```
    Extension "\T3Docs\GuidesExtension\..." does not exist
    ```
-   **Fix:** Delete `guides.xml` - it's usually not needed for TYPO3 extensions
+   **Fix:** Ensure correct `class` attribute in guides.xml:
+   ```xml
+   <extension class="\T3Docs\Typo3DocsTheme\DependencyInjection\Typo3DocsThemeExtension"
+   ```
+   The class path changed in modern rendering - update old guides.xml files
 
 2. **Missing Image Errors**
    ```
@@ -881,7 +947,7 @@ For comprehensive webhook setup, troubleshooting, and best practices, see: `refe
 - ✅ Use confval directive for ALL configuration options (mandatory)
 - ✅ Include UTF-8 emoji icons in card titles (📘 📦 ⚙️ 👤 etc.)
 - ✅ Add stretched-link class to card footers (full card clickability)
-- ✅ Omit guides.xml unless specifically needed (avoid rendering issues)
+- ✅ Use guides.xml for modern PHP-based rendering (preferred over Settings.cfg)
 - ✅ Use TYPO3-specific directives (confval, versionadded, php:method)
 - ✅ Cross-reference using `:ref:` labels (internal links)
 - ✅ Render locally before committing (catch issues early)
@@ -890,7 +956,7 @@ For comprehensive webhook setup, troubleshooting, and best practices, see: `refe
 **DON'T:**
 - ❌ Create plain toctree lists (use card-grid instead)
 - ❌ Use plain text for configuration (must use confval directive)
-- ❌ Create guides.xml by default (causes rendering errors)
+- ❌ Use Settings.cfg for new extensions (use guides.xml instead)
 - ❌ Leave broken image references (remove or add descriptive content)
 - ❌ Skip stretched-link in card footers (poor UX)
 - ❌ Create markdown files in Documentation/ (RST only)

@@ -1,7 +1,7 @@
 ---
 name: typo3-conformance
-version: 1.1.0
-description: "Evaluate TYPO3 extensions for conformance to official TYPO3 12/13 LTS standards, coding guidelines (PSR-12, TYPO3 CGL), and architecture patterns. Use when assessing extension quality, generating conformance reports, identifying technical debt, or planning modernization efforts. Evaluates: extension architecture, dependency injection, services configuration, testing coverage, Extbase patterns, and best practices alignment. Supports PHP 8.1-8.4 and provides actionable improvement recommendations with dual scoring (0-100 base + 0-20 excellence). Orchestrates specialized skills: delegates to typo3-tests for deep testing analysis and typo3-docs for comprehensive documentation creation/validation. Now includes guidance for addressing the most common gap: missing documentation (typically 0/4 points)."
+version: 1.2.0
+description: "Evaluate TYPO3 extensions for conformance to official TYPO3 12/13 LTS standards, coding guidelines (PSR-12, TYPO3 CGL), and architecture patterns. Use when assessing extension quality, generating conformance reports, identifying technical debt, or planning modernization efforts. Evaluates: extension architecture, dependency injection, services configuration, testing coverage, Extbase patterns, best practices alignment, and Crowdin integration. Supports PHP 8.1-8.4 and provides actionable improvement recommendations with dual scoring (0-100 base + 0-20 excellence). Orchestrates specialized skills: delegates to typo3-tests for deep testing analysis and typo3-docs for comprehensive documentation creation/validation. Includes comprehensive Crowdin integration validation for TYPO3's centralized translation ecosystem."
 license: Complete terms in LICENSE.txt
 ---
 
@@ -711,7 +711,10 @@ Excellence indicators are **optional features** that demonstrate exceptional qua
 **Total Possible Score: 120 points** (100 base conformance + 20 excellence bonus)
 
 **Category 1: Community & Internationalization (0-6 points)**
-- Crowdin integration (crowdin.yml): +2 points
+- Crowdin integration: 0-2 points
+  - Basic (crowdin.yml exists): +1 point
+  - TYPO3-compliant (preserve_hierarchy, wildcards, proper patterns, no download job): +2 points
+  - See `references/crowdin-integration.md` for comprehensive validation
 - GitHub issue templates (.github/ISSUE_TEMPLATE/): +1 point
 - .gitattributes with export-ignore: +1 point
 - Professional README badges (stability, versions, downloads, CI): +2 points
