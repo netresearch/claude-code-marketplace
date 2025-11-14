@@ -1,6 +1,6 @@
 ---
 name: typo3-testing
-version: 1.0.0
+version: 1.1.0
 description: Create, configure, and manage TYPO3 extension tests (unit, functional, acceptance) following official TYPO3 testing framework patterns. Use when setting up tests, writing test cases, configuring PHPUnit, managing fixtures, or integrating CI/CD pipelines for TYPO3 extensions. Covers PHPUnit 11/12, TYPO3 v12/v13 LTS, modern dependency injection testing patterns, and comprehensive quality tooling (PHPStan level 10, Rector, php-cs-fixer).
 license: Complete terms in LICENSE.txt
 ---
@@ -199,15 +199,17 @@ cp templates/github-actions-tests.yml .github/workflows/tests.yml
 ### GitLab CI
 See `references/ci-cd.md` for GitLab CI example configuration.
 
-## Best Practices
+## Test Organization Standards
 
-1. **Test Organization**: Group tests by feature/domain, not by type
-2. **Naming**: `*Test.php` for unit/functional, `*Cest.php` for acceptance
-3. **Fixtures**: Minimal, reusable, well-documented
-4. **Assertions**: Specific assertions over assertEquals
-5. **Test Independence**: Each test can run standalone
-6. **Setup/Teardown**: Use setUp() and tearDown() consistently
-7. **Test Strategy**: Document in AGENTS.md what directory tests
+**When organizing tests**, apply these patterns:
+1. Group tests by feature or domain, not by test type
+2. Name unit and functional tests with `*Test.php` suffix
+3. Name acceptance tests with `*Cest.php` suffix
+4. Keep fixtures minimal, reusable, and well-documented
+5. Use specific assertions (assertSame, assertInstanceOf) over generic assertEquals
+6. Ensure each test can run independently without side effects
+7. Apply setUp() and tearDown() methods consistently across test classes
+8. Document test strategy in AGENTS.md to explain what each directory tests
 
 ## Troubleshooting
 
@@ -226,10 +228,29 @@ See `references/ci-cd.md` for GitLab CI example configuration.
 - Check Selenium service is running
 - Review Codeception configuration
 
-## Resources
+## Reference Material Usage
 
-- [TYPO3 Testing Documentation](https://docs.typo3.org/m/typo3/reference-coreapi/main/en-us/Testing/)
-- [TYPO3 Testing Framework](https://github.com/typo3/testing-framework)
-- [Tea Extension](https://github.com/TYPO3BestPractices/tea) - Reference implementation
-- [PHPUnit Documentation](https://phpunit.de/documentation.html)
-- [Codeception Documentation](https://codeception.com/docs/)
+**When understanding TYPO3 testing patterns**, read [TYPO3 Testing Documentation](https://docs.typo3.org/m/typo3/reference-coreapi/main/en-us/Testing/) for:
+- Official testing framework usage
+- Best practices and patterns
+- Version-specific requirements
+
+**When working with test framework internals**, check [TYPO3 Testing Framework](https://github.com/typo3/testing-framework) for:
+- Framework API reference
+- Base test case implementations
+- Fixture handling utilities
+
+**When seeking reference implementations**, study [Tea Extension](https://github.com/TYPO3BestPractices/tea) for:
+- Production-quality test examples
+- Complete testing infrastructure setup
+- Best practice patterns in action
+
+**When writing PHPUnit tests**, consult [PHPUnit Documentation](https://phpunit.de/documentation.html) for:
+- Assertion methods
+- Test doubles and mocking
+- Configuration options
+
+**When implementing acceptance tests**, reference [Codeception Documentation](https://codeception.com/docs/) for:
+- Page object patterns
+- Browser automation
+- E2E test scenarios

@@ -1,6 +1,6 @@
 ---
 name: typo3-conformance
-version: 1.2.0
+version: 1.3.0
 description: "Evaluate TYPO3 extensions for conformance to official TYPO3 12/13 LTS standards, coding guidelines (PSR-12, TYPO3 CGL), and architecture patterns. Use when assessing extension quality, generating conformance reports, identifying technical debt, or planning modernization efforts. Evaluates: extension architecture, dependency injection, services configuration, testing coverage, Extbase patterns, best practices alignment, and Crowdin integration. Supports PHP 8.1-8.4 and provides actionable improvement recommendations with dual scoring (0-100 base + 0-20 excellence). Orchestrates specialized skills: delegates to typo3-tests for deep testing analysis and typo3-docs for comprehensive documentation creation/validation. Includes comprehensive Crowdin integration validation for TYPO3's centralized translation ecosystem."
 license: Complete terms in LICENSE.txt
 ---
@@ -11,19 +11,9 @@ license: Complete terms in LICENSE.txt
 
 **Activation:** This skill activates when analyzing TYPO3 extensions for standards compliance, code quality, or conformance checking.
 
-## Overview
+## Skill Ecosystem Integration
 
-This skill provides systematic evaluation of TYPO3 extensions against official TYPO3 standards:
-
-1. **Extension Architecture** - File structure, naming conventions, required files
-2. **Coding Guidelines** - PSR-12 compliance, TYPO3-specific code style
-3. **PHP Architecture** - Dependency injection, services, events, Extbase patterns (see `references/hooks-and-events.md`)
-4. **Testing Standards** - Unit, functional, and acceptance testing requirements
-5. **Best Practices** - Real-world patterns from Tea extension and core standards
-
-### Skill Ecosystem Integration
-
-This skill acts as an **orchestrator** that delegates to specialized skills for deep domain analysis:
+Delegate to specialized skills for deep domain analysis:
 
 **🔧 typo3-tests** (https://github.com/netresearch/typo3-testing-skill)
 - Deep PHPUnit configuration analysis
@@ -40,10 +30,10 @@ This skill acts as an **orchestrator** that delegates to specialized skills for 
 - Official TYPO3 documentation standards
 
 **Delegation Strategy:**
-- **Surface-level checks:** Performed directly by this skill
-- **Deep analysis:** Delegated to specialized skills when available
-- **Fallback:** Basic validation if specialized skills unavailable
-- **Integration:** Results incorporated into conformance scoring
+- **Surface-level checks:** Perform directly with this skill
+- **Deep analysis:** Delegate to specialized skills when available
+- **Fallback:** Apply basic validation if specialized skills unavailable
+- **Integration:** Incorporate results into conformance scoring
 
 ## Version Compatibility
 
@@ -361,45 +351,42 @@ cat Tests/Functional/Domain/Repository/ProductRepositoryTest.php
 - Estimated coverage: ~45% (below 70% recommendation)
 ```
 
-### Step 6: Best Practices Review
+### Step 6: Standards Application
 
 **Reference:** `references/best-practices.md`
 
-**CRITICAL: New Comprehensive Validation Areas**
+**When evaluating build scripts** (see `references/runtests-validation.md`):
+1. Verify Build/Scripts/runTests.sh exists and matches Tea extension reference
+2. Confirm PHP_VERSION default matches composer.json minimum requirement
+3. Validate TYPO3_VERSION default matches composer.json target version
+4. Check PHP version regex includes only supported versions (8.1-8.4)
+5. Ensure database version lists are current (no EOL versions)
+6. Verify network name is customized (not "friendsoftypo3-tea")
+7. Validate test suite paths match actual directory structure
 
-**1. Build Scripts Validation** (`references/runtests-validation.md`)
-- [ ] Build/Scripts/runTests.sh exists and matches Tea reference
-- [ ] PHP_VERSION default matches composer.json minimum
-- [ ] TYPO3_VERSION default matches composer.json target
-- [ ] PHP version regex includes only supported versions
-- [ ] Database version lists are current (not EOL)
-- [ ] Network name customized (not "friendsoftypo3-tea")
-- [ ] Test suite paths match actual directory structure
+**When evaluating development environment** (see `references/development-environment.md`):
+1. Locate DDEV configuration (.ddev/config.yaml) or Docker Compose alternative
+2. When DDEV present, verify type set to 'typo3'
+3. Confirm DDEV PHP version matches composer.json minimum
+4. Validate DDEV docroot matches composer.json web-dir
+5. Check database is MariaDB 10.11+ or MySQL 8.0+
+6. Flag missing DevContainer configuration as optional improvement
 
-**2. Development Environment** (`references/development-environment.md`)
-- [ ] DDEV configuration (.ddev/config.yaml) present
-- [ ] DDEV type set to 'typo3'
-- [ ] DDEV PHP version matches composer.json minimum
-- [ ] DDEV docroot matches composer.json web-dir
-- [ ] Database is MariaDB 10.11+ or MySQL 8.0+
-- [ ] OR Docker Compose (docker-compose.yml) as alternative
-- [ ] DevContainer configuration (optional but recommended)
+**When evaluating directory structure** (see `references/directory-structure.md`):
+1. Verify Build/ directory exists with committed configuration
+2. Confirm .Build/ is fully gitignored (entire directory)
+3. Flag any .Build/ files committed to git as critical violation
+4. Check cache files are in .Build/, not Build/
+5. Validate Composer paths reference .Build/ (bin-dir, vendor-dir, web-dir)
+6. Verify quality tool configs reference .Build/ for cache
 
-**3. Directory Structure** (`references/directory-structure.md`)
-- [ ] Build/ directory exists with committed configuration
-- [ ] .Build/ properly gitignored (entire directory)
-- [ ] No .Build/ files committed to git
-- [ ] Cache files in .Build/, not Build/
-- [ ] Composer paths reference .Build/ (bin-dir, vendor-dir, web-dir)
-- [ ] Quality tool configs reference .Build/ for cache
-
-**4. Project Infrastructure**
-- [ ] .editorconfig present
-- [ ] .gitignore properly configured
-- [ ] CI/CD pipeline (.github/workflows/ or .gitlab-ci.yml)
-- [ ] Code quality tools configured (php-cs-fixer, phpstan)
-- [ ] README.md with clear instructions
-- [ ] LICENSE file present
+**When evaluating project infrastructure**:
+1. Check .editorconfig presence for consistent code formatting
+2. Verify .gitignore properly configured with standard exclusions
+3. Locate CI/CD pipeline (.github/workflows/ or .gitlab-ci.yml)
+4. Confirm code quality tools configured (php-cs-fixer, phpstan)
+5. Validate README.md provides clear setup instructions
+6. Ensure LICENSE file present with appropriate open-source license
 
 **Security Practices:**
 ```bash
@@ -601,58 +588,114 @@ public function __construct(
 
 ---
 
-## Conformance Checklist
+## Pre-Evaluation Validation Procedures
 
-Use this checklist to track conformance improvements:
+Execute these validation steps systematically during conformance evaluation:
 
-**File Structure**
-- [ ] composer.json with PSR-4 autoloading
-- [ ] Classes/ directory properly organized
-- [ ] Configuration/ using modern structure
-- [ ] Resources/ separated Private/Public
-- [ ] Tests/ mirroring Classes/
-- [ ] Documentation/ complete
+**File Structure Validation**
+1. Verify composer.json exists with PSR-4 autoloading configuration
+2. Confirm Classes/ directory follows namespace hierarchy
+3. Check Configuration/ uses modern structure (no ext_tables.php dependencies)
+4. Validate Resources/ separates Private/ and Public/ correctly
+5. Ensure Tests/ mirrors Classes/ structure exactly
+6. Confirm Documentation/ contains Index.rst and Settings.cfg
 
-**Coding Standards**
-- [ ] declare(strict_types=1) in all PHP files
-- [ ] Type declarations everywhere
-- [ ] PHPDoc on all public methods
-- [ ] PSR-12 compliant formatting
-- [ ] Proper naming conventions
+**Coding Standards Validation**
+1. Scan all PHP files for declare(strict_types=1) at file start
+2. Verify type declarations on all properties, parameters, and return types
+3. Check PHPDoc blocks on all public methods and classes
+4. Run PSR-12 compliance validation via PHPCS
+5. Validate naming conventions (classes, methods, variables)
 
-**PHP Architecture**
-- [ ] Constructor injection used
-- [ ] Configuration/Services.yaml configured
-- [ ] PSR-14 events instead of hooks
-- [ ] No GeneralUtility::makeInstance()
-- [ ] No $GLOBALS access
+**PHP Architecture Validation**
+1. Verify constructor injection used throughout codebase
+2. Check Configuration/Services.yaml exists and configures services
+3. Confirm PSR-14 events replace deprecated hooks
+4. Search for GeneralUtility::makeInstance() usage (flag as violation)
+5. Search for $GLOBALS access (flag as violation)
 
-**Testing**
-- [ ] Unit tests present and passing
-- [ ] Functional tests with fixtures
-- [ ] Test coverage >70%
-- [ ] PHPUnit configuration files
-- [ ] Acceptance tests (if applicable)
+**Testing Validation**
+1. Verify unit tests exist and execute successfully
+2. Check functional tests include proper fixtures
+3. Calculate test coverage (target >70%)
+4. Confirm PHPUnit configuration files present (UnitTests.xml, FunctionalTests.xml)
+5. Check acceptance tests if web interface present
 
-**Best Practices**
-- [ ] Development environment (DDEV or Docker Compose) configured
-- [ ] Build/Scripts/runTests.sh present and accurate
-- [ ] Directory structure (.Build/ vs Build/) correct
-- [ ] Code quality tools configured
-- [ ] CI/CD pipeline setup
-- [ ] Security best practices followed
-- [ ] Complete documentation
-- [ ] README and LICENSE present
+**Standards Application Validation**
+1. Verify development environment configured (DDEV or Docker Compose)
+2. Check Build/Scripts/runTests.sh exists with accurate configuration
+3. Validate directory structure (.Build/ vs Build/) separation
+4. Confirm code quality tools configured (phpstan, php-cs-fixer)
+5. Verify CI/CD pipeline setup (.github/workflows/ or .gitlab-ci.yml)
+6. Review security practices implementation
+7. Validate documentation completeness
+8. Confirm README.md and LICENSE files present
 
 ---
 
-## Resources
+## Reference Material Usage
 
-- **TYPO3 Core API:** https://docs.typo3.org/m/typo3/reference-coreapi/main/en-us/
-- **Extension Architecture:** https://docs.typo3.org/m/typo3/reference-coreapi/main/en-us/ExtensionArchitecture/
-- **Coding Guidelines:** https://docs.typo3.org/m/typo3/reference-coreapi/main/en-us/CodingGuidelines/
-- **Testing Documentation:** https://docs.typo3.org/m/typo3/reference-coreapi/main/en-us/Testing/
-- **Tea Extension (Best Practice):** https://github.com/TYPO3BestPractices/tea
+**When checking extension architecture patterns**, read `references/extension-architecture.md` for:
+- Standard directory structures and naming conventions
+- Required files and their purposes
+- PSR-4 autoloading configuration examples
+
+**When validating coding guidelines**, read `references/coding-guidelines.md` for:
+- PSR-12 compliance requirements
+- TYPO3-specific code style rules
+- Type declaration standards
+
+**When evaluating PHP architecture**, read `references/php-architecture.md` for:
+- Dependency injection patterns
+- Service configuration examples
+- PSR-14 event system usage
+
+**When analyzing testing standards**, read `references/testing-standards.md` for:
+- PHPUnit configuration patterns
+- Test structure requirements
+- Coverage calculation methods
+
+**When applying best practices**, read `references/best-practices.md` for:
+- Development environment setup patterns
+- Build script validation criteria
+- Directory structure standards
+
+**For build script validation**, read `references/runtests-validation.md` for:
+- Line-by-line runTests.sh validation
+- Tea extension reference comparison
+- Common configuration errors
+
+**For development environment checks**, read `references/development-environment.md` for:
+- DDEV configuration standards
+- Docker Compose alternatives
+- PHP and database version requirements
+
+**For directory structure evaluation**, read `references/directory-structure.md` for:
+- .Build/ vs Build/ separation rules
+- Composer path configuration
+- Gitignore patterns
+
+**For excellence indicators**, read `references/excellence-indicators.md` for:
+- Crowdin integration validation
+- Advanced quality tooling detection
+- Documentation excellence criteria
+
+**For Crowdin integration**, read `references/crowdin-integration.md` for:
+- TYPO3-compliant crowdin.yml patterns
+- Translation workflow validation
+- Common misconfigurations
+
+**For hooks and events migration**, read `references/hooks-and-events.md` for:
+- PSR-14 event patterns
+- Deprecated hook identification
+- Migration strategies
+
+**When encountering official documentation**, visit:
+- TYPO3 Core API: https://docs.typo3.org/m/typo3/reference-coreapi/main/en-us/
+- Extension Architecture: https://docs.typo3.org/m/typo3/reference-coreapi/main/en-us/ExtensionArchitecture/
+- Coding Guidelines: https://docs.typo3.org/m/typo3/reference-coreapi/main/en-us/CodingGuidelines/
+- Testing Documentation: https://docs.typo3.org/m/typo3/reference-coreapi/main/en-us/Testing/
+- Tea Extension (Best Practice): https://github.com/TYPO3BestPractices/tea
 ```
 
 ## Scoring System

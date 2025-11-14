@@ -1,6 +1,6 @@
 ---
 name: netresearch-branding
-version: 1.0.0
+version: 1.1.0
 description: "Apply Netresearch brand identity and design standards to web projects, documentation, presentations, and digital content. This skill should be used when creating branded materials, designing web interfaces, building presentations, or ensuring brand consistency. Covers: color system (turquoise #40B4B4, orange #F08C1F), typography (Raleway, Open Sans, Calibri), logo usage, web design patterns, social media templates, and image guidelines. This skill ensures professional, unified Netresearch appearance across all digital touchpoints."
 license: Complete terms in LICENSE.txt
 ---
@@ -10,17 +10,6 @@ license: Complete terms in LICENSE.txt
 **Purpose:** Apply Netresearch brand identity and design standards to web projects, documentation, presentations, and digital content.
 
 **Activation:** This skill activates when working on Netresearch-branded projects, designing web interfaces, creating presentations, or producing digital content for Netresearch.
-
-## Overview
-
-This skill ensures consistent application of Netresearch brand identity across all digital touchpoints:
-
-1. **Color System** - Turquoise primary, orange accents, grey tones
-2. **Typography** - Raleway headlines, Open Sans/Calibri body text
-3. **Logo Usage** - Official variants, proper spacing, size guidelines
-4. **Web Design** - Layout patterns, component styles, responsive design
-5. **Social Media** - Platform-specific templates and dimensions
-6. **Image Guidelines** - Photo selection, treatment, and usage
 
 ## Brand Identity
 
@@ -118,7 +107,7 @@ RGB: 255, 255, 255
 
 ### Color Application Rules
 
-**Web Interface:**
+**When applying colors to web interfaces**:
 ```css
 /* Primary brand color */
 .brand-primary { color: #2F99A4; }
@@ -136,19 +125,17 @@ RGB: 255, 255, 255
 .bg-white { background-color: #FFFFFF; }
 ```
 
-**Do's:**
-- ✅ Use turquoise as dominant brand color
-- ✅ Use orange sparingly for accents and energy
-- ✅ Maintain high white space ratio
-- ✅ Use grey for text instead of pure black
-- ✅ Ensure sufficient contrast for accessibility (WCAG AA minimum)
-
-**Don'ts:**
-- ❌ Don't use turquoise and orange equally (turquoise dominates)
-- ❌ Don't use pure black (#000000) for text
-- ❌ Don't create new color variations
-- ❌ Don't reduce white space significantly
-- ❌ Don't use colors that clash with brand palette
+**When applying brand colors**:
+- Use turquoise as dominant brand color in all primary elements
+- Apply orange sparingly for accents and energy highlights only
+- Maintain high white space ratio for clean, modern appearance
+- Use grey (#585961) for text instead of pure black for softer look
+- Ensure sufficient contrast for accessibility (WCAG AA minimum: 4.5:1)
+- Let turquoise dominate over orange (never use them equally)
+- Avoid pure black (#000000) for text (use anthracite #585961)
+- Never create new color variations outside the brand palette
+- Preserve white space generously (don't reduce significantly)
+- Reject colors that clash with the brand palette
 
 ## Typography
 
@@ -294,21 +281,19 @@ strong, .emphasis {
 }
 ```
 
-### Typography Do's and Don'ts
+### Typography Application Standards
 
-**Do's:**
-- ✅ Use Raleway for all headlines and emphasis
-- ✅ Use Open Sans for website body text
-- ✅ Maintain consistent line-height (1.6 for body, 1.2-1.4 for headlines)
-- ✅ Use appropriate font weights for hierarchy
-- ✅ Ensure readable font sizes (minimum 16px for body text)
-
-**Don'ts:**
-- ❌ Don't mix Calibri with Raleway/Open Sans on web
-- ❌ Don't use excessive font weights (stick to Regular, Semi-Bold, Bold)
-- ❌ Don't use all caps for long text (only for short labels)
-- ❌ Don't use decorative or script fonts
-- ❌ Don't reduce line-height below 1.4 for readability
+**When applying typography**:
+- Use Raleway for all headlines and emphasis text
+- Use Open Sans for website body text and navigation
+- Maintain consistent line-height (1.6 for body, 1.2-1.4 for headlines)
+- Apply appropriate font weights to establish visual hierarchy
+- Ensure readable font sizes (minimum 16px for body text)
+- Keep Calibri separate from Raleway/Open Sans (documents only, not web)
+- Limit font weights to Regular, Semi-Bold, and Bold (avoid extremes)
+- Restrict all caps to short labels only (never for long text passages)
+- Reject decorative or script fonts (maintain professional sans-serif)
+- Never reduce line-height below 1.4 (preserves readability)
 
 ## Logo Usage
 
@@ -706,58 +691,57 @@ Use consistent icons for:
 - ARIA labels for complex interactions
 - Proper heading hierarchy (h1 → h2 → h3)
 
-## Implementation Checklist
+## Pre-Launch Validation Procedures
 
-### Starting a New Netresearch Project
+Execute these validation steps systematically before launching Netresearch projects:
 
-**Design Phase:**
-- [ ] Import Raleway and Open Sans fonts
-- [ ] Set up color variables (CSS custom properties or Sass variables)
-- [ ] Define typography scale
-- [ ] Create component library with brand styles
-- [ ] Establish responsive breakpoints
-- [ ] Plan white space and layout grid
+**Design Phase Validation**
+1. Import Raleway and Open Sans fonts from Google Fonts or internal server
+2. Set up color variables using CSS custom properties or Sass variables
+3. Define complete typography scale (h1-h5, body, buttons)
+4. Create component library with all brand styles documented
+5. Establish responsive breakpoints (320px, 768px, 1024px, 1440px)
+6. Plan white space allocation and layout grid system
 
-**Development Phase:**
-- [ ] Implement brand colors consistently
-- [ ] Apply Raleway to all headlines
-- [ ] Apply Open Sans to body text and navigation
-- [ ] Add Netresearch logo (official variant)
-- [ ] Optimize images (WebP, compression, responsive)
-- [ ] Test color contrast (WCAG AA)
-- [ ] Implement keyboard navigation
-- [ ] Add focus states
+**Development Phase Validation**
+1. Implement brand colors consistently across all components
+2. Apply Raleway font family to all headlines (h1-h5)
+3. Apply Open Sans to body text, navigation, and UI elements
+4. Add Netresearch logo using official variant with proper sizing
+5. Optimize all images (WebP format, compression, responsive srcsets)
+6. Test color contrast ratios (WCAG AA: minimum 4.5:1 for text)
+7. Implement keyboard navigation for all interactive elements
+8. Add visible focus states with turquoise outline (2px)
 
-**Quality Assurance:**
-- [ ] Verify logo usage (size, spacing, variant)
-- [ ] Check color accuracy across browsers
-- [ ] Test typography rendering
-- [ ] Validate responsive behavior
-- [ ] Run accessibility audit
-- [ ] Verify inclusive language in all content
-- [ ] Cross-browser testing
-- [ ] Performance optimization
+**Quality Assurance Validation**
+1. Verify logo usage (minimum sizes, clear space, correct variant)
+2. Check color accuracy across Chrome, Firefox, Safari browsers
+3. Test typography rendering on different operating systems
+4. Validate responsive behavior at all defined breakpoints
+5. Run automated accessibility audit (axe, WAVE, Lighthouse)
+6. Verify inclusive language throughout all content (no problematic terms)
+7. Execute cross-browser testing (latest 2 versions minimum)
+8. Measure and optimize performance (Core Web Vitals)
 
-### Brand Compliance Review
+**Brand Compliance Validation**
 
-**Visual Identity:**
-- Are brand colors used correctly?
-- Is the logo properly displayed?
-- Is typography hierarchy clear?
-- Is white space adequate?
+Execute visual identity checks:
+1. Confirm brand colors used correctly (turquoise primary, orange accent)
+2. Verify logo displayed properly with adequate clear space
+3. Check typography hierarchy is clear and consistent
+4. Validate white space is adequate and generous
 
-**Content Quality:**
-- Are images high-quality and on-brand?
-- Is messaging clear and professional?
-- Is the "one Netresearch" principle maintained?
-- Are team/sub-brand logos avoided externally?
-- Is inclusive language used throughout all content?
+Execute content quality checks:
+1. Confirm images are high-quality and align with brand aesthetics
+2. Verify messaging is clear, professional, and on-brand
+3. Check "one Netresearch" principle maintained (no team logos externally)
+4. Validate inclusive language used throughout all content
 
-**Technical Standards:**
-- Is accessibility compliance verified (WCAG AA)?
-- Are performance metrics acceptable?
-- Is responsive design working correctly?
-- Are all brand assets optimized?
+Execute technical standards checks:
+1. Verify WCAG AA accessibility compliance (automated and manual testing)
+2. Confirm performance metrics acceptable (Lighthouse score 90+)
+3. Validate responsive design works correctly across all viewports
+4. Check all brand assets optimized (file sizes, formats, compression)
 
 ## Resources
 

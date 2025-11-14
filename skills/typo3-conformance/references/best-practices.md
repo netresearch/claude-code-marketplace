@@ -511,7 +511,222 @@ Clear and concise extension description explaining the purpose and main features
    Sitemap
 ```
 
-### 8. Language File Organization
+**Page Size Guidelines:**
+
+Follow TYPO3 documentation best practices for page organization and sizing:
+
+**Index.rst (Landing Page):**
+- **Target:** 80-150 lines
+- **Maximum:** 200 lines
+- **Purpose:** Entry point with metadata, brief description, and navigation only
+- **Contains:** Extension metadata, brief description, card-grid (optional), toctree, license
+- **Anti-pattern:** ❌ Embedding all content (introduction, requirements, contributing, credits, etc.)
+
+**Content Pages:**
+- **Target:** 100-300 lines per file
+- **Optimal:** 150-200 lines
+- **Maximum:** 400 lines (split if larger)
+- **Structure:** Focused on single topic or logically related concepts
+- **Split Strategy:** Create subdirectories for complex topics with multiple aspects
+
+**Red Flags:**
+- ❌ Index.rst >200 lines → Extract content to Introduction/, Contributing/, etc.
+- ❌ Single file >400 lines → Split into multiple focused pages
+- ❌ All content in Index.rst → Create proper section directories
+- ❌ Navigation by scrolling → Use card-grid + toctree structure
+
+**Proper Structure Example:**
+```
+Documentation/
+├── Index.rst              # Landing page (80-150 lines)
+├── Introduction/          # Getting started
+│   └── Index.rst         # Features, requirements, quick start
+├── Installation/          # Setup instructions
+│   └── Index.rst
+├── Configuration/         # Configuration guides
+│   ├── Index.rst
+│   ├── Basic.rst
+│   └── Advanced.rst
+├── Contributing/          # Contribution guidelines
+│   └── Index.rst         # Code, translations, credits, resources
+├── Examples/              # Usage examples
+├── Troubleshooting/       # Problem solving
+└── API/                   # Developer reference
+```
+
+**Benefits:**
+- ✅ Better user experience (focused, scannable pages)
+- ✅ Easier maintenance (smaller, manageable files)
+- ✅ Improved search results (specific pages rank better)
+- ✅ Clear information architecture
+- ✅ Follows TYPO3 documentation standards
+- ✅ Mobile-friendly navigation
+
+**Reference:** [TYPO3 tea extension](https://github.com/TYPO3BestPractices/tea) - exemplary documentation structure
+
+### 8. Version Control Best Practices
+
+#### Default Branch Naming
+
+**✅ Use `main` as the default branch instead of `master`**
+
+**Rationale:**
+- **Industry Standard**: GitHub, GitLab, and Bitbucket all default to `main` for new repositories
+- **Modern Convention**: Aligns with current version control ecosystem standards
+- **Inclusive Language**: Part of broader industry shift toward inclusive terminology
+- **Consistency**: Matches TYPO3 Core and most modern TYPO3 extensions
+
+**Migration from `master` to `main`:**
+
+If your extension currently uses `master`, migrate to `main`:
+
+```bash
+# 1. Create main branch from master
+git checkout master
+git pull origin master
+git checkout -b main
+git push -u origin main
+
+# 2. Change default branch on GitHub
+gh repo edit --default-branch main
+
+# 3. Update all branch references in codebase
+# - CI/CD workflows (.github/workflows/*.yml)
+# - Documentation (guides.xml, *.rst files)
+# - URLs in CONTRIBUTING.md, README.md
+
+# 4. Delete old master branch
+git branch -d master
+git push origin --delete master
+```
+
+**Example CI/CD workflow update:**
+
+```yaml
+# .github/workflows/tests.yml
+on:
+  push:
+    branches: [main, develop]  # Changed from: master
+  pull_request:
+    branches: [main]           # Changed from: master
+```
+
+**Example documentation update:**
+
+```xml
+<!-- Documentation/guides.xml -->
+<extension edit-on-github-branch="main" />  <!-- Changed from: master -->
+```
+
+#### Branch Protection Enforcement
+
+**Prevent accidental `master` branch recreation** and **protect `main` branch** using GitHub Repository Rulesets.
+
+**Block master branch - prevents creation and pushes:**
+
+Create `ruleset-block-master.json`:
+
+```json
+{
+  "name": "Block master branch",
+  "target": "branch",
+  "enforcement": "active",
+  "conditions": {
+    "ref_name": {
+      "include": ["refs/heads/master"],
+      "exclude": []
+    }
+  },
+  "rules": [
+    {
+      "type": "creation"
+    },
+    {
+      "type": "update"
+    },
+    {
+      "type": "deletion"
+    }
+  ],
+  "bypass_actors": []
+}
+```
+
+Apply the ruleset:
+
+```bash
+gh api -X POST repos/OWNER/REPO/rulesets \
+  --input ruleset-block-master.json
+```
+
+**Protect main branch - requires CI and prevents force pushes:**
+
+Create `ruleset-protect-main.json`:
+
+```json
+{
+  "name": "Protect main branch",
+  "target": "branch",
+  "enforcement": "active",
+  "conditions": {
+    "ref_name": {
+      "include": ["refs/heads/main"],
+      "exclude": []
+    }
+  },
+  "rules": [
+    {
+      "type": "required_status_checks",
+      "parameters": {
+        "required_status_checks": [
+          {
+            "context": "build"
+          }
+        ],
+        "strict_required_status_checks_policy": false
+      }
+    },
+    {
+      "type": "non_fast_forward"
+    }
+  ],
+  "bypass_actors": [
+    {
+      "actor_id": 5,
+      "actor_type": "RepositoryRole",
+      "bypass_mode": "always"
+    }
+  ]
+}
+```
+
+Apply the ruleset:
+
+```bash
+gh api -X POST repos/OWNER/REPO/rulesets \
+  --input ruleset-protect-main.json
+```
+
+**Verify rulesets are active:**
+
+```bash
+# List all rulesets
+gh api repos/OWNER/REPO/rulesets
+
+# Test master branch is blocked (should fail)
+git push origin test-branch:master
+# Expected: remote: error: GH013: Repository rule violations found
+```
+
+**Benefits of Repository Rulesets:**
+- ✅ Prevents accidental `master` branch recreation
+- ✅ Enforces CI status checks before merging to `main`
+- ✅ Prevents force pushes to protected branches
+- ✅ Allows admin bypass for emergency situations
+- ✅ More flexible than legacy branch protection rules
+- ✅ Supports complex conditions and multiple rule types
+
+### 9. Language File Organization
 
 **Resources/Private/Language/locallang.xlf:**
 
@@ -535,7 +750,7 @@ Clear and concise extension description explaining the purpose and main features
 </xliff>
 ```
 
-### 9. TCA Best Practices
+### 10. TCA Best Practices
 
 **Configuration/TCA/tx_myext_domain_model_product.php:**
 
@@ -595,7 +810,7 @@ return [
 ];
 ```
 
-### 10. Security Best Practices
+### 11. Security Best Practices
 
 **✅ Input Validation:**
 ```php

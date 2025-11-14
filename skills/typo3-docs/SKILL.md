@@ -1,6 +1,6 @@
 ---
 name: typo3-docs
-version: 1.1.0
+version: 1.2.0
 description: >
   Create and maintain TYPO3 extension documentation following official TYPO3 13.x standards.
 
@@ -104,10 +104,6 @@ editor.ui.componentFactory.add('insertimage', ...)  # Correct button name
 2. Update README.md with correct information
 3. Update all Documentation/*.rst files with same information
 4. Commit both in same atomic commit
-
-## Overview
-
-This skill enables creation and maintenance of TYPO3 extension documentation following official TYPO3 documentation standards. It covers RST syntax, TYPO3-specific directives (confval, versionadded, php:method, card-grid), documentation extraction and analysis tools, local rendering with Docker, validation procedures, and automated deployment through TYPO3 Intercept.
 
 ## Documentation Structure
 
@@ -752,26 +748,27 @@ xdg-open Documentation-GENERATED-temp/Index.html
 3. Update reference or create missing label
 4. Re-render to verify fix
 
-## Quality Standards
+## Pre-Commit Validation
 
-**Before Committing:**
-- ✅ No rendering warnings
-- ✅ No broken cross-references
-- ✅ All confval directives complete
-- ✅ Version information for new features
-- ✅ Card grids use stretched-link
-- ✅ UTF-8 emoji icons in card titles
-- ✅ Code blocks specify language
-- ✅ Proper heading hierarchy
-- ✅ No trailing whitespace
-- ✅ PHP method signatures include return types
+Before committing documentation changes, perform these quality checks in order:
 
-**Documentation Coverage:**
-- All public APIs documented
-- All configuration options explained
-- All features have usage examples
-- Troubleshooting for common issues
-- Security considerations documented
+1. **Run validation**: Execute `scripts/validate_docs.sh` to check RST syntax, encoding, and structural issues
+2. **Render locally**: Execute `scripts/render_docs.sh` and verify no rendering warnings appear
+3. **Check cross-references**: Confirm all `:ref:` labels resolve correctly in rendered output
+4. **Verify directives**: Ensure all `confval` directives include `:type:`, `:Default:`, and `:Path:` fields
+5. **Confirm version markers**: Add `versionadded`/`versionchanged` directives for new features or changed behavior
+6. **Test card grids**: Verify card-footer buttons include `stretched-link` class for full card clickability
+7. **Check visual elements**: Confirm card titles use UTF-8 emoji icons (📘 🔧 🎨 etc.)
+8. **Validate code blocks**: Ensure all code blocks specify language (`:caption:` optional)
+9. **Review heading structure**: Verify proper hierarchy (= for title, - for sections, ~ for subsections)
+10. **Check PHP signatures**: Confirm method signatures include return types (either in signature or `:returntype:` field)
+
+Additionally, verify documentation coverage meets standards:
+- Public APIs have corresponding `php:method` or `php:class` documentation
+- Configuration options documented with `confval` directives
+- Features include usage examples and integration guides
+- Common issues addressed in Troubleshooting section
+- Security considerations noted for sensitive features
 
 ## TYPO3 Intercept Deployment
 
@@ -940,57 +937,55 @@ If needed:
 
 For comprehensive webhook setup, troubleshooting, and best practices, see: `references/intercept-deployment.md`
 
-## Best Practices
+## Documentation Standards Application
 
-**DO:**
-- ✅ Use card-grid navigation for Index.rst (modern default)
-- ✅ Use confval directive for ALL configuration options (mandatory)
-- ✅ Include UTF-8 emoji icons in card titles (📘 📦 ⚙️ 👤 etc.)
-- ✅ Add stretched-link class to card footers (full card clickability)
-- ✅ Use guides.xml for modern PHP-based rendering (preferred over Settings.cfg)
-- ✅ Use TYPO3-specific directives (confval, versionadded, php:method)
-- ✅ Cross-reference using `:ref:` labels (internal links)
-- ✅ Render locally before committing (catch issues early)
-- ✅ Follow modern TYPO3 13.x standards
+When creating or editing TYPO3 documentation, apply these modern standards:
 
-**DON'T:**
-- ❌ Create plain toctree lists (use card-grid instead)
-- ❌ Use plain text for configuration (must use confval directive)
-- ❌ Use Settings.cfg for new extensions (use guides.xml instead)
-- ❌ Leave broken image references (remove or add descriptive content)
-- ❌ Skip stretched-link in card footers (poor UX)
-- ❌ Create markdown files in Documentation/ (RST only)
-- ❌ Commit claudedocs/ to version control (gitignored)
-- ❌ Use external links for internal docs (use :ref:)
-- ❌ Skip local rendering (blind commits = broken docs)
+**Navigation and Structure:**
+- Implement card-grid layouts for Index.rst instead of plain toctree lists
+- Include UTF-8 emoji icons in card titles for visual clarity (📘 📦 ⚙️ 👤)
+- Add `stretched-link` class to card-footer buttons for full card clickability
+- Use guides.xml for metadata (modern PHP-based rendering), avoid Settings.cfg for new extensions
 
-## Resources
+**Directive Usage:**
+- Use `confval` directive for ALL configuration options, never plain text
+- Apply `versionadded`/`versionchanged` directives for version-specific features
+- Document PHP APIs with `php:method` and `php:class` directives
+- Create internal links with `:ref:` labels, avoid external links for internal documentation
 
-This skill includes comprehensive reference materials and automation scripts:
+**File and Content Constraints:**
+- Create only RST files in Documentation/ directory, never markdown files
+- Remove broken image references or add descriptive content with todo notes
+- Keep claudedocs/ gitignored, never commit to version control
+- Validate and render locally before every commit to catch issues early
 
-### references/
+Follow TYPO3 13.x standards as defined in references/typo3-directives.md and official TYPO3 documentation guidelines.
 
-**rst-syntax.md:**
-Complete RST syntax reference including headings, code blocks, lists, links, tables, admonitions, images, and whitespace rules. Load this when working with basic RST syntax or encountering RST-specific formatting questions.
+## Reference Material Usage
 
-**typo3-directives.md:**
-TYPO3-specific directive reference including confval, version directives, PHP domain, card-grid, intersphinx, and quality checklists. Load this when using TYPO3-specific features or creating specialized documentation elements.
+When encountering specific documentation challenges, consult these bundled resources:
 
-### scripts/
+**For basic RST syntax questions:**
+- Read `references/rst-syntax.md` for headings, code blocks, lists, links, tables, admonitions, images, and whitespace rules
+- Use when formatting basic content or troubleshooting RST parsing errors
 
-**validate_docs.sh:**
-Validates RST syntax, checks for Settings.cfg and Index.rst, detects encoding issues, identifies trailing whitespace, and provides comprehensive validation reporting. Execute this before committing documentation changes.
+**For TYPO3-specific features:**
+- Read `references/typo3-directives.md` for confval, version directives, PHP domain, card-grid, intersphinx, and quality checklists
+- Use when implementing TYPO3-specific documentation elements or directives
 
-**render_docs.sh:**
-Renders documentation locally using Docker with the official TYPO3 render-guides image. Execute this to verify documentation renders correctly before pushing to version control.
+**For validation:**
+- Execute `scripts/validate_docs.sh` before committing to check RST syntax, Settings.cfg/guides.xml presence, Index.rst, encoding issues, and trailing whitespace
+- Use as part of pre-commit workflow (see "Pre-Commit Validation" section)
 
-## Additional Resources
+**For local preview:**
+- Execute `scripts/render_docs.sh` to generate HTML using official TYPO3 render-guides Docker image
+- Use to verify documentation renders correctly before pushing changes
 
-**Official Documentation:**
-- TYPO3 Documentation Guide: https://docs.typo3.org/m/typo3/docs-how-to-document/main/en-us/
-- RST Reference: https://www.sphinx-doc.org/en/master/usage/restructuredtext/basics.html
-- Rendering with Docker: https://docs.typo3.org/m/typo3/docs-how-to-document/main/en-us/Howto/RenderingDocs/Index.html
+**For official guidelines:**
+- Consult https://docs.typo3.org/m/typo3/docs-how-to-document/main/en-us/ for TYPO3 documentation standards
+- Reference https://www.sphinx-doc.org/en/master/usage/restructuredtext/basics.html for RST specification
+- Check https://docs.typo3.org/m/typo3/docs-how-to-document/main/en-us/Howto/RenderingDocs/Index.html for rendering procedures
 
-**Example Projects:**
-- TYPO3 Best Practice Extension: https://github.com/TYPO3BestPractices/tea
-- RTE CKEditor Image: https://docs.typo3.org/p/netresearch/rte-ckeditor-image/main/en-us/
+**For examples:**
+- Study https://github.com/TYPO3BestPractices/tea for best practice extension structure
+- Review https://docs.typo3.org/p/netresearch/rte-ckeditor-image/main/en-us/ for modern TYPO3 13.x documentation patterns

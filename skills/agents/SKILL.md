@@ -1,6 +1,6 @@
 ---
 name: agents
-version: 1.0.0
+version: 1.1.0
 description: Generate and maintain AGENTS.md files following the public agents.md convention. Use when creating documentation for AI agent workflows, onboarding guides, or when standardizing agent interaction patterns across projects.
 license: Complete terms in LICENSE.txt
 ---
@@ -308,40 +308,31 @@ git clone https://github.com/netresearch/agents-skill.git /tmp/agents-skill
 /tmp/agents-skill/scripts/generate-agents.sh .
 ```
 
-## Best Practices
+## Structure Standards Application
 
-### Keep Root Thin
+**When creating root AGENTS.md files**, keep them thin (~30 lines):
+- Include clear precedence statement at top
+- Define minimal global rules only (PR size, commit format, safety)
+- List pre-commit checks (typecheck, lint, format, test)
+- Provide scope index linking to scoped files
+- Move detailed setup to scoped files (not in root)
+- Move language-specific patterns to scoped files (not in root)
+- Move extensive examples to scoped files (not in root)
 
-✅ **Good** (simple-ldap-go, 26 lines):
-- Precedence statement
-- Minimal global rules
-- Pre-commit checks
-- Scope index
+**When determining scope boundaries**, create scoped files for:
+- Different technology stacks: `backend/`, `frontend/`, `api/`
+- Package visibility: `internal/`, `pkg/` (Go projects)
+- CLI tools: `cmd/`, `cli/`
+- Utility scripts: `scripts/`
+- Documentation and examples: `docs/`, `examples/`
+- Testing infrastructure: `tests/`, `testutil/`
 
-❌ **Bloated** (some projects, 300+ lines):
-- Detailed setup instructions (→ move to scoped files)
-- Language-specific patterns (→ move to scoped files)
-- Extensive examples (→ move to scoped files)
-
-### Scope Appropriately
-
-Create scoped files for:
-- `backend/`, `frontend/`, `api/` - Different technology stacks
-- `internal/`, `pkg/` - Public vs private Go packages
-- `cmd/`, `cli/` - CLI tools
-- `scripts/` - Utility scripts
-- `docs/`, `examples/` - Documentation and examples
-- `tests/`, `testutil/` - Testing infrastructure
-
-### Auto-Extract Commands
-
-Don't manually write commands if they exist in:
-- Makefile targets
-- package.json scripts
-- composer.json scripts
-- CI workflows
-
-Let the generator extract them automatically.
+**When extracting commands**, automate extraction from:
+- Makefile targets with `##` comments
+- package.json scripts section
+- composer.json scripts section
+- CI workflow files (.github/workflows/, .gitlab-ci.yml)
+- Never manually duplicate commands that exist in build tools
 
 ## Troubleshooting
 

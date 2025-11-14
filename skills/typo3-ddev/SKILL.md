@@ -5,7 +5,7 @@ license: MIT License - see LICENSE file
 metadata:
   author: Netresearch
   repository: https://github.com/netresearch/typo3-ddev-skill
-  version: 1.5.0
+  version: 1.6.0
   tags:
     - typo3
     - ddev
@@ -40,29 +40,20 @@ Use this skill when:
 
 ## Prerequisites Validation
 
-Before proceeding with ANY DDEV commands, especially on first DDEV command during a session, perform comprehensive prerequisite validation.
+Before executing ANY DDEV commands, perform comprehensive prerequisite validation:
 
-**Quick validation using the included script:**
-```bash
-scripts/validate-prerequisites.sh
-```
+1. **Run validation script**: Execute `scripts/validate-prerequisites.sh` to check:
+   - Docker daemon status (must be running)
+   - Docker CLI version (requires >= 20.10)
+   - Docker Compose version (requires >= 2.0)
+   - DDEV installation (must be present)
+   - TYPO3 extension project structure (must be valid)
 
-The script validates:
-- ✅ Docker daemon status
-- ✅ Docker CLI version (>= 20.10)
-- ✅ Docker Compose version (>= 2.0)
-- ✅ DDEV installation
-- ✅ TYPO3 extension project structure
+2. **If validation fails**: Consult `references/prerequisites-validation.md` for platform-specific installation instructions (Linux/WSL2, macOS, Windows), version requirements, manual validation steps, and troubleshooting
 
-**For detailed prerequisite information including:**
-- Platform-specific installation instructions (Linux/WSL2, macOS, Windows)
-- Version requirements and rationale
-- Manual validation steps
-- Troubleshooting common issues
+3. **Report results**: Display validation status to user with specific instructions for any missing prerequisites
 
-See: `references/prerequisites-validation.md`
-
-**Critical:** Always run prerequisite checks on the FIRST DDEV command in a session to catch environment issues early.
+Always validate on the FIRST DDEV command in a session to catch environment issues early.
 
 ## Step-by-Step Workflow
 
@@ -513,56 +504,27 @@ See: `references/index-page-generation.md`
 
 ## Error Handling
 
-Common issues and their solutions are documented in the troubleshooting guide.
+When encountering errors during setup or installation:
 
-**Most frequent issues:**
-- Prerequisites not met (Docker daemon, version mismatches)
-- Port conflicts (80/443 already in use)
-- TYPO3 installation failures
-- Service configuration issues
+1. **Check error category**: Identify if the error relates to prerequisites, database setup, extension detection, or service configuration
+2. **Consult troubleshooting guide**: Read `references/troubleshooting.md` and locate the relevant error category
+3. **Apply recommended solution**: Follow the step-by-step resolution guide for the specific error
+4. **For Windows/WSL2 environments**: If error persists on Windows, consult `references/windows-fixes.md` for platform-specific solutions (CRLF issues, health check failures, Apache config problems)
+5. **Performance issues on Windows**: Consult `references/windows-optimizations.md` for performance tuning
 
-**For comprehensive troubleshooting including:**
-- Prerequisites validation failures
-- Database setup errors
-- Extension detection issues
-- Service container problems
-- Step-by-step resolution guides
+Report the error to the user with the specific solution being applied, then re-attempt the failed operation.
 
-See: `references/troubleshooting.md`
+## Advanced Configuration
 
-**Windows-specific issues:**
-- DDEV health check failures with custom Apache configs
-- CRLF vs LF line ending issues in scripts
-- PowerShell commands for file conversion
-- Performance optimizations for Windows/WSL2
+When user requests customizations beyond the standard setup:
 
-See: `references/windows-fixes.md` and `references/windows-optimizations.md`
+1. **Identify customization type**: Determine if request involves PHP version, database engine, debugging tools, TYPO3 versions, or additional services
+2. **Consult advanced options guide**: Read `references/advanced-options.md` for the relevant configuration section
+3. **Present options to user**: Show available choices (e.g., PHP 8.1/8.2/8.3, database engines with tiered selection logic)
+4. **Apply configuration**: Follow the templates and instructions in `references/advanced-options.md` to implement the requested customization
+5. **Configure optional services**: If user needs Valkey/Redis caching, MailPit, Ofelia scheduler, or other services, follow the service configuration templates in the advanced guide
 
-## Advanced Options
-
-For advanced configuration and optional features, see the comprehensive guide.
-
-**Available customizations:**
-- Custom PHP versions (8.1, 8.2, 8.3)
-- Intelligent database selection (SQLite, MariaDB, PostgreSQL, MySQL)
-- XDebug setup for debugging
-- Custom TYPO3 versions
-- Database management (export/import)
-
-**Optional services:**
-- Valkey/Redis for caching (default: Valkey 8)
-- MailPit for email testing
-- Ofelia for TYPO3 scheduler automation
-- Shell aliases for convenience
-
-**For detailed information including:**
-- Tiered database selection logic with auto-detection
-- Service configuration and templates
-- Performance tuning guidelines
-- ADR references for architectural decisions
-- Complete service documentation
-
-See: `references/advanced-options.md`
+Offer customization options proactively when user mentions performance requirements, specific PHP versions, or debugging needs.
 
 ## Documentation Rendering
 
@@ -601,26 +563,23 @@ ddev docs
 
 ## Demo Content (Introduction Package)
 
-**Note:** The introduction package is automatically installed with every TYPO3 version.
+When discussing testing capabilities with users, inform them that the Introduction Package is automatically installed with every TYPO3 version during setup, providing:
 
-The Introduction Package provides realistic demo content for testing your extension:
+- 86+ pages with full page tree structure for testing navigation
+- 226+ content elements (text, images, forms, tables) for testing rendering
+- Multi-language support (English, German, Danish) for testing translations
+- Bootstrap Package responsive theme for testing frontend integration
+- RTE feature examples for testing rich text functionality
 
-**What's Included:**
-- 86+ pages with full page tree structure
-- 226+ content elements (text, images, forms, tables)
-- Multi-language support (English, German, Danish)
-- Bootstrap Package responsive theme
-- Example content for testing RTE features
+Direct users to test their extension against this demo content at:
+- Frontend: `https://v11.{{DDEV_SITENAME}}.ddev.site/` (or v12, v13)
+- Backend: `https://v11.{{DDEV_SITENAME}}.ddev.site/typo3/` (or v12, v13)
 
-**Access:**
-- Frontend: `https://v13.{{DDEV_SITENAME}}.ddev.site/`
-- Backend: `https://v13.{{DDEV_SITENAME}}.ddev.site/typo3/`
-
-The introduction package is installed during the initial `ddev install-v13` (or `install-v11`, `install-v12`, `install-all`) setup, so no additional steps are required.
+No manual installation required—the package installs automatically during `ddev install-all` or individual version commands.
 
 ## Extension Auto-Configuration
 
-For extensions requiring additional setup (RTE configuration, Page TSConfig, TypoScript), create a custom configuration command:
+When user's extension requires additional setup beyond standard installation (RTE configuration, Page TSConfig, TypoScript), guide them through creating a custom configuration command:
 
 ```bash
 # Copy the configure-extension template
@@ -634,23 +593,23 @@ chmod +x .ddev/commands/web/configure-{{EXTENSION_KEY}}
 ddev configure-{{EXTENSION_KEY}} v13
 ```
 
-### Use Cases for Auto-Configuration
+### Identify Configuration Needs by Extension Type
 
-**RTE/CKEditor Extensions:**
-- Create RTE YAML configuration importing your plugin
-- Set up toolbar buttons and editor config
-- Configure Page TSConfig for RTE presets
-- Example: `rte_ckeditor_image` with custom image handling
+**For RTE/CKEditor Extensions**, configure:
+- RTE YAML configuration importing the plugin
+- Toolbar buttons and editor config
+- Page TSConfig for RTE presets
+- Example reference: `rte_ckeditor_image` with custom image handling
 
-**Backend Module Extensions:**
-- Set up Page TSConfig for module access
-- Configure user permissions
-- Create initial database records
+**For Backend Module Extensions**, configure:
+- Page TSConfig for module access
+- User permissions setup
+- Initial database records
 
-**Frontend Plugin Extensions:**
-- Set up TypoScript configuration
-- Create example content elements
-- Configure plugin settings
+**For Frontend Plugin Extensions**, configure:
+- TypoScript configuration
+- Example content elements
+- Plugin settings
 
 ### Template Structure
 
@@ -705,31 +664,25 @@ vendor/bin/typo3 cache:flush
 - Demo content ready for testing
 - Reduces manual configuration errors
 
-## Validation Checklist
+### Step 9: Verify Installation
 
-Before completing, verify:
+After installation completes, perform these verification steps in order:
 
-- [ ] All prerequisite checks passed
-- [ ] Extension metadata extracted correctly
-- [ ] User confirmed configuration values
-- [ ] All .ddev files generated with correct variable replacements
-- [ ] DDEV started successfully (`ddev describe` works)
-- [ ] At least one TYPO3 version installed successfully
-- [ ] URLs are accessible in browser
-- [ ] Backend login works with provided credentials
-- [ ] Extension appears in TYPO3 Extension Manager
+1. **Confirm prerequisites passed**: Review output from Step 1 prerequisite validation
+2. **Verify extension metadata**: Check that extracted values match project configuration
+3. **Test DDEV status**: Run `ddev describe` to confirm containers are running
+4. **Validate TYPO3 installations**: Confirm at least one version installed without errors
+5. **Test URL accessibility**: Open each TYPO3 version URL in browser to verify routing
+6. **Verify backend access**: Log in to TYPO3 backend with credentials (admin / Password:joh316)
+7. **Confirm extension activation**: Check Extension Manager to ensure extension is loaded
 
-## Communication Style
+If any verification fails, consult `references/troubleshooting.md` for resolution steps.
 
-- Use clear, concise language
-- Show progress indicators during long operations
-- Use emojis for visual clarity (✅ ❌ 🔧 📦 🌐 🔑)
-- Provide copy-pasteable commands
-- Explain what each step does and why
-- Offer both automated and manual options
-- Be encouraging and supportive
+## Output Formatting Guidelines
 
-## Example Interaction
-
-```
-User: Set up DDEV for my TYPO3 extension
+Throughout all steps, format output for clarity:
+- Use emojis for visual indicators: ✅ (success), ❌ (error), 🔧 (configuration), 📦 (installation), 🌐 (URLs), 🔑 (credentials)
+- Display progress indicators during operations taking >5 seconds
+- Provide copy-pasteable command blocks with explanations
+- Present configuration values in formatted tables or code blocks
+- Explain what each command does before executing it

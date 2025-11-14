@@ -1,6 +1,6 @@
 ---
 name: typo3-core-contributions
-version: 1.3.0
+version: 1.4.0
 description: |
   Guide contributors through the complete TYPO3 Core contribution workflow from account setup to patch submission
   for both code and documentation contributions.
@@ -17,10 +17,6 @@ license: Complete terms in LICENSE
 ---
 
 # TYPO3 Core Contributions
-
-## Overview
-
-Guide contributors through the complete TYPO3 Core contribution process, from initial setup through patch submission and review. Handle both new contributors starting from scratch and experienced contributors working on specific patches.
 
 ## When to Use This Skill
 
@@ -1024,25 +1020,36 @@ export FORGE_API_KEY="your-api-key"
 
 **commit-template.txt**: Git commit message template for TYPO3 (copy to `~/.gitmessage.txt`)
 
-## Best Practices
+## Contribution Workflow Standards
 
-1. **One commit per patch**: Amend changes, don't create multiple commits
-2. **Preserve Change-Id**: Never modify the auto-generated Change-Id line
-3. **Validate BEFORE committing**: Use typo3-conformance-skill and typo3-testing-skill proactively
-4. **Test thoroughly**: Write and run tests locally (typo3-testing-skill) before submission
-5. **Quality first**: Always validate with typo3-conformance-skill before pushing
-6. **Rebase regularly**: Keep patch up-to-date with main branch
-7. **Self-review first**: Check changes before pushing
-8. **Respond promptly**: Answer reviewer feedback within 2-3 days
-9. **Use complementary skills**: Leverage typo3-ddev-skill, typo3-docs-skill as needed
-10. **Ask for help**: Use #typo3-cms-coredev Slack channel when stuck
-11. **Follow conventions**: Read existing code patterns in affected files
+Apply these standards throughout the contribution process:
 
-**Skill integration best practices**:
-- Use typo3-conformance-skill BEFORE every commit
-- Use typo3-testing-skill when writing ANY test
-- Use typo3-docs-skill for ALL documentation contributions
-- Catch issues locally to avoid CI failures and review iterations
+**When managing commits**:
+1. Maintain exactly one commit per patch (amend changes, never create multiple commits)
+2. Preserve the auto-generated Change-Id line (never modify or remove it)
+3. Validate code quality BEFORE committing using typo3-conformance-skill proactively
+4. Write and execute tests locally using typo3-testing-skill before any submission
+5. Always validate with typo3-conformance-skill before pushing to Gerrit
+
+**When maintaining patches**:
+1. Rebase regularly to keep patch current with main branch
+2. Self-review all changes thoroughly before pushing
+3. Respond to reviewer feedback promptly (within 2-3 days maximum)
+4. Leverage complementary skills (typo3-ddev-skill, typo3-docs-skill) as needed
+5. Request help in #typo3-cms-coredev Slack channel when blocked
+
+**When writing code**:
+1. Study existing code patterns in affected files before implementing
+2. Follow TYPO3 framework patterns (DI, events, service configuration)
+3. Use typo3-conformance-skill validation BEFORE every commit
+4. Use typo3-testing-skill when writing ANY test (unit, functional, acceptance)
+5. Use typo3-docs-skill for ALL documentation contributions
+
+**When handling CI failures**:
+1. Catch issues locally first to avoid CI failures entirely
+2. Fix issues locally using appropriate skill before pushing updates
+3. Never skip validation to make builds pass
+4. Understand root cause before applying fixes
 
 ## References
 
