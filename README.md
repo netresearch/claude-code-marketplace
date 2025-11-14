@@ -18,19 +18,15 @@ Then use `/plugin` to browse and install plugins.
 
 ## Installed Skills
 
-| Skill | Version | Last Updated | Description |
-|-------|---------|--------------|-------------|
-| TYPO3 Documentation | 1.0.0-20251027 | 2025-10-27 | Create TYPO3 extension documentation |
-| TYPO3 Testing | 1.0.0-20251027 | 2025-10-27 | Manage TYPO3 extension tests |
-| TYPO3 DDEV Setup | 1.0.0 | Pending | Automate DDEV environment setup |
-| TYPO3 Core Contributions | 1.0.0 | Pending | Guide TYPO3 core contributions |
-| TYPO3 Conformance | 1.0.0-20251027 | 2025-10-27 | Evaluate TYPO3 standards compliance |
-| Netresearch Branding | 1.0.0-20251027 | 2025-10-27 | Apply Netresearch brand guidelines |
-| AGENTS.md Generator | 1.0.0-20251027 | 2025-10-27 | Generate AGENTS.md documentation |
-
-> **Version Format:** `MAJOR.MINOR.PATCH-YYYYMMDD` (semantic version + last commit date)
->
-> See [VERSIONING.md](VERSIONING.md) for details on the versioning strategy.
+| Skill | Repository | Description |
+|-------|------------|-------------|
+| TYPO3 Documentation | [typo3-docs-skill](https://github.com/netresearch/typo3-docs-skill) | Create TYPO3 extension documentation |
+| TYPO3 Testing | [typo3-testing-skill](https://github.com/netresearch/typo3-testing-skill) | Manage TYPO3 extension tests |
+| TYPO3 DDEV Setup | [typo3-ddev-skill](https://github.com/netresearch/typo3-ddev-skill) | Automate DDEV environment setup |
+| TYPO3 Core Contributions | [typo3-core-contributions-skill](https://github.com/netresearch/typo3-core-contributions-skill) | Guide TYPO3 core contributions |
+| TYPO3 Conformance | [typo3-conformance-skill](https://github.com/netresearch/typo3-conformance-skill) | Evaluate TYPO3 standards compliance |
+| Netresearch Branding | [netresearch-branding-skill](https://github.com/netresearch/netresearch-branding-skill) | Apply Netresearch brand guidelines |
+| AGENTS.md Generator | [agents-skill](https://github.com/netresearch/agents-skill) | Generate AGENTS.md documentation |
 
 ## Architecture
 
@@ -44,21 +40,12 @@ This marketplace uses an **automated sync workflow** to maintain skills from ind
 - ✅ Consistent marketplace structure
 
 **Sync Workflow:**
-1. Skills are developed and versioned in separate repositories
+1. Skills are developed and versioned in separate repositories (see "Installed Skills" table for repository links)
 2. GitHub Actions sync workflow clones each skill repository
 3. Semantic version is extracted from skill's `SKILL.md`
 4. Last commit date is appended to create final version (e.g., `1.2.3-20251021`)
 5. Skills are copied to `skills/` directory
 6. Marketplace metadata is updated with current versions
-
-**Source Repositories:**
-- [typo3-docs-skill](https://github.com/netresearch/typo3-docs-skill)
-- [typo3-testing-skill](https://github.com/netresearch/typo3-testing-skill)
-- [typo3-ddev-skill](https://github.com/netresearch/typo3-ddev-skill)
-- [typo3-core-contributions-skill](https://github.com/netresearch/typo3-core-contributions-skill)
-- [typo3-conformance-skill](https://github.com/netresearch/typo3-conformance-skill)
-- [netresearch-branding-skill](https://github.com/netresearch/netresearch-branding-skill)
-- [agents-skill](https://github.com/netresearch/agents-skill)
 
 ## Available Plugins
 
