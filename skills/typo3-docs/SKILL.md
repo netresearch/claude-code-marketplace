@@ -184,7 +184,7 @@ Extracted data saved to: `.claude/docs-extraction/data/*.json`
 
 **2. Analyze Documentation Coverage**
 
-Compare extracted data with existing Documentation/:
+Compare extracted data with existing Documentation/ using **feature-based coverage analysis** (see `references/documentation-coverage-analysis.md` for detailed methodology):
 
 ```bash
 scripts/analyze-docs.sh
@@ -192,9 +192,13 @@ scripts/analyze-docs.sh
 
 Generates: `Documentation/ANALYSIS.md` with:
 - **Summary**: Coverage statistics (X/Y classes documented, etc.)
+- **Feature Coverage**: User-facing vs developer features documented
+- **Extension Scope Assessment**: Small/medium/large classification
 - **Missing Documentation**: Undocumented classes, configs, methods
 - **Outdated Documentation**: Config defaults that don't match code
-- **Recommendations**: Prioritized action items
+- **Recommendations**: Scope-appropriate prioritized action items
+
+**IMPORTANT**: Documentation excellence is measured by **feature coverage quality**, not static file count thresholds. A focused extension with 22 RST files covering 100% of user features is EXCELLENT, while a large CMS extension with 150+ files missing critical feature documentation is INSUFFICIENT. Always assess coverage relative to extension scope and actual features.
 
 **3. Review Analysis Report**
 
@@ -972,6 +976,11 @@ When encountering specific documentation challenges, consult these bundled resou
 **For TYPO3-specific features:**
 - Read `references/typo3-directives.md` for confval, version directives, PHP domain, card-grid, intersphinx, and quality checklists
 - Use when implementing TYPO3-specific documentation elements or directives
+
+**For documentation coverage analysis:**
+- Read `references/documentation-coverage-analysis.md` for feature-based coverage methodology, scope-appropriate scoring, and conformance assessment
+- Use when evaluating documentation completeness relative to extension features and scope
+- Explains why static file count thresholds (e.g., "50+ RST files") are flawed and how to assess quality over quantity
 
 **For validation:**
 - Execute `scripts/validate_docs.sh` before committing to check RST syntax, Settings.cfg/guides.xml presence, Index.rst, encoding issues, and trailing whitespace
