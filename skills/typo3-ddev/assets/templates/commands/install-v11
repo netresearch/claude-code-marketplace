@@ -26,7 +26,7 @@ vendor/bin/typo3cms configuration:set 'BE/debug' 1
 vendor/bin/typo3cms configuration:set 'FE/debug' 1
 vendor/bin/typo3cms configuration:set 'SYS/devIPmask' '*'
 vendor/bin/typo3cms configuration:set 'SYS/displayErrors' 1
-vendor/bin/typo3cms configuration:set 'SYS/trustedHostsPattern' '.*.*'
+vendor/bin/typo3cms configuration:set 'SYS/trustedHostsPattern' '.*\.{{DDEV_SITENAME}}\.ddev\.site'
 vendor/bin/typo3cms configuration:set 'MAIL/transport' 'smtp'
 vendor/bin/typo3cms configuration:set 'MAIL/transport_smtp_server' 'localhost:1025'
 vendor/bin/typo3cms configuration:set 'GFX/processor' 'ImageMagick'
