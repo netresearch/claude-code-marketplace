@@ -1,6 +1,6 @@
 ---
 name: typo3-ddev
-description: "Automate DDEV environment setup for TYPO3 extension development. Use when setting up local development environment, configuring DDEV for TYPO3 extensions, or creating multi-version TYPO3 testing environments."
+description: "Automate DDEV environment setup for TYPO3 extension development. Use when setting up local development environment, configuring DDEV for TYPO3 extensions, or creating multi-version TYPO3 testing environments. Covers: DDEV configuration generation, TYPO3 11.5/12.4/13.4 LTS installation, custom DDEV commands, Apache vhost setup, Docker volume management, and .gitignore best practices (avoid double-ignore anti-pattern). Provides complete automation from metadata detection to ready-to-use TYPO3 backend access."
 license: MIT License - see LICENSE file
 metadata:
   author: Netresearch
@@ -624,6 +624,70 @@ The `configure-extension.optional` template includes:
 4. **Cache Flushing** - Ensure changes take effect
 5. **Success Message** - Clear next steps for developer
 
+### TYPO3 v13 Site Sets Approach
+
+**Important:** TYPO3 v13 introduces site sets as the modern approach for TypoScript and configuration loading, replacing static templates.
+
+**Site Sets vs Static Templates:**
+
+| Feature | Site Sets (TYPO3 v13+) | Static Templates (Legacy) |
+|---------|------------------------|---------------------------|
+| Configuration | `config.yaml` in site config | `sys_template` database records |
+| Loading Order | Dependency-based | Include order in template |
+| Type Safety | Schema-validated | No validation |
+| Maintenance | Version-controlled files | Database-stored |
+| Best Practice | ✅ Use for TYPO3 v13+ | ⚠️ Legacy approach |
+
+**How Extensions Should Provide Configuration:**
+
+1. **Create a Site Set** in your extension:
+   ```
+   Configuration/Sets/YourExtensionName/
+   ├── config.yaml          # Site set metadata
+   ├── setup.typoscript     # TypoScript configuration
+   └── page.tsconfig        # Page TSConfig (optional)
+   ```
+
+2. **Define Site Set** in `config.yaml`:
+   ```yaml
+   name: vendor/extension-name
+   label: 'Your Extension Name'
+   # Optional dependencies load BEFORE your set
+   optionalDependencies:
+     - typo3/fluid-styled-content
+     - bk2k/bootstrap-package
+   ```
+
+3. **Import TypoScript** in `setup.typoscript`:
+   ```typoscript
+   @import 'EXT:your_extension/Configuration/TypoScript/*.typoscript'
+   ```
+
+4. **Users Add to Site Configuration** (`config/sites/main/config.yaml`):
+   ```yaml
+   dependencies:
+     - bootstrap-package/full      # Frontend rendering
+     - vendor/extension-name        # Your extension
+   ```
+
+**Benefits:**
+- ✅ No sys_template database records needed
+- ✅ Proper dependency ordering
+- ✅ Version-controlled configuration
+- ✅ No static template conflicts
+- ✅ Type-safe settings with schema
+
+**Common Pitfall:** Avoid loading TypoScript via BOTH site sets AND static templates - this causes double-loading and configuration conflicts (e.g., duplicate `lib.parseFunc_RTE.tags.img` processors causing unexpected behavior).
+
+**Debugging Site Sets:**
+```bash
+# Check active site sets for a site
+ddev exec vendor/bin/typo3 site:show <siteIdentifier>
+
+# View resolved TypoScript (TYPO3 v13)
+Backend → Site Management → Sites → [Your Site] → Dependencies
+```
+
 ### Example: RTE Configuration Command
 
 For a CKEditor plugin extension:
@@ -674,9 +738,160 @@ After installation completes, perform these verification steps in order:
 4. **Validate TYPO3 installations**: Confirm at least one version installed without errors
 5. **Test URL accessibility**: Open each TYPO3 version URL in browser to verify routing
 6. **Verify backend access**: Log in to TYPO3 backend with credentials (admin / Password:joh316)
+
+## Troubleshooting
+
+### Database Already Exists Error
+
+If reinstalling TYPO3 and you get "database already exists" errors:
+
+```bash
+# Clean up and recreate database
+ddev mysql -e "DROP DATABASE IF EXISTS v13; CREATE DATABASE v13;"
+
+# Now retry installation
+ddev install-v13
+```
+
+### TYPO3 Setup Shows "Database contains tables" Error
+
+```bash
+# Option 1: Clean database
+ddev mysql v13 -e "DROP DATABASE v13; CREATE DATABASE v13;"
+
+# Option 2: Use different database name
+# Edit install-v* script to use different DB name
+```
+
+### Services Not Loading
+
+If Redis, MailPit, or Ofelia containers don't start:
+
+```bash
+# Check container status
+docker ps --filter "name=ddev-{{DDEV_SITENAME}}"
+
+# View logs
+docker logs ddev-{{DDEV_SITENAME}}-redis
+docker logs ddev-{{DDEV_SITENAME}}-mailpit
+docker logs ddev-{{DDEV_SITENAME}}-ofelia
+
+# Restart DDEV
+ddev restart
+```
+
+### Extension Not Appearing in Backend
+
+```bash
+# Flush all caches
+ddev exec -d /var/www/html/v13 vendor/bin/typo3 cache:flush
+
+# Check extension is symlinked
+ddev exec ls -la /var/www/html/v13/vendor/{{VENDOR}}/{{EXTENSION_KEY}}
+```
+
+### .gitignore Configuration Best Practices
+
+**CRITICAL:** Ensure `.ddev/.gitignore` is committed to version control, NOT ignored!
+
+**The Double-Ignore Anti-Pattern:**
+
+DDEV often generates `.ddev/.gitignore` with this problematic structure:
+
+```
+#ddev-generated: Automatically generated ddev .gitignore.
+# You can remove the above line if you want to edit and maintain this file yourself.
+/.gitignore    ← File ignores ITSELF!
+```
+
+**The Problem:**
+
+1. `.ddev/.gitignore` ignores itself (`/.gitignore`)
+2. Root `.gitignore` also ignores it (`.ddev/.gitignore`)
+3. Result: DDEV ignore rules NOT shared with team
+4. Each developer must generate their own DDEV config
+5. Inconsistent git behavior across team members
+
+**The Fix:**
+
+1. **Remove from root `.gitignore`:**
+   ```diff
+   # .gitignore (ROOT)
+   .ddev/.homeadditions
+   .ddev/.ddev-docker-compose-full.yaml
+   - .ddev/.gitignore    ← REMOVE THIS LINE
+   ```
+
+2. **Fix `.ddev/.gitignore` to not self-ignore:**
+   ```diff
+   # .ddev/.gitignore (UPDATED)
+   - #ddev-generated: Automatically generated ddev .gitignore.
+   - # You can remove the above line if you want to edit and maintain this file yourself.
+   - /.gitignore
+   + # DDEV gitignore rules
+   + # Manually maintained to ensure consistency across team
+
+   /**/*.example
+   /.dbimageBuild
+   /.ddev-docker-*.yaml
+   ```
+
+3. **Commit DDEV configuration to share with team:**
+   ```bash
+   git add .ddev/.gitignore .ddev/config.yaml .ddev/docker-compose.*.yaml
+   git add .ddev/apache/ .ddev/commands/ .ddev/web-build/
+   git commit -m "[TASK] Add DDEV configuration for development environment"
+   ```
+
+**What to Commit vs. Ignore:**
+
+✅ **Commit (share with team):**
+- `.ddev/.gitignore` (ignore rules)
+- `.ddev/config.yaml` (main config)
+- `.ddev/docker-compose.*.yaml` (custom services)
+- `.ddev/apache/` (custom Apache config)
+- `.ddev/commands/` (custom DDEV commands)
+- `.ddev/web-build/` (custom Dockerfile)
+
+❌ **Ignore (personal/generated):**
+- `.ddev/.homeadditions` (personal shell config)
+- `.ddev/.ddev-docker-compose-full.yaml` (auto-generated)
+- `.ddev/db_snapshots/` (database snapshots)
+- `.ddev/.sshimageBuild` (build artifacts)
+- `.ddev/.webimageBuild` (build artifacts)
+
+**Validation:**
+
+After fixing, verify:
+```bash
+# Should show .ddev/.gitignore as tracked
+git ls-files .ddev/.gitignore
+
+# Should list DDEV files to be committed
+git status .ddev/
+```
+
+**Benefits:**
+
+- ✅ Consistent environment across all developers
+- ✅ Shared DDEV ignore rules
+- ✅ Quick onboarding: `git clone && ddev start`
+- ✅ No manual DDEV configuration needed
+- ✅ Team follows same git patterns
+
+## Validation Checklist
+
+Before completing, verify:
+
+1. **Confirm prerequisites passed**: Review output from Step 1 prerequisite validation
+2. **Verify extension metadata**: Check that extracted values match project configuration
+3. **Test DDEV status**: Run `ddev describe` to confirm containers are running
+4. **Validate TYPO3 installations**: Confirm at least one version installed without errors
+5. **Test URL accessibility**: Open each TYPO3 version URL in browser to verify routing
+6. **Verify backend access**: Log in to TYPO3 backend with credentials (admin / Password:joh316)
 7. **Confirm extension activation**: Check Extension Manager to ensure extension is loaded
 
-If any verification fails, consult `references/troubleshooting.md` for resolution steps.
+If any verification fails, consult the Troubleshooting section above for resolution steps.
 
 ## Output Formatting Guidelines
 

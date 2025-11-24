@@ -679,16 +679,17 @@ Crowdin PRs often contain many cosmetic changes that make review difficult:
 
 #### 1. .editorconfig
 
-Add XLIFF/XML formatting rules:
+Add XLIFF/XML formatting rules to match Crowdin's export format:
 
 ```ini
 [*.{xlf,xml}]
-indent_style = tab
-indent_size = 4
+indent_style = space
+indent_size = 2
 trim_trailing_whitespace = true
+end_of_line = lf
 ```
 
-**Purpose**: Ensures consistent formatting between local files and Crowdin exports
+**Purpose**: Ensures consistent formatting between local files and Crowdin exports (Crowdin uses 2-space indentation)
 
 #### 2. .gitattributes
 

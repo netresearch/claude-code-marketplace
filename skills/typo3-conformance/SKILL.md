@@ -1,7 +1,6 @@
 ---
 name: typo3-conformance
-version: 1.3.0
-description: "Evaluate TYPO3 extensions for conformance to official TYPO3 12/13 LTS standards, coding guidelines (PSR-12, TYPO3 CGL), and architecture patterns. Use when assessing extension quality, generating conformance reports, identifying technical debt, or planning modernization efforts. Evaluates: extension architecture, dependency injection, services configuration, testing coverage, Extbase patterns, best practices alignment, and Crowdin integration. Supports PHP 8.1-8.4 and provides actionable improvement recommendations with dual scoring (0-100 base + 0-20 excellence). Orchestrates specialized skills: delegates to typo3-tests for deep testing analysis and typo3-docs for comprehensive documentation creation/validation. Includes comprehensive Crowdin integration validation for TYPO3's centralized translation ecosystem."
+description: "Evaluate TYPO3 extensions for conformance to TYPO3 12/13 LTS standards, coding guidelines (PSR-12), and architecture patterns. Use when assessing extension quality, generating conformance reports, identifying technical debt, or planning modernization. Validates: extension architecture, composer.json, ext_emconf.php, ext_* files, v13 deprecations, backend module v13 compliance (ES6 modules, DocHeader, Modal/Notification APIs, Module.html layout, ARIA, extension key consistency, CSRF, icons), dependency injection, services, testing, Extbase patterns, Crowdin, GitHub workflows. Dual scoring (0-100 base + 0-22 excellence). Delegates to typo3-tests and typo3-docs skills for deep analysis. PHP 8.1-8.4 support."
 license: Complete terms in LICENSE.txt
 ---
 
@@ -215,6 +214,96 @@ The TYPO3 community is committed to inclusive language that welcomes all contrib
 - Some variables using snake_case (5 instances)
 ```
 
+### Step 3.5: Backend Module v13 Compliance (If Applicable)
+
+**Reference:** `references/backend-module-v13.md`
+
+**Trigger:** Extension contains backend modules (Configuration/Backend/Modules.php or ext_tables.php with registerModule)
+
+**Critical Checks:**
+
+**Extension Key Consistency:**
+```bash
+# Check for mixed extension keys
+grep -rn "EXT:.*/" Resources/Private/Templates/ | grep -v "EXT:${EXTENSION_KEY}/"
+
+# Verify JavaScript uses correct name
+grep -rn "alert\|console" Resources/Public/JavaScript/
+```
+
+**JavaScript Modernization:**
+```bash
+# Check for inline JavaScript (VIOLATION)
+grep -rn "FooterAssets" Resources/Private/Templates/
+grep -rn "<script" Resources/Private/Templates/
+
+# Verify ES6 module exists
+ls Resources/Public/JavaScript/BackendModule.js
+
+# Check Modal/Notification API usage
+grep -E "Modal\.confirm|Notification\.(success|error)" Resources/Public/JavaScript/*.js
+```
+
+**Layout Pattern:**
+```bash
+# Verify Module.html layout
+ls Resources/Private/Layouts/Module.html
+
+# Check all templates use Module layout
+grep -n "f:layout name=" Resources/Private/Templates/Backend/**/*.html
+```
+
+**DocHeader Integration:**
+```bash
+# Check IconFactory injection
+grep "IconFactory" Classes/Controller/Backend/*.php
+
+# Verify DocHeader buttons
+grep "addDocHeaderButtons\|makeLinkButton\|makeShortcutButton" Classes/Controller/Backend/*.php
+```
+
+**CSRF Protection:**
+```bash
+# Check for hardcoded URLs (VIOLATION)
+grep -rn '"/typo3/' Resources/
+
+# Verify uriBuilder usage
+grep "uriFor(" Classes/Controller/Backend/*.php
+```
+
+**Accessibility:**
+```bash
+# Check ARIA labels
+grep -rn "aria-label\|role=" Resources/Private/Templates/
+```
+
+**Icon Registration:**
+```bash
+# Verify modern icon registration
+ls Configuration/Icons.php
+
+# Check for deprecated IconRegistry (VIOLATION)
+grep -rn "IconRegistry" ext_localconf.php
+```
+
+**Scoring Impact:**
+- Extension key consistency: -5 points if violations found
+- Inline JavaScript: -8 points (non-CSP-compliant)
+- Missing DocHeader: -4 points (poor UX)
+- Hardcoded URLs: -6 points (security risk)
+- No accessibility: -3 points (WCAG non-compliant)
+- Deprecated icon registration: -2 points
+
+**Read `references/backend-module-v13.md` for:**
+- Complete before/after code examples
+- ES6 module architecture patterns
+- Modal/Notification API usage
+- WCAG 2.1 accessibility requirements
+- 10-phase modernization checklist
+- Real-world modernization case study (45/100 → 95/100)
+
+---
+
 ### Step 4: PHP Architecture Evaluation
 
 **Reference:** `references/php-architecture.md`
@@ -387,6 +476,8 @@ cat Tests/Functional/Domain/Repository/ProductRepositoryTest.php
 4. Confirm code quality tools configured (php-cs-fixer, phpstan)
 5. Validate README.md provides clear setup instructions
 6. Ensure LICENSE file present with appropriate open-source license
+7. Check GitHub issue templates (.github/ISSUE_TEMPLATE/config.yml)
+8. Verify TER publishing workflow (.github/workflows/publish-to-ter.yml)
 
 **Security Practices:**
 ```bash
@@ -645,6 +736,18 @@ Execute these validation steps systematically during conformance evaluation:
 - TYPO3-specific code style rules
 - Type declaration standards
 
+**When evaluating backend modules**, read `references/backend-module-v13.md` for:
+- Extension key consistency validation
+- JavaScript modernization (ES6 modules, no inline scripts)
+- TYPO3 Modal and Notification API patterns
+- DocHeader integration (ButtonBar, IconFactory)
+- Module.html layout requirements
+- ARIA accessibility standards
+- Icon registration (Configuration/Icons.php)
+- CSRF protection via uriBuilder
+- 10-phase modernization checklist
+- Real-world case study (45/100 → 95/100 compliance)
+
 **When evaluating PHP architecture**, read `references/php-architecture.md` for:
 - Dependency injection patterns
 - Service configuration examples
@@ -751,7 +854,7 @@ Each category (Architecture, Coding, PHP Architecture, Testing, Best Practices) 
 
 Excellence indicators are **optional features** that demonstrate exceptional quality and community engagement. Extensions are NOT penalized for missing these features - they provide bonus points only.
 
-**Total Possible Score: 120 points** (100 base conformance + 20 excellence bonus)
+**Total Possible Score: 122 points** (100 base conformance + 22 excellence bonus)
 
 **Category 1: Community & Internationalization (0-6 points)**
 - Crowdin integration: 0-2 points
@@ -762,12 +865,13 @@ Excellence indicators are **optional features** that demonstrate exceptional qua
 - .gitattributes with export-ignore: +1 point
 - Professional README badges (stability, versions, downloads, CI): +2 points
 
-**Category 2: Advanced Quality Tooling (0-7 points)**
+**Category 2: Advanced Quality Tooling (0-9 points)**
 - Fractor configuration (Build/fractor/fractor.php): +2 points
 - TYPO3 CodingStandards package (typo3/coding-standards in composer.json): +2 points
 - StyleCI integration (.styleci.yml): +1 point
 - Makefile with self-documenting help: +1 point
 - CI testing matrix (multiple PHP/TYPO3 versions): +1 point
+- TER publishing workflow (.github/workflows/publish-to-ter.yml): +2 points
 
 **Category 3: Documentation Excellence (0-4 points)**
 - 50-99 RST files in Documentation/: +1 point
@@ -782,9 +886,9 @@ Excellence indicators are **optional features** that demonstrate exceptional qua
 
 **Excellence Score Interpretation:**
 - **0-5 points:** Standard extension (meets requirements)
-- **6-10 points:** Good practices (actively maintained)
-- **11-15 points:** Excellent quality (community reference level)
-- **16-20 points:** Outstanding (georgringer/news level)
+- **6-11 points:** Good practices (actively maintained)
+- **12-16 points:** Excellent quality (community reference level)
+- **17-22 points:** Outstanding (georgringer/news level)
 
 **Example Report Format:**
 
@@ -804,17 +908,18 @@ Excellence indicators are **optional features** that demonstrate exceptional qua
 - Testing Standards: 18/20
 - Best Practices: 20/20
 
-**Excellence Indicators:** 12/20 (Bonus)
-- Community & Internationalization: 4/6
+**Excellence Indicators:** 14/22 (Bonus)
+- Community & Internationalization: 5/6
   - ✅ Crowdin integration (+2)
   - ✅ Professional README badges (+2)
-  - ❌ No GitHub issue templates
+  - ✅ GitHub issue templates (+1)
   - ❌ No .gitattributes export-ignore
 
-- Advanced Quality Tooling: 5/7
+- Advanced Quality Tooling: 7/9
   - ✅ Fractor configuration (+2)
   - ✅ TYPO3 CodingStandards (+2)
   - ✅ Makefile with help (+1)
+  - ✅ TER publishing workflow (+2)
   - ❌ No StyleCI
   - ❌ No CI testing matrix
 
@@ -827,14 +932,14 @@ Excellence indicators are **optional features** that demonstrate exceptional qua
   - ❌ No ext_conf_template.txt
   - ❌ Only one Configuration/Sets/ preset
 
-**Total Score:** 106/120
+**Total Score:** 108/122
 
 **Rating:** Excellent - This extension demonstrates strong conformance and excellent quality practices.
 ```
 
 **Important Notes:**
 - Base conformance (0-100) is MANDATORY - this is pass/fail criteria
-- Excellence indicators (0-20) are OPTIONAL - bonus points for exceptional quality
+- Excellence indicators (0-22) are OPTIONAL - bonus points for exceptional quality
 - Extensions scoring 100/100 base are fully conformant, regardless of excellence score
 - Excellence indicators identify community reference extensions
 
