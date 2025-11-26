@@ -2,6 +2,80 @@
 
 Comprehensive reference for TYPO3-specific RST directives and extensions.
 
+## Permalink Anchors (Labels)
+
+Every section in TYPO3 documentation **MUST** have a permalink anchor (label) for deep linking.
+
+**Syntax:**
+```rst
+..  _section-name-label:
+
+Section heading
+===============
+```
+
+**Requirements:**
+- Place label **immediately before** the section heading (no blank line between)
+- Use **lowercase** with hyphens (`-`) as separators
+- Use **descriptive, hierarchical names** reflecting the document structure
+- Labels enable `:ref:` cross-references and URL anchors
+
+**Example from Mass Approval documentation:**
+```rst
+..  _crowdin-mass-approval:
+
+========================
+Mass approval on Crowdin
+========================
+
+..  _crowdin-mass-approval-workflow:
+
+Crowdin API workflow
+====================
+
+..  _crowdin-mass-approval-api:
+
+API endpoints
+-------------
+
+..  _crowdin-mass-approval-authentication:
+
+Authentication
+--------------
+
+..  _crowdin-mass-approval-implementation:
+
+PHP implementation
+==================
+
+..  _crowdin-mass-approval-implementation-usage:
+
+Usage
+-----
+
+..  _crowdin-mass-approval-best-practices:
+
+Best practices
+==============
+
+..  _crowdin-mass-approval-best-practices-error:
+
+Error handling
+--------------
+```
+
+**Naming Convention:**
+- Start with document/topic prefix: `crowdin-mass-approval`
+- Add section hierarchy: `crowdin-mass-approval-workflow`
+- Add subsection: `crowdin-mass-approval-implementation-usage`
+- This creates predictable, navigable anchor URLs
+
+**Benefits:**
+- Direct linking to specific sections
+- Stable URLs for documentation references
+- Cross-document `:ref:` linking
+- Search engine indexability
+
 ## Configuration Values (confval)
 
 Document configuration options with structured metadata.
@@ -421,6 +495,10 @@ Create tabbed content for multiple options.
 ✅ Admonitions used appropriately
 ✅ Local render shows no warnings
 ✅ All headings have proper underlines
+✅ **Sentence case** used for all headlines (not Title Case)
+✅ **Permalink anchors** (`.. _label:`) before every section heading
+✅ **List punctuation**: all list items end with periods
+✅ **CGL compliance**: PHP code examples pass `make fix-cgl`
 
 ## References
 

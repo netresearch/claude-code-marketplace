@@ -54,6 +54,44 @@ $EM_CONF[$_EXTKEY] = [
 grep '\$EM_CONF\[$_EXTKEY\]' ext_emconf.php && echo "✅ Uses $_EXTKEY" || echo "❌ Hardcoded key"
 ```
 
+### ❌ MUST NOT contain custom code
+
+The ext_emconf.php file must only contain the `$EM_CONF` array assignment. No additional functions, classes, or executable code is allowed.
+
+❌ **WRONG:**
+```php
+<?php
+function getVersion() { return '1.0.0'; }
+$EM_CONF[$_EXTKEY] = [
+    'version' => getVersion(),
+];
+```
+
+❌ **WRONG:**
+```php
+<?php
+$EM_CONF[$_EXTKEY] = [
+    'title' => 'My Extension',
+];
+// Additional initialization code
+require_once 'setup.php';
+```
+
+✅ **CORRECT:**
+```php
+<?php
+$EM_CONF[$_EXTKEY] = [
+    'title' => 'My Extension',
+    'version' => '1.0.0',
+];
+```
+
+**Detection:**
+```bash
+# Check for function/class definitions
+grep -E '^(function|class|interface|trait|require|include)' ext_emconf.php && echo "❌ Contains custom code" || echo "✅ No custom code"
+```
+
 ---
 
 ## Mandatory Fields
@@ -72,16 +110,36 @@ grep "'title' =>" ext_emconf.php && echo "✅ Has title" || echo "❌ Missing ti
 ```
 
 ### description
-**Format:** Short, precise English description
+**Format:** Short, precise English description of extension functionality
 
-**Example:**
+**Requirements:**
+- Clear explanation of what the extension does
+- Should identify the vendor/company for professional extensions
+- Must be meaningful (not just "Extension" or empty)
+- Keep concise but informative (typically 50-150 characters)
+
+**Good Examples:**
 ```php
-'description' => 'Provides advanced content management features',
+'description' => 'Adds image support to CKEditor5 RTE - by Netresearch',
+'description' => 'Provides advanced content management features for TYPO3 editors',
+'description' => 'Custom form elements for newsletter subscription by Vendor GmbH',
+```
+
+**Bad Examples:**
+```php
+'description' => '',  // Empty
+'description' => 'Extension',  // Too vague
+'description' => 'Some tools',  // Meaningless
 ```
 
 **Validation:**
 ```bash
+# Check description exists
 grep "'description' =>" ext_emconf.php && echo "✅ Has description" || echo "❌ Missing description"
+
+# Check description is not empty or trivial
+DESC=$(grep -oP "'description' => '\K[^']+(?=')" ext_emconf.php)
+[[ ${#DESC} -gt 20 ]] && echo "✅ Description is meaningful" || echo "⚠️  Description too short or vague"
 ```
 
 ### version
@@ -96,6 +154,45 @@ grep "'description' =>" ext_emconf.php && echo "✅ Has description" || echo "�
 **Validation:**
 ```bash
 grep -oP "'version' => '\K[0-9]+\.[0-9]+\.[0-9]+" ext_emconf.php && echo "✅ Valid version format" || echo "❌ Invalid version"
+```
+
+### author
+**Format:** Developer name(s), comma-separated for multiple
+
+**Example:**
+```php
+'author' => 'Sebastian Koschel, Sebastian Mendel, Rico Sonntag',
+```
+
+**Validation:**
+```bash
+grep "'author' =>" ext_emconf.php && echo "✅ Has author" || echo "❌ Missing author"
+```
+
+### author_email
+**Format:** Email address(es), comma-separated for multiple
+
+**Example:**
+```php
+'author_email' => 'developer@company.com, other@company.com',
+```
+
+**Validation:**
+```bash
+grep "'author_email' =>" ext_emconf.php | grep -q "@" && echo "✅ Has author_email" || echo "❌ Missing author_email"
+```
+
+### author_company
+**Format:** Company name
+
+**Example:**
+```php
+'author_company' => 'Company Name GmbH',
+```
+
+**Validation:**
+```bash
+grep "'author_company' =>" ext_emconf.php && echo "✅ Has author_company" || echo "⚠️  Missing author_company"
 ```
 
 ---
@@ -266,6 +363,49 @@ echo "ext_emconf: $EMCONF_TYPO3"
 
 ---
 
+## Complete Required Fields Checklist
+
+**Mandatory (MUST have):**
+- [ ] `title` - Extension name in English
+- [ ] `description` - Short, precise description
+- [ ] `version` - Semantic version (x.y.z format)
+- [ ] `category` - Valid category (be, fe, plugin, misc, etc.)
+- [ ] `state` - Valid state (stable, beta, alpha, etc.)
+- [ ] `constraints.depends.typo3` - TYPO3 version range
+- [ ] `constraints.depends.php` - PHP version range
+
+**Recommended (SHOULD have):**
+- [ ] `author` - Developer name(s)
+- [ ] `author_email` - Contact email(s)
+- [ ] `author_company` - Company name
+- [ ] `constraints.conflicts` - Conflicting extensions (even if empty array)
+- [ ] `constraints.suggests` - Suggested companion extensions
+
+**Complete Example:**
+```php
+<?php
+$EM_CONF[$_EXTKEY] = [
+    'title'          => 'My Extension Title',
+    'description'    => 'Provides specific functionality for TYPO3.',
+    'category'       => 'fe',
+    'author'         => 'Developer Name',
+    'author_email'   => 'developer@company.com',
+    'author_company' => 'Company Name GmbH',
+    'state'          => 'stable',
+    'version'        => '1.0.0',
+    'constraints'    => [
+        'depends' => [
+            'typo3' => '12.4.0-13.4.99',
+            'php'   => '8.1.0-8.4.99',
+        ],
+        'conflicts' => [],
+        'suggests'  => [],
+    ],
+];
+```
+
+---
+
 ## Complete Validation Script
 
 ```bash
@@ -291,10 +431,20 @@ if ! grep -q '\$EM_CONF\[$_EXTKEY\]' ext_emconf.php 2>/dev/null; then
     ((ERRORS++))
 fi
 
+# CRITICAL: Check for custom code
+if grep -E '^(function|class|interface|trait|require|include)' ext_emconf.php 2>/dev/null; then
+    echo "❌ CRITICAL: ext_emconf.php contains custom code (functions/classes/requires)"
+    ((ERRORS++))
+fi
+
 # Check mandatory fields
 grep -q "'title' =>" ext_emconf.php || { echo "❌ Missing title"; ((ERRORS++)); }
 grep -q "'description' =>" ext_emconf.php || { echo "❌ Missing description"; ((ERRORS++)); }
 grep -qP "'version' => '[0-9]+\.[0-9]+\.[0-9]+" ext_emconf.php || { echo "❌ Missing or invalid version"; ((ERRORS++)); }
+
+# Check description is meaningful (>20 chars)
+DESC=$(grep -oP "'description' => '\K[^']+(?=')" ext_emconf.php)
+[[ ${#DESC} -lt 20 ]] && { echo "⚠️  Description too short (should be >20 chars)"; ((WARNINGS++)); }
 
 # Check category
 CATEGORY=$(grep -oP "'category' => '\K[a-z]+(?=')" ext_emconf.php)
@@ -313,6 +463,11 @@ fi
 # Check constraints
 grep -A 5 "'depends' =>" ext_emconf.php | grep -q "'typo3'" || { echo "❌ Missing TYPO3 dependency"; ((ERRORS++)); }
 grep -A 5 "'depends' =>" ext_emconf.php | grep -q "'php'" || { echo "❌ Missing PHP dependency"; ((ERRORS++)); }
+
+# Check recommended author fields
+grep -q "'author' =>" ext_emconf.php || { echo "⚠️  Missing author"; ((WARNINGS++)); }
+grep "'author_email' =>" ext_emconf.php | grep -q "@" || { echo "⚠️  Missing or invalid author_email"; ((WARNINGS++)); }
+grep -q "'author_company' =>" ext_emconf.php || { echo "⚠️  Missing author_company"; ((WARNINGS++)); }
 
 echo ""
 echo "Validation complete: $ERRORS errors, $WARNINGS warnings"

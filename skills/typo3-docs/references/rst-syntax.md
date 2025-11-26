@@ -5,30 +5,33 @@ Complete reStructuredText syntax reference for TYPO3 documentation.
 ## Headings
 
 ```rst
-===========
-Page Title
-===========
+=======================
+Page title in sentence case
+=======================
 
-Section
-=======
+Section heading
+===============
 
-Subsection
-----------
+Subsection heading
+------------------
 
-Subsubsection
-~~~~~~~~~~~~~
+Subsubsection heading
+~~~~~~~~~~~~~~~~~~~~~
 
-Paragraph
-^^^^^^^^^
+Paragraph heading
+^^^^^^^^^^^^^^^^^
 ```
 
 **Rules:**
-- Page titles: `=` above and below (11 characters minimum)
+- Page titles: `=` above and below (must match title length)
 - Sections: `=` below
 - Subsections: `-` below
 - Subsubsections: `~` below
 - Paragraphs: `^` below
 - **CRITICAL**: Underline must be exactly the same length as the title text
+- **SENTENCE CASE**: Use sentence case for all headlines, NOT title case
+  - ✅ Correct: "Mass approval on Crowdin", "API endpoints", "Best practices"
+  - ❌ Wrong: "Mass Approval On Crowdin", "API Endpoints", "Best Practices"
 
 ## Inline Formatting
 
@@ -82,28 +85,34 @@ Paragraph
 
 **Bullet Lists:**
 ```rst
-- First item
-- Second item
+- First item.
+- Second item.
 
-  - Nested item
-  - Another nested
+  - Nested item.
+  - Another nested.
 ```
 
 **Numbered Lists:**
 ```rst
-1. First item
-2. Second item
-3. Third item
+1. First item.
+2. Second item.
+3. Third item.
 ```
 
 **Definition Lists:**
 ```rst
 term
-   Definition of the term
+   Definition of the term.
 
 another term
-   Definition of another term
+   Definition of another term.
 ```
+
+**Punctuation Rules:**
+- **End with periods**: All list items should end with a period (`.`)
+- ✅ Correct: `1. Retrieve project metadata to get available languages.`
+- ❌ Wrong: `1. Retrieve project metadata to get available languages`
+- Exception: Single-word or very short items may omit periods for readability
 
 ## Links
 

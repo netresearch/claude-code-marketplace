@@ -11,7 +11,7 @@
     {
       "name": "typo3-docs",
       "description": "Create and maintain TYPO3 extension documentation following official TYPO3 documentation standards. Includes automated documentation extraction with priority-weighted gap analysis based on TYPO3 architecture, RST syntax reference, TYPO3-specific directives, local rendering, validation, and TYPO3 Intercept deployment setup.",
-      "version": "1.2.0-20251117",
+      "version": "1.3.0-20251126",
       "author": {
         "name": "Netresearch DTT GmbH",
         "email": "info@netresearch.de"
@@ -55,7 +55,7 @@
     {
       "name": "typo3-conformance",
       "description": "Evaluate TYPO3 extensions for conformance to official TYPO3 coding standards, architecture patterns, and best practices. Includes automated validation scripts for file structure, PSR-12 compliance, dependency injection, testing infrastructure, and comprehensive conformance scoring with priority-based action items.",
-      "version": "1.0.0-20251121",
+      "version": "1.0.0-20251126",
       "author": {
         "name": "Netresearch DTT GmbH",
         "email": "info@netresearch.de"
@@ -66,7 +66,7 @@
     {
       "name": "netresearch-branding",
       "description": "Implement Netresearch brand guidelines in web projects with comprehensive color system, typography standards (Raleway, Open Sans, Calibri), responsive component library, and production-ready templates. Includes WCAG AA accessibility compliance, social media specifications, and complete web design patterns.",
-      "version": "1.1.0-20251114",
+      "version": "1.1.0-20251126",
       "author": {
         "name": "Netresearch DTT GmbH",
         "email": "info@netresearch.de"
@@ -77,7 +77,7 @@
     {
       "name": "agents",
       "description": "Generate and maintain AGENTS.md files following the public agents.md convention. Creates thin root files with precedence rules, scoped files for subsystems, auto-extracts commands from build tools, and supports Go, PHP, TypeScript, and Python projects with language-specific templates.",
-      "version": "1.1.0-20251114",
+      "version": "1.1.0-20251125",
       "author": {
         "name": "Netresearch DTT GmbH",
         "email": "info@netresearch.de"

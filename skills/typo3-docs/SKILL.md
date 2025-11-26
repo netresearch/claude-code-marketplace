@@ -1,6 +1,6 @@
 ---
 name: typo3-docs
-version: 1.2.0
+version: 1.3.0
 description: >
   Create and maintain TYPO3 extension documentation following official TYPO3 13.x standards.
 
@@ -69,6 +69,10 @@ Invoke this skill when working with TYPO3 extension documentation:
 - ❌ Missing `:type:`, `:Default:`, or `:Path:` in confval directives
 - ❌ Using external links for internal documentation (use `:ref:` instead)
 - ❌ **Updating README.md without updating Documentation/** (or vice versa)
+- ❌ Using Title Case headlines instead of sentence case ("API Endpoints" → "API endpoints")
+- ❌ Missing permalink anchors (`.. _section-label:`) before section headings
+- ❌ List items without ending punctuation (periods)
+- ❌ PHP code examples failing CGL checks (run `make fix-cgl`)
 
 ## Documentation Synchronization
 
@@ -643,6 +647,99 @@ To create visual navigation, use card-grid layouts with stretched links:
 
 For complete card-grid reference, see: `references/typo3-directives.md`
 
+## Code Snippets with literalinclude
+
+For PHP scripts, configuration files, or other code examples, prefer `literalinclude` over inline code blocks:
+
+**Benefits:**
+- DRY: Single source of truth for code
+- Testable: Referenced file can be syntax-checked/executed
+- GitHub link: Rendered docs include "Edit on GitHub" link
+- Maintainable: Update code in one place
+
+**Basic Usage:**
+```rst
+..  literalinclude:: _codesnippets/example.php
+    :caption: example.php
+    :language: php
+```
+
+**With Line Selection:**
+```rst
+..  literalinclude:: _codesnippets/example.php
+    :caption: Relevant excerpt
+    :language: php
+    :lines: 10-25
+```
+
+**With Highlighting:**
+```rst
+..  literalinclude:: _codesnippets/example.php
+    :caption: example.php
+    :language: php
+    :emphasize-lines: 5,10-12
+```
+
+**Directory Structure:**
+```
+Documentation/
+├── Section/
+│   ├── Index.rst
+│   └── _codesnippets/
+│       ├── example.php
+│       └── config.yaml
+```
+
+**When to Use:**
+- ✅ Scripts longer than ~20 lines
+- ✅ Code that should be executable/testable
+- ✅ Examples referenced from multiple places
+- ❌ Short inline examples (use code-block)
+- ❌ Pseudo-code or partial snippets
+
+## PHP Code CGL Compliance
+
+PHP code examples in TYPO3 documentation **MUST** pass CGL (Coding Guidelines) checks.
+
+**Why:**
+- TYPO3 documentation builds enforce coding standards
+- Non-compliant code causes build warnings/failures
+- Consistent formatting improves readability
+
+**Validation:**
+```bash
+# Run CGL check locally before committing
+make fix-cgl
+
+# Or using Docker
+ddev exec make fix-cgl
+```
+
+**Common CGL Issues:**
+- Missing/incorrect spacing around operators
+- Improper array formatting
+- Wrong indentation (4 spaces, not tabs)
+- Missing blank lines between functions
+- Line length exceeding limits
+
+**Example Fix:**
+```php
+// ❌ Before (CGL violation)
+function getItems($id){return $this->items[$id];}
+
+// ✅ After (CGL compliant)
+function getItems(int $id): array
+{
+    return $this->items[$id];
+}
+```
+
+**Best Practice:**
+1. Write code examples following PSR-12 and TYPO3 CGL
+2. Run `make fix-cgl` before committing
+3. Fix any reported issues before pushing
+4. If build fails on CI, check CGL compliance first
+
 ## Cross-References
 
 To create internal links, use labels and `:ref:`:
@@ -766,6 +863,10 @@ Before committing documentation changes, perform these quality checks in order:
 8. **Validate code blocks**: Ensure all code blocks specify language (`:caption:` optional)
 9. **Review heading structure**: Verify proper hierarchy (= for title, - for sections, ~ for subsections)
 10. **Check PHP signatures**: Confirm method signatures include return types (either in signature or `:returntype:` field)
+11. **Verify sentence case**: Headlines must use sentence case, NOT title case ("API endpoints" not "API Endpoints")
+12. **Check permalink anchors**: Every section must have a `.. _label:` anchor for deep linking
+13. **Verify list punctuation**: All list items should end with periods
+14. **Run CGL checks**: Execute `make fix-cgl` for PHP code examples in `_codesnippets/` directories
 
 Additionally, verify documentation coverage meets standards:
 - Public APIs have corresponding `php:method` or `php:class` documentation
@@ -941,6 +1042,27 @@ If needed:
 
 For comprehensive webhook setup, troubleshooting, and best practices, see: `references/intercept-deployment.md`
 
+## Security Tips for Documentation
+
+**Sensitive Commands in Code Blocks:**
+
+When documenting commands with API tokens or secrets, add a leading space to prevent shell history logging:
+
+```rst
+..  code-block:: bash
+
+    # Set API token (leading space prevents saving to shell history)
+     export CROWDIN_TOKEN="your_api_token_here"
+```
+
+The leading space triggers `HISTCONTROL=ignorespace` behavior in bash/zsh, keeping secrets out of `~/.bash_history`.
+
+**Other Security Practices:**
+- ✅ Use environment variables for secrets, never hardcode
+- ✅ Add warnings for security-sensitive settings
+- ✅ Document minimal required permissions
+- ✅ Reference official security guidelines
+
 ## Documentation Standards Application
 
 When creating or editing TYPO3 documentation, apply these modern standards:
@@ -955,6 +1077,7 @@ When creating or editing TYPO3 documentation, apply these modern standards:
 - Use `confval` directive for ALL configuration options, never plain text
 - Apply `versionadded`/`versionchanged` directives for version-specific features
 - Document PHP APIs with `php:method` and `php:class` directives
+- Use `literalinclude` for longer code examples (DRY, testable, GitHub edit links)
 - Create internal links with `:ref:` labels, avoid external links for internal documentation
 
 **File and Content Constraints:**

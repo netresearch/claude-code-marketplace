@@ -1,0 +1,21 @@
+{
+  "name": "netresearch/agents-skill",
+  "description": "Generate and maintain AGENTS.md files following the public agents.md convention",
+  "type": "ai-agent-skill",
+  "license": "GPL-2.0-or-later",
+  "authors": [
+    {
+      "name": "Netresearch DTT GmbH",
+      "email": "plugins@netresearch.de",
+      "homepage": "https://www.netresearch.de/",
+      "role": "Manufacturer"
+    }
+  ],
+  "require": {
+    "netresearch/composer-agent-skill-plugin": "*"
+  },
+  "keywords": [
+    "ai-agent",
+    "skill"
+  ]
+}
