@@ -6,18 +6,18 @@
 
 Excellence Indicators are **optional** features that demonstrate exceptional project quality, community engagement, and professional development practices. Extensions are **not penalized** for missing these features, but **earn bonus points** when present.
 
-**Key Principle:** Base conformance (0-100 points) measures adherence to TYPO3 standards. Excellence indicators (0-20 bonus points) reward exceptional quality.
+**Key Principle:** Base conformance (0-100 points) measures adherence to TYPO3 standards. Excellence indicators (0-22 bonus points) reward exceptional quality.
 
 ---
 
 ## Scoring System
 
-**Total Excellence Points: 0-20 (bonus)**
+**Total Excellence Points: 0-22 (bonus)**
 
 | Category | Max Points | Purpose |
 |----------|-----------|---------|
 | Community & Internationalization | 6 | Engagement, accessibility, distribution |
-| Advanced Quality Tooling | 7 | Automation, code quality, maintenance |
+| Advanced Quality Tooling | 9 | Automation, code quality, TER workflow |
 | Documentation Excellence | 4 | Comprehensive docs, modern tooling |
 | Extension Configuration | 3 | Professional setup, flexibility |
 
@@ -170,7 +170,7 @@ grep -c "^|" README.md   # Table rows
 
 ---
 
-## Category 2: Advanced Quality Tooling (0-7 points)
+## Category 2: Advanced Quality Tooling (0-9 points)
 
 ### 2.1 Fractor Configuration (+2 points)
 
@@ -400,49 +400,145 @@ grep -A 5 "matrix:" .github/workflows/*.yml | grep -c "composerInstall"
 
 ---
 
-## Category 3: Documentation Excellence (0-4 points)
+### 2.6 TER Publishing Workflow (+2 points)
 
-### 3.1 Extensive RST Documentation (100+ files) (+3 points)
+**File:** `.github/workflows/publish-to-ter.yml`
 
-**Directory:** `Documentation/`
+**Purpose:** Automated extension publishing to TYPO3 Extension Repository on releases
 
-**Purpose:** Comprehensive, structured documentation covering all aspects
+**Reference:** `references/ter-publishing.md`
 
-**Example (georgringer/news: 183 RST files):**
+**Required Elements:**
+- Triggers on `release: [published]` event
+- Tag format validation (vX.Y.Z)
+- Version extraction (strips 'v' prefix)
+- Proper upload comment handling
+- Uses `typo3/tailor` for publishing
+
+**Example:**
+```yaml
+name: Publish to TER
+on:
+  release:
+    types: [published]
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    env:
+      TYPO3_EXTENSION_KEY: ${{ secrets.TYPO3_EXTENSION_KEY }}
+      TYPO3_API_TOKEN: ${{ secrets.TYPO3_TER_ACCESS_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate tag
+        run: |
+          [[ "${GITHUB_REF_NAME}" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]] || exit 1
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+      - run: composer global require typo3/tailor
+      - run: |
+          VERSION="${GITHUB_REF_NAME#v}"
+          tailor set-version "$VERSION"
+          tailor ter:publish --comment "${{ github.event.release.body }}" "$VERSION"
 ```
-Documentation/
-├── Addons/          # Extension integrations
-├── Administration/  # Backend administration
-├── Introduction/    # Getting started
-├── QuickStart/      # Fast setup guide
-├── Reference/       # API reference
-├── Tutorials/       # Step-by-step guides
-├── UsersManual/     # End-user documentation
-└── Images/          # Visual assets
-```
 
-**Scoring:**
-- 50-99 RST files: +1 point
-- 100-149 RST files: +2 points
-- 150+ RST files: +3 points
+**Upload Comment Format:**
+- Plain text only (no HTML/Markdown)
+- Newlines supported (rendered as `<br>` on frontend)
+- Allowed: word chars, whitespace, `" % & [ ] ( ) . , ; : / ? { } ! $ - @`
+- Stripped in XML export: `# * + = ~ ^ | \ < >`
+
+**Benefits:**
+- Automated releases reduce manual errors
+- Consistent versioning across ext_emconf and TER
+- Professional release workflow
+- Release notes automatically sync to TER
 
 **Validation:**
 ```bash
-RST_COUNT=$(find Documentation -name "*.rst" | wc -l)
-if [ $RST_COUNT -ge 150 ]; then
-    echo "✅ Extensive documentation 150+ RST (+3)"
-elif [ $RST_COUNT -ge 100 ]; then
-    echo "✅ Comprehensive documentation 100+ RST (+2)"
-elif [ $RST_COUNT -ge 50 ]; then
-    echo "✅ Good documentation 50+ RST (+1)"
+[ -f ".github/workflows/publish-to-ter.yml" ] && echo "✅ TER publish workflow (+2)"
+# Or check for alternative naming
+ls .github/workflows/*ter*.yml 2>/dev/null && echo "✅ TER workflow found"
+```
+
+---
+
+## Category 3: Documentation Excellence (0-4 points)
+
+### 3.1 Complete Documentation Structure (+3 points)
+
+**Directory:** `Documentation/`
+
+**Purpose:** Documentation appropriate for extension complexity with all required sections
+
+**Required Sections (scale with extension complexity):**
+
+| Extension Complexity | Required Sections | Example |
+|---------------------|-------------------|---------|
+| **Simple** (1-2 features) | Index, Installation, Configuration | Single-purpose utility extension |
+| **Medium** (3-5 features) | + Administration, Reference | Content element, backend module |
+| **Complex** (6+ features) | + Tutorials, FAQ, API docs | Full CMS feature like EXT:news |
+
+**Scoring:**
+- Complete documentation for extension scope: +3 points
+  - All required sections present for complexity level
+  - Each section has meaningful content (not stub/placeholder)
+  - Configuration options documented with examples
+- Partial documentation: +2 points
+  - Most required sections present
+  - Some sections incomplete or missing examples
+- Basic documentation: +1 point
+  - Index.rst and Installation present
+  - Minimal configuration documentation
+- No documentation: 0 points
+
+**Example Structure (medium complexity):**
+```
+Documentation/
+├── Index.rst           # Overview and quick links
+├── Installation/       # Setup and requirements
+│   └── Index.rst
+├── Configuration/      # All options with examples
+│   └── Index.rst
+├── Administration/     # Backend usage guide
+│   └── Index.rst
+├── Reference/          # Technical reference
+│   └── Index.rst
+└── Images/             # Visual assets
+```
+
+**Validation:**
+```bash
+# Check for required documentation sections
+REQUIRED_SECTIONS=("Index.rst" "Installation" "Configuration")
+SCORE=0
+for section in "${REQUIRED_SECTIONS[@]}"; do
+    if [ -e "Documentation/$section" ] || [ -e "Documentation/${section}/Index.rst" ]; then
+        ((SCORE++))
+    fi
+done
+
+# Assess completeness relative to extension complexity
+CLASSES_COUNT=$(find Classes -name "*.php" 2>/dev/null | wc -l)
+if [ $CLASSES_COUNT -gt 20 ]; then
+    COMPLEXITY="complex"
+    REQUIRED_SECTIONS+=("Administration" "Reference" "Tutorials")
+elif [ $CLASSES_COUNT -gt 5 ]; then
+    COMPLEXITY="medium"
+    REQUIRED_SECTIONS+=("Administration" "Reference")
 fi
+
+# Score based on completeness for scope
+echo "Extension complexity: $COMPLEXITY"
+echo "Documentation score based on completeness for scope"
 ```
 
 **Benefits:**
-- Reduces support burden
-- Improves onboarding
-- Professional project impression
-- Better community adoption
+- Documentation appropriate for extension scope
+- Quality over quantity approach
+- Reduces user confusion
+- Improves onboarding efficiency
 
 ---
 
@@ -660,12 +756,13 @@ Community & Internationalization (0-6):
 □ .gitattributes with export-ignore (+1)
 □ README with 4+ badges + compatibility table (+2)
 
-Advanced Quality Tooling (0-7):
+Advanced Quality Tooling (0-9):
 □ Build/fractor/fractor.php present (+2)
 □ TYPO3\CodingStandards in php-cs-fixer config (+1)
 □ .styleci.yml present (+1)
 □ Makefile with help target (+1)
 □ CI matrix: 3+ PHP versions + composerInstall variants (+2)
+□ TER publish workflow (.github/workflows/*ter*.yml) (+2)
 
 Documentation Excellence (0-4):
 □ 50-99 RST files (+1) / 100-149 (+2) / 150+ (+3)

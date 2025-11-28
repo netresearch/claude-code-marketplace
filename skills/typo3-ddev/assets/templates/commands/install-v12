@@ -26,7 +26,10 @@ vendor/bin/typo3 configuration:set 'BE/debug' 1
 vendor/bin/typo3 configuration:set 'FE/debug' 1
 vendor/bin/typo3 configuration:set 'SYS/devIPmask' '*'
 vendor/bin/typo3 configuration:set 'SYS/displayErrors' 1
-vendor/bin/typo3 configuration:set 'SYS/trustedHostsPattern' '.*\.{{DDEV_SITENAME}}\.ddev\.site'
+# Create additional.php for trustedHostsPattern (configuration:set doesn't work reliably for this)
+mkdir -p /var/www/html/$VERSION/config/system
+echo '<?php' > /var/www/html/$VERSION/config/system/additional.php
+echo '$GLOBALS["TYPO3_CONF_VARS"]["SYS"]["trustedHostsPattern"] = ".*";' >> /var/www/html/$VERSION/config/system/additional.php
 vendor/bin/typo3 configuration:set 'MAIL/transport' 'smtp'
 vendor/bin/typo3 configuration:set 'MAIL/transport_smtp_server' 'localhost:1025'
 vendor/bin/typo3 configuration:set 'MAIL/defaultMailFromAddress' 'admin@example.com'

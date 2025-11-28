@@ -33,7 +33,7 @@
     {
       "name": "typo3-ddev",
       "description": "Set up and manage TYPO3 development environments using DDEV. Includes DDEV configuration, local development workflows, container management, database handling, and integration with TYPO3-specific tooling.",
-      "version": "1.6.0-20251121",
+      "version": "1.6.0-20251128",
       "author": {
         "name": "Netresearch DTT GmbH",
         "email": "info@netresearch.de"
@@ -55,7 +55,7 @@
     {
       "name": "typo3-conformance",
       "description": "Evaluate TYPO3 extensions for conformance to official TYPO3 coding standards, architecture patterns, and best practices. Includes automated validation scripts for file structure, PSR-12 compliance, dependency injection, testing infrastructure, and comprehensive conformance scoring with priority-based action items.",
-      "version": "1.0.0-20251126",
+      "version": "1.0.0-20251128",
       "author": {
         "name": "Netresearch DTT GmbH",
         "email": "info@netresearch.de"
@@ -66,7 +66,7 @@
     {
       "name": "netresearch-branding",
       "description": "Implement Netresearch brand guidelines in web projects with comprehensive color system, typography standards (Raleway, Open Sans, Calibri), responsive component library, and production-ready templates. Includes WCAG AA accessibility compliance, social media specifications, and complete web design patterns.",
-      "version": "1.1.0-20251126",
+      "version": "1.0.0-20251126",
       "author": {
         "name": "Netresearch DTT GmbH",
         "email": "info@netresearch.de"

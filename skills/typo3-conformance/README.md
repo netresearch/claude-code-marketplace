@@ -1060,7 +1060,7 @@ The skill generates comprehensive markdown reports with dual scoring system:
 - ✅ Crowdin integration (+2)
 - ✅ Professional README badges (+2)
 - ✅ Fractor configuration (+2)
-- ✅ 65 RST files (+1)
+- ✅ Basic documentation structure (+1)
 - ✅ Composer doc scripts (+1)
 
 ## Critical Issues
@@ -1140,9 +1140,9 @@ This skill is based on official TYPO3 documentation:
 - CI testing matrix: +1 point
 
 **Documentation Excellence (0-4 points)**
-- 50-99 RST files: +1 point
-- 100-149 RST files: +2 points
-- 150+ RST files: +3 points
+- Complete documentation for extension scope: +3 points (all required sections present)
+- Partial documentation: +2 points (most sections, some incomplete)
+- Basic documentation: +1 point (Index.rst + Installation only)
 - Modern tooling (guides.xml, screenshots.json): +1 point
 
 **Extension Configuration (0-3 points)**

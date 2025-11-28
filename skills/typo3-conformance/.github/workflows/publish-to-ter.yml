@@ -7,45 +7,80 @@ on:
 jobs:
   publish:
     name: Publish new version to TER
-    if: startsWith(github.ref, 'refs/tags/')
     runs-on: ubuntu-latest
     env:
       TYPO3_EXTENSION_KEY: ${{ secrets.TYPO3_EXTENSION_KEY }}
       TYPO3_API_TOKEN: ${{ secrets.TYPO3_TER_ACCESS_TOKEN }}
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
-      - name: Check tag
+      - name: Validate tag format
         run: |
-          if ! [[ ${{ github.ref }} =~ ^refs/tags/v[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}$ ]]; then
+          if ! [[ "${GITHUB_REF_NAME}" =~ ^v[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$ ]]; then
+            echo "::error::Invalid tag format '${GITHUB_REF_NAME}'. Expected format: v1.2.3"
             exit 1
           fi
 
-      - name: Get version
-        id: get-version
-        run: echo "version=${GITHUB_REF/refs\/tags\/v/}" >> $GITHUB_ENV
-
-      - name: Get comment
-        id: get-comment
+      - name: Extract version
+        id: version
         run: |
-          readonly local comment=$(git tag -n10 -l v${{ env.version }} | sed "s/^v[0-9.]*[ ]*//g")
+          # Strip 'v' prefix for TER (expects "3.0.1" not "v3.0.1")
+          VERSION="${GITHUB_REF_NAME#v}"
+          echo "version=${VERSION}" >> $GITHUB_OUTPUT
+          echo "Extracted version: ${VERSION}"
 
-          if [[ -z "${comment// }" ]]; then
-            echo "comment=Released version ${{ env.version }} of ${{ env.TYPO3_EXTENSION_KEY }} -- for details see $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/releases" >> $GITHUB_ENV
+      - name: Prepare release comment
+        id: comment
+        env:
+          RELEASE_BODY: ${{ github.event.release.body }}
+          RELEASE_NAME: ${{ github.event.release.name }}
+          RELEASE_URL: ${{ github.event.release.html_url }}
+        run: |
+          # TER Upload Comment Format:
+          # - Plain text only (no HTML/Markdown)
+          # - Newlines ARE supported (rendered as <br> on frontend)
+          # - Allowed chars: word chars, whitespace, " % & [ ] ( ) . , ; : / ? { } ! $ - @
+          # - Stripped in XML export: # * + = ~ ^ | \ < >
+          # See: references/ter-publishing.md
+
+          if [[ -n "${RELEASE_BODY}" ]]; then
+            # Preserve newlines (TER displays them as line breaks)
+            # Limit to reasonable length (1000 chars)
+            COMMENT=$(echo "${RELEASE_BODY}" | head -c 1000)
+          elif [[ -n "${RELEASE_NAME}" ]]; then
+            COMMENT="${RELEASE_NAME}"
           else
-            echo "comment=$comment -- for details see $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/releases" >> $GITHUB_ENV
+            COMMENT="Release ${{ steps.version.outputs.version }}"
           fi
+
+          # Strip characters not supported in TER XML export
+          COMMENT=$(echo "${COMMENT}" | sed 's/[#*+=~^|\\<>]//g')
+
+          # Append release link on new line
+          COMMENT="${COMMENT}
+
+Details: ${RELEASE_URL}"
+
+          # Escape for GitHub Actions output (HEREDOC preserves newlines)
+          {
+            echo "comment<<EOF"
+            echo "${COMMENT}"
+            echo "EOF"
+          } >> $GITHUB_OUTPUT
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: 8.3
+          php-version: '8.3'
           extensions: intl, mbstring, json, zip, curl
           tools: composer:v2
 
       - name: Install tailor
-        run: composer global require typo3/tailor --prefer-dist --no-progress --no-suggest
+        run: composer global require typo3/tailor --prefer-dist --no-progress
 
       - name: Publish to TER
-        run: php ~/.composer/vendor/bin/tailor ter:publish --comment "${{ env.comment }}" ${{ env.version }}
+        run: |
+          TAILOR="$(composer global config bin-dir --absolute)/tailor"
+          "${TAILOR}" set-version "${{ steps.version.outputs.version }}"
+          "${TAILOR}" ter:publish --comment "${{ steps.comment.outputs.comment }}" "${{ steps.version.outputs.version }}"
