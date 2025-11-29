@@ -1,0 +1,14 @@
+{
+  "name": "prename",
+  "install_method": "package_manager",
+  "description": "Perl rename utility - rename files using Perl expressions",
+  "homepage": "https://metacpan.org/pod/File::Rename",
+  "binary_name": "file-rename",
+  "package_managers": {
+    "apt": "rename",
+    "dnf": "prename",
+    "pacman": "perl-rename",
+    "brew": "rename"
+  },
+  "notes": "Different distributions use different package names. Binary may be 'rename', 'prename', or 'file-rename'."
+}

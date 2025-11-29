@@ -1,0 +1,13 @@
+{
+  "name": "gosec",
+  "install_method": "github_release_binary",
+  "description": "Go security checker that inspects source code for security problems by scanning the Go AST",
+  "homepage": "https://github.com/securego/gosec",
+  "github_repo": "securego/gosec",
+  "binary_name": "gosec",
+  "download_url_template": "https://github.com/securego/gosec/releases/download/{version}/gosec_{version_nov}_linux_{arch}.tar.gz",
+  "arch_map": {
+    "x86_64": "amd64",
+    "aarch64": "arm64"
+  }
+}

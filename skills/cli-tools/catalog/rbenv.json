@@ -1,0 +1,15 @@
+{
+  "name": "rbenv",
+  "install_method": "github_clone",
+  "description": "Ruby version manager",
+  "homepage": "https://github.com/rbenv/rbenv",
+  "github_repo": "rbenv/rbenv",
+  "binary_name": "rbenv",
+  "clone_path": "~/.rbenv",
+  "install_script": "src/configure && make -C src"
+  ,"guide": {
+    "display_name": "rbenv",
+    "install_action": "install",
+    "order": 30
+  }
+}

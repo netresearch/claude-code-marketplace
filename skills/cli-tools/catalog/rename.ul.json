@@ -1,0 +1,13 @@
+{
+  "name": "rename.ul",
+  "install_method": "package_manager",
+  "description": "util-linux rename - rename files using sed-like expressions",
+  "homepage": "https://man7.org/linux/man-pages/man1/rename.1.html",
+  "binary_name": "rename.ul",
+  "package_managers": {
+    "apt": "util-linux",
+    "dnf": "util-linux",
+    "pacman": "util-linux"
+  },
+  "notes": "Part of util-linux package. Uses sed-style expressions (different from Perl rename/prename)."
+}

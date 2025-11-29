@@ -1,0 +1,16 @@
+{
+  "name": "poetry",
+  "install_method": "package_manager",
+  "description": "Python dependency management and packaging made easy",
+  "homepage": "https://python-poetry.org/",
+  "package_name": "poetry",
+  "binary_name": "poetry",
+  "packages": {
+    "apt": "python3-poetry",
+    "brew": "poetry",
+    "dnf": "poetry",
+    "pacman": "python-poetry"
+  },
+  "notes": "Some distributions may require installing via pipx or the official installer: curl -sSL https://install.python-poetry.org | python3 -",
+  "pinned_version": "never"
+}

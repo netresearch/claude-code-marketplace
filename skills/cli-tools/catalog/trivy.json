@@ -1,0 +1,14 @@
+{
+  "name": "trivy",
+  "install_method": "github_release_binary",
+  "description": "A comprehensive security scanner for vulnerabilities in container images, file systems, and Git repositories",
+  "homepage": "https://github.com/aquasecurity/trivy",
+  "github_repo": "aquasecurity/trivy",
+  "binary_name": "trivy",
+  "download_url_template": "https://github.com/aquasecurity/trivy/releases/download/{version}/trivy_{version_nov}_Linux-{arch}.tar.gz",
+  "arch_map": {
+    "x86_64": "64bit",
+    "aarch64": "ARM64",
+    "armv7l": "ARM"
+  }
+}

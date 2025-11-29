@@ -1,0 +1,14 @@
+{
+  "name": "dive",
+  "install_method": "github_release_binary",
+  "description": "A tool for exploring each layer in a docker image",
+  "homepage": "https://github.com/wagoodman/dive",
+  "github_repo": "wagoodman/dive",
+  "binary_name": "dive",
+  "download_url_template": "https://github.com/wagoodman/dive/releases/download/{version}/dive_{version_nov}_linux_{arch}.tar.gz",
+  "arch_map": {
+    "x86_64": "amd64",
+    "aarch64": "arm64",
+    "armv7l": "arm"
+  }
+}

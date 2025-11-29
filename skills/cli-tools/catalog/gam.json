@@ -1,0 +1,10 @@
+{
+  "name": "gam",
+  "install_method": "uv_tool",
+  "description": "Google Workspace admin management tool",
+  "homepage": "https://github.com/GAM-team/GAM",
+  "github_repo": "GAM-team/GAM",
+  "binary_name": "gam",
+  "version_flag": "version",
+  "package_name": "gam7"
+}

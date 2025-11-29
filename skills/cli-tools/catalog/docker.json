@@ -1,0 +1,15 @@
+{
+  "name": "docker",
+  "install_method": "dedicated_script",
+  "description": "Container platform for building and running applications",
+  "homepage": "https://www.docker.com",
+  "github_repo": "docker/cli",
+  "binary_name": "docker",
+  "script": "install_docker.sh",
+  "guide": {
+    "display_name": "Docker CLI",
+    "install_action": "install",
+    "order": 200
+  },
+  "pinned_version": "29.0.0"
+}

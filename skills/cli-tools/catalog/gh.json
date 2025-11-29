@@ -1,0 +1,14 @@
+{
+  "name": "gh",
+  "install_method": "github_release_binary",
+  "description": "GitHub's official command line tool",
+  "homepage": "https://github.com/cli/cli",
+  "github_repo": "cli/cli",
+  "binary_name": "gh",
+  "download_url_template": "https://github.com/cli/cli/releases/download/{version}/gh_{version_nov}_linux_{arch}.tar.gz",
+  "arch_map": {
+    "x86_64": "amd64",
+    "aarch64": "arm64",
+    "armv7l": "armv6"
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "name": "pipx",
+  "install_method": "package_manager",
+  "description": "Install and run Python applications in isolated environments",
+  "homepage": "https://pipx.pypa.io/",
+  "package_name": "pipx",
+  "binary_name": "pipx",
+  "packages": {
+    "apt": "pipx",
+    "brew": "pipx",
+    "dnf": "pipx",
+    "pacman": "python-pipx"
+  },
+  "pinned_version": "never"
+}

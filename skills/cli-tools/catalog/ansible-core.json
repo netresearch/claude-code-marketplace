@@ -1,0 +1,15 @@
+{
+  "name": "ansible-core",
+  "install_method": "pipx",
+  "description": "Ansible core automation engine",
+  "homepage": "https://ansible.com",
+  "github_repo": "ansible/ansible",
+  "binary_name": "ansible",
+  "package_name": "ansible-core",
+  "guide": {
+    "display_name": "Ansible Core",
+    "install_action": "upgrade",
+    "order": 350
+  },
+  "notes": "ansible-core is the base Ansible engine. The 'ansible' package includes additional collections."
+}

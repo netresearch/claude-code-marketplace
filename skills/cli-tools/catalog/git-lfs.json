@@ -1,0 +1,14 @@
+{
+  "name": "git-lfs",
+  "install_method": "github_release_binary",
+  "description": "Git extension for versioning large files",
+  "homepage": "https://github.com/git-lfs/git-lfs",
+  "github_repo": "git-lfs/git-lfs",
+  "binary_name": "git-lfs",
+  "download_url_template": "https://github.com/git-lfs/git-lfs/releases/download/{version}/git-lfs-linux-{arch}-{version}.tar.gz",
+  "arch_map": {
+    "x86_64": "amd64",
+    "aarch64": "arm64",
+    "armv7l": "arm"
+  }
+}

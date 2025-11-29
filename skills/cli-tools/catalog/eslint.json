@@ -1,0 +1,14 @@
+{
+  "name": "eslint",
+  "install_method": "npm_global",
+  "description": "JavaScript and TypeScript linter",
+  "homepage": "https://eslint.org",
+  "github_repo": "eslint/eslint",
+  "binary_name": "eslint",
+  "package_name": "eslint",
+  "guide": {
+    "display_name": "ESLint",
+    "install_action": "upgrade",
+    "order": 300
+  }
+}

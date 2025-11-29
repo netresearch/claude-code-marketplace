@@ -1,0 +1,10 @@
+{
+  "name": "compose",
+  "install_method": "docker_plugin",
+  "description": "Docker Compose - tool for defining multi-container applications",
+  "homepage": "https://docs.docker.com/compose/",
+  "github_repo": "docker/compose",
+  "binary_name": "docker",
+  "version_command": "docker compose version 2>&1 | head -1",
+  "notes": "Docker Compose v2 is a plugin for Docker CLI. Can be installed separately as a plugin or bundled with Docker Desktop."
+}

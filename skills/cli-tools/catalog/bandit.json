@@ -1,0 +1,7 @@
+{
+  "name": "bandit",
+  "install_method": "uv_tool",
+  "description": "Security-oriented static analyzer for Python code to find common security issues",
+  "homepage": "https://github.com/PyCQA/bandit",
+  "package_name": "bandit"
+}

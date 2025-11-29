@@ -1,0 +1,40 @@
+{
+  "name": "fd",
+  "install_method": "auto",
+  "description": "A simple, fast and user-friendly alternative to find",
+  "homepage": "https://github.com/sharkdp/fd",
+  "github_repo": "sharkdp/fd",
+  "binary_name": "fd",
+  "download_url_template": "https://github.com/sharkdp/fd/releases/download/{version}/fd-{version}-{arch}-unknown-linux-musl.tar.gz",
+  "arch_map": {
+    "x86_64": "x86_64",
+    "aarch64": "aarch64",
+    "armv7l": "armv7"
+  },
+  "available_methods": [
+    {
+      "method": "github_release_binary",
+      "priority": 1,
+      "config": {
+        "repo": "sharkdp/fd",
+        "asset_pattern": "fd-.*-x86_64-unknown-linux-musl.tar.gz"
+      }
+    },
+    {
+      "method": "cargo",
+      "priority": 2,
+      "config": {
+        "crate": "fd-find"
+      }
+    },
+    {
+      "method": "apt",
+      "priority": 3,
+      "config": {
+        "package": "fd-find"
+      }
+    }
+  ],
+  "requires": [],
+  "tags": ["core", "search", "file-utils"]
+}

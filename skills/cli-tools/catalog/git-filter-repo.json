@@ -1,0 +1,7 @@
+{
+  "name": "git-filter-repo",
+  "install_method": "uv_tool",
+  "description": "Versatile tool for rewriting git history (replacement for git filter-branch)",
+  "homepage": "https://github.com/newren/git-filter-repo",
+  "package_name": "git-filter-repo"
+}

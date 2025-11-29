@@ -1,0 +1,7 @@
+{
+  "name": "pre-commit",
+  "install_method": "uv_tool",
+  "description": "A framework for managing and maintaining multi-language pre-commit hooks",
+  "homepage": "https://github.com/pre-commit/pre-commit",
+  "package_name": "pre-commit"
+}

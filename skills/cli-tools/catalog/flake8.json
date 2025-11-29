@@ -1,0 +1,7 @@
+{
+  "name": "flake8",
+  "install_method": "uv_tool",
+  "description": "Python style guide enforcement tool combining PyFlakes, pycodestyle, and McCabe complexity checker",
+  "homepage": "https://github.com/PyCQA/flake8",
+  "package_name": "flake8"
+}

@@ -1,0 +1,14 @@
+{
+  "name": "dasel",
+  "install_method": "github_release_binary",
+  "description": "Query and update data structures from the command line",
+  "homepage": "https://github.com/TomWright/dasel",
+  "github_repo": "TomWright/dasel",
+  "binary_name": "dasel",
+  "download_url_template": "https://github.com/TomWright/dasel/releases/download/{version}/dasel_linux_{arch}",
+  "arch_map": {
+    "x86_64": "amd64",
+    "aarch64": "arm64",
+    "armv7l": "arm7"
+  }
+}

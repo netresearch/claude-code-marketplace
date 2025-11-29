@@ -1,0 +1,16 @@
+{
+  "name": "ruby-build",
+  "install_method": "github_clone",
+  "description": "Install Ruby versions (rbenv plugin)",
+  "homepage": "https://github.com/rbenv/ruby-build",
+  "github_repo": "rbenv/ruby-build",
+  "binary_name": "ruby-build",
+  "clone_path": "~/.rbenv/plugins/ruby-build",
+  "version_command": "cd ~/.rbenv/plugins/ruby-build && git log -1 --format='%s' | grep -oP 'ruby-build \\K[0-9]+'",
+  "notes": "Installs as rbenv plugin. Requires rbenv to be installed first.",
+  "guide": {
+    "display_name": "ruby-build",
+    "install_action": "install",
+    "order": 31
+  }
+}

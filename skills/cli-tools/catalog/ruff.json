@@ -1,0 +1,7 @@
+{
+  "name": "ruff",
+  "install_method": "uv_tool",
+  "description": "An extremely fast Python linter and code formatter, written in Rust",
+  "homepage": "https://github.com/astral-sh/ruff",
+  "package_name": "ruff"
+}

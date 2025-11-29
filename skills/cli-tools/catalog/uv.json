@@ -1,0 +1,14 @@
+{
+  "name": "uv",
+  "install_method": "dedicated_script",
+  "description": "Fast Python package installer and resolver",
+  "homepage": "https://github.com/astral-sh/uv",
+  "github_repo": "astral-sh/uv",
+  "binary_name": "uv",
+  "script": "install_uv.sh"
+  ,"guide": {
+    "display_name": "uv",
+    "install_action": "reconcile",
+    "order": 20
+  }
+}

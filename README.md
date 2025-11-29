@@ -27,6 +27,7 @@ Then use `/plugin` to browse and install plugins.
 | TYPO3 Conformance | [typo3-conformance-skill](https://github.com/netresearch/typo3-conformance-skill) | Evaluate TYPO3 standards compliance |
 | Netresearch Branding | [netresearch-branding-skill](https://github.com/netresearch/netresearch-branding-skill) | Apply Netresearch brand guidelines |
 | AGENTS.md Generator | [agents-skill](https://github.com/netresearch/agents-skill) | Generate AGENTS.md documentation |
+| CLI Tools | [cli-tools-skill](https://github.com/netresearch/cli-tools-skill) | Auto-install missing CLI tools |
 
 ## Architecture
 
@@ -146,6 +147,20 @@ Generate and maintain AGENTS.md files following the public agents.md convention.
 - Language-specific templates (Go, PHP, TypeScript, Python)
 - Standard conventions adherence
 - Build system integration
+
+### CLI Tools
+Automatic CLI tool management for coding agents with reactive and proactive modes.
+
+**Repository:** https://github.com/netresearch/cli-tools-skill
+
+**Features:**
+- Auto-detect "command not found" errors and install missing tools
+- 74+ tool catalog (ripgrep, fd, jq, docker, terraform, etc.)
+- Project environment auditing and reporting
+- Batch update capabilities across package managers
+- Smart installation method selection (GitHub releases, cargo, npm, apt/brew)
+- Support for Python, Node.js, Rust, Go, PHP, Ruby, and infrastructure projects
+- User-level installation priority (~/.local/bin, ~/.cargo/bin)
 
 ---
 

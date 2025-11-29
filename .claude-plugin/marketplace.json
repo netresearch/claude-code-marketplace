@@ -97,6 +97,17 @@
       "category": "development"
     },
     {
+      "name": "cli-tools",
+      "description": "Automatic CLI tool management for coding agents. Detects missing tools from 'command not found' errors and installs them via optimal package managers. Includes 74+ tool catalog (ripgrep, fd, jq, docker, terraform, etc.), project environment auditing, and batch update capabilities. Supports Python, Node.js, Rust, Go, PHP, Ruby, and infrastructure projects.",
+      "version": "1.0.0-20251129",
+      "author": {
+        "name": "Netresearch DTT GmbH",
+        "email": "info@netresearch.de"
+      },
+      "source": "./skills/cli-tools",
+      "category": "development"
+    },
+    {
       "name": "jira-integration",
       "source": {
         "source": "github",
@@ -117,7 +128,8 @@
         "./skills/typo3-core-contributions",
         "./skills/typo3-conformance",
         "./skills/netresearch-branding",
-        "./skills/agents"
+        "./skills/agents",
+        "./skills/cli-tools"
       ]
     }
   ]

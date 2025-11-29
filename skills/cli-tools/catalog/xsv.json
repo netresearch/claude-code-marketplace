@@ -1,0 +1,14 @@
+{
+  "name": "xsv",
+  "install_method": "github_release_binary",
+  "description": "A fast CSV command line toolkit written in Rust",
+  "homepage": "https://github.com/BurntSushi/xsv",
+  "github_repo": "BurntSushi/xsv",
+  "binary_name": "xsv",
+  "download_url_template": "https://github.com/BurntSushi/xsv/releases/download/{version}/xsv-{version}-{arch}-unknown-linux-musl.tar.gz",
+  "arch_map": {
+    "x86_64": "x86_64",
+    "aarch64": "aarch64",
+    "armv7l": "armv7"
+  }
+}

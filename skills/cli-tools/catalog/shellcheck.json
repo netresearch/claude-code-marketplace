@@ -1,0 +1,14 @@
+{
+  "name": "shellcheck",
+  "install_method": "github_release_binary",
+  "description": "A static analysis tool for shell scripts",
+  "homepage": "https://github.com/koalaman/shellcheck",
+  "github_repo": "koalaman/shellcheck",
+  "binary_name": "shellcheck",
+  "download_url_template": "https://github.com/koalaman/shellcheck/releases/download/{version}/shellcheck-{version}.linux.{arch}.tar.xz",
+  "arch_map": {
+    "x86_64": "x86_64",
+    "aarch64": "aarch64",
+    "armv7l": "armv6hf"
+  }
+}

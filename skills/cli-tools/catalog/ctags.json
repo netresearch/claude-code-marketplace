@@ -1,0 +1,13 @@
+{
+  "name": "ctags",
+  "install_method": "package_manager",
+  "description": "Universal Ctags - multilanguage implementation of ctags",
+  "homepage": "https://github.com/universal-ctags/ctags",
+  "github_repo": "universal-ctags/ctags",
+  "binary_name": "ctags",
+  "packages": {
+    "apt": "universal-ctags",
+    "brew": "universal-ctags"
+  },
+  "pinned_version": "5.9.0"
+}

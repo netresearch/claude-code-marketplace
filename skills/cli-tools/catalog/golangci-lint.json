@@ -1,0 +1,14 @@
+{
+  "name": "golangci-lint",
+  "install_method": "github_release_binary",
+  "description": "Fast linters runner for Go",
+  "homepage": "https://github.com/golangci/golangci-lint",
+  "github_repo": "golangci/golangci-lint",
+  "binary_name": "golangci-lint",
+  "download_url_template": "https://github.com/golangci/golangci-lint/releases/download/{version}/golangci-lint-{version_nov}-linux-{arch}.tar.gz",
+  "arch_map": {
+    "x86_64": "amd64",
+    "aarch64": "arm64",
+    "armv7l": "armv6"
+  }
+}

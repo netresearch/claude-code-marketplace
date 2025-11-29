@@ -1,0 +1,16 @@
+{
+  "name": "entr",
+  "install_method": "package_manager",
+  "description": "Run arbitrary commands when files change",
+  "homepage": "http://eradman.com/entrproject/",
+  "github_repo": "eradman/entr",
+  "version_command": "entr 2>&1 | grep 'release:' | head -1",
+  "package_managers": {
+    "apt": "entr",
+    "dnf": "entr",
+    "pacman": "entr",
+    "brew": "entr"
+  },
+  "notes": "entr does not publish GitHub releases; install via system package manager",
+  "pinned_version": "5.5"
+}

@@ -1,0 +1,25 @@
+{
+  "name": "php",
+  "install_method": "auto",
+  "description": "PHP programming language interpreter",
+  "homepage": "https://www.php.net/",
+  "binary_name": "php",
+  "available_methods": [
+    {
+      "method": "apt",
+      "priority": 1,
+      "config": {
+        "package": "php-cli"
+      }
+    },
+    {
+      "method": "brew",
+      "priority": 2,
+      "config": {
+        "formula": "php"
+      }
+    }
+  ],
+  "requires": [],
+  "tags": ["language", "web"]
+}

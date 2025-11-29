@@ -1,0 +1,14 @@
+{
+  "name": "ninja",
+  "install_method": "github_release_binary",
+  "description": "Small build system with a focus on speed",
+  "homepage": "https://github.com/ninja-build/ninja",
+  "github_repo": "ninja-build/ninja",
+  "binary_name": "ninja",
+  "download_url_template": "https://github.com/ninja-build/ninja/releases/download/{version}/ninja-linux{arch_suffix}.zip",
+  "arch_map": {
+    "x86_64": "",
+    "aarch64": "-aarch64"
+  },
+  "notes": "x86_64 uses empty suffix (ninja-linux.zip), arm64 uses -aarch64 suffix"
+}

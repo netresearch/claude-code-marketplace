@@ -1,0 +1,15 @@
+{
+  "name": "go",
+  "install_method": "dedicated_script",
+  "description": "Go programming language",
+  "homepage": "https://go.dev",
+  "github_repo": "golang/go",
+  "binary_name": "go",
+  "version_flag": "version",
+  "script": "install_go.sh"
+  ,"guide": {
+    "display_name": "Go toolchain",
+    "install_action": "install",
+    "order": 50
+  }
+}

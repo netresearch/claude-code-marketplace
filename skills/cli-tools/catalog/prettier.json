@@ -1,0 +1,8 @@
+{
+  "name": "prettier",
+  "install_method": "npm_global",
+  "description": "Opinionated code formatter",
+  "homepage": "https://prettier.io",
+  "package_name": "prettier",
+  "notes": "Prettier is a JavaScript/Node.js tool installed via npm"
+}

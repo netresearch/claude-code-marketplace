@@ -1,0 +1,40 @@
+{
+  "name": "ripgrep",
+  "install_method": "auto",
+  "description": "A line-oriented search tool that recursively searches directories for a regex pattern",
+  "homepage": "https://github.com/BurntSushi/ripgrep",
+  "github_repo": "BurntSushi/ripgrep",
+  "binary_name": "rg",
+  "download_url_template": "https://github.com/BurntSushi/ripgrep/releases/download/{version}/ripgrep-{version}-{arch}-unknown-linux-musl.tar.gz",
+  "arch_map": {
+    "x86_64": "x86_64",
+    "aarch64": "aarch64",
+    "armv7l": "arm-unknown-linux-gnueabihf"
+  },
+  "available_methods": [
+    {
+      "method": "github_release_binary",
+      "priority": 1,
+      "config": {
+        "repo": "BurntSushi/ripgrep",
+        "asset_pattern": "ripgrep-.*-x86_64-unknown-linux-musl.tar.gz"
+      }
+    },
+    {
+      "method": "cargo",
+      "priority": 2,
+      "config": {
+        "crate": "ripgrep"
+      }
+    },
+    {
+      "method": "apt",
+      "priority": 3,
+      "config": {
+        "package": "ripgrep"
+      }
+    }
+  ],
+  "requires": [],
+  "tags": ["core"]
+}

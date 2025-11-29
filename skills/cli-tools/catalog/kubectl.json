@@ -1,0 +1,23 @@
+{
+  "name": "kubectl",
+  "install_method": "github_release_binary",
+  "description": "Kubernetes command-line tool",
+  "homepage": "https://kubernetes.io/docs/reference/kubectl/",
+  "github_repo": "kubernetes/kubernetes",
+  "version_url": "https://dl.k8s.io/release/stable.txt",
+  "download_url_template": "https://dl.k8s.io/release/{version}/bin/{os}/{arch}/kubectl",
+  "fallback_url_template": "https://storage.googleapis.com/kubernetes-release/release/{version}/bin/{os}/{arch}/kubectl",
+  "binary_name": "kubectl",
+  "arch_map": {
+    "x86_64": "amd64",
+    "aarch64": "arm64",
+    "armv7l": "armv7",
+    "s390x": "s390x",
+    "ppc64le": "ppc64le"
+  }
+  ,"guide": {
+    "display_name": "kubectl",
+    "install_action": "install",
+    "order": 203
+  }
+}

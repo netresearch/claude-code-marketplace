@@ -1,0 +1,14 @@
+{
+  "name": "gitleaks",
+  "install_method": "github_release_binary",
+  "description": "A SAST tool for detecting and preventing hardcoded secrets like passwords, api keys, and tokens in git repos",
+  "homepage": "https://github.com/gitleaks/gitleaks",
+  "github_repo": "gitleaks/gitleaks",
+  "binary_name": "gitleaks",
+  "download_url_template": "https://github.com/gitleaks/gitleaks/releases/download/{version}/gitleaks_{version_nov}_linux_{arch}.tar.gz",
+  "arch_map": {
+    "x86_64": "x64",
+    "aarch64": "arm64",
+    "armv7l": "armv7"
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "name": "ruby",
+  "install_method": "dedicated_script",
+  "description": "Ruby programming language",
+  "homepage": "https://www.ruby-lang.org/",
+  "github_repo": "ruby/ruby",
+  "binary_name": "ruby",
+  "script": "install_ruby.sh",
+  "notes": "Installed via rbenv for version management. Removes apt-managed Ruby in favor of rbenv.",
+  "guide": {
+    "display_name": "Ruby (rbenv)",
+    "install_action": "reconcile",
+    "order": 32
+  }
+}

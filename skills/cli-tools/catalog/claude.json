@@ -1,0 +1,14 @@
+{
+  "name": "claude",
+  "install_method": "npm_global",
+  "description": "Anthropic's Claude Code CLI - AI-powered development assistant",
+  "homepage": "https://claude.com/claude-code",
+  "github_repo": "anthropics/claude-code",
+  "binary_name": "claude",
+  "package_name": "@anthropic-ai/claude-code",
+  "guide": {
+    "display_name": "Claude Code",
+    "install_action": "upgrade",
+    "order": 400
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "name": "isort",
+  "install_method": "uv_tool",
+  "description": "A Python utility to sort imports alphabetically and automatically separate them into sections",
+  "homepage": "https://github.com/PyCQA/isort",
+  "package_name": "isort"
+}

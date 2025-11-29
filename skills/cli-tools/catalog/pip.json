@@ -1,0 +1,16 @@
+{
+  "name": "pip",
+  "install_method": "package_manager",
+  "description": "Python package installer",
+  "homepage": "https://pip.pypa.io/",
+  "package_name": "pip",
+  "binary_name": "pip",
+  "packages": {
+    "apt": "python3-pip",
+    "brew": "python3",
+    "dnf": "python3-pip",
+    "pacman": "python-pip"
+  },
+  "notes": "pip typically comes with Python 3. Use python3 -m pip if pip command is not available.",
+  "pinned_version": "never"
+}

@@ -1,0 +1,14 @@
+{
+  "name": "fx",
+  "install_method": "github_release_binary",
+  "description": "Terminal JSON viewer and processor",
+  "homepage": "https://github.com/antonmedv/fx",
+  "github_repo": "antonmedv/fx",
+  "binary_name": "fx",
+  "download_url_template": "https://github.com/antonmedv/fx/releases/download/{version}/fx_linux_{arch}",
+  "arch_map": {
+    "x86_64": "amd64",
+    "aarch64": "arm64",
+    "armv7l": "armv6"
+  }
+}

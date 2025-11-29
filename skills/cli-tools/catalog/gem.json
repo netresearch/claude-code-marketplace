@@ -1,0 +1,15 @@
+{
+  "name": "gem",
+  "install_method": "dedicated_script",
+  "description": "Ruby package manager (RubyGems)",
+  "homepage": "https://rubygems.org/",
+  "github_repo": "rubygems/rubygems",
+  "binary_name": "gem",
+  "script": "install_gem.sh",
+  "notes": "gem comes bundled with Ruby. Updates via 'gem update --system'. Requires Ruby to be installed via rbenv."
+  ,"guide": {
+    "display_name": "gem (RubyGems)",
+    "install_action": "update",
+    "order": 33
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "name": "git-branchless",
+  "install_method": "github_release_binary",
+  "description": "High-velocity, monorepo-scale workflow for Git",
+  "homepage": "https://github.com/arxanas/git-branchless",
+  "github_repo": "arxanas/git-branchless",
+  "binary_name": "git-branchless",
+  "download_url_template": "https://github.com/arxanas/git-branchless/releases/download/{version}/git-branchless-{version}-x86_64-unknown-linux-musl.tar.gz",
+  "arch_map": {
+    "x86_64": "x86_64-unknown-linux-musl"
+  },
+  "notes": "Only x86_64 Linux builds available. KNOWN ISSUE: v0.10.0 release binary incorrectly reports version 0.9.0 - this is an upstream packaging bug, not an installer issue.",
+  "known_issues": "v0.10.0 release binary reports version 0.9.0 (upstream packaging bug). Upgrade will appear to fail. Wait for v0.10.1+ or build from source.",
+  "pinned_version": "0.10.0"
+}

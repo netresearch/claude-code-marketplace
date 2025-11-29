@@ -1,0 +1,14 @@
+{
+  "name": "tfsec",
+  "install_method": "github_release_binary",
+  "description": "Security scanner for your Terraform code",
+  "homepage": "https://github.com/aquasecurity/tfsec",
+  "github_repo": "aquasecurity/tfsec",
+  "binary_name": "tfsec",
+  "download_url_template": "https://github.com/aquasecurity/tfsec/releases/download/{version}/tfsec-linux-{arch}",
+  "arch_map": {
+    "x86_64": "amd64",
+    "aarch64": "arm64",
+    "armv7l": "arm"
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "name": "terraform",
+  "install_method": "hashicorp_zip",
+  "description": "Infrastructure as Code tool",
+  "homepage": "https://www.terraform.io/",
+  "github_repo": "hashicorp/terraform",
+  "product_name": "terraform",
+  "binary_name": "terraform",
+  "arch_map": {
+    "x86_64": "amd64",
+    "aarch64": "arm64"
+  }
+  ,"guide": {
+    "display_name": "Terraform",
+    "install_action": "install",
+    "order": 204
+  }
+}

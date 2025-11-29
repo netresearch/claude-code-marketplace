@@ -1,0 +1,15 @@
+{
+  "name": "node",
+  "install_method": "dedicated_script",
+  "description": "Node.js JavaScript runtime",
+  "homepage": "https://nodejs.org",
+  "github_repo": "nodejs/node",
+  "binary_name": "node",
+  "script": "install_node.sh",
+  "guide": {
+    "display_name": "Node.js stack",
+    "install_action": "reconcile",
+    "order": 40
+  },
+  "pinned_version": "25.0.0"
+}

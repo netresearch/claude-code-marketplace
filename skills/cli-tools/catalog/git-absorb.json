@@ -1,0 +1,15 @@
+{
+  "name": "git-absorb",
+  "install_method": "github_release_binary",
+  "description": "git commit --fixup, but automatic",
+  "homepage": "https://github.com/tummychow/git-absorb",
+  "github_repo": "tummychow/git-absorb",
+  "binary_name": "git-absorb",
+  "version_flag": "--version",
+  "download_url_template": "https://github.com/tummychow/git-absorb/releases/download/{version_nov}/git-absorb-{version_nov}-{arch}-unknown-linux-musl.tar.gz",
+  "arch_map": {
+    "x86_64": "x86_64",
+    "armv7l": "arm"
+  },
+  "notes": "Only x86_64 builds available; arm builds use different target triple"
+}

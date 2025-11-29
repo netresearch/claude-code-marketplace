@@ -1,0 +1,10 @@
+{
+  "name": "composer",
+  "install_method": "dedicated_script",
+  "description": "PHP dependency manager",
+  "homepage": "https://getcomposer.org/",
+  "github_repo": "composer/composer",
+  "binary_name": "composer",
+  "script": "install_composer.sh",
+  "notes": "Installed from latest stable phar (https://getcomposer.org/download/latest-stable/composer.phar). Requires PHP."
+}

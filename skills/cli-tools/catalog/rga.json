@@ -1,0 +1,14 @@
+{
+  "name": "rga",
+  "install_method": "github_release_binary",
+  "description": "ripgrep, but also search in PDFs, E-Books, Office documents, zip, tar.gz, etc.",
+  "homepage": "https://github.com/phiresky/ripgrep-all",
+  "github_repo": "phiresky/ripgrep-all",
+  "binary_name": "rga",
+  "download_url_template": "https://github.com/phiresky/ripgrep-all/releases/download/{version}/ripgrep_all-{version}-{arch}-unknown-linux-musl.tar.gz",
+  "arch_map": {
+    "x86_64": "x86_64",
+    "aarch64": "aarch64",
+    "armv7l": "armv7"
+  }
+}

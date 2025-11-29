@@ -1,0 +1,7 @@
+{
+  "name": "semgrep",
+  "install_method": "uv_tool",
+  "description": "Lightweight static analysis tool",
+  "homepage": "https://semgrep.dev/",
+  "package_name": "semgrep"
+}

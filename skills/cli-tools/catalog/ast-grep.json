@@ -1,0 +1,14 @@
+{
+  "name": "ast-grep",
+  "install_method": "github_release_binary",
+  "description": "A CLI tool for code structural search, lint and rewriting",
+  "homepage": "https://github.com/ast-grep/ast-grep",
+  "github_repo": "ast-grep/ast-grep",
+  "binary_name": "ast-grep",
+  "download_url_template": "https://github.com/ast-grep/ast-grep/releases/download/{version}/app-{arch}-unknown-linux-gnu.zip",
+  "arch_map": {
+    "x86_64": "x86_64",
+    "aarch64": "aarch64",
+    "armv7l": "armv7"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "parallel",
+  "install_method": "dedicated_script",
+  "description": "GNU Parallel - shell tool for executing jobs in parallel",
+  "homepage": "https://www.gnu.org/software/parallel/",
+  "binary_name": "parallel",
+  "script": "install_parallel.sh",
+  "ftp_url": "https://ftp.gnu.org/gnu/parallel/",
+  "notes": "Installed from GNU FTP releases. Installs to ~/.local/bin/parallel.",
+  "pinned_version": "20231122"
+}

@@ -1,0 +1,15 @@
+{
+  "name": "delta",
+  "install_method": "github_release_binary",
+  "description": "A syntax-highlighting pager for git, diff, and grep output",
+  "homepage": "https://github.com/dandavison/delta",
+  "github_repo": "dandavison/delta",
+  "binary_name": "delta",
+  "download_url_template": "https://github.com/dandavison/delta/releases/download/{version}/delta-{version}-{arch}-unknown-linux-musl.tar.gz",
+  "arch_map": {
+    "x86_64": "x86_64",
+    "aarch64": "aarch64",
+    "armv7l": "armv7"
+  }
+  ,"tags": ["core"]
+}

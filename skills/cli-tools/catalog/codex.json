@@ -1,0 +1,10 @@
+{
+  "name": "codex",
+  "install_method": "uv_tool",
+  "description": "CLI tool for generating and managing code documentation",
+  "homepage": "https://github.com/codex-cli/codex",
+  "package_name": "codex",
+  "python_version": "3.13",
+  "version_command": "uv tool list | grep '^codex ' | awk '{print $2}'",
+  "notes": "Codex is a web server app - running codex --version starts the full server. Use uv tool list for version detection."
+}

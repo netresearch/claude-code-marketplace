@@ -1,0 +1,16 @@
+{
+  "name": "sponge",
+  "install_method": "package_manager",
+  "description": "Soak up standard input and write to a file - part of moreutils",
+  "homepage": "https://joeyh.name/code/moreutils/",
+  "binary_name": "sponge",
+  "version_command": "dpkg -s moreutils 2>/dev/null | grep '^Version:' | awk '{print $2}'",
+  "packages": {
+    "apt": "moreutils",
+    "brew": "moreutils",
+    "dnf": "moreutils",
+    "pacman": "moreutils"
+  },
+  "notes": "sponge is part of the moreutils package, which includes other useful tools like chronic, combine, errno, ifdata, ifne, isutf8, lckdo, parallel, pee, ts, vidir, vipe, and zrun.",
+  "pinned_version": "0.69"
+}
