@@ -1,6 +1,12 @@
 {
   "skills": [
     {
+      "name": "enterprise-readiness",
+      "repository": "https://github.com/netresearch/enterprise-readiness-skill.git",
+      "target_path": "skills/enterprise-readiness",
+      "marketplace_name": "enterprise-readiness"
+    },
+    {
       "name": "typo3-docs",
       "repository": "https://github.com/netresearch/typo3-docs-skill.git",
       "target_path": "skills/typo3-docs",
