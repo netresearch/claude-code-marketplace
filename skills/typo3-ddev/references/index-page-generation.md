@@ -28,6 +28,24 @@ list-skills | grep -i branding
 
 **Invoke:** `netresearch-branding` skill
 
+**Use Template:** `netresearch-branding/assets/landing-page-template.html`
+
+This pre-built template includes:
+- Professional gradient background
+- Card-based layout for quick links
+- Credentials display section
+- Development commands reference
+- GitHub repository link
+- Netresearch footer branding
+
+**Template Variables to Replace:**
+| Variable | Source | Example |
+|----------|--------|---------|
+| `{{EXTENSION_TITLE}}` | Extension name from composer.json | "RTE CKEditor Image" |
+| `{{EXTENSION_DESCRIPTION}}` | composer.json description | "Image support in CKEditor for TYPO3" |
+| `{{DDEV_SITENAME}}` | .ddev/config.yaml name | "rte-ckeditor-image" |
+| `{{GITHUB_URL}}` | composer.json homepage | "https://github.com/netresearch/..." |
+
 **Colors:**
 - Primary: #2F99A4 (Turquoise)
 - Accent: #FF4D00 (Orange)

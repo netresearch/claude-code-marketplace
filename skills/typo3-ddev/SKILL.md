@@ -5,7 +5,7 @@ license: MIT License - see LICENSE file
 metadata:
   author: Netresearch
   repository: https://github.com/netresearch/typo3-ddev-skill
-  version: 1.6.0
+  version: 1.7.0
   tags:
     - typo3
     - ddev
@@ -434,6 +434,15 @@ After DDEV setup, generate a beautiful overview page for easy access to all TYPO
 ```bash
 ddev generate-index
 ```
+
+#### Automatic Branding Detection
+
+The index page automatically detects and applies appropriate branding:
+
+1. **Check for branding skills** - Looks for `netresearch-branding` or similar
+2. **Use branded template** - If `netresearch-branding` skill available, uses `assets/landing-page-template.html`
+3. **Replace template variables** - `{{EXTENSION_TITLE}}`, `{{EXTENSION_DESCRIPTION}}`, `{{DDEV_SITENAME}}`, `{{GITHUB_URL}}`
+4. **Fallback to TYPO3 branding** - Uses TYPO3 orange (#FF8700) if no branding detected
 
 #### Index Page Features
 
