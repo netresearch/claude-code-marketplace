@@ -65,6 +65,8 @@ Bug fixes & improvements! See CHANGELOG.md for details...
 
 **File:** `.github/workflows/publish-to-ter.yml`
 
+**Template:** Copy from `templates/.github/workflows/publish-to-ter.yml`
+
 ```yaml
 name: Publish new extension version to TER
 

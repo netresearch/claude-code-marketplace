@@ -97,8 +97,9 @@ Production-ready configuration templates based on [TYPO3 Best Practices (Tea Ext
 - **Build/typoscript-lint/TypoScriptLint.yml** - TypoScript quality enforcement
 - **Build/eslint/.eslintrc.json** - JavaScript/TypeScript linting
 - **Build/stylelint/.stylelintrc.json** - CSS/SCSS quality checks
+- **.github/workflows/publish-to-ter.yml** - TER publishing workflow
 
-All templates are available in [`templates/Build/`](templates/Build/) and ready for direct use.
+All templates are available in [`templates/`](templates/) and ready for direct use.
 
 ## Advanced Code Quality Tools
 
