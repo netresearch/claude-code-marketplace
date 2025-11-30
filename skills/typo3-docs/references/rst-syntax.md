@@ -81,6 +81,61 @@ Paragraph heading
    const example = 'value';
 ```
 
+## literalinclude (External Files)
+
+Include code from external files instead of inline code blocks.
+
+**Benefits:**
+- DRY: Single source of truth for code
+- Testable: Referenced file can be syntax-checked/executed
+- GitHub link: Rendered docs include "Edit on GitHub" link
+- Maintainable: Update code in one place
+
+**Basic Usage:**
+```rst
+..  literalinclude:: _codesnippets/example.php
+    :caption: example.php
+    :language: php
+```
+
+**With Line Selection:**
+```rst
+..  literalinclude:: _codesnippets/example.php
+    :caption: Relevant excerpt
+    :language: php
+    :lines: 10-25
+```
+
+**With Line Highlighting:**
+```rst
+..  literalinclude:: _codesnippets/example.php
+    :caption: example.php
+    :language: php
+    :emphasize-lines: 5,10-12
+```
+
+**Directory Structure:**
+```
+Documentation/
+├── Section/
+│   ├── Index.rst
+│   └── _codesnippets/
+│       ├── example.php
+│       └── config.yaml
+```
+
+**When to Use:**
+- ✅ Scripts longer than ~20 lines
+- ✅ Code that should be executable/testable
+- ✅ Examples referenced from multiple places
+- ❌ Short inline examples (use code-block)
+- ❌ Pseudo-code or partial snippets
+
+**Path Rules:**
+- Paths are relative to the RST file location
+- Use `../_codesnippets/` to reference parent directory
+- Use absolute paths from Documentation root with `/`
+
 ## Lists
 
 **Bullet Lists:**

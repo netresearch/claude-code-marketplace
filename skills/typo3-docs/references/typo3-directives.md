@@ -472,6 +472,49 @@ Create tabbed content for multiple options.
 :download:`Download PDF <../_static/manual.pdf>`
 ```
 
+## PHP Code CGL Compliance
+
+PHP code examples in TYPO3 documentation **MUST** pass CGL (Coding Guidelines) checks.
+
+**Why:**
+- TYPO3 documentation builds enforce coding standards
+- Non-compliant code causes build warnings/failures
+- Consistent formatting improves readability
+
+**Validation:**
+```bash
+# Run CGL check locally before committing
+make fix-cgl
+
+# Or using Docker/DDEV
+ddev exec make fix-cgl
+```
+
+**Common CGL Issues:**
+- Missing/incorrect spacing around operators
+- Improper array formatting
+- Wrong indentation (4 spaces, not tabs)
+- Missing blank lines between functions
+- Line length exceeding limits
+
+**Example Fix:**
+```php
+// ❌ Before (CGL violation)
+function getItems($id){return $this->items[$id];}
+
+// ✅ After (CGL compliant)
+function getItems(int $id): array
+{
+    return $this->items[$id];
+}
+```
+
+**Best Practice Workflow:**
+1. Write code examples following PSR-12 and TYPO3 CGL
+2. Run `make fix-cgl` before committing
+3. Fix any reported issues before pushing
+4. If build fails on CI, check CGL compliance first
+
 ## Best Practices
 
 1. **Use confval for all configuration**: Document every setting with proper metadata
