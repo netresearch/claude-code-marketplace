@@ -40,7 +40,7 @@ services:
   # Playwright container for E2E testing
   # Alternative: Run Playwright locally with `npm run playwright:run`
   playwright:
-    image: mcr.microsoft.com/playwright:v1.56.1-noble
+    image: mcr.microsoft.com/playwright:v1.57.0-noble
     container_name: typo3-test-playwright
     volumes:
       - ../../../:/var/www/html
