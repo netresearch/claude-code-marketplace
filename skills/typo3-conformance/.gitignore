@@ -1,2 +1,11 @@
 .serena/
 claudedocs/
+
+# Playwright
+.auth/
+node_modules/
+test-results/
+playwright-report/
+
+# Environment
+.env

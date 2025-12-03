@@ -37,12 +37,20 @@ services:
     networks:
       - typo3-test
 
-  selenium:
-    image: selenium/standalone-chrome:latest
-    container_name: typo3-test-selenium
-    ports:
-      - "4444:4444"
-    shm_size: 2gb
+  # Playwright container for E2E testing
+  # Alternative: Run Playwright locally with `npm run playwright:run`
+  playwright:
+    image: mcr.microsoft.com/playwright:v1.56.1-noble
+    container_name: typo3-test-playwright
+    volumes:
+      - ../../../:/var/www/html
+    working_dir: /var/www/html/Build
+    environment:
+      - PLAYWRIGHT_BASE_URL=http://web:80/typo3/
+      - PLAYWRIGHT_ADMIN_USERNAME=admin
+      - PLAYWRIGHT_ADMIN_PASSWORD=password
+    depends_on:
+      - web
     networks:
       - typo3-test
 

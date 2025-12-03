@@ -22,7 +22,7 @@
     {
       "name": "typo3-docs",
       "description": "Create and maintain TYPO3 extension documentation following official TYPO3 documentation standards. Includes automated documentation extraction with priority-weighted gap analysis based on TYPO3 architecture, RST syntax reference, TYPO3-specific directives, local rendering, validation, and TYPO3 Intercept deployment setup.",
-      "version": "1.4.0-20251130",
+      "version": "1.0.0-20251203",
       "author": {
         "name": "Netresearch DTT GmbH",
         "email": "info@netresearch.de"
@@ -33,7 +33,7 @@
     {
       "name": "typo3-testing",
       "description": "Create and manage TYPO3 extension tests with comprehensive testing infrastructure. Includes unit, functional, and acceptance testing support, PHPUnit configurations, Docker setup, CI/CD templates, and automated test generation following TYPO3 best practices.",
-      "version": "1.1.0-20251114",
+      "version": "1.0.0-20251203",
       "author": {
         "name": "Netresearch DTT GmbH",
         "email": "info@netresearch.de"
@@ -44,7 +44,7 @@
     {
       "name": "typo3-ddev",
       "description": "Set up and manage TYPO3 development environments using DDEV. Includes DDEV configuration, local development workflows, container management, database handling, and integration with TYPO3-specific tooling.",
-      "version": "1.7.0-20251130",
+      "version": "1.0.0-20251203",
       "author": {
         "name": "Netresearch DTT GmbH",
         "email": "info@netresearch.de"
@@ -55,7 +55,7 @@
     {
       "name": "typo3-core-contributions",
       "description": "Guide contributions to TYPO3 core following official contribution guidelines. Includes patch creation, Gerrit workflow, coding guidelines, testing requirements, and review processes for contributing to the TYPO3 core.",
-      "version": "1.4.0-20251114",
+      "version": "1.0.0-20251203",
       "author": {
         "name": "Netresearch DTT GmbH",
         "email": "info@netresearch.de"
@@ -66,7 +66,7 @@
     {
       "name": "typo3-conformance",
       "description": "Evaluate TYPO3 extensions for conformance to official TYPO3 coding standards, architecture patterns, and best practices. Includes automated validation scripts for file structure, PSR-12 compliance, dependency injection, testing infrastructure, and comprehensive conformance scoring with priority-based action items.",
-      "version": "1.0.0-20251128",
+      "version": "1.0.0-20251203",
       "author": {
         "name": "Netresearch DTT GmbH",
         "email": "info@netresearch.de"
@@ -88,7 +88,7 @@
     {
       "name": "agents",
       "description": "Generate and maintain AGENTS.md files following the public agents.md convention. Creates thin root files with precedence rules, scoped files for subsystems, auto-extracts commands from build tools, and supports Go, PHP, TypeScript, and Python projects with language-specific templates.",
-      "version": "1.1.0-20251125",
+      "version": "1.0.0-20251203",
       "author": {
         "name": "Netresearch DTT GmbH",
         "email": "info@netresearch.de"

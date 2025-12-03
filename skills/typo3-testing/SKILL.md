@@ -1,15 +1,13 @@
 ---
 name: typo3-testing
-version: 1.1.0
-description: Create, configure, and manage TYPO3 extension tests (unit, functional, acceptance) following official TYPO3 testing framework patterns. Use when setting up tests, writing test cases, configuring PHPUnit, managing fixtures, or integrating CI/CD pipelines for TYPO3 extensions. Covers PHPUnit 11/12, TYPO3 v12/v13 LTS, modern dependency injection testing patterns, and comprehensive quality tooling (PHPStan level 10, Rector, php-cs-fixer).
-license: Complete terms in LICENSE.txt
+description: "Create, configure, and manage TYPO3 extension tests (unit, functional, E2E) following official TYPO3 testing framework patterns. This skill should be used when setting up test infrastructure, writing test cases, configuring PHPUnit, managing fixtures, or integrating CI/CD pipelines for TYPO3 extensions. Covers PHPUnit 11/12, TYPO3 v12/v13 LTS, Playwright E2E testing with axe-core accessibility, and comprehensive quality tooling (PHPStan level 10, Rector, php-cs-fixer)."
 ---
 
 # TYPO3 Testing Skill
 
-## Purpose
+## Overview
 
-This skill helps developers create, configure, and manage TYPO3 extension tests following official TYPO3 testing framework patterns and community best practices.
+Provides templates, scripts, and reference documentation for implementing comprehensive TYPO3 extension testing following official patterns and community best practices.
 
 ## Quick Start Decision Tree
 
@@ -19,11 +17,11 @@ This skill helps developers create, configure, and manage TYPO3 extension tests 
 ├─ Create new test
 │  ├─ Unit test (no database, fast)
 │  ├─ Functional test (with database)
-│  └─ Acceptance test (browser-based E2E)
+│  └─ E2E test (Playwright browser automation)
 │
 ├─ Setup testing infrastructure
 │  ├─ Basic (unit + functional)
-│  └─ Full (+ acceptance with Docker)
+│  └─ Full (+ E2E with Playwright)
 │
 ├─ Add CI/CD
 │  ├─ GitHub Actions
@@ -51,11 +49,12 @@ This skill helps developers create, configure, and manage TYPO3 extension tests 
 - Testing repositories, controllers, hooks
 - Slower execution acceptable (seconds)
 
-**Acceptance Tests** → Use when:
+**E2E Tests (Playwright)** → Use when:
 - Testing complete user workflows
 - Browser interaction required
 - Frontend functionality validation
-- Slowest execution (minutes)
+- Accessibility testing with axe-core
+- Execution time: seconds to minutes
 
 ### 3. Infrastructure exists?
 
@@ -64,8 +63,8 @@ This skill helps developers create, configure, and manage TYPO3 extension tests 
 # Basic setup (unit + functional)
 scripts/setup-testing.sh
 
-# With acceptance testing
-scripts/setup-testing.sh --with-acceptance
+# With E2E testing (Playwright)
+scripts/setup-testing.sh --with-e2e
 ```
 
 **Yes** → Generate test:
@@ -76,14 +75,14 @@ scripts/generate-test.sh <type> <ClassName>
 # Examples:
 scripts/generate-test.sh unit UserValidator
 scripts/generate-test.sh functional ProductRepository
-scripts/generate-test.sh acceptance LoginCest
+scripts/generate-test.sh e2e backend-module
 ```
 
 ## Commands
 
 ### Setup Testing Infrastructure
 ```bash
-scripts/setup-testing.sh [--with-acceptance]
+scripts/setup-testing.sh [--with-e2e]
 ```
 Creates:
 - composer.json dependencies
@@ -91,7 +90,7 @@ Creates:
 - Build/Scripts/runTests.sh
 - Tests/ directory structure
 - .github/workflows/ CI configs (optional)
-- docker-compose.yml (with --with-acceptance)
+- Build/playwright.config.ts (with --with-e2e)
 
 ### Generate Test Class
 ```bash
@@ -110,7 +109,7 @@ Checks:
 - Required composer dependencies
 - PHPUnit configuration files
 - Test directory structure
-- Docker availability (for acceptance tests)
+- Node.js/Playwright availability (for E2E tests)
 
 ## Test Execution
 
@@ -122,8 +121,8 @@ Build/Scripts/runTests.sh -s unit
 # Functional tests
 Build/Scripts/runTests.sh -s functional
 
-# Acceptance tests
-Build/Scripts/runTests.sh -s acceptance
+# E2E tests (Playwright)
+Build/Scripts/runTests.sh -s e2e
 
 # All quality checks
 Build/Scripts/runTests.sh -s lint
@@ -131,14 +130,17 @@ Build/Scripts/runTests.sh -s phpstan
 Build/Scripts/runTests.sh -s cgl
 ```
 
-### via Composer
+### via Composer/npm
 ```bash
-# All tests
+# All PHP tests
 composer ci:test
 
 # Specific suites
 composer ci:test:php:unit
 composer ci:test:php:functional
+
+# E2E tests (Playwright)
+cd Build && npm run playwright:run
 
 # Quality tools
 composer ci:test:php:lint
@@ -152,7 +154,8 @@ Detailed documentation for each testing aspect:
 
 - [Unit Testing](references/unit-testing.md) - UnitTestCase patterns, mocking, assertions
 - [Functional Testing](references/functional-testing.md) - FunctionalTestCase, fixtures, database
-- [Acceptance Testing](references/acceptance-testing.md) - Codeception, Selenium, page objects
+- [E2E Testing](references/e2e-testing.md) - Playwright, Page Object Model, browser automation
+- [Accessibility Testing](references/accessibility-testing.md) - axe-core, WCAG compliance
 - [JavaScript Testing](references/javascript-testing.md) - CKEditor plugins, data-* attributes, frontend tests
 - [Test Runners](references/test-runners.md) - runTests.sh orchestration patterns
 - [CI/CD Integration](references/ci-cd.md) - GitHub Actions, GitLab CI workflows
@@ -162,14 +165,25 @@ Detailed documentation for each testing aspect:
 
 Ready-to-use configuration files and examples:
 
-- `templates/AGENTS.md` - AI assistant context template for test directories
+### PHPUnit Templates
 - `templates/UnitTests.xml` - PHPUnit config for unit tests
 - `templates/FunctionalTests.xml` - PHPUnit config for functional tests
 - `templates/FunctionalTestsBootstrap.php` - Bootstrap for functional tests
+
+### Playwright Templates
+- `templates/Build/playwright/playwright.config.ts` - Playwright configuration
+- `templates/Build/playwright/package.json` - Node.js dependencies
+- `templates/Build/playwright/.nvmrc` - Node version (22.18)
+- `templates/Build/playwright/tests/playwright/config.ts` - TYPO3-specific config
+- `templates/Build/playwright/tests/playwright/helper/login.setup.ts` - Auth setup
+- `templates/Build/playwright/tests/playwright/fixtures/setup-fixtures.ts` - Page Objects
+- `templates/Build/playwright/tests/playwright/e2e/` - E2E test examples
+- `templates/Build/playwright/tests/playwright/accessibility/` - Accessibility tests
+
+### Other Templates
+- `templates/AGENTS.md` - AI assistant context template for test directories
 - `templates/runTests.sh` - Test orchestration script
 - `templates/github-actions-tests.yml` - GitHub Actions workflow
-- `templates/docker-compose.yml` - Docker services for acceptance tests
-- `templates/codeception.yml` - Codeception configuration
 - `templates/example-tests/` - Example test classes
 
 ## Fixture Management (Functional Tests)
@@ -201,56 +215,43 @@ See `references/ci-cd.md` for GitLab CI example configuration.
 
 ## Test Organization Standards
 
-**When organizing tests**, apply these patterns:
+Apply these patterns when organizing tests:
 1. Group tests by feature or domain, not by test type
 2. Name unit and functional tests with `*Test.php` suffix
-3. Name acceptance tests with `*Cest.php` suffix
+3. Name E2E tests with `*.spec.ts` suffix
 4. Keep fixtures minimal, reusable, and well-documented
-5. Use specific assertions (assertSame, assertInstanceOf) over generic assertEquals
-6. Ensure each test can run independently without side effects
+5. Prefer specific assertions (assertSame, assertInstanceOf) over generic assertEquals
+6. Ensure each test runs independently without side effects
 7. Apply setUp() and tearDown() methods consistently across test classes
-8. Document test strategy in AGENTS.md to explain what each directory tests
+8. Document test strategy in AGENTS.md for each test directory
 
 ## Troubleshooting
 
 **Tests not found:**
 - Check PHPUnit XML testsuites configuration
 - Verify test class extends correct base class
-- Check file naming convention (*Test.php)
+- Check file naming convention (*Test.php for PHP, *.spec.ts for Playwright)
 
 **Database errors in functional tests:**
 - Verify database driver in FunctionalTests.xml
 - Check fixture CSV format (proper escaping)
 - Ensure bootstrap file is configured
 
-**Acceptance tests fail:**
-- Verify Docker and Docker Compose installed
-- Check Selenium service is running
-- Review Codeception configuration
+**E2E tests fail:**
+- Verify Node.js 22.18+ installed (`node --version`)
+- Run `npm run playwright:install` to install browsers
+- Check Playwright config baseURL matches your TYPO3 instance
+- Ensure TYPO3 backend is running and accessible
 
-## Reference Material Usage
+## External References
 
-**When understanding TYPO3 testing patterns**, read [TYPO3 Testing Documentation](https://docs.typo3.org/m/typo3/reference-coreapi/main/en-us/Testing/) for:
-- Official testing framework usage
-- Best practices and patterns
-- Version-specific requirements
+Consult these resources for additional context:
 
-**When working with test framework internals**, check [TYPO3 Testing Framework](https://github.com/typo3/testing-framework) for:
-- Framework API reference
-- Base test case implementations
-- Fixture handling utilities
-
-**When seeking reference implementations**, study [Tea Extension](https://github.com/TYPO3BestPractices/tea) for:
-- Production-quality test examples
-- Complete testing infrastructure setup
-- Best practice patterns in action
-
-**When writing PHPUnit tests**, consult [PHPUnit Documentation](https://phpunit.de/documentation.html) for:
-- Assertion methods
-- Test doubles and mocking
-- Configuration options
-
-**When implementing acceptance tests**, reference [Codeception Documentation](https://codeception.com/docs/) for:
-- Page object patterns
-- Browser automation
-- E2E test scenarios
+| Resource | Use For |
+|----------|---------|
+| [TYPO3 Testing Documentation](https://docs.typo3.org/m/typo3/reference-coreapi/main/en-us/Testing/) | Official framework usage, best practices, version requirements |
+| [TYPO3 Testing Framework](https://github.com/typo3/testing-framework) | Framework API, base test cases, fixture utilities |
+| [Tea Extension](https://github.com/TYPO3BestPractices/tea) | Production-quality examples, complete infrastructure setup |
+| [PHPUnit Documentation](https://phpunit.de/documentation.html) | Assertions, test doubles, configuration |
+| [Playwright Documentation](https://playwright.dev/docs/intro) | Browser automation, Page Object Model |
+| [TYPO3 Core Playwright Tests](https://github.com/TYPO3/typo3/tree/main/Build/tests/playwright) | E2E patterns, authentication, accessibility testing |

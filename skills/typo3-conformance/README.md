@@ -39,7 +39,7 @@ This conformance checker acts as an **orchestrator** that delegates to specializ
 | **PHP** | 8.1 / 8.2 / 8.3 / 8.4 |
 | **Coding Style** | PSR-12 (Extended Coding Style) |
 | **Architecture** | Dependency Injection (PSR-11), PSR-14 Events, PSR-15 Middleware |
-| **Testing** | PHPUnit 10+, TYPO3 Testing Framework |
+| **Testing** | PHPUnit 10+, TYPO3 Testing Framework, Playwright E2E |
 | **Documentation** | reStructuredText (RST), TYPO3 Documentation Standards |
 
 ### Conformance Areas
@@ -47,7 +47,7 @@ This conformance checker acts as an **orchestrator** that delegates to specializ
 - **Extension Architecture** - File structure, naming conventions, required files
 - **Coding Guidelines** - PSR-12 compliance, TYPO3-specific code style
 - **PHP Architecture** - Dependency injection, services, events, Extbase patterns
-- **Testing Standards** - Unit, functional, and acceptance testing requirements
+- **Testing Standards** - Unit, functional, and Playwright E2E testing requirements
 - **Best Practices** - Real-world patterns from Tea extension and core standards
 
 ## Features
@@ -68,7 +68,7 @@ This conformance checker acts as an **orchestrator** that delegates to specializ
 - **extension-architecture.md** - TYPO3 file structure standards
 - **coding-guidelines.md** - PSR-12 and TYPO3 code style guide
 - **php-architecture.md** - Dependency injection and architectural patterns
-- **testing-standards.md** - Unit, functional, and acceptance testing
+- **testing-standards.md** - Unit, functional, and Playwright E2E testing
 - **best-practices.md** - Real-world patterns and project infrastructure
 
 **Advanced Validation Guides:**
@@ -97,6 +97,7 @@ Production-ready configuration templates based on [TYPO3 Best Practices (Tea Ext
 - **Build/typoscript-lint/TypoScriptLint.yml** - TypoScript quality enforcement
 - **Build/eslint/.eslintrc.json** - JavaScript/TypeScript linting
 - **Build/stylelint/.stylelintrc.json** - CSS/SCSS quality checks
+- **Build/playwright/** - Playwright E2E and accessibility testing (Node >=22.18)
 - **.github/workflows/publish-to-ter.yml** - TER publishing workflow
 
 All templates are available in [`templates/`](templates/) and ready for direct use.
@@ -1277,6 +1278,6 @@ Based on:
 
 ---
 
-**Version:** 1.0.0
+**Version:** 1.8.0
 **Maintained By:** Netresearch DTT GmbH
-**Last Updated:** 2025-10-18
+**Last Updated:** 2025-12-02

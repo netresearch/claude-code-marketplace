@@ -1,6 +1,6 @@
 ---
 name: typo3-conformance
-description: "Evaluate TYPO3 extensions for conformance to TYPO3 12/13 LTS standards, coding guidelines (PSR-12), and architecture patterns. Use when assessing extension quality, generating conformance reports, identifying technical debt, or planning modernization. Validates: extension architecture, composer.json, ext_emconf.php, ext_* files, v13 deprecations, backend module v13 compliance (ES6 modules, DocHeader, Modal/Notification APIs, Module.html layout, ARIA, extension key consistency, CSRF, icons), dependency injection, services, testing, Extbase patterns, Crowdin, GitHub workflows. Dual scoring (0-100 base + 0-22 excellence). Delegates to typo3-tests and typo3-docs skills for deep analysis. PHP 8.1-8.4 support."
+description: "This skill evaluates TYPO3 extensions for conformance to TYPO3 12/13 LTS standards, coding guidelines (PSR-12), and architecture patterns. Use when assessing extension quality, generating conformance reports, identifying technical debt, or planning modernization. Validates extension architecture, composer.json, ext_emconf.php, backend module v13 compliance, dependency injection, testing, and Extbase patterns. Provides dual scoring (0-100 base + 0-22 excellence). Delegates to typo3-tests and typo3-docs skills for deep analysis."
 ---
 
 # TYPO3 Extension Conformance Checker
@@ -18,16 +18,7 @@ Delegate to specialized skills for deep domain analysis:
 | **typo3-tests** | PHPUnit config, test patterns, coverage calculation, anti-patterns |
 | **typo3-docs** | RST validation, documentation rendering, cross-references |
 
-**Strategy:** Surface-level → this skill. Deep analysis → delegate. Fallback → basic validation.
-
-## Version Compatibility
-
-| TYPO3 | PHP Support |
-|-------|-------------|
-| 12.4 LTS | 8.1 - 8.4 |
-| 13.x | 8.2 - 8.4 |
-
-**Reference:** `references/version-requirements.md`
+**Strategy:** Surface-level checks use this skill. Deep analysis delegates to specialized skills. Basic validation serves as fallback.
 
 ## Evaluation Workflow
 
@@ -35,20 +26,17 @@ Delegate to specialized skills for deep domain analysis:
 
 Identify extension context: key, location, TYPO3 version, type (Extbase, backend module, etc.)
 
-```bash
-ls -la | grep -E "Classes|Configuration|Resources|Tests|Documentation"
-ls -1 | grep -E "composer.json|ext_emconf.php"
-```
+**Reference:** `references/version-requirements.md` for PHP/TYPO3 compatibility matrix
 
 ### Step 2: File Structure Analysis
 
 **Reference:** `references/extension-architecture.md`
 
-**Required Files:**
-- [ ] `composer.json` with PSR-4 autoloading
-- [ ] `ext_emconf.php` with proper metadata
-- [ ] `Classes/`, `Configuration/`, `Resources/` directories
-- [ ] `Documentation/Index.rst` + `Settings.cfg`
+Verify required files:
+- `composer.json` with PSR-4 autoloading
+- `ext_emconf.php` with proper metadata
+- `Classes/`, `Configuration/`, `Resources/` directories
+- `Documentation/Index.rst` + `Settings.cfg`
 
 **Validation:** `references/composer-validation.md`, `references/ext-emconf-validation.md`, `references/ext-files-validation.md`
 
@@ -56,143 +44,117 @@ ls -1 | grep -E "composer.json|ext_emconf.php"
 
 **Reference:** `references/coding-guidelines.md`
 
-**Check:**
-- [ ] `declare(strict_types=1)` in all PHP files (except ext_emconf.php)
-- [ ] Type declarations on properties, parameters, returns
-- [ ] PHPDoc on public methods/classes
-- [ ] PSR-12 compliance, short array syntax `[]`
-- [ ] Inclusive language (no master/slave, blacklist/whitelist)
+Verify:
+- `declare(strict_types=1)` in all PHP files (except ext_emconf.php)
+- Type declarations on properties, parameters, returns
+- PHPDoc on public methods/classes
+- PSR-12 compliance, short array syntax `[]`
+- Inclusive language (no master/slave, blacklist/whitelist)
 
-### Step 3.5: Backend Module v13 (If Applicable)
+### Step 4: Backend Module v13 (If Applicable)
 
 **Reference:** `references/backend-module-v13.md`
 
-**Critical Checks:**
+Critical checks:
 - Extension key consistency across templates/JS
 - ES6 modules (no inline JavaScript)
 - Modal/Notification API usage
-- DocHeader integration
-- Module.html layout
-- CSRF protection via uriBuilder
-- ARIA accessibility
+- DocHeader integration, Module.html layout
+- CSRF protection, ARIA accessibility
 
-### Step 4: PHP Architecture
+### Step 5: PHP Architecture
 
-**Reference:** `references/php-architecture.md`
+**References:** `references/php-architecture.md`, `references/hooks-and-events.md`
 
-**Check:**
-- [ ] `Configuration/Services.yaml` present
-- [ ] Constructor injection (not GeneralUtility::makeInstance)
-- [ ] PSR-14 events (not deprecated hooks)
-- [ ] No `$GLOBALS` access
+Verify:
+- `Configuration/Services.yaml` present
+- Constructor injection (not GeneralUtility::makeInstance)
+- PSR-14 events where applicable
+- No `$GLOBALS` access
 
-### Step 5: Testing Infrastructure
+### Step 6: Testing Infrastructure
 
 **Reference:** `references/testing-standards.md`
 
 **Delegate:** Use typo3-tests skill for deep analysis when available.
 
-**Basic Check:**
-- [ ] `Tests/Unit/` mirrors `Classes/` structure
-- [ ] `Tests/Functional/` with fixtures
-- [ ] PHPUnit configuration files present
-- [ ] Coverage target: >70%
+PHP Tests (PHPUnit):
+- `Tests/Unit/` mirrors `Classes/` structure
+- `Tests/Functional/` with fixtures
+- PHPUnit configuration files present
+- Coverage target: >70%
 
-### Step 6: Best Practices
+E2E Tests (Playwright):
+- `Build/playwright.config.ts` configured
+- `Build/tests/playwright/e2e/` test files
+- `Build/tests/playwright/accessibility/` with axe-core
+- Node.js >=22.18
 
-**References:**
-- `references/best-practices.md`
-- `references/runtests-validation.md`
-- `references/development-environment.md`
-- `references/directory-structure.md`
+### Step 7: Best Practices
 
-**Check:**
-- [ ] DDEV/Docker configuration
-- [ ] Build/Scripts/runTests.sh
-- [ ] .Build/ vs Build/ separation
-- [ ] Quality tools (phpstan, php-cs-fixer)
-- [ ] CI/CD pipeline
-- [ ] README.md + LICENSE
+**References:** `references/best-practices.md`, `references/runtests-validation.md`, `references/development-environment.md`, `references/directory-structure.md`
+
+Verify:
+- DDEV/Docker configuration
+- Build/Scripts/runTests.sh
+- Quality tools (phpstan, php-cs-fixer, rector)
+- CI/CD pipeline, README.md + LICENSE
 
 ## Scoring System
 
-### Base Conformance (0-100 points)
+**Base Conformance (0-100 points):**
 
-| Category | Points | Key Criteria |
-|----------|--------|--------------|
-| Extension Architecture | 20 | Required files, directory structure, naming |
-| Coding Guidelines | 20 | PSR-12, type declarations, PHPDoc |
-| PHP Architecture | 20 | DI, no deprecated patterns, events |
-| Testing Standards | 20 | Coverage >70%, proper structure |
-| Best Practices | 20 | Dev env, build scripts, quality tools |
+| Category | Points |
+|----------|--------|
+| Extension Architecture | 20 |
+| Coding Guidelines | 20 |
+| PHP Architecture | 20 |
+| Testing Standards | 20 |
+| Best Practices | 20 |
 
-### Excellence Indicators (0-22 bonus)
+**Excellence Indicators (0-22 bonus):** Optional features for exceptional quality.
 
-**Reference:** `references/excellence-indicators.md`
+**Reference:** `references/excellence-indicators.md` for detailed scoring criteria.
 
-| Category | Points | Examples |
-|----------|--------|----------|
-| Community & i18n | 6 | Crowdin, issue templates, badges |
-| Quality Tooling | 9 | Fractor, CodingStandards, TER workflow |
-| Documentation | 4 | RST file count, modern tooling |
-| Configuration | 3 | ext_conf_template, doc scripts |
+**Severity Levels:** Critical (security/broken), High (deprecated patterns), Medium (missing tests), Low (style issues)
 
-**Total Possible:** 122 points (100 base + 22 excellence)
+## Bundled Resources
 
-### Severity Levels
+### Validation Scripts (`scripts/`)
 
-- **Critical:** Security vulnerabilities, broken functionality
-- **High:** Deprecated patterns, missing required files
-- **Medium:** Missing tests, incomplete documentation
-- **Low:** Style inconsistencies, optional improvements
+Execute automated conformance checks:
 
-## Report Generation
+| Script | Purpose |
+|--------|---------|
+| `check-conformance.sh` | Main orchestration script |
+| `check-file-structure.sh` | File structure validation |
+| `check-coding-standards.sh` | PSR-12 and code style |
+| `check-architecture.sh` | DI and architecture patterns |
+| `check-testing.sh` | Testing infrastructure |
+| `check-phpstan-baseline.sh` | PHPStan baseline validation |
+| `generate-report.sh` | Report generation |
 
-**Template:** `references/report-template.md`
+**Usage:** `scripts/check-conformance.sh /path/to/extension`
 
-```markdown
-# TYPO3 Extension Conformance Report
+### Configuration Templates (`templates/`)
 
-**Extension:** {name} (v{version})
-**Base Score:** {score}/100
-**Excellence:** {bonus}/22
-**Total:** {total}/122
+Production-ready configurations based on TYPO3 Best Practices (Tea Extension):
 
-## Summary by Category
-- Extension Architecture: {x}/20
-- Coding Guidelines: {x}/20
-- PHP Architecture: {x}/20
-- Testing Standards: {x}/20
-- Best Practices: {x}/20
+| Template | Purpose |
+|----------|---------|
+| `Build/phpstan/` | PHPStan Level 10 configuration |
+| `Build/rector/` | Rector TYPO3 migrations |
+| `Build/php-cs-fixer/` | TYPO3 coding standards |
+| `Build/playwright/` | E2E and accessibility testing |
+| `Build/eslint/` | JavaScript linting |
+| `Build/stylelint/` | CSS quality checks |
+| `Build/typoscript-lint/` | TypoScript validation |
+| `Build/composer-unused/` | Dependency health |
+| `.github/workflows/` | TER publishing workflow |
 
-## Priority Issues
-{critical and high severity items}
+Copy templates to extension: `cp -r templates/Build/* /path/to/extension/Build/`
 
-## Recommendations
-{actionable improvements}
-```
-
-## Quick Validation Commands
-
-```bash
-# File structure
-ls -la | grep -E "Classes|Configuration|Resources|Tests"
-
-# Strict types check
-grep -rL "declare(strict_types=1)" Classes/ --include="*.php"
-
-# Deprecated patterns
-grep -r "GeneralUtility::makeInstance" Classes/
-grep -r "\$GLOBALS\[" Classes/
-
-# Inclusive language
-grep -ri "master\|slave\|blacklist\|whitelist" Classes/ Documentation/
-
-# Backend module checks
-ls Configuration/Backend/Modules.php 2>/dev/null || echo "Using deprecated ext_tables.php"
-```
-
-## Reference Index
+### Reference Documentation (`references/`)
 
 | File | Purpose |
 |------|---------|
@@ -200,7 +162,8 @@ ls Configuration/Backend/Modules.php 2>/dev/null || echo "Using deprecated ext_t
 | `coding-guidelines.md` | PSR-12, naming conventions |
 | `backend-module-v13.md` | Backend module modernization |
 | `php-architecture.md` | DI, events, services |
-| `testing-standards.md` | PHPUnit, coverage |
+| `hooks-and-events.md` | SC_OPTIONS hooks, PSR-14 events |
+| `testing-standards.md` | PHPUnit, Playwright E2E |
 | `best-practices.md` | Infrastructure, quality |
 | `composer-validation.md` | composer.json requirements |
 | `ext-emconf-validation.md` | ext_emconf.php requirements |
@@ -208,9 +171,19 @@ ls Configuration/Backend/Modules.php 2>/dev/null || echo "Using deprecated ext_t
 | `v13-deprecations.md` | TYPO3 v13 deprecations |
 | `excellence-indicators.md` | Bonus scoring criteria |
 | `crowdin-integration.md` | Translation workflow |
-| `ter-publishing.md` | TER upload workflow, comment format |
+| `ter-publishing.md` | TER upload workflow |
+| `version-requirements.md` | PHP/TYPO3 version matrix |
+| `directory-structure.md` | Build directory organization |
+| `development-environment.md` | DDEV, Docker setup |
+| `runtests-validation.md` | runTests.sh patterns |
 | `report-template.md` | Full report format |
+
+## Report Generation
+
+**Template:** `references/report-template.md`
+
+Generate conformance reports with dual scoring: Base (0-100) + Excellence (0-22 bonus).
 
 ---
 
-*For detailed validation rules, see the reference files in `references/`.*
+*For detailed validation rules, consult the reference files in `references/`.*

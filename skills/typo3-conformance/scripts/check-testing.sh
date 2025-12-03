@@ -104,23 +104,48 @@ else
     echo "  - Functional tests recommended for repository and database operations"
 fi
 
-### Acceptance Tests
+### E2E Tests (Playwright)
 echo ""
-echo "### Acceptance Tests"
+echo "### E2E Tests (Playwright)"
 echo ""
 
-if [ -d "Tests/Acceptance" ]; then
-    accept_test_count=$(find Tests/Acceptance/ -name "*Cest.php" 2>/dev/null | wc -l)
-    echo "- ✅ Tests/Acceptance/ directory present"
-    echo "  - **${accept_test_count} acceptance test files found**"
+if [ -d "Build/tests/playwright" ]; then
+    e2e_test_count=$(find Build/tests/playwright/ -name "*.spec.ts" 2>/dev/null | wc -l)
+    echo "- ✅ Build/tests/playwright/ directory present"
+    echo "  - **${e2e_test_count} E2E test files found**"
 
-    if [ -f "Tests/codeception.yml" ]; then
-        echo "  - ✅ codeception.yml configuration found"
+    if [ -f "Build/playwright.config.ts" ]; then
+        echo "  - ✅ playwright.config.ts configuration found"
     else
-        echo "  - ⚠️  codeception.yml configuration missing"
+        echo "  - ⚠️  playwright.config.ts configuration missing"
     fi
+
+    if [ -d "Build/tests/playwright/e2e" ]; then
+        echo "  - ✅ E2E tests directory present"
+    fi
+
+    if [ -d "Build/tests/playwright/accessibility" ]; then
+        echo "  - ✅ Accessibility tests directory present (axe-core)"
+    fi
+
+    if [ -d "Build/tests/playwright/fixtures" ]; then
+        echo "  - ✅ Page Object Model fixtures present"
+    fi
+
+    if [ -f "Build/tests/playwright/helper/login.setup.ts" ]; then
+        echo "  - ✅ Authentication setup found"
+    fi
+
+    if [ -f "Build/.nvmrc" ]; then
+        node_version=$(cat Build/.nvmrc 2>/dev/null || echo "unknown")
+        echo "  - ✅ Node version specified: ${node_version}"
+    else
+        echo "  - ⚠️  .nvmrc missing (recommend Node >=22.18)"
+    fi
+elif [ -f "Build/playwright.config.ts" ]; then
+    echo "- ⚠️  playwright.config.ts found but tests directory missing"
 else
-    echo "- ℹ️  Tests/Acceptance/ not found (optional for most extensions)"
+    echo "- ℹ️  Playwright E2E tests not found (optional, recommended for backend modules)"
 fi
 
 ### Test Coverage Estimate

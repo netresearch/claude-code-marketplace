@@ -111,12 +111,20 @@ project_home = https://github.com/vendor/extension
     - `Resources/Public/Images/` - Images
 
 **Tests/**
-- Contains all test files
+- Contains PHP test files
 - Structure:
   - `Tests/Unit/` - PHPUnit unit tests
   - `Tests/Functional/` - PHPUnit functional tests
-  - `Tests/Acceptance/` - Codeception acceptance tests
 - MUST mirror `Classes/` structure
+
+**Build/tests/playwright/** (E2E Testing)
+- Contains Playwright E2E and accessibility tests
+- Structure:
+  - `e2e/` - End-to-end tests (`.spec.ts`)
+  - `accessibility/` - Accessibility tests with axe-core
+  - `fixtures/` - Page Object Models
+  - `helper/` - Authentication setup
+- Requires Node.js ≥22.18, `@playwright/test`, `@axe-core/playwright`
 
 **Documentation/**
 - Contains RST documentation

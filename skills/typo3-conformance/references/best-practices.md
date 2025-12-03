@@ -63,11 +63,24 @@ my_extension/
 │       └── JavaScript/
 ├── Tests/
 │   ├── Unit/
-│   ├── Functional/
-│   │   └── Fixtures/
-│   └── Acceptance/
-│       ├── Support/
-│       └── codeception.yml
+│   └── Functional/
+│       └── Fixtures/
+├── Build/
+│   ├── playwright.config.ts      # Playwright E2E configuration
+│   ├── package.json              # Node dependencies
+│   ├── .nvmrc                    # Node version (>=22.18)
+│   ├── phpunit/
+│   │   ├── UnitTests.xml
+│   │   └── FunctionalTests.xml
+│   ├── Scripts/
+│   │   └── runTests.sh
+│   └── tests/
+│       └── playwright/           # Playwright E2E tests
+│           ├── config.ts
+│           ├── e2e/
+│           ├── accessibility/
+│           ├── fixtures/
+│           └── helper/
 ├── .editorconfig                   # Editor configuration
 ├── .gitattributes                  # Git attributes
 ├── .gitignore                      # Git ignore rules

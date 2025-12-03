@@ -1,0 +1,20 @@
+{
+  "name": "typo3-extension-e2e-tests",
+  "version": "1.0.0",
+  "private": true,
+  "engines": {
+    "node": ">=22.18.0 <23.0.0",
+    "npm": ">=11.5.2"
+  },
+  "scripts": {
+    "playwright:install": "playwright install",
+    "playwright:open": "playwright test --ui --ignore-https-errors",
+    "playwright:run": "playwright test",
+    "playwright:codegen": "playwright codegen",
+    "playwright:report": "playwright show-report"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.56.1",
+    "@axe-core/playwright": "^4.9.0"
+  }
+}
