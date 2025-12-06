@@ -1,6 +1,6 @@
 ---
 name: typo3-testing
-description: "Create, configure, and manage TYPO3 extension tests (unit, functional, E2E) following official TYPO3 testing framework patterns. This skill should be used when setting up test infrastructure, writing test cases, configuring PHPUnit, managing fixtures, or integrating CI/CD pipelines for TYPO3 extensions. Covers PHPUnit 11/12, TYPO3 v12/v13 LTS, Playwright E2E testing with axe-core accessibility, and comprehensive quality tooling (PHPStan level 10, Rector, php-cs-fixer)."
+description: "Create, configure, and manage TYPO3 extension tests (unit, functional, E2E, fuzz, mutation) following official TYPO3 testing framework patterns. Use when setting up test infrastructure, writing test cases, configuring PHPUnit, managing fixtures, or integrating CI/CD pipelines. Covers PHPUnit 11/12, TYPO3 v12/v13 LTS, Playwright E2E with axe-core, nikic/php-fuzzer, Infection mutation testing, and quality tooling (PHPStan level 10, Rector, php-cs-fixer). By Netresearch."
 ---
 
 # TYPO3 Testing Skill
@@ -17,7 +17,9 @@ Provides templates, scripts, and reference documentation for implementing compre
 ├─ Create new test
 │  ├─ Unit test (no database, fast)
 │  ├─ Functional test (with database)
-│  └─ E2E test (Playwright browser automation)
+│  ├─ E2E test (Playwright browser automation)
+│  ├─ Fuzz test (security, input mutation)
+│  └─ Mutation test (test quality verification)
 │
 ├─ Setup testing infrastructure
 │  ├─ Basic (unit + functional)
@@ -55,6 +57,20 @@ Provides templates, scripts, and reference documentation for implementing compre
 - Frontend functionality validation
 - Accessibility testing with axe-core
 - Execution time: seconds to minutes
+
+**Fuzz Tests (php-fuzzer)** → Use when:
+- Testing HTML/XML parsers
+- Security-critical input handling
+- Finding crashes with malformed input
+- DOMDocument-based code
+- Run manually before releases
+
+**Mutation Tests (Infection)** → Use when:
+- Verifying test suite quality
+- After achieving 70%+ code coverage
+- Finding weak/missing test assertions
+- Critical code paths require validation
+- Run in CI or before releases
 
 ### 3. Infrastructure exists?
 
@@ -128,6 +144,12 @@ Build/Scripts/runTests.sh -s e2e
 Build/Scripts/runTests.sh -s lint
 Build/Scripts/runTests.sh -s phpstan
 Build/Scripts/runTests.sh -s cgl
+
+# Fuzz tests (security)
+Build/Scripts/runTests.sh -s fuzz
+
+# Mutation tests (test quality)
+Build/Scripts/runTests.sh -s mutation
 ```
 
 ### via Composer/npm
@@ -146,6 +168,12 @@ cd Build && npm run playwright:run
 composer ci:test:php:lint
 composer ci:test:php:phpstan
 composer ci:test:php:cgl
+
+# Fuzz tests (security - manual runs)
+composer ci:fuzz
+
+# Mutation tests (test quality)
+composer ci:test:mutation
 ```
 
 ## References
@@ -157,6 +185,8 @@ Detailed documentation for each testing aspect:
 - [E2E Testing](references/e2e-testing.md) - Playwright, Page Object Model, browser automation
 - [Accessibility Testing](references/accessibility-testing.md) - axe-core, WCAG compliance
 - [JavaScript Testing](references/javascript-testing.md) - CKEditor plugins, data-* attributes, frontend tests
+- [Fuzz Testing](references/fuzz-testing.md) - nikic/php-fuzzer, security testing, input mutation
+- [Mutation Testing](references/mutation-testing.md) - Infection, test quality verification, code mutation
 - [Test Runners](references/test-runners.md) - runTests.sh orchestration patterns
 - [CI/CD Integration](references/ci-cd.md) - GitHub Actions, GitLab CI workflows
 - [Quality Tools](references/quality-tools.md) - PHPStan, Rector, php-cs-fixer

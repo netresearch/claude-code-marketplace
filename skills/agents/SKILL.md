@@ -1,6 +1,6 @@
 ---
 name: agents
-description: Generate and maintain AGENTS.md files following the public agents.md convention. This skill should be used when creating documentation for AI agent workflows, onboarding guides, or when standardizing agent interaction patterns across projects.
+description: "Generate and maintain AGENTS.md files following the public agents.md convention. Use when creating documentation for AI agent workflows, onboarding guides, or standardizing agent interaction patterns across projects. By Netresearch."
 ---
 
 # AGENTS.md Generator Skill

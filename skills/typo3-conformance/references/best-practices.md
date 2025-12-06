@@ -739,6 +739,93 @@ git push origin test-branch:master
 - ✅ More flexible than legacy branch protection rules
 - ✅ Supports complex conditions and multiple rule types
 
+#### .gitignore Best Practices
+
+**Standard .gitignore for TYPO3 Extensions:**
+
+```gitignore
+# Composer
+composer.lock
+vendor/
+
+# Build artifacts and caches
+.Build/
+.php-cs-fixer.cache
+.phpunit.result.cache
+
+# IDE and editors
+.idea/
+.vscode/
+*.sublime-*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Testing artifacts
+var/
+.phpunit.cache/
+
+# Node.js (if using Playwright/frontend tools)
+node_modules/
+Build/node_modules/
+
+# Do not ignore public icons (example)
+public/*
+!public/Icons/
+!public/Icons/**
+```
+
+**Key Patterns Explained:**
+
+| Pattern | Purpose |
+|---------|---------|
+| `.Build/` | Composer's vendor-dir and build artifacts when using `"vendor-dir": ".Build/vendor"` |
+| `.php-cs-fixer.cache` | PHP-CS-Fixer cache file (regenerated on each run) |
+| `.phpunit.result.cache` | PHPUnit result cache |
+| `composer.lock` | Often gitignored for libraries/extensions (include for projects) |
+| `vendor/` | Composer dependencies |
+| `var/` | TYPO3 testing framework temporary files |
+
+**Anti-pattern: Double-ignore**
+
+❌ **Wrong:** Adding patterns already covered by parent ignore
+```gitignore
+.Build/
+.Build/vendor/      # Redundant - already ignored by .Build/
+.Build/bin/         # Redundant - already ignored by .Build/
+```
+
+✅ **Right:** Single parent pattern covers all subdirectories
+```gitignore
+.Build/
+```
+
+**Tracking vs Ignoring:**
+
+If a file was previously tracked and you add it to `.gitignore`, you must also remove it from git:
+
+```bash
+# Stop tracking a file that's now gitignored
+git rm --cached .php-cs-fixer.cache
+git commit -m "chore: stop tracking php-cs-fixer cache"
+
+# Stop tracking a directory
+git rm -r --cached .Build/
+git commit -m "chore: stop tracking build artifacts"
+```
+
+**DDEV-specific ignores (optional):**
+
+If using DDEV, consider also ignoring:
+
+```gitignore
+# DDEV (optional - some teams commit .ddev/)
+.ddev/.gitignore
+.ddev/db_snapshots/
+.ddev/import-db/
+```
+
 ### 9. Language File Organization
 
 **Resources/Private/Language/locallang.xlf:**
@@ -926,5 +1013,6 @@ public function __construct(
 - [ ] No global state access
 - [ ] Security best practices followed
 - [ ] .editorconfig for consistent formatting
+- [ ] .gitignore with standard patterns (caches, build artifacts, vendor)
 - [ ] README.md with clear instructions
 - [ ] LICENSE file present

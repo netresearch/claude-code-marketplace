@@ -43,6 +43,50 @@ composer require --dev "typo3/testing-framework":"^8.0.9" "phpunit/phpunit":"^10
 - [ ] Backend user initialized when testing backend operations
 - [ ] Tests database operations with proper assertions
 - [ ] Fixtures minimal and well-documented
+- [ ] Singleton instances reset between tests (see Singleton Testability below)
+- [ ] `tearDown()` uses try-catch for incomplete setUp() scenarios
+
+### Singleton Testability Pattern
+
+Singletons can cause test isolation failures when state persists between tests.
+
+**Problem Detection:**
+```bash
+# Find singleton usage that may need reset
+grep -rn "GeneralUtility::makeInstance.*Singleton" Tests/
+grep -rn "::getInstance()" Tests/
+```
+
+**Solution Pattern:**
+```php
+protected function setUp(): void
+{
+    parent::setUp();
+    // Reset singleton before each test
+    GeneralUtility::purgeInstances();
+    // Or reset specific singleton
+    GeneralUtility::removeSingletonInstance(
+        MyService::class,
+        GeneralUtility::makeInstance(MyService::class)
+    );
+}
+```
+
+**Safe tearDown() Pattern:**
+```php
+protected function tearDown(): void
+{
+    try {
+        // Cleanup that depends on setUp() completion
+        $this->cleanupTestData();
+    } catch (\Throwable $e) {
+        // setUp() may have failed, ignore cleanup errors
+    }
+    parent::tearDown();
+}
+```
+
+**Severity:** Medium (causes intermittent test failures)
 
 ## E2E Test Conformance (Playwright)
 

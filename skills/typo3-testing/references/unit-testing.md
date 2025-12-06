@@ -553,6 +553,103 @@ final class ImageControllerTest extends UnitTestCase
 6. **Use Data Providers**: Test multiple scenarios efficiently
 7. **Mock External Dependencies**: Keep tests isolated and fast
 
+## Testing PHP Syntax Variants
+
+When testing code that parses or analyzes PHP (like Extension Scanner matchers), test all syntax variants that PHP allows. Different syntaxes may be parsed differently.
+
+### Dynamic Method Calls
+
+PHP supports multiple forms of dynamic method calls:
+
+```php
+// DataProvider for testing dynamic call handling
+public static function dynamicCallSyntaxDataProvider(): array
+{
+    return [
+        // Standard dynamic method call - variable holds method name
+        'dynamic method call with variable' => [
+            '<?php
+            $methodName = "someMethod";
+            $object->$methodName();',
+            [], // no match expected, must not crash
+        ],
+        // Expression-based dynamic call - expression evaluated for method name
+        'dynamic method call with expression' => [
+            '<?php
+            $object->{$this->getMethodName()}();',
+            [], // no match expected, must not crash
+        ],
+        // Curly brace syntax with variable
+        'dynamic method call with curly brace variable' => [
+            '<?php
+            $object->{$methodName}();',
+            [], // no match expected, must not crash
+        ],
+    ];
+}
+```
+
+**Why This Matters**: PhpParser represents these differently:
+- `$obj->$var()` → `$node->name` is `PhpParser\Node\Expr\Variable`
+- `$obj->{$expr}()` → `$node->name` is `PhpParser\Node\Expr\MethodCall` or other expression
+- `$obj->method()` → `$node->name` is `PhpParser\Node\Identifier`
+
+Code assuming `$node->name` is always an `Identifier` will crash on dynamic calls.
+
+### Dynamic Function Calls
+
+```php
+'dynamic function call' => [
+    '<?php
+    $func = "myFunction";
+    $func();',
+    [],
+],
+'variable function with call_user_func' => [
+    '<?php
+    call_user_func($callback, $arg);',
+    [],
+],
+```
+
+### Static Method Variants
+
+```php
+'dynamic static method call' => [
+    '<?php
+    $method = "staticMethod";
+    SomeClass::$method();',
+    [],
+],
+'variable class static call' => [
+    '<?php
+    $class = "SomeClass";
+    $class::staticMethod();',
+    [],
+],
+```
+
+### Testing Pattern
+
+Always include regression tests with clear comments:
+
+```php
+// Regression test for issue #108413: $object->$var() syntax must not crash
+'no match for dynamic method call with variable' => [
+    [
+        'Foo->aMethod' => [
+            'numberOfMandatoryArguments' => 0,
+            'maximumNumberOfArguments' => 2,
+            'restFiles' => ['Foo-1.rst'],
+        ],
+    ],
+    '<?php
+    $methodName = "someMethod";
+    $someVar->$methodName();',
+    [], // no match, must not crash
+],
+```
+
 ## Common Pitfalls
 
 ❌ **Testing Framework Code**

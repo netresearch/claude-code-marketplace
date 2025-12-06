@@ -448,6 +448,38 @@ class User
 }
 ```
 
+### PHP 8.4 Explicit Nullable Types (Critical)
+
+PHP 8.4 deprecates **implicit nullable parameters**. Parameters with `null` default values MUST use explicit nullable syntax.
+
+**Search Pattern:**
+```bash
+# Find implicit nullable parameters
+grep -rn '\(.*\$[a-zA-Z_]* = null\)' Classes/ | grep -v '?[a-zA-Z_\\]*\s*\$'
+```
+
+**Severity:** High (E_DEPRECATED in PHP 8.4, Error in PHP 9.0)
+
+```php
+// ❌ Wrong: Implicit nullable (deprecated in PHP 8.4)
+public function process(string $data = null): void {}
+public function configure(array $options = null): self {}
+public function setLogger(LoggerInterface $logger = null): void {}
+
+// ✅ Right: Explicit nullable type
+public function process(?string $data = null): void {}
+public function configure(?array $options = null): self {}
+public function setLogger(?LoggerInterface $logger = null): void {}
+```
+
+**Common Occurrences:**
+- FlexForm configuration parameters
+- Optional constructor dependencies
+- Setter methods with optional values
+- Hook/callback method signatures
+
+**Rector Rule:** Use `NullableTypeDeclarationRector` to auto-fix.
+
 ## File Structure
 
 ### Standard File Template

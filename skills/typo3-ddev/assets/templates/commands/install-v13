@@ -33,6 +33,7 @@ vendor/bin/typo3 configuration:set 'SYS/displayErrors' 1
 mkdir -p /var/www/html/$VERSION/config/system
 echo '<?php' > /var/www/html/$VERSION/config/system/additional.php
 echo '$GLOBALS["TYPO3_CONF_VARS"]["SYS"]["trustedHostsPattern"] = ".*";' >> /var/www/html/$VERSION/config/system/additional.php
+echo '$GLOBALS["TYPO3_CONF_VARS"]["SYS"]["features"]["security.backend.enforceReferrer"] = false;' >> /var/www/html/$VERSION/config/system/additional.php
 vendor/bin/typo3 configuration:set 'MAIL/transport' 'smtp'
 vendor/bin/typo3 configuration:set 'MAIL/transport_smtp_server' 'localhost:1025'
 vendor/bin/typo3 configuration:set 'MAIL/defaultMailFromAddress' 'admin@example.com'
@@ -42,6 +43,20 @@ vendor/bin/typo3 configuration:set 'GFX/processor_path' '/usr/bin/'
 sed -i "/'deprecations'/,/^[[:space:]]*'disabled' => true,/s/'disabled' => true,/'disabled' => false,/" /var/www/html/$VERSION/config/system/settings.php
 
 vendor/bin/typo3 extension:setup
+
+# Configure site sets for v13 (adds Bootstrap Package for frontend rendering)
+if [ -f config/sites/main/config.yaml ]; then
+    if ! grep -q "^dependencies:" config/sites/main/config.yaml; then
+        echo "" >> config/sites/main/config.yaml
+        echo "dependencies:" >> config/sites/main/config.yaml
+        echo "  - bootstrap-package/full" >> config/sites/main/config.yaml
+        echo "🎨 Site sets configured with Bootstrap Package"
+    fi
+fi
+
+# Generate styleguide demo content for UI pattern reference
+vendor/bin/typo3 styleguide:generate
+echo "📐 Styleguide demo content generated"
 
 vendor/bin/typo3 cache:flush
 

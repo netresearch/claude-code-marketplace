@@ -131,4 +131,8 @@ MIT License - See [LICENSE](LICENSE) for details.
 
 ## Credits
 
-Created for use with [Claude Code](https://claude.ai/code) by Anthropic.
+Developed and maintained by [Netresearch DTT GmbH](https://www.netresearch.de/).
+
+---
+
+**Made with ❤️ for Open Source by [Netresearch](https://www.netresearch.de/)**

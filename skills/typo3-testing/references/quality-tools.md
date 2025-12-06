@@ -82,6 +82,64 @@ parameters:
         - '#Call to an undefined method.*::getRepository\(\)#'
 ```
 
+### PHPStan in Tests - Common Patterns
+
+When writing tests that validate runtime behavior guaranteed by PHPDoc types, PHPStan Level 9+ may report "alreadyNarrowedType" errors. These tests are still valuable as they verify implementation matches type declarations.
+
+**Common Test-Specific Ignore Identifiers:**
+
+| Identifier | When to Use |
+|------------|-------------|
+| `staticMethod.alreadyNarrowedType` | `assertTrue()`, `assertFalse()`, `assertIsArray()` when PHPStan knows the result |
+| `function.alreadyNarrowedType` | `is_subclass_of()`, `is_array()`, `is_string()` when type is known from PHPDoc |
+
+**Example - Testing Contract Guarantees:**
+
+```php
+#[Test]
+public function allDiscoveredClassesExtendBaseClass(): void
+{
+    $registry = new MatcherRegistry();
+    $result = $registry->getMatcherClasses(); // Returns array<class-string<AbstractCoreMatcher>>
+
+    foreach ($result as $matcherClass) {
+        // PHPStan knows this is always true from PHPDoc, but test validates runtime behavior
+        // @phpstan-ignore staticMethod.alreadyNarrowedType
+        self::assertTrue(
+            is_subclass_of($matcherClass, AbstractCoreMatcher::class), // @phpstan-ignore function.alreadyNarrowedType
+            sprintf('%s should extend AbstractCoreMatcher', $matcherClass)
+        );
+    }
+}
+
+#[Test]
+public function allConfigurationsAreArrays(): void
+{
+    $registry = new MatcherRegistry();
+    $configurations = $registry->getMatcherConfigurations(); // Returns array<class-string, array<string, mixed>>
+
+    foreach ($configurations as $matcherClass => $configuration) {
+        // @phpstan-ignore staticMethod.alreadyNarrowedType
+        self::assertIsArray(
+            $configuration,
+            sprintf('Configuration for %s should be an array', $matcherClass)
+        );
+    }
+}
+```
+
+**When to Use These Ignores:**
+- ✅ Tests validating that implementation matches PHPDoc contracts
+- ✅ Tests checking class hierarchies or type relationships
+- ✅ Tests ensuring configuration structures are correct
+- ❌ Production code (fix the types instead)
+- ❌ Tests where the assertion actually could fail
+
+**Placement Rules:**
+- **Next-line comment** (`// @phpstan-ignore ...`): Applies to the **next** line
+- **Inline comment**: Applies to the **same** line where it appears
+- Multiple identifiers: Separate with comma (`// @phpstan-ignore id1, id2`)
+
 ### TYPO3-Specific Rules
 
 ```php

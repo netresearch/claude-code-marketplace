@@ -424,4 +424,4 @@ MIT License - see [LICENSE](LICENSE) file for details.
 
 ---
 
-**Made with ❤️ for the TYPO3 Community**
+**Made with ❤️ for the TYPO3 Community by [Netresearch DTT GmbH](https://www.netresearch.de/)**

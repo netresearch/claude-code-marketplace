@@ -1,6 +1,6 @@
 ---
 name: typo3-docs
-description: Create and maintain TYPO3 extension documentation following official TYPO3 13.x standards. This skill should be used when creating/editing Documentation/*.rst files or README.md, using TYPO3 directives (confval, versionadded, card-grid), rendering docs locally, extracting documentation data, or deploying to docs.typo3.org. Covers RST syntax, TYPO3-specific directives, documentation extraction/analysis, local Docker rendering, validation, webhook setup, and Intercept deployment.
+description: "Create and maintain TYPO3 extension documentation following official TYPO3 13.x standards. Use when creating/editing Documentation/*.rst files or README.md, using TYPO3 directives (confval, versionadded, card-grid), rendering docs locally, extracting documentation data, or deploying to docs.typo3.org. Covers RST syntax, TYPO3-specific directives, documentation extraction/analysis, local Docker rendering, validation, webhook setup, and Intercept deployment. By Netresearch."
 ---
 
 # TYPO3 Documentation

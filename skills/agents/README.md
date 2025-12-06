@@ -438,3 +438,11 @@ GPL-2.0-or-later (matching other Netresearch skills)
 - **Analysis**: `references/analysis.md` - Analysis of 21 real AGENTS.md files
 - **Examples**: `references/examples/` - Real-world AGENTS.md files from Netresearch projects
 - **Public Convention**: https://github.com/anthropics/anthropic-sdk-python/blob/main/AGENTS.md
+
+## Credits
+
+Developed and maintained by [Netresearch DTT GmbH](https://www.netresearch.de/).
+
+---
+
+**Made with ❤️ for Open Source by [Netresearch](https://www.netresearch.de/)**

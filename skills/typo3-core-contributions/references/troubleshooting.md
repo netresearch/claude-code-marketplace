@@ -46,9 +46,26 @@ ssh -p 29418 <username>@review.typo3.org
 ```
 
 **Verify key on Gerrit**:
-1. Visit https://review.typo3.org
-2. Settings → SSH Keys
-3. Ensure your public key is listed
+1. Visit https://review.typo3.org/settings/#SSHKeys (NOT my.typo3.org!)
+2. Click "Add new SSH key"
+3. Paste your public key: `cat ~/.ssh/id_ed25519.pub`
+4. Ensure your public key is listed
+
+**Configure SSH for Gerrit** (add to `~/.ssh/config`):
+```
+Host review.typo3.org
+    User your-typo3-username
+    IdentityFile ~/.ssh/id_ed25519
+    Port 29418
+```
+
+**Update Git remote URL** to include your username:
+```bash
+cd /path/to/typo3
+git remote set-url origin ssh://your-typo3-username@review.typo3.org:29418/Packages/TYPO3.CMS
+# Or add as separate remote
+git remote add gerrit ssh://your-typo3-username@review.typo3.org:29418/Packages/TYPO3.CMS
+```
 
 ### Problem: "fatal: refusing to merge unrelated histories"
 
@@ -81,12 +98,18 @@ remote:    other@example.com
 
 **Cause**: Git commit email doesn't match any email registered in your Gerrit account
 
+**IMPORTANT**: Git commits have TWO email addresses:
+- **Author**: Who wrote the code (shown in `git log`)
+- **Committer**: Who committed the code (used by Gerrit for permission checks)
+
+Gerrit checks the **committer** email, not the author email. You can keep a different author email if needed.
+
 **Solution**:
 
 **1. Check your Gerrit registered emails**:
 Visit: https://review.typo3.org/settings#EmailAddresses
 
-**2. Update Git configuration to match**:
+**2. Update Git configuration to match** (for future commits):
 ```bash
 # Use one of your registered emails
 git config user.email "your-registered@email.com"
@@ -96,10 +119,21 @@ cd /path/to/typo3
 git config user.email "your-registered@email.com"
 ```
 
-**3. Amend the commit with new email**:
+**3. Fix existing commit** - choose one option:
+
+**Option A: Change both author and committer**:
 ```bash
 git commit --amend --reset-author --no-edit
 ```
+
+**Option B: Change only committer (keep original author)**:
+```bash
+GIT_COMMITTER_NAME="Your Name" \
+GIT_COMMITTER_EMAIL="your-registered@email.com" \
+git commit --amend --no-edit
+```
+
+This is useful when you want to preserve the original author (e.g., `info@yourdomain.de`) but need to use a different registered email for the committer.
 
 **4. Push again**:
 ```bash
@@ -159,11 +193,18 @@ remote: ERROR: commit abc123: missing Change-Id in message footer
 
 **Solutions**:
 
-**Install hook**:
+**Install hook** (choose one method):
+
 ```bash
+# Method 1: Via composer (if available)
 composer gerrit:setup
 
-# Or manually
+# Method 2: Via curl (recommended - always gets latest version)
+curl -o "$(git rev-parse --git-dir)/hooks/commit-msg" \
+  https://review.typo3.org/tools/hooks/commit-msg && \
+chmod +x "$(git rev-parse --git-dir)/hooks/commit-msg"
+
+# Method 3: Copy from Build directory (if exists)
 cp Build/git-hooks/commit-msg .git/hooks/
 chmod +x .git/hooks/commit-msg
 ```
@@ -651,6 +692,7 @@ Any ideas what I'm missing?
 - [ ] Rebase on latest main
 - [ ] Ensure single commit
 - [ ] Verify Change-Id present
+- [ ] Check no `composer.lock` changes: `git diff --cached --name-only | grep composer.lock`
 - [ ] Test one more time
 
 ### After Pushing
@@ -922,6 +964,108 @@ https://review.typo3.org/c/Packages/TYPO3.CMS/+/12345"
 - Wait for current CI to finish
 - Make all fixes in one commit
 - Push once with all fixes
+
+## Common Patch Pitfalls
+
+### Problem: "composer.lock included in patch"
+
+**Symptoms**:
+- Gerrit shows `composer.lock` in changed files
+- Reviewer mentions lock file shouldn't be changed
+- Large diff with dependency changes
+
+**Cause**: Running `composer install` or `composer update` and accidentally staging the lock file
+
+**Why This Matters**:
+- TYPO3 Core manages dependencies centrally
+- `composer.lock` changes should NEVER be part of feature/bugfix patches
+- Lock file changes require separate, dedicated patches with proper review
+
+**Solution**:
+
+**If already committed but not pushed**:
+```bash
+# Remove composer.lock from the commit
+git reset HEAD~ -- composer.lock
+git checkout -- composer.lock
+git commit --amend --no-edit
+```
+
+**If already pushed to Gerrit**:
+```bash
+# Remove from current commit
+git reset HEAD~ -- composer.lock
+git checkout -- composer.lock
+git commit --amend --no-edit
+
+# Push new patchset
+git push origin HEAD:refs/for/main
+```
+
+**Prevention**:
+```bash
+# Before committing, always check what's staged
+git status
+git diff --cached --name-only
+
+# Only stage specific files
+git add path/to/changed/files
+# NOT: git add .  (this catches everything including composer.lock)
+```
+
+### Problem: "patch was created without a push certificate"
+
+**Symptoms**:
+- Gerrit shows warning: "this patch was created without a push certificate"
+- Yellow/orange indicator on patch
+
+**Background**:
+- Push certificates are cryptographic signatures proving who pushed the code
+- They use **GPG (GNU Privacy Guard)**, NOT SSH keys
+- This is **completely optional** for TYPO3 contributions
+- Many successful contributors never use push certificates
+
+**What Push Certificates Are**:
+```
+Push certificates use GPG to sign the push operation itself (not the commit).
+This proves that the person with access to the GPG key initiated the push.
+It's an additional layer of verification beyond SSH authentication.
+```
+
+**Why You Might See This Warning**:
+- You don't have GPG configured (most common - totally fine!)
+- GPG is configured but not linked to Git
+- Your GPG key isn't uploaded to Gerrit
+
+**Solutions**:
+
+**Option A: Ignore It (Recommended for most contributors)**:
+- The warning is informational only
+- Patches are accepted without push certificates
+- SSH authentication is sufficient for contribution
+
+**Option B: Set Up GPG Signing (Optional)**:
+```bash
+# 1. Generate GPG key if you don't have one
+gpg --full-generate-key
+
+# 2. List your keys
+gpg --list-secret-keys --keyid-format=long
+
+# 3. Configure Git to use GPG
+git config --global user.signingkey YOUR_KEY_ID
+git config --global push.gpgSign true
+
+# 4. Upload public key to Gerrit
+# Go to: https://review.typo3.org/settings/#GPGKeys
+# Paste output of: gpg --armor --export YOUR_KEY_ID
+```
+
+**Key Points**:
+- ❌ SSH keys do NOT create push certificates
+- ✅ GPG keys are required for push certificates
+- ✅ Push certificates are optional for TYPO3 contributions
+- ✅ Patches are merged without push certificates regularly
 
 ## Quick Diagnostic Commands
 

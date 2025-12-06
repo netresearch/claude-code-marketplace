@@ -1,6 +1,6 @@
 ---
 name: typo3-ddev
-description: "Automate DDEV environment setup for TYPO3 extension development. Use when setting up local development environment, configuring DDEV for TYPO3 extensions, or creating multi-version TYPO3 testing environments. Covers: DDEV configuration generation, TYPO3 11.5/12.4/13.4 LTS installation, custom DDEV commands, Apache vhost setup, Docker volume management, and .gitignore best practices (avoid double-ignore anti-pattern). Provides complete automation from metadata detection to ready-to-use TYPO3 backend access."
+description: "Automate DDEV environment setup for TYPO3 extension development. Use when setting up local development environment, configuring DDEV for TYPO3 extensions, or creating multi-version TYPO3 testing environments. Covers DDEV configuration generation, TYPO3 11.5/12.4/13.4 LTS installation, custom DDEV commands, Apache vhost setup, Docker volume management, and .gitignore best practices. By Netresearch."
 ---
 
 # TYPO3 DDEV Setup Skill
@@ -101,6 +101,11 @@ ddev install-all    # Installs TYPO3 + extension + Introduction Package
 - Extension source: Bind-mounted from project root
 - TYPO3 installations: Docker volumes (`v11-data`, `v12-data`, `v13-data`)
 
+### .envrc Variables
+- `{{EXTENSION_KEY}}`: Extension key for display
+- `{{DDEV_SITENAME}}`: DDEV project name (URLs)
+- `{{GENERATED_DATE}}`: Auto-populated generation date
+
 ## Optional Enhancements
 
 ### Generate Makefile
@@ -126,8 +131,18 @@ Renders `Documentation/*.rst` to `Documentation-GENERATED-temp/`.
 Each TYPO3 version includes:
 - TYPO3 Core (specified version)
 - Your extension (activated)
-- TYPO3 Backend Styleguide
+- TYPO3 Backend Styleguide (with generated demo content)
 - Introduction Package (86+ pages demo content)
+
+### Security Configuration (Development Mode)
+
+The install scripts automatically configure:
+```php
+$GLOBALS["TYPO3_CONF_VARS"]["SYS"]["trustedHostsPattern"] = ".*";
+$GLOBALS["TYPO3_CONF_VARS"]["SYS"]["features"]["security.backend.enforceReferrer"] = false;
+```
+
+This prevents "Invalid Referrer" and "Trusted Host" errors in the multi-subdomain DDEV environment.
 
 ## Troubleshooting
 
@@ -136,6 +151,7 @@ Each TYPO3 version includes:
 | Database exists error | `ddev mysql -e "DROP DATABASE v13; CREATE DATABASE v13;"` |
 | Extension not appearing | `ddev exec -d /var/www/html/v13 vendor/bin/typo3 cache:flush` |
 | Services not loading | `ddev restart` or check `docker logs` |
+| Invalid Referrer error | Already fixed - reinstall with `ddev install-v13` |
 | Windows issues | See `references/windows-fixes.md` |
 
 ## .gitignore Best Practices
@@ -152,10 +168,18 @@ Each TYPO3 version includes:
 
 ## TYPO3 v13 Site Sets
 
-For TYPO3 v13+, use site sets instead of static templates:
+For TYPO3 v13+, site sets are **automatically configured** during installation:
 
 ```yaml
-# config/sites/main/config.yaml
+# config/sites/main/config.yaml (auto-generated)
+dependencies:
+  - bootstrap-package/full
+```
+
+The install script adds Bootstrap Package as a site set dependency, enabling proper frontend rendering out of the box.
+
+To add your extension as a site set dependency:
+```yaml
 dependencies:
   - bootstrap-package/full
   - vendor/extension-name

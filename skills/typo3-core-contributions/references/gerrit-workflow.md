@@ -275,6 +275,41 @@ git commit --amend
 # CRITICAL: Keep the Change-Id line unchanged!
 ```
 
+### Preserving Reviewer Changes
+
+**IMPORTANT**: Reviewers often edit your commit message (adding backticks, formatting, `Releases:` line). Always preserve these changes when amending!
+
+**Safe Workflow**:
+```bash
+# 1. Fetch the latest patchset FIRST
+git fetch origin refs/changes/XX/NNNNN/N   # N = latest patchset number
+# Example: git fetch origin refs/changes/20/92020/3
+
+# 2. Check reviewer's message
+git log -1 --format="%B" FETCH_HEAD
+
+# 3. Reset to reviewer's version (preserves their message)
+git reset --soft FETCH_HEAD
+
+# 4. Make your code changes
+git add path/to/changed/file.php
+
+# 5. Amend with reviewer's message preserved
+git commit --amend
+```
+
+**Common Reviewer Edits to Preserve**:
+- Backticks around code: `` `$variable` ``, `` `ClassName` ``
+- `Releases: main, 14.0, 13.4` line
+- "Added tests fixate this behavior." when tests are included
+- Formatting improvements to description
+
+**Anti-pattern** (loses reviewer changes):
+```bash
+# DON'T do this after reviewer edited your message!
+git commit --amend --no-edit  # ❌ Reverts to YOUR old message
+```
+
 ### Step 3: Push Updated Patchset
 
 ```bash

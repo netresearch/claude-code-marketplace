@@ -125,6 +125,37 @@ This change improves performance by:
 * Pre-loading frequently accessed resources
 ```
 
+### Documenting Tests
+
+When your patch includes tests, add a line to document this:
+
+```
+Added tests fixate this behavior.
+```
+
+This standard phrase indicates that tests were added to prevent regression. Place it after the main description, before the "Affected" list (if any):
+
+**Example**:
+```
+[BUGFIX] Fix crash on dynamic method calls
+
+Several matchers crash when encountering dynamic method calls
+like `$object->$methodName()`. This happens because the code
+assumes `$node->name` is always an identifier.
+
+This is fixed by adding an explicit `instanceof` check
+before accessing `$node->name->name`.
+
+Added tests fixate this behavior.
+
+Affected matchers:
+- MethodCallMatcher
+- MethodArgumentDroppedMatcher
+
+Resolves: #108413
+Releases: main, 14.0, 13.4
+```
+
 ### Long URLs
 
 Lines exceeding 72 chars are acceptable for URLs. Use numbered references:

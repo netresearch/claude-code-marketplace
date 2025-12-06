@@ -22,9 +22,39 @@ TYPO3 Forge (https://forge.typo3.org) is built on Redmine and exposes a REST API
 
 ### Using API Key
 
+**IMPORTANT**: Different operations require different authentication methods!
+
+#### For GET Requests (Reading)
+
 Pass via HTTP header:
 ```bash
 -H "X-Redmine-API-Key: your-api-key-here"
+```
+
+#### For POST Requests (Creating Issues)
+
+**Header authentication does NOT work for creating issues!** Use HTTP Basic Auth with API key as username:
+```bash
+curl -u "your-api-key-here:x" \
+  -H "Content-Type: application/json" \
+  -X POST \
+  -d '{"issue": {...}}' \
+  https://forge.typo3.org/issues.json
+```
+
+Note: The password can be anything (we use "x") - only the API key as username matters.
+
+#### For PUT Requests (Updating Issues)
+
+**Warning**: PUT requests may return 403 Forbidden depending on your account permissions. Some accounts can create issues but not update them via API. If you get 403 on PUT, you'll need to update issues manually through the web interface.
+
+```bash
+# This may return 403 depending on permissions
+curl -u "your-api-key-here:x" \
+  -H "Content-Type: application/json" \
+  -X PUT \
+  -d '{"issue": {"description": "..."}}' \
+  https://forge.typo3.org/issues/12345.json
 ```
 
 **Security**: Never commit API keys to repositories. Use environment variables:

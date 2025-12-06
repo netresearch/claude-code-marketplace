@@ -1,13 +1,6 @@
 ---
 name: cli-tools
-description: |
-  CLI tool management for coding agents. This skill should be used when:
-  - A command fails with "command not found" or similar errors
-  - The user asks to install, update, or check CLI tools
-  - A project needs environment setup or dependency checking
-  - Tools are missing, outdated, or need reconciliation
-  Provides auto-installation of 74+ tools via optimal package managers,
-  project environment auditing, and batch update capabilities.
+description: "CLI tool management for coding agents. Use when a command fails with 'command not found', installing/updating CLI tools, setting up project environments, or checking dependencies. Provides auto-installation of 74+ tools via optimal package managers, project environment auditing, and batch update capabilities. By Netresearch."
 ---
 
 # CLI Tools Skill

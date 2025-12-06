@@ -1,13 +1,82 @@
 # GitHub-Specific Enterprise Readiness Checks
 
 Checks specific to GitHub-hosted repositories and GitHub Actions.
+Aligned with OpenSSF Scorecard high-risk checks.
 
-## Workflow Hardening (15 points)
+## Dangerous Workflow Patterns (8 points) - CRITICAL
 
-### Harden Runner (4 points)
+*This section addresses the OpenSSF Scorecard "Dangerous-Workflow" check (Critical risk)*
+
+### Script Injection Prevention (4 points)
 | Criteria | Points | How to Check |
 |----------|--------|--------------|
-| step-security/harden-runner on all jobs | 3 | Check all workflow job steps |
+| No direct interpolation of untrusted input in `run` blocks | 2 | Grep for `\$\{\{.*github\.event` in workflow files |
+| Environment variables used for user input | 1 | Check for `env:` block before `run:` |
+| No `pull_request_target` with checkout of PR code | 1 | Check workflow triggers and checkout patterns |
+
+**Critical Pattern - NEVER DO THIS:**
+```yaml
+# DANGEROUS - Script injection vulnerability
+- run: echo "Title: ${{ github.event.issue.title }}"
+```
+
+**Safe Pattern - ALWAYS DO THIS:**
+```yaml
+# SAFE - Use environment variables
+- name: Process issue
+  env:
+    TITLE: ${{ github.event.issue.title }}
+  run: echo "Title: $TITLE"
+```
+
+### Dangerous Triggers (4 points)
+| Criteria | Points | How to Check |
+|----------|--------|--------------|
+| No `pull_request_target` without careful review | 2 | `grep -r "pull_request_target" .github/workflows/` |
+| No `workflow_run` with untrusted artifact access | 1 | Check for artifact downloads from forked PRs |
+| Checkout uses explicit ref for PR workflows | 1 | Verify `ref: ${{ github.event.pull_request.head.sha }}` pattern |
+
+**Why**: `pull_request_target` runs in the context of the base branch with write permissions,
+making it dangerous when combined with checkout of PR code from forks.
+
+---
+
+## Code Review Requirements (6 points)
+
+*This section addresses the OpenSSF Scorecard "Code-Review" check (High risk)*
+
+### Branch Protection (3 points)
+| Criteria | Points | How to Check |
+|----------|--------|--------------|
+| Default branch protected | 1 | Check repository settings or `gh api repos/{owner}/{repo}/branches/{branch}/protection` |
+| Require pull request before merging | 1 | Check branch protection rules |
+| Dismiss stale reviews on new commits | 1 | Check branch protection settings |
+
+### Review Enforcement (3 points)
+| Criteria | Points | How to Check |
+|----------|--------|--------------|
+| Require at least 1 approving review | 2 | Check required reviewers setting |
+| Code owners review required | 1 | Check `require_code_owner_reviews` setting |
+
+**Implementation**:
+```bash
+# Check branch protection via GitHub CLI
+gh api repos/{owner}/{repo}/branches/main/protection \
+  --jq '{
+    enforce_admins: .enforce_admins.enabled,
+    required_reviews: .required_pull_request_reviews.required_approving_review_count,
+    dismiss_stale: .required_pull_request_reviews.dismiss_stale_reviews
+  }'
+```
+
+---
+
+## Workflow Hardening (10 points)
+
+### Harden Runner (3 points)
+| Criteria | Points | How to Check |
+|----------|--------|--------------|
+| step-security/harden-runner on security-sensitive jobs | 2 | Check workflow job steps |
 | Egress policy configured | 1 | Check for `egress-policy: audit` or `block` |
 
 **Implementation**:
@@ -26,43 +95,37 @@ Checks specific to GitHub-hosted repositories and GitHub Actions.
 
 **Example**:
 ```yaml
-# Good
+# Good - Pinned to SHA with version comment
 uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
-# Bad
+# Bad - Tag can be moved by attacker
 uses: actions/checkout@v4
 ```
 
-### Minimal Permissions (4 points)
+### Minimal Permissions (3 points)
 | Criteria | Points | How to Check |
 |----------|--------|--------------|
-| `permissions: read-all` at workflow level | 2 | Check workflow top-level permissions |
-| Per-job permission escalation only | 2 | Check job-level permissions are minimal |
+| `permissions: read-all` or explicit permissions at workflow level | 2 | Check workflow top-level permissions |
+| Per-job permission escalation only | 1 | Check job-level permissions are minimal |
 
 **Implementation**:
 ```yaml
-permissions: read-all
+permissions: read-all  # Or explicit minimal permissions
 
 jobs:
   build:
     permissions:
-      contents: write  # Only what's needed
+      contents: write  # Only what's needed for this job
 ```
-
-### Network Restrictions (3 points)
-| Criteria | Points | How to Check |
-|----------|--------|--------------|
-| Egress policy set to audit or block | 2 | Check harden-runner config |
-| Allowed endpoints documented | 1 | Check for endpoint allowlist |
 
 ---
 
-## Security Features (15 points)
+## Security Features (10 points)
 
-### Dependabot (3 points)
+### Dependabot (2 points)
 | Criteria | Points | How to Check |
 |----------|--------|--------------|
-| Dependabot enabled | 2 | Check `.github/dependabot.yml` |
+| Dependabot enabled | 1 | Check `.github/dependabot.yml` |
 | Grouped updates configured | 1 | Check for `groups:` in config |
 
 **Implementation**:
@@ -79,11 +142,12 @@ updates:
         patterns: ["*"]
 ```
 
-### CodeQL Analysis (4 points)
+### CodeQL Analysis (3 points)
 | Criteria | Points | How to Check |
 |----------|--------|--------------|
-| CodeQL workflow exists | 2 | Check `.github/workflows/codeql*.yml` |
-| Scheduled scans (weekly minimum) | 2 | Check schedule trigger |
+| CodeQL workflow exists | 1 | Check `.github/workflows/codeql*.yml` |
+| Scheduled scans (weekly minimum) | 1 | Check schedule trigger |
+| All relevant languages configured | 1 | Check language matrix |
 
 **Implementation**:
 ```yaml
@@ -92,25 +156,18 @@ on:
     - cron: '0 6 * * 1'  # Weekly on Monday
 ```
 
-### Branch Protection (4 points)
-| Criteria | Points | How to Check |
-|----------|--------|--------------|
-| Required reviews enabled | 2 | Check branch protection settings |
-| Required status checks | 2 | Check for required CI checks |
-
-**Note**: For solo developers, branch protection may be relaxed but should still exist.
-
 ### Secret Scanning (2 points)
 | Criteria | Points | How to Check |
 |----------|--------|--------------|
 | GitHub secret scanning enabled | 1 | Check repository security settings |
 | Push protection enabled | 1 | Check secret scanning settings |
 
-### Merge Queue (2 points)
+### Merge Queue (3 points)
 | Criteria | Points | How to Check |
 |----------|--------|--------------|
 | Merge queue enabled | 1 | Check branch protection settings |
 | Workflows handle `merge_group` event | 1 | Check workflow triggers |
+| Required status checks configured | 1 | Check branch protection settings |
 
 **Implementation**:
 ```yaml
@@ -124,32 +181,22 @@ on:
 
 ---
 
-## CI/CD Patterns (bonus, not scored)
+## SLSA Implementation (6 points)
 
-### Reusable Workflows
-- [ ] Common workflows extracted to reusable templates
-- [ ] Version-controlled workflow references
+### SLSA Level Achievement (4 points)
+| Criteria | Points | How to Check |
+|----------|--------|--------------|
+| SLSA Level 1 (provenance exists) | 1 | Check for `.intoto.jsonl` in releases |
+| SLSA Level 2 (hosted build, signed provenance) | 1 | Check for signed attestations |
+| SLSA Level 3 (isolated builder, unforgeable) | 2 | Check for slsa-github-generator usage |
 
-### Matrix Builds
-- [ ] Multi-platform testing via matrix strategy
-- [ ] Fail-fast disabled for comprehensive results
+### Provenance Verification (2 points)
+| Criteria | Points | How to Check |
+|----------|--------|--------------|
+| Verification instructions documented | 1 | Check README or release notes |
+| `slsa-verifier` compatible | 1 | Test with `slsa-verifier verify-artifact` |
 
-### Artifact Management
-- [ ] Build artifacts uploaded for job coordination
-- [ ] Proper artifact retention policies
-
-### Release Automation
-- [ ] Automated changelog generation (git-cliff, conventional-changelog)
-- [ ] Release asset upload automation
-- [ ] Container image publishing with signing
-
----
-
-## SLSA Implementation (GitHub-specific)
-
-### Using slsa-github-generator
-
-For Go projects:
+**Using slsa-github-generator (Go example)**:
 ```yaml
 uses: slsa-framework/slsa-github-generator/.github/workflows/builder_go_slsa3.yml@v2.1.0
 with:
@@ -159,24 +206,32 @@ with:
   upload-assets: true
 ```
 
-### SLSA Config File Template
-```yaml
-# .slsa-goreleaser/linux-amd64.yml
-version: 1
-env:
-  - CGO_ENABLED=0
-  - GO111MODULE=on
-flags:
-  - -trimpath
-goos: linux
-goarch: amd64
-main: .
-binary: myapp-{{ .Os }}-{{ .Arch }}
-ldflags:
-  - "-s -w -X main.version={{ .Env.VERSION }} -X main.build={{ .Env.COMMIT }}"
-```
-
 **Critical**: Use `{{ .Env.VERSION }}` not `{{ .Tag }}` - SLSA builder uses different template syntax.
+
+---
+
+## Total: 40 points
+
+**Scoring Thresholds**:
+- 36-40: Excellent GitHub security posture
+- 28-35: Good, minor improvements needed
+- 20-27: Fair, significant gaps
+- Below 20: Poor, major improvements required
+
+---
+
+## OpenSSF Scorecard Alignment
+
+| Scorecard Check | This Skill Section | Status |
+|-----------------|-------------------|--------|
+| Branch-Protection | Code Review Requirements | ✅ Covered |
+| Code-Review | Code Review Requirements | ✅ Covered |
+| Dangerous-Workflow | Dangerous Workflow Patterns | ✅ Covered |
+| Dependency-Update-Tool | Security Features (Dependabot) | ✅ Covered |
+| Pinned-Dependencies | Workflow Hardening | ✅ Covered |
+| SAST | Security Features (CodeQL) | ✅ Covered |
+| Token-Permissions | Workflow Hardening | ✅ Covered |
+| Webhooks | (Not yet covered) | ⚠️ Future |
 
 ---
 
@@ -194,12 +249,9 @@ ldflags:
 **Cause**: Workflow doesn't handle `merge_group` event.
 **Fix**: Add `merge_group:` to workflow triggers.
 
----
+### Issue: Fork PRs can't access secrets
+**Cause**: GitHub doesn't expose secrets to fork PRs for security.
+**Fix**: Use `pull_request_target` carefully or use OIDC for external services.
 
-## Total: 30 points
-
-**Scoring Thresholds**:
-- 27-30: Excellent GitHub hardening
-- 21-26: Good, minor improvements needed
-- 15-20: Fair, significant gaps
-- Below 15: Poor, major improvements required
+### Issue: Actions pinned to SHA break updates
+**Fix**: Use Dependabot with `package-ecosystem: "github-actions"` to update SHA pins.

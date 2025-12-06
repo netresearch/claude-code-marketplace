@@ -694,19 +694,154 @@ public function findsByCategory(): void
 }
 ```
 
+## Running Functional Tests with DDEV
+
+Functional tests require the mysqli extension which is typically not available on the host system. Run tests inside the DDEV container:
+
+```bash
+# ❌ Wrong - mysqli not available on host PHP
+./vendor/bin/phpunit -c Build/phpunit/FunctionalTests.xml
+
+# ✅ Correct - Run inside DDEV with database credentials
+ddev exec typo3DatabaseHost=db typo3DatabaseUsername=db typo3DatabasePassword=db typo3DatabaseName=db \
+    ./vendor/bin/phpunit -c Build/phpunit/FunctionalTests.xml
+```
+
+### DDEV Database Configuration
+
+When using DDEV, the database credentials are:
+- **Host**: `db`
+- **Username**: `db`
+- **Password**: `db`
+- **Database**: `db`
+
+## Handling cHash Validation Errors
+
+Frontend tests with query parameters may fail with "cHash empty" errors. Exclude test parameters from cHash validation:
+
+```php
+final class MyFunctionalTest extends FunctionalTestCase
+{
+    /**
+     * Exclude test parameters from cHash validation to avoid errors.
+     */
+    protected array $configurationToUseInTestInstance = [
+        'FE' => [
+            'cacheHash' => [
+                'excludedParameters' => ['test', 'myTestParam'],
+            ],
+        ],
+    ];
+}
+```
+
+## InternalRequest Query Parameters
+
+`InternalRequest` does not parse URL-embedded query strings. Always use `withQueryParameters()`:
+
+```php
+// ❌ Wrong - Query string not parsed by InternalRequest
+$request = new InternalRequest('http://localhost/?id=1&test=1');
+
+// ✅ Correct - Use withQueryParameters()
+$request = (new InternalRequest('http://localhost/'))
+    ->withQueryParameters(['id' => 1, 'test' => 1]);
+
+$response = $this->executeFrontendSubRequest($request);
+```
+
+## Singleton Reset for Test Isolation
+
+Singleton classes must provide a `reset()` method to ensure fresh state between tests:
+
+```php
+// Singleton class with reset capability
+final class Container
+{
+    private static ?self $instance = null;
+
+    public static function get(): self
+    {
+        return self::$instance ??= new self();
+    }
+
+    public static function reset(): void
+    {
+        self::$instance = null;
+    }
+}
+
+// In test setUp()
+protected function setUp(): void
+{
+    parent::setUp();
+    Container::reset(); // Ensure fresh state between tests
+}
+```
+
+## Safe tearDown Pattern
+
+When `setUp()` might fail (e.g., database connection issues), `tearDown()` should handle incomplete initialization:
+
+```php
+protected function tearDown(): void
+{
+    // Clean up test-specific globals
+    unset($_GET['test']);
+
+    // Handle cases where setUp() didn't complete
+    try {
+        parent::tearDown();
+    } catch (Error) {
+        // Setup didn't complete, nothing to tear down
+    }
+}
+```
+
+## Site Configuration (TYPO3 v12+)
+
+Use `SiteWriter` instead of the deprecated `writeSiteConfiguration()`:
+
+```php
+use TYPO3\CMS\Core\Configuration\SiteWriter;
+
+protected function setUp(): void
+{
+    parent::setUp();
+
+    $this->importCSVDataSet(__DIR__ . '/Fixtures/pages.csv');
+
+    // ❌ Deprecated in TYPO3 v12
+    // $this->writeSiteConfiguration('test', ['rootPageId' => 1, 'base' => '/']);
+
+    // ✅ TYPO3 v12+ with SiteWriter
+    $siteWriter = $this->get(SiteWriter::class);
+    $siteWriter->createNewBasicSite('website-local', 1, 'http://localhost/');
+
+    // Set up TypoScript for frontend rendering
+    $this->setUpFrontendRootPage(1, [
+        'EXT:my_extension/Tests/Functional/Fixtures/TypoScript/Basic.typoscript',
+    ]);
+}
+```
+
 ## Running Functional Tests
 
 ```bash
 # Via runTests.sh
 Build/Scripts/runTests.sh -s functional
 
-# Via PHPUnit directly
+# Via PHPUnit directly (on host with mysqli)
 vendor/bin/phpunit -c Build/phpunit/FunctionalTests.xml
+
+# Via DDEV (recommended)
+ddev exec typo3DatabaseHost=db typo3DatabaseUsername=db typo3DatabasePassword=db typo3DatabaseName=db \
+    vendor/bin/phpunit -c Build/phpunit/FunctionalTests.xml
 
 # Via Composer
 composer ci:test:php:functional
 
-# With specific database
+# With specific database driver
 typo3DatabaseDriver=pdo_mysql vendor/bin/phpunit -c Build/phpunit/FunctionalTests.xml
 
 # Single test

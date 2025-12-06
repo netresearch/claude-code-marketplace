@@ -1,0 +1,38 @@
+# DCO (Developer Certificate of Origin) Check Workflow
+# Add this to .github/workflows/dco.yml to enforce DCO sign-offs
+name: DCO Check
+
+on:
+  pull_request:
+    branches: [main, master]
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  dco:
+    name: DCO Check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check DCO
+        uses: dcoapp/app@v1
+        # Alternative using GitHub Script:
+        # - name: Check DCO Sign-off
+        #   uses: actions/github-script@v7
+        #   with:
+        #     script: |
+        #       const commits = await github.rest.pulls.listCommits({
+        #         owner: context.repo.owner,
+        #         repo: context.repo.repo,
+        #         pull_number: context.payload.pull_request.number
+        #       });
+        #
+        #       const missing = commits.data.filter(c =>
+        #         !c.commit.message.includes('Signed-off-by:')
+        #       );
+        #
+        #       if (missing.length > 0) {
+        #         const list = missing.map(c => `- ${c.sha.substring(0,7)}: ${c.commit.message.split('\n')[0]}`).join('\n');
+        #         core.setFailed(`Missing DCO sign-off in:\n${list}\n\nAdd sign-off with: git commit --amend -s`);
+        #       }
