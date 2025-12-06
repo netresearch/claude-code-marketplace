@@ -260,7 +260,7 @@ jobs:
           git clone https://github.com/netresearch/typo3-core-contributions-skill.git .sync-temp/typo3-core-contributions
 
           cd .sync-temp/typo3-core-contributions
-          COMMIT_DATE=$(git log -1 --format=%cd --date=format=%Y%m%d)
+          COMMIT_DATE=$(git log -1 --format=%cd --date=format:%Y%m%d)
           LATEST_TAG=$(git tag --sort=-v:refname | grep -E '^v?[0-9]+\.[0-9]+' | head -1)
           SEMVER=$(echo "$LATEST_TAG" | sed 's/^v//')
           if [ -z "$SEMVER" ]; then SEMVER="1.0.0"; fi
