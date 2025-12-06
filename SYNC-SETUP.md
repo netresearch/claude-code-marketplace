@@ -2,11 +2,11 @@
 
 This marketplace uses automated GitHub Actions to sync skills from their individual source repositories. This document explains how to set up and maintain the sync automation.
 
-## ⚠️ CURRENT STATUS (2025-10-29)
+## ⚠️ CURRENT STATUS (2025-12-06)
 
 **Sync Mechanism**: ✅ Fixed and operational
-- All 7 skills configured in sync workflow
-- Directory creation issue fixed
+- All 10 skills configured in sync workflow
+- Version extraction from git tags (not SKILL.md)
 - Weekly schedule working (Monday 2 AM UTC)
 
 **Immediate Sync**: ❌ NOT WORKING
@@ -14,7 +14,7 @@ This marketplace uses automated GitHub Actions to sync skills from their individ
 - No repository_dispatch events being sent
 - Skills only sync once per week via cron
 
-**Action Required**: Add notify workflow to all 7 source repositories (see step 3 below)
+**Action Required**: Add notify workflow to all 10 source repositories (see step 3 below)
 
 ## Overview
 
@@ -113,11 +113,14 @@ git push origin main
 ```
 
 **Repositories that need this workflow**:
+- [ ] enterprise-readiness-skill
+- [ ] cli-tools-skill
 - [ ] typo3-docs-skill
 - [ ] typo3-conformance-skill
 - [ ] typo3-testing-skill
 - [ ] typo3-ddev-skill
 - [ ] typo3-core-contributions-skill
+- [ ] typo3-extension-upgrade-skill
 - [ ] netresearch-branding-skill
 - [ ] agents-skill
 
@@ -327,5 +330,5 @@ diff -r skills/typo3-conformance /path/to/typo3-conformance-skill
 
 ---
 
-**Last Updated**: 2025-10-18
+**Last Updated**: 2025-12-06
 **Automation Status**: ✅ Active and operational
