@@ -43,16 +43,73 @@ jobs:
           cat .sync-config.json >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
 
+      - name: Sync enterprise-readiness skill
+        run: |
+          echo "=== Syncing enterprise-readiness-skill ==="
+
+          git clone https://github.com/netresearch/enterprise-readiness-skill.git .sync-temp/enterprise-readiness
+
+          cd .sync-temp/enterprise-readiness
+          COMMIT_DATE=$(git log -1 --format=%cd --date=format:%Y%m%d)
+          LATEST_TAG=$(git tag --sort=-v:refname | grep -E '^v?[0-9]+\.[0-9]+' | head -1)
+          SEMVER=$(echo "$LATEST_TAG" | sed 's/^v//')
+          if [ -z "$SEMVER" ]; then SEMVER="1.0.0"; fi
+          VERSION="${SEMVER}-${COMMIT_DATE}"
+          cd ../..
+
+          rm -rf .sync-temp/enterprise-readiness/.git
+          mkdir -p skills/enterprise-readiness
+          rm -rf skills/enterprise-readiness/*
+          rm -rf skills/enterprise-readiness/.[!.]*
+          cp -r .sync-temp/enterprise-readiness/* skills/enterprise-readiness/
+          cp -r .sync-temp/enterprise-readiness/.[!.]* skills/enterprise-readiness/ 2>/dev/null || true
+
+          echo "ENTERPRISE_READINESS_VERSION=$VERSION" >> $GITHUB_ENV
+
+          echo "✓ enterprise-readiness synced (version: $VERSION)"
+
+      - name: Sync cli-tools skill
+        run: |
+          echo "=== Syncing cli-tools-skill ==="
+
+          git clone https://github.com/netresearch/cli-tools-skill.git .sync-temp/cli-tools
+
+          cd .sync-temp/cli-tools
+          COMMIT_DATE=$(git log -1 --format=%cd --date=format:%Y%m%d)
+          LATEST_TAG=$(git tag --sort=-v:refname | grep -E '^v?[0-9]+\.[0-9]+' | head -1)
+          SEMVER=$(echo "$LATEST_TAG" | sed 's/^v//')
+          if [ -z "$SEMVER" ]; then SEMVER="1.0.0"; fi
+          VERSION="${SEMVER}-${COMMIT_DATE}"
+          cd ../..
+
+          rm -rf .sync-temp/cli-tools/.git
+          mkdir -p skills/cli-tools
+          rm -rf skills/cli-tools/*
+          rm -rf skills/cli-tools/.[!.]*
+          cp -r .sync-temp/cli-tools/* skills/cli-tools/
+          cp -r .sync-temp/cli-tools/.[!.]* skills/cli-tools/ 2>/dev/null || true
+
+          echo "CLI_TOOLS_VERSION=$VERSION" >> $GITHUB_ENV
+
+          echo "✓ cli-tools synced (version: $VERSION)"
+
       - name: Sync typo3-docs skill
         run: |
           echo "=== Syncing typo3-docs-skill ==="
 
-          # Clone skill repository to temp directory (NOT shallow to get commit date)
+          # Clone skill repository (full clone to access tags)
           git clone https://github.com/netresearch/typo3-docs-skill.git .sync-temp/typo3-docs
 
-          # Get last commit date before removing .git
+          # Get version from git tags and commit date before removing .git
           cd .sync-temp/typo3-docs
           COMMIT_DATE=$(git log -1 --format=%cd --date=format:%Y%m%d)
+          # Get latest version tag (sorted by version number, strip 'v' prefix)
+          LATEST_TAG=$(git tag --sort=-v:refname | grep -E '^v?[0-9]+\.[0-9]+' | head -1)
+          SEMVER=$(echo "$LATEST_TAG" | sed 's/^v//')
+          if [ -z "$SEMVER" ]; then
+            SEMVER="1.0.0"
+          fi
+          VERSION="${SEMVER}-${COMMIT_DATE}"
           cd ../..
 
           # Remove .git directory to avoid nested repos
@@ -67,29 +124,7 @@ jobs:
           cp -r .sync-temp/typo3-docs/* skills/typo3-docs/
           cp -r .sync-temp/typo3-docs/.[!.]* skills/typo3-docs/ 2>/dev/null || true
 
-          # Extract semantic version from SKILL.md (YAML frontmatter or metadata section)
-          if [ -f skills/typo3-docs/SKILL.md ]; then
-            # Try top-level YAML frontmatter first (^version:)
-            SEMVER=$(grep "^version:" skills/typo3-docs/SKILL.md | head -1 | sed 's/^version: *//' | tr -d '"' || echo "")
-            # Fall back to nested metadata.version (  version:)
-            if [ -z "$SEMVER" ]; then
-              SEMVER=$(grep "^  version:" skills/typo3-docs/SKILL.md | head -1 | sed 's/^  version: *//' | tr -d '"' || echo "")
-            fi
-            # Fall back to ## Skill Metadata section
-            if [ -z "$SEMVER" ]; then
-              SEMVER=$(grep -A 5 "## Skill Metadata" skills/typo3-docs/SKILL.md | grep "version:" | sed 's/.*version: *//' | tr -d '"' || echo "")
-            fi
-            # Final fallback to 1.0.0
-            if [ -z "$SEMVER" ]; then
-              SEMVER="1.0.0"
-            fi
-            # Combine semver + date
-            VERSION="${SEMVER}-${COMMIT_DATE}"
-            echo "TYPO3_DOCS_VERSION=$VERSION" >> $GITHUB_ENV
-          else
-            echo "TYPO3_DOCS_VERSION=1.0.0-${COMMIT_DATE}" >> $GITHUB_ENV
-            VERSION="1.0.0-${COMMIT_DATE}"
-          fi
+          echo "TYPO3_DOCS_VERSION=$VERSION" >> $GITHUB_ENV
 
           echo "✓ typo3-docs synced (version: $VERSION)"
 
@@ -101,6 +136,10 @@ jobs:
 
           cd .sync-temp/typo3-conformance
           COMMIT_DATE=$(git log -1 --format=%cd --date=format:%Y%m%d)
+          LATEST_TAG=$(git tag --sort=-v:refname | grep -E '^v?[0-9]+\.[0-9]+' | head -1)
+          SEMVER=$(echo "$LATEST_TAG" | sed 's/^v//')
+          if [ -z "$SEMVER" ]; then SEMVER="1.0.0"; fi
+          VERSION="${SEMVER}-${COMMIT_DATE}"
           cd ../..
 
           rm -rf .sync-temp/typo3-conformance/.git
@@ -110,27 +149,7 @@ jobs:
           cp -r .sync-temp/typo3-conformance/* skills/typo3-conformance/
           cp -r .sync-temp/typo3-conformance/.[!.]* skills/typo3-conformance/ 2>/dev/null || true
 
-          if [ -f skills/typo3-conformance/SKILL.md ]; then
-            # Try top-level YAML frontmatter first (^version:)
-            SEMVER=$(grep "^version:" skills/typo3-conformance/SKILL.md | head -1 | sed 's/^version: *//' | tr -d '"' || echo "")
-            # Fall back to nested metadata.version (  version:)
-            if [ -z "$SEMVER" ]; then
-              SEMVER=$(grep "^  version:" skills/typo3-conformance/SKILL.md | head -1 | sed 's/^  version: *//' | tr -d '"' || echo "")
-            fi
-            # Fall back to ## Skill Metadata section
-            if [ -z "$SEMVER" ]; then
-              SEMVER=$(grep -A 5 "## Skill Metadata" skills/typo3-conformance/SKILL.md | grep "version:" | sed 's/.*version: *//' | tr -d '"' || echo "")
-            fi
-            # Final fallback to 1.0.0
-            if [ -z "$SEMVER" ]; then
-              SEMVER="1.0.0"
-            fi
-            VERSION="${SEMVER}-${COMMIT_DATE}"
-            echo "TYPO3_CONFORMANCE_VERSION=$VERSION" >> $GITHUB_ENV
-          else
-            echo "TYPO3_CONFORMANCE_VERSION=1.0.0-${COMMIT_DATE}" >> $GITHUB_ENV
-            VERSION="1.0.0-${COMMIT_DATE}"
-          fi
+          echo "TYPO3_CONFORMANCE_VERSION=$VERSION" >> $GITHUB_ENV
 
           echo "✓ typo3-conformance synced (version: $VERSION)"
 
@@ -142,6 +161,10 @@ jobs:
 
           cd .sync-temp/typo3-testing
           COMMIT_DATE=$(git log -1 --format=%cd --date=format:%Y%m%d)
+          LATEST_TAG=$(git tag --sort=-v:refname | grep -E '^v?[0-9]+\.[0-9]+' | head -1)
+          SEMVER=$(echo "$LATEST_TAG" | sed 's/^v//')
+          if [ -z "$SEMVER" ]; then SEMVER="1.0.0"; fi
+          VERSION="${SEMVER}-${COMMIT_DATE}"
           cd ../..
 
           rm -rf .sync-temp/typo3-testing/.git
@@ -151,27 +174,7 @@ jobs:
           cp -r .sync-temp/typo3-testing/* skills/typo3-testing/
           cp -r .sync-temp/typo3-testing/.[!.]* skills/typo3-testing/ 2>/dev/null || true
 
-          if [ -f skills/typo3-testing/SKILL.md ]; then
-            # Try top-level YAML frontmatter first (^version:)
-            SEMVER=$(grep "^version:" skills/typo3-testing/SKILL.md | head -1 | sed 's/^version: *//' | tr -d '"' || echo "")
-            # Fall back to nested metadata.version (  version:)
-            if [ -z "$SEMVER" ]; then
-              SEMVER=$(grep "^  version:" skills/typo3-testing/SKILL.md | head -1 | sed 's/^  version: *//' | tr -d '"' || echo "")
-            fi
-            # Fall back to ## Skill Metadata section
-            if [ -z "$SEMVER" ]; then
-              SEMVER=$(grep -A 5 "## Skill Metadata" skills/typo3-testing/SKILL.md | grep "version:" | sed 's/.*version: *//' | tr -d '"' || echo "")
-            fi
-            # Final fallback to 1.0.0
-            if [ -z "$SEMVER" ]; then
-              SEMVER="1.0.0"
-            fi
-            VERSION="${SEMVER}-${COMMIT_DATE}"
-            echo "TYPO3_TESTING_VERSION=$VERSION" >> $GITHUB_ENV
-          else
-            echo "TYPO3_TESTING_VERSION=1.0.0-${COMMIT_DATE}" >> $GITHUB_ENV
-            VERSION="1.0.0-${COMMIT_DATE}"
-          fi
+          echo "TYPO3_TESTING_VERSION=$VERSION" >> $GITHUB_ENV
 
           echo "✓ typo3-testing synced (version: $VERSION)"
 
@@ -183,6 +186,10 @@ jobs:
 
           cd .sync-temp/netresearch-branding
           COMMIT_DATE=$(git log -1 --format=%cd --date=format:%Y%m%d)
+          LATEST_TAG=$(git tag --sort=-v:refname | grep -E '^v?[0-9]+\.[0-9]+' | head -1)
+          SEMVER=$(echo "$LATEST_TAG" | sed 's/^v//')
+          if [ -z "$SEMVER" ]; then SEMVER="1.0.0"; fi
+          VERSION="${SEMVER}-${COMMIT_DATE}"
           cd ../..
 
           rm -rf .sync-temp/netresearch-branding/.git
@@ -192,27 +199,7 @@ jobs:
           cp -r .sync-temp/netresearch-branding/* skills/netresearch-branding/
           cp -r .sync-temp/netresearch-branding/.[!.]* skills/netresearch-branding/ 2>/dev/null || true
 
-          if [ -f skills/netresearch-branding/SKILL.md ]; then
-            # Try top-level YAML frontmatter first (^version:)
-            SEMVER=$(grep "^version:" skills/netresearch-branding/SKILL.md | head -1 | sed 's/^version: *//' | tr -d '"' || echo "")
-            # Fall back to nested metadata.version (  version:)
-            if [ -z "$SEMVER" ]; then
-              SEMVER=$(grep "^  version:" skills/netresearch-branding/SKILL.md | head -1 | sed 's/^  version: *//' | tr -d '"' || echo "")
-            fi
-            # Fall back to ## Skill Metadata section
-            if [ -z "$SEMVER" ]; then
-              SEMVER=$(grep -A 5 "## Skill Metadata" skills/netresearch-branding/SKILL.md | grep "version:" | sed 's/.*version: *//' | tr -d '"' || echo "")
-            fi
-            # Final fallback to 1.0.0
-            if [ -z "$SEMVER" ]; then
-              SEMVER="1.0.0"
-            fi
-            VERSION="${SEMVER}-${COMMIT_DATE}"
-            echo "NETRESEARCH_BRANDING_VERSION=$VERSION" >> $GITHUB_ENV
-          else
-            echo "NETRESEARCH_BRANDING_VERSION=1.0.0-${COMMIT_DATE}" >> $GITHUB_ENV
-            VERSION="1.0.0-${COMMIT_DATE}"
-          fi
+          echo "NETRESEARCH_BRANDING_VERSION=$VERSION" >> $GITHUB_ENV
 
           echo "✓ netresearch-branding synced (version: $VERSION)"
 
@@ -224,6 +211,10 @@ jobs:
 
           cd .sync-temp/agents
           COMMIT_DATE=$(git log -1 --format=%cd --date=format:%Y%m%d)
+          LATEST_TAG=$(git tag --sort=-v:refname | grep -E '^v?[0-9]+\.[0-9]+' | head -1)
+          SEMVER=$(echo "$LATEST_TAG" | sed 's/^v//')
+          if [ -z "$SEMVER" ]; then SEMVER="1.0.0"; fi
+          VERSION="${SEMVER}-${COMMIT_DATE}"
           cd ../..
 
           rm -rf .sync-temp/agents/.git
@@ -233,27 +224,7 @@ jobs:
           cp -r .sync-temp/agents/* skills/agents/
           cp -r .sync-temp/agents/.[!.]* skills/agents/ 2>/dev/null || true
 
-          if [ -f skills/agents/SKILL.md ]; then
-            # Try top-level YAML frontmatter first (^version:)
-            SEMVER=$(grep "^version:" skills/agents/SKILL.md | head -1 | sed 's/^version: *//' | tr -d '"' || echo "")
-            # Fall back to nested metadata.version (  version:)
-            if [ -z "$SEMVER" ]; then
-              SEMVER=$(grep "^  version:" skills/agents/SKILL.md | head -1 | sed 's/^  version: *//' | tr -d '"' || echo "")
-            fi
-            # Fall back to ## Skill Metadata section
-            if [ -z "$SEMVER" ]; then
-              SEMVER=$(grep -A 5 "## Skill Metadata" skills/agents/SKILL.md | grep "version:" | sed 's/.*version: *//' | tr -d '"' || echo "")
-            fi
-            # Final fallback to 1.0.0
-            if [ -z "$SEMVER" ]; then
-              SEMVER="1.0.0"
-            fi
-            VERSION="${SEMVER}-${COMMIT_DATE}"
-            echo "AGENTS_VERSION=$VERSION" >> $GITHUB_ENV
-          else
-            echo "AGENTS_VERSION=1.0.0-${COMMIT_DATE}" >> $GITHUB_ENV
-            VERSION="1.0.0-${COMMIT_DATE}"
-          fi
+          echo "AGENTS_VERSION=$VERSION" >> $GITHUB_ENV
 
           echo "✓ agents synced (version: $VERSION)"
 
@@ -265,6 +236,10 @@ jobs:
 
           cd .sync-temp/typo3-ddev
           COMMIT_DATE=$(git log -1 --format=%cd --date=format:%Y%m%d)
+          LATEST_TAG=$(git tag --sort=-v:refname | grep -E '^v?[0-9]+\.[0-9]+' | head -1)
+          SEMVER=$(echo "$LATEST_TAG" | sed 's/^v//')
+          if [ -z "$SEMVER" ]; then SEMVER="1.0.0"; fi
+          VERSION="${SEMVER}-${COMMIT_DATE}"
           cd ../..
 
           rm -rf .sync-temp/typo3-ddev/.git
@@ -274,27 +249,7 @@ jobs:
           cp -r .sync-temp/typo3-ddev/* skills/typo3-ddev/
           cp -r .sync-temp/typo3-ddev/.[!.]* skills/typo3-ddev/ 2>/dev/null || true
 
-          if [ -f skills/typo3-ddev/SKILL.md ]; then
-            # Try top-level YAML frontmatter first (^version:)
-            SEMVER=$(grep "^version:" skills/typo3-ddev/SKILL.md | head -1 | sed 's/^version: *//' | tr -d '"' || echo "")
-            # Fall back to nested metadata.version (  version:)
-            if [ -z "$SEMVER" ]; then
-              SEMVER=$(grep "^  version:" skills/typo3-ddev/SKILL.md | head -1 | sed 's/^  version: *//' | tr -d '"' || echo "")
-            fi
-            # Fall back to ## Skill Metadata section
-            if [ -z "$SEMVER" ]; then
-              SEMVER=$(grep -A 5 "## Skill Metadata" skills/typo3-ddev/SKILL.md | grep "version:" | sed 's/.*version: *//' | tr -d '"' || echo "")
-            fi
-            # Final fallback to 1.0.0
-            if [ -z "$SEMVER" ]; then
-              SEMVER="1.0.0"
-            fi
-            VERSION="${SEMVER}-${COMMIT_DATE}"
-            echo "TYPO3_DDEV_VERSION=$VERSION" >> $GITHUB_ENV
-          else
-            echo "TYPO3_DDEV_VERSION=1.0.0-${COMMIT_DATE}" >> $GITHUB_ENV
-            VERSION="1.0.0-${COMMIT_DATE}"
-          fi
+          echo "TYPO3_DDEV_VERSION=$VERSION" >> $GITHUB_ENV
 
           echo "✓ typo3-ddev synced (version: $VERSION)"
 
@@ -305,7 +260,11 @@ jobs:
           git clone https://github.com/netresearch/typo3-core-contributions-skill.git .sync-temp/typo3-core-contributions
 
           cd .sync-temp/typo3-core-contributions
-          COMMIT_DATE=$(git log -1 --format=%cd --date=format:%Y%m%d)
+          COMMIT_DATE=$(git log -1 --format=%cd --date=format=%Y%m%d)
+          LATEST_TAG=$(git tag --sort=-v:refname | grep -E '^v?[0-9]+\.[0-9]+' | head -1)
+          SEMVER=$(echo "$LATEST_TAG" | sed 's/^v//')
+          if [ -z "$SEMVER" ]; then SEMVER="1.0.0"; fi
+          VERSION="${SEMVER}-${COMMIT_DATE}"
           cd ../..
 
           rm -rf .sync-temp/typo3-core-contributions/.git
@@ -315,61 +274,75 @@ jobs:
           cp -r .sync-temp/typo3-core-contributions/* skills/typo3-core-contributions/
           cp -r .sync-temp/typo3-core-contributions/.[!.]* skills/typo3-core-contributions/ 2>/dev/null || true
 
-          if [ -f skills/typo3-core-contributions/SKILL.md ]; then
-            # Try top-level YAML frontmatter first (^version:)
-            SEMVER=$(grep "^version:" skills/typo3-core-contributions/SKILL.md | head -1 | sed 's/^version: *//' | tr -d '"' || echo "")
-            # Fall back to nested metadata.version (  version:)
-            if [ -z "$SEMVER" ]; then
-              SEMVER=$(grep "^  version:" skills/typo3-core-contributions/SKILL.md | head -1 | sed 's/^  version: *//' | tr -d '"' || echo "")
-            fi
-            # Fall back to ## Skill Metadata section
-            if [ -z "$SEMVER" ]; then
-              SEMVER=$(grep -A 5 "## Skill Metadata" skills/typo3-core-contributions/SKILL.md | grep "version:" | sed 's/.*version: *//' | tr -d '"' || echo "")
-            fi
-            # Final fallback to 1.0.0
-            if [ -z "$SEMVER" ]; then
-              SEMVER="1.0.0"
-            fi
-            VERSION="${SEMVER}-${COMMIT_DATE}"
-            echo "TYPO3_CORE_CONTRIBUTIONS_VERSION=$VERSION" >> $GITHUB_ENV
-          else
-            echo "TYPO3_CORE_CONTRIBUTIONS_VERSION=1.0.0-${COMMIT_DATE}" >> $GITHUB_ENV
-            VERSION="1.0.0-${COMMIT_DATE}"
-          fi
+          echo "TYPO3_CORE_CONTRIBUTIONS_VERSION=$VERSION" >> $GITHUB_ENV
 
           echo "✓ typo3-core-contributions synced (version: $VERSION)"
+
+      - name: Sync typo3-extension-upgrade skill
+        run: |
+          echo "=== Syncing typo3-extension-upgrade-skill ==="
+
+          git clone https://github.com/netresearch/typo3-extension-upgrade-skill.git .sync-temp/typo3-extension-upgrade
+
+          cd .sync-temp/typo3-extension-upgrade
+          COMMIT_DATE=$(git log -1 --format=%cd --date=format:%Y%m%d)
+          LATEST_TAG=$(git tag --sort=-v:refname | grep -E '^v?[0-9]+\.[0-9]+' | head -1)
+          SEMVER=$(echo "$LATEST_TAG" | sed 's/^v//')
+          if [ -z "$SEMVER" ]; then SEMVER="1.0.0"; fi
+          VERSION="${SEMVER}-${COMMIT_DATE}"
+          cd ../..
+
+          rm -rf .sync-temp/typo3-extension-upgrade/.git
+          mkdir -p skills/typo3-extension-upgrade
+          rm -rf skills/typo3-extension-upgrade/*
+          rm -rf skills/typo3-extension-upgrade/.[!.]*
+          cp -r .sync-temp/typo3-extension-upgrade/* skills/typo3-extension-upgrade/
+          cp -r .sync-temp/typo3-extension-upgrade/.[!.]* skills/typo3-extension-upgrade/ 2>/dev/null || true
+
+          echo "TYPO3_EXTENSION_UPGRADE_VERSION=$VERSION" >> $GITHUB_ENV
+
+          echo "✓ typo3-extension-upgrade synced (version: $VERSION)"
 
       - name: Update marketplace.json versions
         run: |
           echo "=== Updating marketplace.json with latest versions ==="
 
           # Use jq to update versions in marketplace.json
-          jq --arg v1 "$TYPO3_DOCS_VERSION" \
-             --arg v2 "$TYPO3_CONFORMANCE_VERSION" \
-             --arg v3 "$TYPO3_TESTING_VERSION" \
-             --arg v4 "$NETRESEARCH_BRANDING_VERSION" \
-             --arg v5 "$AGENTS_VERSION" \
-             --arg v6 "$TYPO3_DDEV_VERSION" \
-             --arg v7 "$TYPO3_CORE_CONTRIBUTIONS_VERSION" \
-             '(.plugins[] | select(.name == "typo3-docs") | .version) = $v1 |
-              (.plugins[] | select(.name == "typo3-conformance") | .version) = $v2 |
-              (.plugins[] | select(.name == "typo3-testing") | .version) = $v3 |
-              (.plugins[] | select(.name == "netresearch-branding") | .version) = $v4 |
-              (.plugins[] | select(.name == "agents") | .version) = $v5 |
-              (.plugins[] | select(.name == "typo3-ddev") | .version) = $v6 |
-              (.plugins[] | select(.name == "typo3-core-contributions") | .version) = $v7' \
+          jq --arg v1 "$ENTERPRISE_READINESS_VERSION" \
+             --arg v2 "$CLI_TOOLS_VERSION" \
+             --arg v3 "$TYPO3_DOCS_VERSION" \
+             --arg v4 "$TYPO3_CONFORMANCE_VERSION" \
+             --arg v5 "$TYPO3_TESTING_VERSION" \
+             --arg v6 "$NETRESEARCH_BRANDING_VERSION" \
+             --arg v7 "$AGENTS_VERSION" \
+             --arg v8 "$TYPO3_DDEV_VERSION" \
+             --arg v9 "$TYPO3_CORE_CONTRIBUTIONS_VERSION" \
+             --arg v10 "$TYPO3_EXTENSION_UPGRADE_VERSION" \
+             '(.plugins[] | select(.name == "enterprise-readiness") | .version) = $v1 |
+              (.plugins[] | select(.name == "cli-tools") | .version) = $v2 |
+              (.plugins[] | select(.name == "typo3-docs") | .version) = $v3 |
+              (.plugins[] | select(.name == "typo3-conformance") | .version) = $v4 |
+              (.plugins[] | select(.name == "typo3-testing") | .version) = $v5 |
+              (.plugins[] | select(.name == "netresearch-branding") | .version) = $v6 |
+              (.plugins[] | select(.name == "agents") | .version) = $v7 |
+              (.plugins[] | select(.name == "typo3-ddev") | .version) = $v8 |
+              (.plugins[] | select(.name == "typo3-core-contributions") | .version) = $v9 |
+              (.plugins[] | select(.name == "typo3-extension-upgrade") | .version) = $v10' \
              .claude-plugin/marketplace.json > .claude-plugin/marketplace.json.tmp
 
           mv .claude-plugin/marketplace.json.tmp .claude-plugin/marketplace.json
 
           echo "✓ marketplace.json updated"
+          echo "  - enterprise-readiness: $ENTERPRISE_READINESS_VERSION"
+          echo "  - cli-tools: $CLI_TOOLS_VERSION"
           echo "  - typo3-docs: $TYPO3_DOCS_VERSION"
           echo "  - typo3-conformance: $TYPO3_CONFORMANCE_VERSION"
           echo "  - typo3-testing: $TYPO3_TESTING_VERSION"
-          echo "  - netresearch-branding: $NETRESEARCH_BRANDING_VERSION"
-          echo "  - agents: $AGENTS_VERSION"
           echo "  - typo3-ddev: $TYPO3_DDEV_VERSION"
           echo "  - typo3-core-contributions: $TYPO3_CORE_CONTRIBUTIONS_VERSION"
+          echo "  - typo3-extension-upgrade: $TYPO3_EXTENSION_UPGRADE_VERSION"
+          echo "  - netresearch-branding: $NETRESEARCH_BRANDING_VERSION"
+          echo "  - agents: $AGENTS_VERSION"
 
       - name: Cleanup temporary directories
         run: |
@@ -395,11 +368,14 @@ jobs:
           git commit -m "chore: sync skills from source repositories
 
           Synced versions:
+          - enterprise-readiness: $ENTERPRISE_READINESS_VERSION
+          - cli-tools: $CLI_TOOLS_VERSION
           - typo3-docs: $TYPO3_DOCS_VERSION
           - typo3-conformance: $TYPO3_CONFORMANCE_VERSION
           - typo3-testing: $TYPO3_TESTING_VERSION
           - typo3-ddev: $TYPO3_DDEV_VERSION
           - typo3-core-contributions: $TYPO3_CORE_CONTRIBUTIONS_VERSION
+          - typo3-extension-upgrade: $TYPO3_EXTENSION_UPGRADE_VERSION
           - netresearch-branding: $NETRESEARCH_BRANDING_VERSION
           - agents: $AGENTS_VERSION
 
@@ -411,7 +387,7 @@ jobs:
       - name: Summary
         run: |
           echo "=== Skill Sync Complete ==="
-          echo "✓ All 7 skills synchronized successfully"
+          echo "✓ All 10 skills synchronized successfully"
           echo ""
           echo "Next steps:"
           echo "1. Skills are now available in marketplace"

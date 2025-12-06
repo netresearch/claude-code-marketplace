@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
+         bootstrap="vendor/autoload.php"
+         cacheDirectory=".phpunit.cache"
+         executionOrder="depends,defects"
+         beStrictAboutOutputDuringTests="true"
+         colors="true"
+         failOnRisky="true"
+         failOnWarning="true">
+
+    <testsuites>
+        <testsuite name="Unit">
+            <directory>Tests/Unit</directory>
+        </testsuite>
+        <testsuite name="Functional">
+            <directory>Tests/Functional</directory>
+        </testsuite>
+    </testsuites>
+
+    <source>
+        <include>
+            <directory suffix=".php">Classes</directory>
+        </include>
+        <exclude>
+            <directory>Classes/Domain/Model</directory>
+        </exclude>
+    </source>
+
+    <coverage>
+        <report>
+            <html outputDirectory=".Build/coverage"/>
+            <clover outputFile=".Build/coverage/clover.xml"/>
+        </report>
+    </coverage>
+
+    <php>
+        <!-- TYPO3 testing framework settings -->
+        <env name="TYPO3_PATH_ROOT" value=".Build/public"/>
+        <env name="TYPO3_PATH_WEB" value=".Build/public"/>
+        <ini name="display_errors" value="1"/>
+        <ini name="error_reporting" value="E_ALL"/>
+    </php>
+</phpunit>

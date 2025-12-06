@@ -1,0 +1,28 @@
+includes:
+    - vendor/phpstan/phpstan-phpunit/extension.neon
+    - vendor/phpstan/phpstan-deprecation-rules/rules.neon
+
+parameters:
+    # Level 8 is recommended for TYPO3 extensions
+    # Adjust based on project maturity
+    level: 8
+
+    paths:
+        - Classes
+        - Tests
+
+    excludePaths:
+        - .Build
+        - vendor
+
+    # Don't treat PHPDoc types as certain - allows gradual typing
+    treatPhpDocTypesAsCertain: false
+
+    # Ignore specific errors if needed
+    ignoreErrors:
+        # Example: Ignore specific deprecation warnings during migration
+        # - '#Call to deprecated method#'
+
+    # TYPO3-specific settings
+    checkMissingIterableValueType: false
+    checkGenericClassInNonGenericObjectType: false

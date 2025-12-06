@@ -28,6 +28,7 @@ Then use `/plugin` to browse and install plugins.
 | Netresearch Branding | [netresearch-branding-skill](https://github.com/netresearch/netresearch-branding-skill) | Apply Netresearch brand guidelines |
 | AGENTS.md Generator | [agents-skill](https://github.com/netresearch/agents-skill) | Generate AGENTS.md documentation |
 | CLI Tools | [cli-tools-skill](https://github.com/netresearch/cli-tools-skill) | Auto-install missing CLI tools |
+| TYPO3 Extension Upgrade | [typo3-extension-upgrade-skill](https://github.com/netresearch/typo3-extension-upgrade-skill) | Systematic extension upgrades to newer LTS versions |
 
 ## Architecture
 
@@ -119,6 +120,21 @@ Guide contributions to TYPO3 core following official contribution guidelines.
 - Forge issue integration
 - Commit message formatting
 - Change request best practices
+
+### TYPO3 Extension Upgrade
+Systematic TYPO3 extension upgrades to newer LTS versions with modern PHP compatibility.
+
+**Repository:** https://github.com/netresearch/typo3-extension-upgrade-skill
+
+**Features:**
+- Extension Scanner assessment for deprecated/removed APIs
+- Rector for automated PHP code transformations
+- Fractor for non-PHP file migrations (FlexForms, TypoScript, YAML, Fluid)
+- PHPStan for static analysis
+- Version-specific guidance for v11→v12, v12→v13 upgrades
+- Dual-version compatibility scenarios (v12+v13 support)
+- Common issue solutions and troubleshooting
+- Official TYPO3 changelog references (v7-v14)
 
 ### Netresearch Branding
 Implement Netresearch brand guidelines in web projects with complete design system.

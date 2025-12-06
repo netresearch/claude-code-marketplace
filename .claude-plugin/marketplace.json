@@ -108,6 +108,17 @@
       "category": "development"
     },
     {
+      "name": "typo3-extension-upgrade",
+      "description": "Systematic TYPO3 extension upgrades to newer LTS versions with modern PHP compatibility. Covers Extension Scanner assessment, Rector for PHP migrations, Fractor for non-PHP file migrations (FlexForms, TypoScript, YAML, Fluid), PHPStan for static analysis, and testing setup. Includes version-specific guidance for v11→v12, v12→v13, and dual-compatibility scenarios.",
+      "version": "1.0.0-20251206",
+      "author": {
+        "name": "Netresearch DTT GmbH",
+        "email": "info@netresearch.de"
+      },
+      "source": "./skills/typo3-extension-upgrade",
+      "category": "development"
+    },
+    {
       "name": "jira-integration",
       "source": {
         "source": "github",
@@ -127,6 +138,7 @@
         "./skills/typo3-ddev",
         "./skills/typo3-core-contributions",
         "./skills/typo3-conformance",
+        "./skills/typo3-extension-upgrade",
         "./skills/netresearch-branding",
         "./skills/agents",
         "./skills/cli-tools"
