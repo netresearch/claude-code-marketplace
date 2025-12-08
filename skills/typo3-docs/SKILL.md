@@ -64,6 +64,33 @@ Invoke this skill when working with TYPO3 extension documentation:
 - ❌ Missing permalink anchors (`.. _section-label:`) before section headings
 - ❌ List items without ending punctuation (periods)
 - ❌ PHP code examples failing CGL checks (run `make fix-cgl`)
+- ❌ Using GPL/AGPL for documentation license (use CC BY 4.0)
+
+## Documentation License
+
+**All TYPO3 extension documentation MUST use Creative Commons BY 4.0 license.**
+
+This is the TYPO3 documentation standard. The license applies to documentation (RST/Markdown files), not to the extension code (which uses GPL/AGPL).
+
+**Required in Documentation/Index.rst:**
+
+```rst
+:License:
+   This document is published under the
+   `Creative Commons BY 4.0 <https://creativecommons.org/licenses/by/4.0/>`__
+   license.
+```
+
+**Why CC BY 4.0 for Documentation:**
+- TYPO3 official documentation standard
+- Allows sharing, remixing, and commercial use with attribution
+- GPL/AGPL copyleft doesn't make sense for text documentation
+- Consistent with docs.typo3.org expectations
+
+**Common License Mistakes:**
+- ❌ Using GPL/AGPL for documentation (wrong license type)
+- ❌ Missing license field entirely
+- ❌ Using different license than CC BY 4.0
 
 ## Documentation Synchronization
 
@@ -189,6 +216,7 @@ Before committing documentation changes:
 6. Verify sentence case headings (not Title Case)
 7. Verify permalink anchors (`.. _label:`) before sections
 8. Run `make fix-cgl` for PHP code in `_codesnippets/`
+9. Verify license field uses Creative Commons BY 4.0
 
 ## TYPO3 Intercept Deployment
 
