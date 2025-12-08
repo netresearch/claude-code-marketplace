@@ -169,7 +169,39 @@ Always use card-grid instead of plain toctree lists:
 
 For guides.xml structure and migration, see: `references/typo3-directives.md`
 
-**4. literalinclude for Code Examples**
+**4. GitHub Integration in guides.xml (MANDATORY)**
+
+All extensions MUST configure complete GitHub integration for docs.typo3.org:
+
+```xml
+<extension
+    class="\T3Docs\Typo3DocsTheme\DependencyInjection\Typo3DocsThemeExtension"
+    edit-on-github="vendor/extension-key"
+    edit-on-github-branch="main"
+    project-home="https://github.com/vendor/extension-key"
+    project-contact="https://github.com/vendor/extension-key/discussions"
+    project-repository="https://github.com/vendor/extension-key"
+    project-issues="https://github.com/vendor/extension-key/issues"
+    report-issue="https://github.com/vendor/extension-key/issues"
+/>
+```
+
+| Attribute | Format | Purpose |
+|-----------|--------|---------|
+| `edit-on-github` | `org/repo` (no URL) | "Edit on GitHub" button |
+| `edit-on-github-branch` | `main` | Target branch for edits |
+| `project-home` | Full GitHub URL | "Home" footer link |
+| `project-contact` | GitHub discussions URL | "Contact" footer link |
+| `project-repository` | Full GitHub URL | "Repository" footer link |
+| `project-issues` | GitHub issues URL | "Issues" footer link |
+| `report-issue` | GitHub issues URL | "Give feedback" button |
+
+**GitHub Repository Requirements:**
+- ✅ Issues must be enabled
+- ✅ Discussions should be enabled (for project-contact)
+- ❌ Never point project-contact to issues (use discussions)
+
+**5. literalinclude for Code Examples**
 
 Prefer `literalinclude` over inline code blocks for scripts longer than 20 lines:
 
@@ -217,6 +249,7 @@ Before committing documentation changes:
 7. Verify permalink anchors (`.. _label:`) before sections
 8. Run `make fix-cgl` for PHP code in `_codesnippets/`
 9. Verify license field uses Creative Commons BY 4.0
+10. Verify guides.xml has complete GitHub integration (edit-on-github, report-issue, project-issues)
 
 ## TYPO3 Intercept Deployment
 
