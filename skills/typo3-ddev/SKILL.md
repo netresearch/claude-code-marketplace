@@ -126,6 +126,17 @@ ddev docs
 ```
 Renders `Documentation/*.rst` to `Documentation-GENERATED-temp/`.
 
+**Important**: Always use `Documentation-GENERATED-temp/` (TYPO3 convention), never `docs/`.
+
+See `references/documentation-rendering.md` for detailed setup.
+
+### Install PCOV for Code Coverage
+```bash
+# In .ddev/web-build/Dockerfile
+RUN pecl install pcov && docker-php-ext-enable pcov
+```
+PCOV is faster than Xdebug for code coverage collection.
+
 ## What Gets Installed
 
 Each TYPO3 version includes:
@@ -195,6 +206,7 @@ See `references/advanced-options.md` for site set configuration details.
 | Quick start guide | `references/quickstart.md` |
 | Advanced options (PHP, DB, services) | `references/advanced-options.md` |
 | Index page generation | `references/index-page-generation.md` |
+| Documentation rendering | `references/documentation-rendering.md` |
 | Troubleshooting | `references/troubleshooting.md` |
 | Windows-specific fixes | `references/windows-fixes.md` |
 | Windows optimizations | `references/windows-optimizations.md` |

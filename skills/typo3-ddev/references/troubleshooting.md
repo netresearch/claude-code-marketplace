@@ -73,3 +73,33 @@ Troubleshooting:
   4. Try reinstalling: rm -rf /var/www/html/v13/* && ddev install-v13
 ```
 
+**6. Documentation Site Issues**
+```
+❌ docs.{sitename}.ddev.site shows directory listing or 404
+
+Causes and solutions:
+  - Apache not finding Index.html (capital I)
+    Add to VirtualHost: DirectoryIndex Index.html index.html
+
+  - Wrong output directory
+    Use: Documentation-GENERATED-temp (TYPO3 standard)
+    NOT: docs/, Documentation-rendered/, etc.
+
+  - Docker volume not syncing
+    Don't use Docker volumes for docs
+    Use project bind mount instead
+
+  - Root-owned files from Docker
+    Clean with: sudo rm -rf Documentation-GENERATED-temp/*
+```
+
+**7. Root-Owned Docker Files**
+```
+❌ Permission denied when deleting files
+
+Docker creates files as root. Solutions:
+  1. Use sudo: sudo rm -rf Documentation-GENERATED-temp/
+  2. Fix ownership: sudo chown -R $(id -u):$(id -g) Documentation-GENERATED-temp/
+  3. Prevent in future: Run Docker with --user "$(id -u):$(id -g)"
+```
+

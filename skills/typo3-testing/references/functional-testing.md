@@ -779,6 +779,20 @@ protected function setUp(): void
 }
 ```
 
+## Session State Isolation in Fixtures
+
+When testing contexts or features that use session storage, disable sessions in test fixtures to prevent test pollution:
+
+```csv
+# tx_contexts_contexts.csv
+# Column: use_session - Set to 0 to prevent session state from persisting between tests
+"tx_contexts_contexts"
+,"uid","pid","title","alias","type","type_conf","invert","use_session","disabled","hide_in_backend"
+,1,1,"test get","testget","getparam","...",0,0,0,0
+```
+
+**Why this matters**: Session-based contexts can cause flaky tests when session state persists between test runs. Always set `use_session=0` in fixtures unless specifically testing session functionality.
+
 ## Safe tearDown Pattern
 
 When `setUp()` might fail (e.g., database connection issues), `tearDown()` should handle incomplete initialization:

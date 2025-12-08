@@ -69,7 +69,7 @@
     "authors": [
         {
             "name": "<Developer Name>",
-            "email": "<developer>@netresearch.de",
+            "email": "typo3@netresearch.de",
             "role": "Developer",
             "homepage": "https://www.netresearch.de/"
         }
@@ -89,7 +89,7 @@
 | `description` | Must mention "Netresearch" | `Image support for CKEditor5 - by Netresearch` |
 | `homepage` | GitHub repository URL | `https://github.com/netresearch/t3x-rte_ckeditor_image` |
 | `license` | SPDX identifier | `AGPL-3.0-or-later` or `GPL-2.0-or-later` |
-| `authors[].email` | Netresearch email | `developer@netresearch.de` |
+| `authors[].email` | Netresearch TYPO3 email | `typo3@netresearch.de` |
 | `authors[].homepage` | Company website | `https://www.netresearch.de/` |
 
 ## ext_emconf.php Requirements
@@ -103,7 +103,7 @@ $EM_CONF[$_EXTKEY] = [
     'description'    => '<Clear description> - by Netresearch',
     'category'       => '<be|fe|plugin|misc>',
     'author'         => '<Developer Name(s)>',
-    'author_email'   => '<developer>@netresearch.de',
+    'author_email'   => 'typo3@netresearch.de',
     'author_company' => 'Netresearch DTT GmbH',
     'state'          => 'stable',
     'version'        => '<x.y.z>',

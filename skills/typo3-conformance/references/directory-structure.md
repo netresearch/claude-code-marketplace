@@ -549,7 +549,58 @@ fi
 □ Composer vendor-dir = .Build/vendor
 □ TYPO3 web-dir = .Build/public
 □ No configuration files in project root (rector.php, phpstan.neon, etc.)
+□ Root-only configs stay at root (renovate.json, grumphp.yml, infection.json5)
 ```
+
+## Root vs Build/ Configuration Files
+
+Some tools **require** configuration at project root due to auto-discovery conventions:
+
+| File | Location | Reason |
+|------|----------|--------|
+| `composer.json` | Root ✅ | Composer requirement |
+| `renovate.json` | Root ✅ | Renovate Bot auto-discovery |
+| `grumphp.yml` | Root ✅ | GrumPHP convention |
+| `infection.json5` | Root ✅ | Infection auto-discovery |
+| `.editorconfig` | Root ✅ | IDE convention |
+| `phpstan.neon` | Build/ ✅ | Supports `--config` flag |
+| `php-cs-fixer.php` | Build/ ✅ | Supports `--config` flag |
+| `rector.php` | Build/ ✅ | Supports `--config` flag |
+| `fractor.php` | Build/ ✅ | Supports `--config` flag |
+| `phpcs.xml` | Build/ ✅ | Supports `--standard` flag |
+
+**Rule**: Tools with `--config` flags → Build/. Tools with auto-discovery only → Root.
+
+## DDEV public/ Directory Exclusion
+
+When using DDEV, a `public/` directory is created with TYPO3 entry points:
+
+```
+public/
+├── index.php          # Frontend entry point
+└── typo3/
+    └── index.php      # Backend entry point
+```
+
+**These are TYPO3 Core files, not extension code.** Exclude from linting:
+
+```php
+// Build/php-cs-fixer.php
+$finder = PhpCsFixer\Finder::create()
+    ->in(__DIR__ . '/..')
+    ->exclude([
+        '.Build',
+        '.ddev',
+        'Build',
+        'public',  // ← TYPO3 entry points from DDEV
+        'vendor',
+    ]);
+```
+
+**Why exclude?**
+- Files are TYPO3 Core, following TYPO3's conventions (not extension's)
+- php-cs-fixer would want to add `declare(strict_types=1)` which breaks TYPO3 bootstrap
+- Not part of extension distribution
 
 ## Configuration File Templates
 

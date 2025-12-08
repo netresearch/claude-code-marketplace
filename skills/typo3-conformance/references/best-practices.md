@@ -954,6 +954,64 @@ $products = $queryBuilder
 <f:form.hidden property="__trustedProperties" value="{formProtection}" />
 ```
 
+### 12. GrumPHP Configuration
+
+**Pre-commit Hook Best Practices:**
+
+When using GrumPHP with PHPStan, configure it to fail gracefully when no PHP files are staged:
+
+```yaml
+# grumphp.yml
+grumphp:
+    tasks:
+        phpstan:
+            configuration: Build/phpstan.neon
+            use_grumphp_paths: true
+            triggered_by: ['php']
+```
+
+**Common Issue: "No files found" Error**
+
+GrumPHP+PHPStan fails with "No files found to process" when staging only non-PHP files:
+
+```
+❌ WRONG: Commit with only .md, .yaml, or config file changes fails PHPStan
+```
+
+**Solutions:**
+
+1. **Trigger PHPStan only for PHP files** (recommended):
+   ```yaml
+   phpstan:
+       triggered_by: ['php']
+   ```
+
+2. **Skip PHPStan for commits without PHP changes**:
+   ```yaml
+   phpstan:
+       skip_on_empty_paths: true
+   ```
+
+3. **Use `--error-format=raw` with ignore pattern**:
+   ```yaml
+   phpstan:
+       extra_args:
+           - '--error-format=raw'
+   ```
+
+**CI/CD Consideration:**
+
+When running php-cs-fixer in CI, exclude directories that aren't PHP-focused:
+
+```yaml
+# .github/workflows/ci.yml
+- name: PHP CS Fixer
+  run: |
+    vendor/bin/php-cs-fixer fix --dry-run --diff \
+      --path-mode=intersection \
+      -- Classes Tests Configuration
+```
+
 ## Common Anti-Patterns to Avoid
 
 ### ❌ Don't: Use GeneralUtility::makeInstance() for Services

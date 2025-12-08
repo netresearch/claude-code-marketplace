@@ -229,6 +229,8 @@ grep -rn "'wizards'\s*=>\|'wizard_'" Configuration/TCA/
 
 ### Doctrine DBAL 4.x (Critical)
 
+#### PDO Constants Removed
+
 **Search Pattern**
 ```bash
 grep -rn "PDO::PARAM_" Classes/
@@ -247,6 +249,52 @@ grep -rn "PDO::PARAM_" Classes/
 ```php
 use TYPO3\CMS\Core\Database\Connection;
 ```
+
+#### QueryBuilder execute() Removed
+
+**Search Pattern**
+```bash
+grep -rn "->execute()" Classes/
+```
+
+**Replace**
+
+| Before (DBAL 3.x) | After (DBAL 4.x) |
+|-------------------|------------------|
+| `$queryBuilder->execute()` (SELECT) | `$queryBuilder->executeQuery()` |
+| `$queryBuilder->execute()` (INSERT/UPDATE/DELETE) | `$queryBuilder->executeStatement()` |
+
+**Example Migration**
+```php
+// Before (DBAL 3.x)
+$result = $queryBuilder
+    ->select('*')
+    ->from('pages')
+    ->execute();
+
+// After (DBAL 4.x)
+$result = $queryBuilder
+    ->select('*')
+    ->from('pages')
+    ->executeQuery();
+```
+
+#### ParameterType Enum (PHPStan Warning)
+
+In Doctrine DBAL 4.x, type parameters changed from `int` to `ParameterType` enum:
+
+```php
+// This works but PHPStan may complain:
+->createNamedParameter($value, Connection::PARAM_INT)
+
+// PHPStan ignore pattern for dual v12/v13 compatibility:
+# Build/phpstan.neon
+parameters:
+    ignoreErrors:
+        - '~Parameter \\#2 \\$type of method .* expects .*, int given~'
+```
+
+**Note**: TYPO3 Core provides `Connection::PARAM_*` constants that work across versions, but PHPStan may still report type mismatches during the transition period
 
 ### GeneralUtility Deprecated Methods
 
@@ -672,4 +720,173 @@ After making changes:
 
 # Functional tests
 ./vendor/bin/phpunit --testsuite Functional
+```
+
+---
+
+## Testing Infrastructure During Upgrades
+
+When upgrading extensions, tests often need adjustments to work with new TYPO3 versions.
+
+### Functional Test Container Isolation
+
+In TYPO3 v12+, singleton services may persist state between tests. Reset the Container before each test:
+
+**Problem Pattern**
+```php
+// Tests pass individually but fail when run together
+// due to state pollution from singleton services
+```
+
+**Fix Pattern**
+```php
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Core\Bootstrap;
+
+protected function setUp(): void
+{
+    parent::setUp();
+    
+    // Reset Container to ensure clean state
+    GeneralUtility::resetSingletonInstances([]);
+    
+    // Flush all caches for complete reset
+    Bootstrap::initializeBackendRouter();
+}
+```
+
+### Session State in Test Fixtures
+
+When testing features that use session storage (e.g., context matching), disable sessions in fixtures:
+
+**CSV Fixture Pattern**
+```csv
+# tx_myext_records.csv
+# Set use_session=0 to prevent session state from persisting between tests
+"tx_myext_records"
+,"uid","pid","title","use_session","disabled"
+,1,1,"Test Record",0,0
+```
+
+**Why**: Session-based features can cause flaky tests when session state persists between test runs.
+
+### PHPUnit Configuration for Dual Version Support
+
+When supporting `^12.4 || ^13.4`, PHPUnit configuration may need adjustments:
+
+**Coverage Driver Consideration**
+```xml
+<!-- Build/phpunit/UnitTests.xml -->
+<phpunit>
+    <coverage>
+        <!-- Requires xdebug or pcov extension -->
+        <include>
+            <directory suffix=".php">../../Classes</directory>
+        </include>
+    </coverage>
+</phpunit>
+```
+
+**CI without Coverage Driver**
+```bash
+# If no coverage driver installed, use --no-coverage flag
+./vendor/bin/phpunit --no-coverage
+```
+
+### Testing Framework Version Matrix
+
+| TYPO3 Version | Testing Framework | PHPUnit |
+|---------------|-------------------|---------|
+| v11.5 | `^7.0` | `^9.0` |
+| v12.4 | `^8.0` | `^10.0 \|\| ^11.0` |
+| v13.4 | `^9.0` | `^11.0 \|\| ^12.0` |
+
+### Database Credentials in DDEV
+
+Functional tests in DDEV require database credentials:
+
+```bash
+# Auto-detect DDEV and set credentials
+if command -v ddev &> /dev/null && ddev describe &> /dev/null; then
+    export typo3DatabaseDriver=mysqli
+    export typo3DatabaseHost=db
+    export typo3DatabasePort=3306
+    export typo3DatabaseName=db
+    export typo3DatabaseUsername=db
+    export typo3DatabasePassword=db
+fi
+```
+
+### E2E Test Compatibility
+
+Playwright E2E tests may need adjustments for TYPO3 version differences:
+
+**Locator Changes**
+```typescript
+// TYPO3 v12 vs v13 may have different CSS selectors
+// Use data-testid attributes for stability
+await page.locator('[data-testid="login-submit"]').click();
+```
+
+**Timeout Adjustments**
+```typescript
+// TYPO3 v13 backend may take longer to initialize
+test.setTimeout(60000); // 60 seconds for complex backend operations
+```
+
+---
+
+## Tooling Configuration Changes
+
+### PHPStan Deprecation Handling
+
+Doctrine DBAL 4.x type changes may cause PHPStan warnings even with correct code:
+
+```neon
+# Build/phpstan.neon
+parameters:
+    ignoreErrors:
+        # Doctrine DBAL 4.x ParameterType enum compatibility
+        - '~Parameter \\#2 \\$type of method .* expects .*, int given~'
+```
+
+### GrumPHP with PHPStan
+
+Prevent GrumPHP failures on non-PHP commits:
+
+```yaml
+# grumphp.yml
+grumphp:
+    tasks:
+        phpstan:
+            # Only trigger on PHP file changes
+            triggered_by: ['php']
+```
+
+### Build Directory Organization
+
+Modern TYPO3 extensions organize tooling in `Build/`:
+
+```
+Build/
+├── phpstan.neon         # PHPStan configuration
+├── phpunit/
+│   ├── UnitTests.xml
+│   └── FunctionalTests.xml
+├── Scripts/
+│   └── runTests.sh      # Test runner script
+└── rector.php           # Rector configuration (optional)
+```
+
+### CI Workflow Path Updates
+
+When moving configs to `Build/`, update CI workflows:
+
+```yaml
+# .github/workflows/ci.yml
+- name: Run PHPStan
+  run: vendor/bin/phpstan analyse -c Build/phpstan.neon
+
+- name: Run Tests  
+  run: vendor/bin/phpunit -c Build/phpunit/UnitTests.xml
 ```

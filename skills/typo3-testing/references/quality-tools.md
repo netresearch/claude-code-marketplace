@@ -62,9 +62,16 @@ vendor/bin/phpstan clear-result-cache
 - **Level 9**: Strict mixed types, unused parameters
 - **Level 10 (max)**: Maximum strictness - explicit mixed types, pure functions
 
-**Recommendation**: Start with level 5, aim for level 10 (max) in modern TYPO3 13 projects.
+**Recommendation**:
+- **New projects**: Start with level 5, aim for level 10 (max)
+- **Existing extensions**: Level 8 is practical - levels 9/10 require extensive type annotations for `$GLOBALS`, TCA, and dynamic TYPO3 patterns
 
-**Why Level 10?**
+**Why Level 8 for existing extensions?**
+- Strict boolean conditions and nullability checks
+- Avoids excessive ignoreErrors for TYPO3's inherently untyped patterns
+- Good balance between strictness and maintainability
+
+**Why Level 10 for new projects?**
 - Enforces explicit type declarations (`mixed` must be declared, not implicit)
 - Catches more potential bugs at development time
 - Aligns with TYPO3 13 strict typing standards (`declare(strict_types=1)`)
@@ -80,6 +87,72 @@ $value = $this->legacyMethod();
 parameters:
     ignoreErrors:
         - '#Call to an undefined method.*::getRepository\(\)#'
+```
+
+### TYPO3-Specific ignoreErrors (Level 8)
+
+For existing TYPO3 extensions, these ignoreErrors handle common TYPO3 patterns:
+
+```neon
+parameters:
+    level: 8
+    ignoreErrors:
+        # TYPO3 TCA/GLOBALS access patterns - inherently untyped
+        - '#Cannot access offset .* on mixed#'
+        - '#Parameter .* of function array_key_exists expects array, mixed given#'
+        - '#Parameter .* of function array_merge expects array, mixed given#'
+        - '#Parameter .* of function in_array expects array, mixed given#'
+        - '#Argument of an invalid type mixed supplied for foreach#'
+        - '#Cannot cast mixed to int#'
+        - '#Cannot cast mixed to string#'
+        - '#Possibly invalid array key type#'
+
+        # Legacy code array type specifications
+        - '#no value type specified in iterable type array#'
+        - '#return type has no value type specified in iterable type#'
+        - '#type has no value type specified in iterable type#'
+
+        # TYPO3 v12/v13 API changes - during migration
+        - '#deprecated class TYPO3\\CMS\\Frontend\\Controller\\TypoScriptFrontendController#'
+        - '#Call to an undefined method TYPO3\\CMS\\Core\\Database\\Query\\QueryBuilder::execute#'
+
+        # Doctrine DBAL 4.x type parameter changes (int → ParameterType enum)
+        - '~Parameter \\#2 \\$type of method .* expects .*, int given~'
+
+        # PHPStan strict rules violations in legacy code
+        - '#Construct empty\\(\\) is not allowed#'
+        - '#Strict comparison using .* will always evaluate to#'
+```
+
+### CI Workflow Paths with Build/ Configuration
+
+When configs are in Build/, update CI workflows:
+
+```yaml
+# .github/workflows/ci.yml
+- name: Run PHPStan
+  run: vendor/bin/phpstan analyse -c Build/phpstan.neon --no-progress
+
+- name: Run PHP-CS-Fixer
+  run: vendor/bin/php-cs-fixer fix --config=Build/php-cs-fixer.php --dry-run --diff
+
+- name: Run PHPCS
+  run: vendor/bin/phpcs --standard=Build/phpcs.xml
+```
+
+**Path resolution note**: PHPStan's `paths:` and `includes:` are resolved relative to the config file location. When config is in Build/:
+
+```neon
+# Build/phpstan.neon
+includes:
+    - ../vendor/phpstan/phpstan-strict-rules/rules.neon  # ← Note ../
+parameters:
+    paths:
+        - ../Classes/     # ← Note ../
+        - ../Tests/
+    excludePaths:
+        - ../vendor/*
+        - ../.Build/*
 ```
 
 ### PHPStan in Tests - Common Patterns

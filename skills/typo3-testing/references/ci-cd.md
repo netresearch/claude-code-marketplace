@@ -454,6 +454,32 @@ unit:8.2:
   allow_failure: false  # Required check
 ```
 
+### Coverage Driver Issues
+
+When PHPUnit config files include `<coverage>` sections, tests will fail if no coverage driver (xdebug/pcov) is available. Add `--no-coverage` flag when coverage is disabled:
+
+```yaml
+- name: Run unit tests
+  run: |
+    if [ "$COVERAGE_ENABLED" = "true" ]; then
+      vendor/bin/phpunit -c Build/phpunit/UnitTests.xml
+    else
+      vendor/bin/phpunit -c Build/phpunit/UnitTests.xml --no-coverage
+    fi
+```
+
+**Common error**: `PHPUnit\Framework\InvalidArgumentException: No code coverage driver available`
+
+**Solution**: Either install a coverage driver (xdebug, pcov) or pass `--no-coverage`:
+
+```bash
+# Install pcov for faster coverage
+pecl install pcov
+
+# Or disable coverage in CI
+vendor/bin/phpunit --no-coverage
+```
+
 ### Coverage Requirements
 
 ```yaml
