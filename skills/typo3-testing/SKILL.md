@@ -182,6 +182,7 @@ Detailed documentation for each testing aspect:
 
 - [Unit Testing](references/unit-testing.md) - UnitTestCase patterns, mocking, assertions
 - [Functional Testing](references/functional-testing.md) - FunctionalTestCase, fixtures, database
+- [Functional Test Patterns](references/functional-test-patterns.md) - Container reset, PHPUnit 10+ migration, DDEV setup
 - [E2E Testing](references/e2e-testing.md) - Playwright, Page Object Model, browser automation
 - [Accessibility Testing](references/accessibility-testing.md) - axe-core, WCAG compliance
 - [JavaScript Testing](references/javascript-testing.md) - CKEditor plugins, data-* attributes, frontend tests

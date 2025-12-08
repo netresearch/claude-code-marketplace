@@ -356,3 +356,18 @@ Each changelog contains four categories:
 - [Extension Scanner Documentation](https://docs.typo3.org/m/typo3/reference-coreapi/main/en-us/ExtensionArchitecture/HowTo/UpdateExtensions/ExtensionScanner.html)
 - [TYPO3 Rector GitHub](https://github.com/sabbelasichon/typo3-rector)
 - [TYPO3 Fractor GitHub](https://github.com/andreaswolf/fractor)
+
+---
+
+## Part 6: Real-World Patterns
+
+For detailed deprecation patterns and fixes discovered from actual extension upgrades:
+
+See `references/real-world-patterns.md` - includes:
+- Container::registerImplementation() removal
+- GeneralUtility::_GET() deprecation fixes
+- $TSFE global undefined handling
+- Doctrine DBAL 4.x migrations
+- SC_OPTIONS hooks to PSR-14 events
+- Fractor migrations applied
+- Site Sets for TYPO3 13

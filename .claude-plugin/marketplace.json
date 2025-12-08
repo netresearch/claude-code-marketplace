@@ -33,7 +33,7 @@
     {
       "name": "typo3-testing",
       "description": "Create and manage TYPO3 extension tests with comprehensive testing infrastructure. Includes unit, functional, and acceptance testing support, PHPUnit configurations, Docker setup, CI/CD templates, and automated test generation following TYPO3 best practices.",
-      "version": "2.2.0-20251207",
+      "version": "2.2.0-20251208",
       "author": {
         "name": "Netresearch DTT GmbH",
         "email": "info@netresearch.de"
@@ -66,7 +66,7 @@
     {
       "name": "typo3-conformance",
       "description": "Evaluate TYPO3 extensions for conformance to official TYPO3 coding standards, architecture patterns, and best practices. Includes automated validation scripts for file structure, PSR-12 compliance, dependency injection, testing infrastructure, and comprehensive conformance scoring with priority-based action items.",
-      "version": "1.8.0-20251207",
+      "version": "1.8.0-20251208",
       "author": {
         "name": "Netresearch DTT GmbH",
         "email": "info@netresearch.de"
@@ -110,7 +110,7 @@
     {
       "name": "typo3-extension-upgrade",
       "description": "Systematic TYPO3 extension upgrades to newer LTS versions with modern PHP compatibility. Covers Extension Scanner assessment, Rector for PHP migrations, Fractor for non-PHP file migrations (FlexForms, TypoScript, YAML, Fluid), PHPStan for static analysis, and testing setup. Includes version-specific guidance for v11→v12, v12→v13, and dual-compatibility scenarios.",
-      "version": "1.1.0-20251207",
+      "version": "1.1.0-20251208",
       "author": {
         "name": "Netresearch DTT GmbH",
         "email": "info@netresearch.de"

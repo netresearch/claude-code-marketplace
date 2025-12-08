@@ -177,6 +177,7 @@ Copy templates to extension: `cp -r templates/Build/* /path/to/extension/Build/`
 | `development-environment.md` | DDEV, Docker setup |
 | `runtests-validation.md` | runTests.sh patterns |
 | `report-template.md` | Full report format |
+| `dual-version-compatibility.md` | v12+v13 dual support patterns |
 
 ## Report Generation
 

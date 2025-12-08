@@ -212,6 +212,7 @@ See `references/advanced-options.md` for site set configuration details.
 | Windows optimizations | `references/windows-optimizations.md` |
 | Database alternatives | `references/0002-mariadb-default-with-database-alternatives.md` |
 | Cache alternatives | `references/0001-valkey-default-with-redis-alternative.md` |
+| TYPO3 12 CLI changes | `references/typo3-12-cli-changes.md` |
 
 ## Scripts
 
