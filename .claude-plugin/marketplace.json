@@ -1,7 +1,7 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "netresearch-claude-code-marketplace",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "description": "Curated Claude Code plugins for TYPO3 development and technical documentation workflows",
   "owner": {
     "name": "Netresearch DTT GmbH",
@@ -119,6 +119,61 @@
       "category": "development"
     },
     {
+      "name": "go-development",
+      "description": "Go (Golang) development patterns following best practices for cloud-native applications. Covers project structure, error handling, concurrency patterns, testing strategies, Docker containerization, LDAP integration, and resilience patterns. By Netresearch.",
+      "version": "1.0.0-20251213",
+      "author": {
+        "name": "Netresearch DTT GmbH",
+        "email": "info@netresearch.de"
+      },
+      "source": "./skills/go-development",
+      "category": "development"
+    },
+    {
+      "name": "php-modernization",
+      "description": "PHP 8.x modernization patterns for upgrading legacy PHP applications. Covers constructor property promotion, readonly classes, enums, attributes, generics via PHPDoc, PHPStan level 9+ compliance, and Symfony best practices. By Netresearch.",
+      "version": "1.0.0-20251213",
+      "author": {
+        "name": "Netresearch DTT GmbH",
+        "email": "info@netresearch.de"
+      },
+      "source": "./skills/php-modernization",
+      "category": "development"
+    },
+    {
+      "name": "security-audit",
+      "description": "Security audit patterns for PHP applications following OWASP guidelines. Covers XXE, SQL injection, XSS, CSRF detection, CVSS v3.1 scoring, and secure coding practices. By Netresearch.",
+      "version": "1.0.0-20251213",
+      "author": {
+        "name": "Netresearch DTT GmbH",
+        "email": "info@netresearch.de"
+      },
+      "source": "./skills/security-audit",
+      "category": "security"
+    },
+    {
+      "name": "typo3-ckeditor5",
+      "description": "CKEditor 5 development patterns for TYPO3 v12+. Covers custom plugin development, schema and conversion system, TYPO3 YAML configuration, and CKEditor 4 to 5 migration guides. By Netresearch.",
+      "version": "1.0.0-20251213",
+      "author": {
+        "name": "Netresearch DTT GmbH",
+        "email": "info@netresearch.de"
+      },
+      "source": "./skills/typo3-ckeditor5",
+      "category": "development"
+    },
+    {
+      "name": "git-workflow",
+      "description": "Git workflow best practices for teams and CI/CD pipelines. Covers Git Flow, GitHub Flow, Trunk-based development, Conventional Commits, pull request workflows, and GitHub Actions integration. By Netresearch.",
+      "version": "1.0.0-20251213",
+      "author": {
+        "name": "Netresearch DTT GmbH",
+        "email": "info@netresearch.de"
+      },
+      "source": "./skills/git-workflow",
+      "category": "development"
+    },
+    {
       "name": "jira-integration",
       "source": {
         "source": "github",
@@ -141,7 +196,12 @@
         "./skills/typo3-extension-upgrade",
         "./skills/netresearch-branding",
         "./skills/agents",
-        "./skills/cli-tools"
+        "./skills/cli-tools",
+        "./skills/go-development",
+        "./skills/php-modernization",
+        "./skills/security-audit",
+        "./skills/typo3-ckeditor5",
+        "./skills/git-workflow"
       ]
     }
   ]
