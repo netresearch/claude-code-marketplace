@@ -1,7 +1,7 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "netresearch-claude-code-marketplace",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "description": "Curated Claude Code plugins for TYPO3 development and technical documentation workflows",
   "owner": {
     "name": "Netresearch DTT GmbH",
@@ -172,6 +172,14 @@
       },
       "source": "./skills/git-workflow",
       "category": "development"
+    },
+    {
+      "name": "github-project",
+      "description": "GitHub repository setup and platform-specific features. Covers branch protection rules, CODEOWNERS configuration, GitHub Issues/Discussions/Projects, PR review workflows with conversation resolution, Dependabot/Renovate auto-merge workflows, and GitHub Releases configuration. Focuses on GitHub platform features only - delegates CI/CD to language skills, security to security-audit, SLSA to enterprise-readiness. By Netresearch.",
+      "source": {
+        "source": "github",
+        "repo": "netresearch/github-project-skill"
+      }
     },
     {
       "name": "jira-integration",
