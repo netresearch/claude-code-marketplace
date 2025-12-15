@@ -94,7 +94,7 @@ Open in your browser:
 - **Overview**: https://my-ext.ddev.site/
 - **TYPO3 13 Backend**: https://v13.my-ext.ddev.site/typo3/
   - Username: `admin`
-  - Password: `Password:joh316`
+  - Password: `Joh316!`
 
 ## Step 7: Start Developing
 

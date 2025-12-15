@@ -8,12 +8,12 @@
 
 **TYPO3 11.x**:
 ```bash
-./vendor/bin/typo3 setup --admin-password='Password:joh316'
+./vendor/bin/typo3 setup --admin-password='Joh316!'
 ```
 
 **TYPO3 12.x+**:
 ```bash
-./vendor/bin/typo3 setup --admin-user-password='Password:joh316'
+./vendor/bin/typo3 setup --admin-user-password='Joh316!'
 ```
 
 **Error if using old option**:
@@ -86,7 +86,7 @@ composer config platform.php 8.2
   --username=db \
   --password=db \
   --admin-username=admin \
-  --admin-user-password='Password:joh316' \
+  --admin-user-password='Joh316!' \
   --admin-email=admin@example.com \
   --project-name="Extension v12" \
   --server-type=apache \

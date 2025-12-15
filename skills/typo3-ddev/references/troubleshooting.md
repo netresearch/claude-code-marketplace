@@ -73,6 +73,50 @@ Troubleshooting:
   4. Try reinstalling: rm -rf /var/www/html/v13/* && ddev install-v13
 ```
 
+**5a. Admin Password Security Requirements**
+```
+❌ Password does not match the requirements.
+   Password must have at least 8 characters,
+   contain at least one uppercase letter,
+   one digit, and one special character.
+
+The TYPO3_SETUP_ADMIN_PASSWORD environment variable must meet TYPO3's
+password policy requirements introduced in TYPO3 12.4:
+
+Required:
+  - Minimum 8 characters
+  - At least one uppercase letter (A-Z)
+  - At least one digit (0-9)
+  - At least one special character (!@#$%^&*...)
+
+Examples:
+  ✅ Joh316!  (default, meets all requirements)
+  ✅ Password123!
+  ✅ MySecure#Pass1
+  ❌ password         (no uppercase, no digit, no special char)
+  ❌ Password123      (no special char)
+  ❌ password!        (no uppercase, no digit)
+
+Fix in docker-compose.web.yaml:
+  environment:
+    - TYPO3_SETUP_ADMIN_PASSWORD=Password123!
+```
+
+**5b. Database Already Exists**
+```
+❌ Database "v12" or "v13" already exists
+
+This occurs when reinstalling without cleanup. Solutions:
+
+1. Let the install script handle it (recommended):
+   The install-v12 and install-v13 commands automatically
+   DROP and recreate the database before setup.
+
+2. Manual cleanup if needed:
+   ddev mysql -uroot -proot -e "DROP DATABASE v12;"
+   ddev mysql -uroot -proot -e "DROP DATABASE v13;"
+```
+
 **6. Documentation Site Issues**
 ```
 ❌ docs.{sitename}.ddev.site shows directory listing or 404

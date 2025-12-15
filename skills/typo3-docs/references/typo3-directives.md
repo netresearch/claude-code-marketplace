@@ -543,6 +543,89 @@ function getItems(int $id): array
 ✅ **List punctuation**: all list items end with periods
 ✅ **CGL compliance**: PHP code examples pass `make fix-cgl`
 
+## guides.xml Configuration
+
+The `guides.xml` file configures modern PHP-based documentation rendering. It replaces the legacy `Settings.cfg`.
+
+**Template:**
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<guides
+    xmlns="https://www.phpdoc.org/guides"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="https://www.phpdoc.org/guides ../vendor/phpdocumentor/guides-cli/resources/schema/guides.xsd"
+    theme="typo3docs"
+>
+    <project title="Extension Name"
+             version="1.0"
+             release="1.0.0"
+             copyright="Vendor Name"
+    />
+
+    <extension
+        class="\T3Docs\Typo3DocsTheme\DependencyInjection\Typo3DocsThemeExtension"
+        project-home="https://github.com/vendor/extension"
+        project-contact="https://github.com/vendor/extension/issues"
+        project-repository="https://github.com/vendor/extension"
+        edit-on-github="vendor/extension"
+        edit-on-github-branch="main"
+    />
+
+    <inventory id="t3coreapi"
+               url="https://docs.typo3.org/m/typo3/reference-coreapi/main/en-us/"
+    />
+</guides>
+```
+
+**Root Attributes (`<guides>`):**
+
+| Attribute | Purpose |
+|-----------|---------|
+| `theme` | Theme name (e.g., `typo3docs`) - **must be attribute, not element** |
+| `links-are-relative` | Use relative links in output (default: `false`) |
+
+**Key Elements:**
+
+| Element | Purpose |
+|---------|---------|
+| `<project>` | Extension metadata (title, version, copyright) |
+| `<extension>` | Theme extension and GitHub integration |
+| `<inventory>` | Intersphinx references to other TYPO3 docs |
+
+**Extension Attributes:**
+
+- `class` (mandatory): Always use `\T3Docs\Typo3DocsTheme\DependencyInjection\Typo3DocsThemeExtension`
+- `project-home`: Extension homepage URL
+- `project-contact`: Issues/support URL
+- `project-repository`: Git repository URL
+- `edit-on-github`: Repository in format `owner/repo` (enables "Edit on GitHub" button)
+- `edit-on-github-branch`: Branch name (default: `main`)
+
+**Common Inventories:**
+
+```xml
+<inventory id="t3coreapi" url="https://docs.typo3.org/m/typo3/reference-coreapi/main/en-us/" />
+<inventory id="t3tsconfig" url="https://docs.typo3.org/m/typo3/reference-tsconfig/main/en-us/" />
+<inventory id="t3tsref" url="https://docs.typo3.org/m/typo3/reference-typoscript/main/en-us/" />
+```
+
+**⚠️ Common Mistakes:**
+
+```xml
+<!-- ❌ WRONG - <theme> as element causes "Invalid type for path guides.theme" error -->
+<guides ...>
+    <theme name="typo3docs" />
+</guides>
+
+<!-- ✅ CORRECT - theme is an ATTRIBUTE on <guides>, not a child element -->
+<guides theme="typo3docs" ...>
+</guides>
+```
+
+**Note on schemaLocation:** The format is `namespace-URI schema-path`. The namespace
+(`https://www.phpdoc.org/guides`) is just an identifier. The schema file is at
+`../vendor/phpdocumentor/guides-cli/resources/schema/guides.xsd` (relative to Documentation/).
+
 ## References
 
 - **TYPO3 Documentation Guide:** https://docs.typo3.org/m/typo3/docs-how-to-document/main/en-us/

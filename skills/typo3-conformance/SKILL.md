@@ -1,6 +1,28 @@
 ---
 name: typo3-conformance
 description: "Evaluate TYPO3 extensions for conformance to TYPO3 12/13 LTS standards, coding guidelines (PSR-12), and architecture patterns. Use when assessing extension quality, generating conformance reports, identifying technical debt, or planning modernization. Validates extension architecture, composer.json, ext_emconf.php, backend module v13 compliance, dependency injection, testing, and Extbase patterns. Provides dual scoring (0-100 base + 0-22 excellence). Delegates to typo3-tests and typo3-docs skills for deep analysis. By Netresearch."
+file_triggers:
+  # TYPO3-only extension root files
+  - "ext_emconf.php"
+  - "ext_localconf.php"
+  - "ext_tables.php"
+  - "ext_tables.sql"
+  - "ext_conf_template.txt"
+  # TYPO3-specific configuration directories
+  - "**/Configuration/TCA/**/*"
+  - "**/Configuration/TsConfig/**/*"
+  - "**/Configuration/TSconfig/**/*"
+  - "**/Configuration/TypoScript/**/*"
+  - "**/Configuration/FlexForms/**/*"
+  - "**/Configuration/Backend/Modules.php"
+  - "**/Configuration/Backend/AjaxRoutes.php"
+  - "**/Configuration/Backend/Routes.php"
+  - "**/Configuration/Sets/**/*"
+  - "**/Configuration/page.tsconfig"
+  - "**/Configuration/user.tsconfig"
+  # TYPO3-specific file extensions
+  - "**/*.typoscript"
+  - "**/*.tsconfig"
 ---
 
 # TYPO3 Extension Conformance Checker

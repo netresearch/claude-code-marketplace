@@ -236,7 +236,7 @@ vendor/bin/typo3 setup \
   --driver=pdo_sqlite \
   --path=/var/www/html/v13/database.sqlite \
   --admin-username=admin \
-  --admin-password='Password:joh316' \
+  --admin-password='Joh316!' \
   --project-name="Extension Dev v13"
 ```
 

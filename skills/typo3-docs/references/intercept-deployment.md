@@ -14,8 +14,10 @@ Before setting up webhooks, ensure:
 2. **Git Repository Referenced**: The Git repository URL must be listed on your extension's TER detail page
 3. **Documentation Structure**: Your `Documentation/` directory must contain:
    - `Index.rst` (main entry point)
-   - `Settings.cfg` (documentation metadata)
+   - `guides.xml` (modern, preferred) OR `Settings.cfg` (legacy)
    - Valid RST files following TYPO3 documentation standards
+
+> **Note**: `guides.xml` is the modern PHP-based rendering configuration and is preferred over `Settings.cfg` (legacy Sphinx-based). New extensions should use `guides.xml`.
 
 ## Webhook Registration
 
@@ -54,6 +56,32 @@ Before setting up webhooks, ensure:
    - Click **Add webhook** to save
    - GitLab will test the connection
 
+### GitHub CLI Automation
+
+For faster setup using `gh` CLI:
+
+```bash
+# Create webhook
+gh api repos/{owner}/{repo}/hooks \
+  --method POST \
+  --field name=web \
+  --field "config[url]=https://docs-hook.typo3.org" \
+  --field "config[content_type]=json" \
+  --field "config[insecure_ssl]=0" \
+  --raw-field "events[]=push" \
+  --field active=true
+
+# Trigger test delivery
+gh api repos/{owner}/{repo}/hooks/{hook_id}/tests --method POST
+
+# Check delivery status
+gh api repos/{owner}/{repo}/hooks/{hook_id}/deliveries \
+  --jq '.[] | {id: .id, status: .status, status_code: .status_code, event: .event}'
+
+# List webhooks to find hook_id
+gh api repos/{owner}/{repo}/hooks --jq '.[] | {id: .id, url: .config.url}'
+```
+
 ## First-Time Approval
 
 The first time you trigger documentation rendering, the TYPO3 Documentation Team must approve your repository:
@@ -76,7 +104,16 @@ The first time you trigger documentation rendering, the TYPO3 Documentation Team
 1. Go to **Settings** → **Webhooks**
 2. Click on the webhook
 3. Scroll to **Recent Deliveries**
-4. Verify delivery shows `200` response code
+4. Verify delivery shows `200` or `204` response code
+
+**Expected Status Codes:**
+| Code | Meaning |
+|------|---------|
+| `200` | Success (ping events) |
+| `204` | Success (push events accepted) |
+| `412` | Precondition Failed - expected on first-time test pushes before approval |
+
+> **Note**: A `412` error on test push delivery is normal for repositories not yet approved. The actual push after commits will trigger the approval workflow.
 
 **GitLab:**
 1. Go to **Settings** → **Webhooks**
@@ -180,10 +217,10 @@ Understanding the rendering pipeline:
    ~/.claude/skills/typo3-docs/scripts/validate_docs.sh
    ```
 
-2. **Missing Settings.cfg**
+2. **Missing Configuration File**
    ```bash
-   # Check file exists
-   ls -la Documentation/Settings.cfg
+   # Check for guides.xml (modern) or Settings.cfg (legacy)
+   ls -la Documentation/guides.xml Documentation/Settings.cfg
    ```
 
 3. **Invalid Cross-References**
@@ -219,7 +256,7 @@ Understanding the rendering pipeline:
 **Fix**:
 1. Trigger manual rebuild from Intercept dashboard
 2. Check build logs for errors
-3. Verify `Settings.cfg` has correct project configuration
+3. Verify `guides.xml` or `Settings.cfg` has correct project configuration
 
 ## Best Practices
 
@@ -276,8 +313,15 @@ For supporting multiple TYPO3 versions:
    git push origin docs-v12
    ```
 
-2. **Configure Settings.cfg** for each branch
+2. **Configure guides.xml** (or Settings.cfg) for each branch
+   ```xml
+   <!-- guides.xml (modern) -->
+   <project title="Extension Name"
+            version="2.1.0"
+            copyright="since 2024 by Your Name"/>
+   ```
    ```ini
+   # Settings.cfg (legacy)
    [general]
    project = Extension Name
    release = 2.1.0

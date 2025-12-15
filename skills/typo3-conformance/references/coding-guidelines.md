@@ -618,6 +618,46 @@ git diff Build/phpstan-baseline.neon
 # If baseline changed, fix the issues instead of committing the baseline
 ```
 
+## php-cs-fixer Configuration
+
+### CRITICAL: ext_emconf.php Exclusion
+
+**Problem:** When `declare_strict_types` rule is enabled in php-cs-fixer, it adds `declare(strict_types=1);` to ALL PHP files, including `ext_emconf.php`. However, TYPO3 specifically requires that `ext_emconf.php` does NOT have strict types declaration.
+
+**Why:** The `ext_emconf.php` file is processed by TYPO3's Extension Manager in a special context during extension installation and updates. Adding strict types can break this process.
+
+**Solution:** Always exclude `ext_emconf.php` from php-cs-fixer processing:
+
+```php
+// Using TYPO3 CodingStandards package
+$config->getFinder()
+    ->in('Classes')
+    ->in('Configuration')
+    ->in('Tests')
+    ->notName('ext_emconf.php');  // CRITICAL: Must exclude
+
+// Using custom PhpCsFixer\Finder
+PhpCsFixer\Finder::create()
+    ->exclude('.build')
+    ->exclude('config')
+    ->exclude('node_modules')
+    ->exclude('var')
+    ->notName('ext_emconf.php')  // CRITICAL: Must exclude
+    ->in(__DIR__ . '/../');
+```
+
+**CI Failure Pattern:** If you see CGL (Coding Guidelines Linter) failures with exit code 8 and changes to `ext_emconf.php` involving `declare(strict_types=1)`, add the `->notName('ext_emconf.php')` exclusion.
+
+### Recommended php-cs-fixer Rules for TYPO3
+
+Use the TYPO3 Coding Standards package for the most up-to-date configuration:
+
+```bash
+composer require --dev typo3/coding-standards
+```
+
+See `templates/Build/php-cs-fixer/php-cs-fixer.php` for a complete template.
+
 ## Conformance Checklist
 
 - [ ] All PHP files use 4 spaces for indentation (NO tabs)
@@ -640,3 +680,4 @@ git diff Build/phpstan-baseline.neon
 - [ ] PHPStan level 10 passes with zero errors
 - [ ] No new errors added to phpstan-baseline.neon
 - [ ] Type-guards before casting mixed values (is_numeric, is_string, is_array)
+- [ ] php-cs-fixer config excludes ext_emconf.php via `->notName('ext_emconf.php')`

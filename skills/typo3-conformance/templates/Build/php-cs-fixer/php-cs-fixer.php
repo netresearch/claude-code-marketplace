@@ -22,7 +22,11 @@ $config->setParallelConfig(ParallelConfigFactory::detect());
 $config->getFinder()
     ->in('Classes')
     ->in('Configuration')
-    ->in('Tests');
+    ->in('Tests')
+    // CRITICAL: Exclude ext_emconf.php - TYPO3 does NOT want declare(strict_types=1) in this file
+    // The ext_emconf.php is processed by TYPO3's extension manager in a special context
+    // Adding strict_types breaks extension installation/updates
+    ->notName('ext_emconf.php');
 
 // Optionally add more directories:
 // ->in('ext_localconf.php')

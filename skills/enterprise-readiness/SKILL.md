@@ -372,6 +372,31 @@ can be added to `references/` following the same checklist structure:
 - `references/rust.md`
 - `references/java.md`
 
+## Related Skills
+
+### security-audit-skill
+**Use for**: Deep security audits of PHP codebases
+
+While this skill focuses on enterprise infrastructure, CI/CD, and OpenSSF compliance, the security-audit-skill provides complementary code-level security analysis:
+- OWASP Top 10 vulnerability patterns
+- XXE prevention patterns
+- SQL injection detection
+- CVSS v3.1 scoring guide
+- PHP-specific security patterns
+
+**When to use**: After achieving baseline enterprise readiness, use security-audit-skill for detailed code-level security review, especially for Gold badge security audit requirements.
+
+### git-workflow-skill
+**Use for**: Git branching strategies and commit conventions
+
+The git-workflow-skill complements enterprise readiness with:
+- Conventional commits for automated versioning
+- Branch protection strategies
+- PR workflow patterns
+- CI/CD integration patterns
+
+**When to use**: When implementing DCO enforcement, signed commits, or release automation.
+
 ## Resources
 
 - [SLSA Framework](https://slsa.dev/) - Supply chain security levels

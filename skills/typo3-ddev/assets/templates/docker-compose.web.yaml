@@ -12,7 +12,7 @@ services:
             - TYPO3_INSTALL_DB_UNIX_SOCKET=
             - TYPO3_INSTALL_DB_USE_EXISTING=0
             - TYPO3_INSTALL_ADMIN_USER=admin
-            - TYPO3_INSTALL_ADMIN_PASSWORD=Password:joh316
+            - TYPO3_INSTALL_ADMIN_PASSWORD=Joh316!
             - TYPO3_INSTALL_SITE_NAME=EXT:{{EXTENSION_KEY}} Dev Environment
             - TYPO3_INSTALL_SITE_SETUP_TYPE=site
             - TYPO3_INSTALL_WEB_SERVER_CONFIG=apache
@@ -24,7 +24,7 @@ services:
             - TYPO3_DB_HOST=db
             - TYPO3_SETUP_ADMIN_EMAIL=admin@example.com
             - TYPO3_SETUP_ADMIN_USERNAME=admin
-            - TYPO3_SETUP_ADMIN_PASSWORD=Password:joh316
+            - TYPO3_SETUP_ADMIN_PASSWORD=Joh316!
             - TYPO3_PROJECT_NAME=EXT:{{EXTENSION_KEY}} Dev Environment
             - TYPO3_SERVER_TYPE=apache
         volumes:

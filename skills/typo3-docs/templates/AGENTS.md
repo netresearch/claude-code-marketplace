@@ -31,7 +31,8 @@ This is the official TYPO3 extension documentation directory in reStructuredText
 ### Required Files
 
 - `Index.rst` - Main documentation entry point
-- `Settings.cfg` - Documentation metadata and configuration
+- `guides.xml` - Documentation metadata (modern, preferred)
+- `Settings.cfg` - Documentation metadata (legacy, migrate to guides.xml)
 
 ### Common Sections
 
@@ -236,11 +237,33 @@ scripts/validate_docs.sh
 Documentation is automatically built and deployed when:
 
 1. Changes pushed to `main` branch
-2. Webhook configured in Settings.cfg
+2. Webhook configured (docs-hook.typo3.org)
 3. TYPO3 Intercept receives notification
 4. Documentation rebuilt and published
 
-### Settings.cfg Configuration
+### guides.xml Configuration (Modern - Preferred)
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<guides xmlns="https://www.phpdoc.org/guides"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="https://www.phpdoc.org/guides https://www.phpdoc.org/guides/guides.xsd"
+        default-code-language="php">
+    <project title="Extension Name"
+             version="1.0.0"
+             copyright="since 2024 by Vendor Name"/>
+
+    <extension class="\T3Docs\Typo3DocsTheme\DependencyInjection\Typo3DocsThemeExtension"
+               edit-on-github="vendor/extension"
+               edit-on-github-branch="main"
+               edit-on-github-directory="Documentation"
+               project-home="https://github.com/vendor/extension"
+               project-repository="https://github.com/vendor/extension"
+               project-issues="https://github.com/vendor/extension/issues"/>
+</guides>
+```
+
+### Settings.cfg Configuration (Legacy)
 
 ```ini
 [general]
@@ -252,6 +275,8 @@ copyright = 2024
 [html_theme_options]
 project_repository = https://github.com/vendor/extension
 ```
+
+> **Note**: New extensions should use `guides.xml`. Migrate existing `Settings.cfg` to `guides.xml` for modern PHP-based rendering.
 
 ## Documentation Extraction and Analysis
 
@@ -416,9 +441,10 @@ See `references/extraction-patterns.md` for complete extraction documentation.
 - Validate code block languages are supported
 
 **Webhook not triggering:**
-- Check Settings.cfg has correct repository URL
-- Verify webhook configured in repository settings
+- Check guides.xml or Settings.cfg has correct repository URL
+- Verify webhook configured in repository settings (https://docs-hook.typo3.org)
 - Check TYPO3 Intercept logs for errors
+- First-time webhooks require TYPO3 Documentation Team approval (1-3 days)
 
 ## Resources
 

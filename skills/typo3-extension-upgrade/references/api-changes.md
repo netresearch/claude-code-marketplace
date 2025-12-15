@@ -887,6 +887,136 @@ When moving configs to `Build/`, update CI workflows:
 - name: Run PHPStan
   run: vendor/bin/phpstan analyse -c Build/phpstan.neon
 
-- name: Run Tests  
+- name: Run Tests
   run: vendor/bin/phpunit -c Build/phpunit/UnitTests.xml
 ```
+
+---
+
+## Symfony Component Deprecations
+
+TYPO3 extensions often use Symfony components directly. Be aware of these deprecations.
+
+### PropertyInfo Type Class (Symfony 7.3+)
+
+> **Source**: netresearch/sdk-api-universal-messenger CI fix (2024-12)
+
+The `Symfony\Component\PropertyInfo\Type` class and its constants are deprecated since Symfony 7.3.
+
+**Search Pattern**
+```bash
+grep -rn "PropertyInfo\\Type\|Type::BUILTIN_TYPE_" Classes/
+```
+
+**Replace**
+
+| Before (Deprecated) | After |
+|---------------------|-------|
+| `Type::BUILTIN_TYPE_BOOL` | `'bool'` |
+| `Type::BUILTIN_TYPE_INT` | `'int'` |
+| `Type::BUILTIN_TYPE_FLOAT` | `'float'` |
+| `Type::BUILTIN_TYPE_STRING` | `'string'` |
+| `Type::BUILTIN_TYPE_ARRAY` | `'array'` |
+| `Type::BUILTIN_TYPE_OBJECT` | `'object'` |
+| `Type::BUILTIN_TYPE_NULL` | `'null'` |
+| `Type::BUILTIN_TYPE_CALLABLE` | `'callable'` |
+| `Type::BUILTIN_TYPE_ITERABLE` | `'iterable'` |
+
+**Example Migration**
+```php
+// Before (deprecated since Symfony 7.3)
+use Symfony\Component\PropertyInfo\Type;
+
+$encoder->addType(
+    Type::BUILTIN_TYPE_BOOL,
+    function ($name, $value) { /* ... */ }
+);
+
+// After - use string literal directly
+$encoder->addType(
+    'bool',
+    function ($name, $value) { /* ... */ }
+);
+```
+
+**PHPStan Detection**: Enable `phpstan/phpstan-deprecation-rules` to catch this automatically.
+
+---
+
+## Composer Dependency Version Constraints
+
+### PHP Version Constraints
+
+> **Source**: netresearch/sdk-api-universal-messenger CI fix (2024-12)
+
+**Always specify minimum PHP version**, not just maximum:
+
+```json
+{
+    "require": {
+        "php": "^8.2"
+    }
+}
+```
+
+**Common Mistakes**
+```json
+// ❌ BAD: No minimum specified - breaks on older PHP
+{
+    "require": {
+        "php": "<8.6.0"
+    }
+}
+
+// ✅ GOOD: Clear version range
+{
+    "require": {
+        "php": "^8.2"
+    }
+}
+```
+
+### Dependency PHP Version Conflicts
+
+When supporting PHP 8.2, watch for dependencies that require newer PHP versions:
+
+| Package | Version | Requires PHP |
+|---------|---------|--------------|
+| `symfony/http-client` | `^8.0` | PHP ≥8.4 |
+| `symfony/http-client` | `^7.0` | PHP ≥8.2 |
+| `magicsunday/jsonmapper` | `^3.0` | PHP ≥8.3 |
+| `magicsunday/jsonmapper` | `^2.4` | PHP ≥8.1 |
+| `phpunit/phpunit` | `^12.0` | PHP ≥8.3 |
+| `phpunit/phpunit` | `^11.0` | PHP ≥8.2 |
+
+**Diagnosis Command**
+```bash
+# Find what prevents a specific PHP version
+composer why-not php:8.2
+```
+
+**Fix Pattern**: Downgrade dependencies to versions compatible with your minimum PHP:
+```json
+{
+    "require": {
+        "php": "^8.2"
+    },
+    "require-dev": {
+        "symfony/http-client": "^7.0",
+        "phpunit/phpunit": "^11.0"
+    }
+}
+```
+
+### CI Version Matrix Recommendations
+
+Test against all supported PHP versions:
+
+```yaml
+# .github/workflows/ci.yml
+strategy:
+  matrix:
+    php: ['8.2', '8.3', '8.4']
+```
+
+Ensure dependencies are compatible with your minimum PHP version in CI.

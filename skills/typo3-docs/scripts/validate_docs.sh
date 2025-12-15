@@ -30,10 +30,16 @@ fi
 echo "Found $RST_FILES RST files"
 echo ""
 
-# Check for Settings.cfg
-if [ ! -f "$DOC_DIR/Settings.cfg" ]; then
-    echo "⚠️  Warning: Settings.cfg not found"
-    echo "   This file is required for TYPO3 Intercept builds"
+# Check for guides.xml (modern) or Settings.cfg (legacy)
+if [ -f "$DOC_DIR/guides.xml" ]; then
+    echo "✅ guides.xml found (modern PHP-based rendering)"
+elif [ -f "$DOC_DIR/Settings.cfg" ]; then
+    echo "✅ Settings.cfg found (legacy Sphinx-based rendering)"
+    echo "   ℹ️  Consider migrating to guides.xml for modern rendering"
+else
+    echo "⚠️  Warning: Neither guides.xml nor Settings.cfg found"
+    echo "   One of these files is required for TYPO3 Intercept builds"
+    echo "   Recommended: Create guides.xml (modern PHP-based rendering)"
 fi
 
 # Check for Index.rst

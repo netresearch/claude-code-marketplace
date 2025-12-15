@@ -20,8 +20,12 @@ composer req typo3/cms-introduction --no-progress -n -d /var/www/html/$VERSION
 
 cd /var/www/html/$VERSION
 
-TYPO3_INSTALL_DB_DBNAME=$VERSION
-vendor/bin/typo3 install:setup -n --database-name $VERSION
+# Clean database before setup (prevents "database already exists" errors)
+mysql -h db -u root -p"root" -e "DROP DATABASE IF EXISTS ${VERSION};"
+mysql -h db -u root -p"root" -e "CREATE DATABASE ${VERSION};"
+
+# TYPO3 12.4+ uses the 'setup' command (install:setup is deprecated)
+vendor/bin/typo3 setup -n --dbname=$VERSION --password=$TYPO3_DB_PASSWORD --create-site="https://${VERSION}.{{DDEV_SITENAME}}.ddev.site" --admin-user-password=$TYPO3_SETUP_ADMIN_PASSWORD
 vendor/bin/typo3 configuration:set 'BE/debug' 1
 vendor/bin/typo3 configuration:set 'FE/debug' 1
 vendor/bin/typo3 configuration:set 'SYS/devIPmask' '*'
@@ -39,8 +43,8 @@ vendor/bin/typo3 configuration:set 'GFX/processor_path' '/usr/bin/'
 
 sed -i "/'deprecations'/,/^[[:space:]]*'disabled' => true,/s/'disabled' => true,/'disabled' => false,/" /var/www/html/$VERSION/config/system/settings.php
 
-sed -i -e "s/base: ht\//base: \//g" /var/www/html/$VERSION/config/sites/main/config.yaml
-sed -i -e 's/base: \/en\//base: \//g' /var/www/html/$VERSION/config/sites/main/config.yaml
+# Run extension:setup to create database tables and import static data
+vendor/bin/typo3 extension:setup
 
 # Generate styleguide demo content for UI pattern reference
 vendor/bin/typo3 styleguide:generate

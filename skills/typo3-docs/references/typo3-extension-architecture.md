@@ -17,7 +17,7 @@ Official TYPO3 extension file structure for documentation extraction weighting a
 **ext_emconf.php** - Extension metadata
 - **Documentation Priority:** HIGH
 - **Extract:** Title, description, version, author, constraints
-- **Map to RST:** Introduction/Index.rst, Settings.cfg
+- **Map to RST:** Introduction/Index.rst, guides.xml (or Settings.cfg)
 - **Weight:** Essential metadata, version constraints
 
 **Index.rst** (in Documentation/)
@@ -25,10 +25,16 @@ Official TYPO3 extension file structure for documentation extraction weighting a
 - **Required:** Main documentation entry point
 - **Must Exist:** For TYPO3 Intercept deployment
 
-**Settings.cfg** (in Documentation/)
+**guides.xml** (in Documentation/) - Modern, Preferred
 - **Documentation Priority:** CRITICAL
-- **Required:** Documentation build configuration
+- **Required:** Documentation build configuration (PHP-based rendering)
 - **Must Exist:** For TYPO3 Intercept deployment
+- **Note:** Modern format, preferred over Settings.cfg
+
+**Settings.cfg** (in Documentation/) - Legacy
+- **Documentation Priority:** CRITICAL (if guides.xml not present)
+- **Required:** Documentation build configuration (Sphinx-based)
+- **Note:** Legacy format, migrate to guides.xml for modern rendering
 
 ### 🟡 Core Structure Files (Medium-High Priority)
 
@@ -205,7 +211,8 @@ Official TYPO3 extension file structure for documentation extraction weighting a
 
 **Required Files:**
 - `Index.rst` - Main entry point
-- `Settings.cfg` - Build configuration
+- `guides.xml` - Build configuration (modern, preferred)
+- `Settings.cfg` - Build configuration (legacy, if guides.xml not present)
 
 **Common Structure:**
 - `Introduction/` - Overview, features, screenshots
@@ -495,12 +502,12 @@ Missing Utility documentation:
 - ✅ `composer.json` with `"type": "typo3-cms-extension"`
 - ✅ PSR-4 autoload configuration
 - ✅ `Documentation/Index.rst`
-- ✅ `Documentation/Settings.cfg`
+- ✅ `Documentation/guides.xml` (modern) OR `Documentation/Settings.cfg` (legacy)
 
 **Classic-Mode Installation:**
 - ✅ `ext_emconf.php`
 - ✅ `Documentation/Index.rst`
-- ✅ `Documentation/Settings.cfg`
+- ✅ `Documentation/guides.xml` (modern) OR `Documentation/Settings.cfg` (legacy)
 
 ### Reserved Prefixes
 

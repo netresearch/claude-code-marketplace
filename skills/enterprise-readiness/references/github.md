@@ -255,3 +255,105 @@ with:
 
 ### Issue: Actions pinned to SHA break updates
 **Fix**: Use Dependabot with `package-ecosystem: "github-actions"` to update SHA pins.
+
+---
+
+## CI Optimization Patterns
+
+### Disk Space Management
+
+GitHub Actions runners have limited disk space (~14GB free on ubuntu-latest). Heavy test operations can exhaust this, causing failures like:
+
+```
+Error: Failed to install package: requires 498.2 MB free space, but only 421.8 MB available
+```
+
+**Solution 1: Free Disk Space (Quick Fix)**
+
+Add this step early in your workflow to reclaim ~25GB:
+
+```yaml
+- name: Free disk space
+  run: |
+    sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc
+    df -h
+```
+
+**What gets removed:**
+| Directory | Size | Contents |
+|-----------|------|----------|
+| `/usr/share/dotnet` | ~6GB | .NET SDK (not needed for most projects) |
+| `/usr/local/lib/android` | ~10GB | Android SDK |
+| `/opt/ghc` | ~8GB | Haskell compiler |
+
+**Solution 2: Test Variable Overrides (Best Practice)**
+
+For tests that install heavy dependencies (Docker images, Flatpak apps, large packages), override variables in test configuration:
+
+```yaml
+# molecule/default/converge.yml for Ansible
+vars:
+  # Override for CI - minimal set reduces disk usage
+  heavy_packages: []  # Empty in CI, full list in defaults/main.yml
+
+# Or for selective testing:
+vars:
+  test_mode: true
+  packages_to_install:
+    - small-package-1  # Test the mechanism with minimal resources
+```
+
+**Why this works:**
+- Production deployments use full defaults from `defaults/main.yml`
+- CI tests validate the mechanism works with minimal resources
+- Avoids downloading gigabytes of packages in every CI run
+
+### Test Execution Optimization
+
+**Run expensive tests conditionally:**
+
+```yaml
+- name: Run lightweight tests
+  run: npm test
+
+- name: Run heavy E2E tests
+  if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+  run: npm run test:e2e
+```
+
+**Use job matrix efficiently:**
+
+```yaml
+strategy:
+  matrix:
+    include:
+      # Full test on main only
+      - os: ubuntu-latest
+        full_test: true
+      # Quick smoke test on PRs
+      - os: ubuntu-latest
+        full_test: false
+  fail-fast: false
+```
+
+### Docker Layer Caching
+
+For Docker-heavy CI (Molecule, container builds):
+
+```yaml
+- uses: docker/setup-buildx-action@v3
+- uses: docker/build-push-action@v6
+  with:
+    context: .
+    cache-from: type=gha
+    cache-to: type=gha,mode=max
+```
+
+### Common CI Failure Patterns
+
+| Pattern | Symptom | Fix |
+|---------|---------|-----|
+| Disk space exhaustion | "No space left on device" | Free disk space step |
+| Memory exhaustion | OOM killed | Reduce parallelism, add swap |
+| Timeout | Job exceeds 6h limit | Split into multiple jobs |
+| Rate limiting | API calls fail | Add retry logic, caching |

@@ -64,33 +64,7 @@ Invoke this skill when working with TYPO3 extension documentation:
 - ❌ Missing permalink anchors (`.. _section-label:`) before section headings
 - ❌ List items without ending punctuation (periods)
 - ❌ PHP code examples failing CGL checks (run `make fix-cgl`)
-- ❌ Using GPL/AGPL for documentation license (use CC BY 4.0)
-
-## Documentation License
-
-**All TYPO3 extension documentation MUST use Creative Commons BY 4.0 license.**
-
-This is the TYPO3 documentation standard. The license applies to documentation (RST/Markdown files), not to the extension code (which uses GPL/AGPL).
-
-**Required in Documentation/Index.rst:**
-
-```rst
-:License:
-   This document is published under the
-   `Creative Commons BY 4.0 <https://creativecommons.org/licenses/by/4.0/>`__
-   license.
-```
-
-**Why CC BY 4.0 for Documentation:**
-- TYPO3 official documentation standard
-- Allows sharing, remixing, and commercial use with attribution
-- GPL/AGPL copyleft doesn't make sense for text documentation
-- Consistent with docs.typo3.org expectations
-
-**Common License Mistakes:**
-- ❌ Using GPL/AGPL for documentation (wrong license type)
-- ❌ Missing license field entirely
-- ❌ Using different license than CC BY 4.0
+- ❌ **Committing `Documentation-GENERATED-temp/`** (add to `.gitignore`)
 
 ## Documentation Synchronization
 
@@ -169,39 +143,7 @@ Always use card-grid instead of plain toctree lists:
 
 For guides.xml structure and migration, see: `references/typo3-directives.md`
 
-**4. GitHub Integration in guides.xml (MANDATORY)**
-
-All extensions MUST configure complete GitHub integration for docs.typo3.org:
-
-```xml
-<extension
-    class="\T3Docs\Typo3DocsTheme\DependencyInjection\Typo3DocsThemeExtension"
-    edit-on-github="vendor/extension-key"
-    edit-on-github-branch="main"
-    project-home="https://github.com/vendor/extension-key"
-    project-contact="https://github.com/vendor/extension-key/discussions"
-    project-repository="https://github.com/vendor/extension-key"
-    project-issues="https://github.com/vendor/extension-key/issues"
-    report-issue="https://github.com/vendor/extension-key/issues"
-/>
-```
-
-| Attribute | Format | Purpose |
-|-----------|--------|---------|
-| `edit-on-github` | `org/repo` (no URL) | "Edit on GitHub" button |
-| `edit-on-github-branch` | `main` | Target branch for edits |
-| `project-home` | Full GitHub URL | "Home" footer link |
-| `project-contact` | GitHub discussions URL | "Contact" footer link |
-| `project-repository` | Full GitHub URL | "Repository" footer link |
-| `project-issues` | GitHub issues URL | "Issues" footer link |
-| `report-issue` | GitHub issues URL | "Give feedback" button |
-
-**GitHub Repository Requirements:**
-- ✅ Issues must be enabled
-- ✅ Discussions should be enabled (for project-contact)
-- ❌ Never point project-contact to issues (use discussions)
-
-**5. literalinclude for Code Examples**
+**4. literalinclude for Code Examples**
 
 Prefer `literalinclude` over inline code blocks for scripts longer than 20 lines:
 
@@ -231,6 +173,8 @@ scripts/render_docs.sh /path/to/project
 
 Output: `Documentation-GENERATED-temp/Index.html`
 
+**Important:** Add `Documentation-GENERATED-temp/` to `.gitignore` - this is a build artifact that should not be committed.
+
 **Always render locally before committing to verify:**
 - No rendering warnings
 - No broken cross-references
@@ -248,8 +192,6 @@ Before committing documentation changes:
 6. Verify sentence case headings (not Title Case)
 7. Verify permalink anchors (`.. _label:`) before sections
 8. Run `make fix-cgl` for PHP code in `_codesnippets/`
-9. Verify license field uses Creative Commons BY 4.0
-10. Verify guides.xml has complete GitHub integration (edit-on-github, report-issue, project-issues)
 
 ## TYPO3 Intercept Deployment
 

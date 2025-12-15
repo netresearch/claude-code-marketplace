@@ -127,7 +127,7 @@ https://your-ext.ddev.site/
 
 ```
 Username: admin
-Password: Password:joh316
+Password: Joh316!
 ```
 
 ## Custom DDEV Commands

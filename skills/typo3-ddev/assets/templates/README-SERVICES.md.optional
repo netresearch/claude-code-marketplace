@@ -198,7 +198,7 @@ vendor/bin/typo3 cache:flush
 ### Enable Scheduler Tasks
 
 1. **Access TYPO3 Backend**: https://v13.rte-ckeditor-image.ddev.site/typo3/
-2. **Login**: admin / Password:joh316
+2. **Login**: admin / Joh316!
 3. **System → Scheduler**
 4. **Create tasks** (examples):
    - Table garbage collection
