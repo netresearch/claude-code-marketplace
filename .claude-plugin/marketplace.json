@@ -254,22 +254,22 @@
       "source": "./",
       "strict": false,
       "skills": [
-        "netresearch/enterprise-readiness-skill",
-        "netresearch/typo3-docs-skill",
-        "netresearch/typo3-testing-skill",
-        "netresearch/typo3-ddev-skill",
-        "netresearch/typo3-core-contributions-skill",
-        "netresearch/typo3-conformance-skill",
-        "netresearch/typo3-extension-upgrade-skill",
-        "netresearch/netresearch-branding-skill",
-        "netresearch/agents-skill",
-        "netresearch/cli-tools-skill",
-        "netresearch/go-development-skill",
-        "netresearch/php-modernization-skill",
-        "netresearch/security-audit-skill",
-        "netresearch/typo3-ckeditor5-skill",
-        "netresearch/git-workflow-skill",
-        "netresearch/skill-repo-skill"
+        "./skills/enterprise-readiness",
+        "./skills/typo3-docs",
+        "./skills/typo3-testing",
+        "./skills/typo3-ddev",
+        "./skills/typo3-core-contributions",
+        "./skills/typo3-conformance",
+        "./skills/typo3-extension-upgrade",
+        "./skills/netresearch-branding",
+        "./skills/agents",
+        "./skills/cli-tools",
+        "./skills/go-development",
+        "./skills/php-modernization",
+        "./skills/security-audit",
+        "./skills/typo3-ckeditor5",
+        "./skills/git-workflow",
+        "./skills/skill-repo"
       ]
     }
   ]
