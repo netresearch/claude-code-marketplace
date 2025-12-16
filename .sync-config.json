@@ -59,6 +59,42 @@
       "repository": "https://github.com/netresearch/typo3-extension-upgrade-skill.git",
       "target_path": "skills/typo3-extension-upgrade",
       "marketplace_name": "typo3-extension-upgrade"
+    },
+    {
+      "name": "go-development",
+      "repository": "https://github.com/netresearch/go-development-skill.git",
+      "target_path": "skills/go-development",
+      "marketplace_name": "go-development"
+    },
+    {
+      "name": "php-modernization",
+      "repository": "https://github.com/netresearch/php-modernization-skill.git",
+      "target_path": "skills/php-modernization",
+      "marketplace_name": "php-modernization"
+    },
+    {
+      "name": "security-audit",
+      "repository": "https://github.com/netresearch/security-audit-skill.git",
+      "target_path": "skills/security-audit",
+      "marketplace_name": "security-audit"
+    },
+    {
+      "name": "typo3-ckeditor5",
+      "repository": "https://github.com/netresearch/typo3-ckeditor5-skill.git",
+      "target_path": "skills/typo3-ckeditor5",
+      "marketplace_name": "typo3-ckeditor5"
+    },
+    {
+      "name": "git-workflow",
+      "repository": "https://github.com/netresearch/git-workflow-skill.git",
+      "target_path": "skills/git-workflow",
+      "marketplace_name": "git-workflow"
+    },
+    {
+      "name": "skill-repo",
+      "repository": "https://github.com/netresearch/skill-repo-skill.git",
+      "target_path": "skills/skill-repo",
+      "marketplace_name": "skill-repo"
     }
   ],
   "sync_settings": {

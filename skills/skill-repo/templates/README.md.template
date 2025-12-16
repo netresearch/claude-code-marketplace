@@ -1,0 +1,85 @@
+# {Skill Name}
+
+{One-line description of what this skill does.}
+
+## Features
+
+- **Feature 1** - Description
+- **Feature 2** - Description
+- **Feature 3** - Description
+
+## Installation
+
+### Option 1: Via Netresearch Marketplace (Recommended)
+
+```bash
+/plugin marketplace add netresearch/claude-code-marketplace
+```
+
+Then browse skills with `/plugin`.
+
+### Option 2: Download Release
+
+Download the [latest release](https://github.com/netresearch/{skill-repo}/releases/latest) and extract to `~/.claude/skills/{skill-name}/`
+
+### Option 3: Composer (PHP projects)
+
+```bash
+composer require netresearch/agent-{skill-name}
+```
+
+**Requires:** [netresearch/composer-agent-skill-plugin](https://github.com/netresearch/composer-agent-skill-plugin)
+
+## Usage
+
+The skill triggers on keywords like:
+- "keyword 1"
+- "keyword 2"
+- "keyword 3"
+
+### Example Prompts
+
+```
+"Example prompt 1"
+"Example prompt 2"
+"Example prompt 3"
+```
+
+## Structure
+
+```
+{skill-name}/
+├── SKILL.md              # AI instructions
+├── README.md             # This file
+├── LICENSE               # MIT license
+├── composer.json         # PHP distribution
+├── references/           # Extended documentation
+│   └── ...
+├── scripts/              # Automation scripts
+│   └── ...
+└── assets/               # Templates, configs
+    └── ...
+```
+
+## References
+
+- `references/example.md` - Description
+
+## Contributing
+
+Contributions welcome! Please submit PRs for:
+- Feature improvements
+- Bug fixes
+- Documentation updates
+
+## License
+
+MIT License - See [LICENSE](LICENSE) for details.
+
+## Credits
+
+Developed and maintained by [Netresearch DTT GmbH](https://www.netresearch.de/).
+
+---
+
+**Made with ❤️ for Open Source by [Netresearch](https://www.netresearch.de/)**
