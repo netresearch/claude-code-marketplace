@@ -1,0 +1,20 @@
+{
+  "name": "netresearch/agent-php-modernization",
+  "description": "Netresearch AI skill for PHP 8.x modernization, type safety and legacy code upgrades",
+  "type": "ai-agent-skill",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Netresearch DTT GmbH",
+      "email": "info@netresearch.de",
+      "homepage": "https://www.netresearch.de/",
+      "role": "Manufacturer"
+    }
+  ],
+  "require": {
+    "netresearch/composer-agent-skill-plugin": "*"
+  },
+  "extra": {
+    "ai-agent-skill": "SKILL.md"
+  }
+}

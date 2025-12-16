@@ -1,0 +1,30 @@
+{
+  "name": "jira-integration",
+  "version": "3.1.0",
+  "description": "Comprehensive Jira integration with script-based architecture",
+  "repository": "https://github.com/netresearch/jira-skill",
+  "license": "MIT",
+  "author": {
+    "name": "Netresearch DTT GmbH",
+    "email": "info@netresearch.de"
+  },
+  "keywords": [
+    "jira",
+    "atlassian",
+    "issue-tracking",
+    "project-management",
+    "wiki-markup",
+    "syntax-validation",
+    "templates"
+  ],
+  "skills": [
+    {
+      "name": "jira-communication",
+      "path": "skills/jira-communication"
+    },
+    {
+      "name": "jira-syntax",
+      "path": "skills/jira-syntax"
+    }
+  ]
+}

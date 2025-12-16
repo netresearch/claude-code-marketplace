@@ -1,0 +1,20 @@
+{
+  "name": "netresearch/agent-skill-repo",
+  "description": "Guide for structuring Netresearch skill repositories with multi-channel distribution",
+  "type": "ai-agent-skill",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Netresearch DTT GmbH",
+      "email": "info@netresearch.de",
+      "homepage": "https://www.netresearch.de/",
+      "role": "Manufacturer"
+    }
+  ],
+  "require": {
+    "netresearch/composer-agent-skill-plugin": "*"
+  },
+  "extra": {
+    "ai-agent-skill": "SKILL.md"
+  }
+}

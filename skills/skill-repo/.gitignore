@@ -1,0 +1,18 @@
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Dist
+dist/
+*.zip
+*.tar.gz
+
+# Never include composer.lock in skill repos
+composer.lock
+vendor/

@@ -1,0 +1,20 @@
+{
+  "name": "netresearch/agent-git-workflow",
+  "description": "Netresearch AI skill for Git branching strategies, Conventional Commits and CI/CD pipelines",
+  "type": "ai-agent-skill",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Netresearch DTT GmbH",
+      "email": "info@netresearch.de",
+      "homepage": "https://www.netresearch.de/",
+      "role": "Manufacturer"
+    }
+  ],
+  "require": {
+    "netresearch/composer-agent-skill-plugin": "*"
+  },
+  "extra": {
+    "ai-agent-skill": "SKILL.md"
+  }
+}

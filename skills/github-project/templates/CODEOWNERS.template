@@ -1,0 +1,30 @@
+# .github/CODEOWNERS
+# Code ownership for automatic review assignment
+# Documentation: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+# Default owners for everything in the repo
+* @{{ORG}}/maintainers
+
+# Core source code requires team review
+/src/ @{{ORG}}/core-team
+/Classes/ @{{ORG}}/core-team
+/internal/ @{{ORG}}/core-team
+/pkg/ @{{ORG}}/core-team
+
+# CI/CD and security-sensitive files require maintainer approval
+/.github/ @{{ORG}}/maintainers
+/.github/workflows/ @{{ORG}}/security-team
+
+# Security policy requires security team approval
+/SECURITY.md @{{ORG}}/security-team
+
+# Documentation can be reviewed by docs team
+/docs/ @{{ORG}}/docs-team
+/Documentation/ @{{ORG}}/docs-team
+*.md @{{ORG}}/docs-team
+
+# Tests can be reviewed by QA team
+/tests/ @{{ORG}}/qa-team
+/Tests/ @{{ORG}}/qa-team
+*_test.go @{{ORG}}/qa-team
+*Test.php @{{ORG}}/qa-team

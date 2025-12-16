@@ -1,0 +1,147 @@
+# Contributing to {{PROJECT}}
+
+Thank you for your interest in contributing! This document provides guidelines and information for contributors.
+
+## Code of Conduct
+
+This project follows the [Contributor Covenant](CODE_OF_CONDUCT.md). By participating, you agree to uphold this code.
+
+## Getting Started
+
+### Prerequisites
+
+- {{LANGUAGE}} {{VERSION}}+
+- Git
+
+### Development Setup
+
+```bash
+# Clone the repository
+git clone https://github.com/{{ORG}}/{{REPO}}.git
+cd {{REPO}}
+
+# Install dependencies
+{{INSTALL_COMMAND}}
+
+# Run tests
+{{TEST_COMMAND}}
+```
+
+## How to Contribute
+
+### Reporting Bugs
+
+1. Check existing [issues](https://github.com/{{ORG}}/{{REPO}}/issues) first
+2. Use the [bug report template](.github/ISSUE_TEMPLATE/bug_report.md)
+3. Include:
+   - Clear description of the problem
+   - Steps to reproduce
+   - Expected vs actual behavior
+   - Version information
+
+### Suggesting Features
+
+1. Check existing [feature requests](https://github.com/{{ORG}}/{{REPO}}/issues?q=label:enhancement)
+2. Use the [feature request template](.github/ISSUE_TEMPLATE/feature_request.md)
+3. Describe the use case and proposed solution
+
+### Submitting Code
+
+1. Fork the repository
+2. Create a feature branch: `git checkout -b feature/my-feature`
+3. Make your changes
+4. Write/update tests
+5. Ensure all tests pass: `{{TEST_COMMAND}}`
+6. Commit using [Conventional Commits](#commit-messages)
+7. Push and create a Pull Request
+
+## Development Guidelines
+
+### Code Style
+
+{{CODE_STYLE_INSTRUCTIONS}}
+
+Run code formatting before committing:
+```bash
+{{FORMAT_COMMAND}}
+```
+
+### Testing
+
+We use a multi-layer testing strategy:
+
+- **Unit Tests**: Test individual functions/methods
+- **Integration Tests**: Test component interactions
+- **End-to-End Tests**: Test complete workflows
+
+Run all tests:
+```bash
+{{TEST_COMMAND}}
+```
+
+### Commit Messages
+
+We follow [Conventional Commits](https://www.conventionalcommits.org/):
+
+```
+<type>[optional scope]: <description>
+
+[optional body]
+
+[optional footer(s)]
+```
+
+**Types:**
+- `feat`: New feature
+- `fix`: Bug fix
+- `docs`: Documentation only
+- `style`: Code style (formatting, no logic change)
+- `refactor`: Code refactoring
+- `perf`: Performance improvements
+- `test`: Adding/updating tests
+- `build`: Build system changes
+- `ci`: CI configuration changes
+- `chore`: Maintenance tasks
+
+**Examples:**
+```
+feat: add user authentication
+fix(api): resolve timeout on large requests
+docs: update installation instructions
+```
+
+### Pull Request Process
+
+1. Update documentation if needed
+2. Add tests for new functionality
+3. Ensure CI passes
+4. Request review from maintainers
+5. Address review feedback
+6. Squash commits if requested
+
+### Pull Request Checklist
+
+- [ ] Code follows project style guidelines
+- [ ] Tests added/updated and passing
+- [ ] Documentation updated
+- [ ] Commit messages follow Conventional Commits
+- [ ] No unrelated changes included
+
+## Release Process
+
+Releases are automated via GitHub Actions when tags are pushed:
+
+```bash
+git tag v1.0.0
+git push origin v1.0.0
+```
+
+## Getting Help
+
+- Open a [GitHub Discussion](https://github.com/{{ORG}}/{{REPO}}/discussions)
+- Check existing documentation
+- Review closed issues for similar problems
+
+## License
+
+By contributing, you agree that your contributions will be licensed under the project's [license](LICENSE).
