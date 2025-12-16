@@ -1,7 +1,7 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "netresearch-claude-code-marketplace",
-  "version": "1.6.0",
+  "version": "1.7.0",
   "description": "Curated Claude Code plugins for TYPO3 development and technical documentation workflows",
   "owner": {
     "name": "Netresearch DTT GmbH",
@@ -16,7 +16,10 @@
         "name": "Netresearch DTT GmbH",
         "email": "info@netresearch.de"
       },
-      "source": "./skills/enterprise-readiness",
+      "source": {
+        "source": "github",
+        "repo": "netresearch/enterprise-readiness-skill"
+      },
       "category": "security"
     },
     {
@@ -27,7 +30,10 @@
         "name": "Netresearch DTT GmbH",
         "email": "info@netresearch.de"
       },
-      "source": "./skills/typo3-docs",
+      "source": {
+        "source": "github",
+        "repo": "netresearch/typo3-docs-skill"
+      },
       "category": "development"
     },
     {
@@ -38,7 +44,10 @@
         "name": "Netresearch DTT GmbH",
         "email": "info@netresearch.de"
       },
-      "source": "./skills/typo3-testing",
+      "source": {
+        "source": "github",
+        "repo": "netresearch/typo3-testing-skill"
+      },
       "category": "development"
     },
     {
@@ -49,7 +58,10 @@
         "name": "Netresearch DTT GmbH",
         "email": "info@netresearch.de"
       },
-      "source": "./skills/typo3-ddev",
+      "source": {
+        "source": "github",
+        "repo": "netresearch/typo3-ddev-skill"
+      },
       "category": "development"
     },
     {
@@ -60,7 +72,10 @@
         "name": "Netresearch DTT GmbH",
         "email": "info@netresearch.de"
       },
-      "source": "./skills/typo3-core-contributions",
+      "source": {
+        "source": "github",
+        "repo": "netresearch/typo3-core-contributions-skill"
+      },
       "category": "development"
     },
     {
@@ -71,7 +86,10 @@
         "name": "Netresearch DTT GmbH",
         "email": "info@netresearch.de"
       },
-      "source": "./skills/typo3-conformance",
+      "source": {
+        "source": "github",
+        "repo": "netresearch/typo3-conformance-skill"
+      },
       "category": "development"
     },
     {
@@ -82,7 +100,10 @@
         "name": "Netresearch DTT GmbH",
         "email": "info@netresearch.de"
       },
-      "source": "./skills/netresearch-branding",
+      "source": {
+        "source": "github",
+        "repo": "netresearch/netresearch-branding-skill"
+      },
       "category": "design"
     },
     {
@@ -93,7 +114,10 @@
         "name": "Netresearch DTT GmbH",
         "email": "info@netresearch.de"
       },
-      "source": "./skills/agents",
+      "source": {
+        "source": "github",
+        "repo": "netresearch/agents-skill"
+      },
       "category": "development"
     },
     {
@@ -104,7 +128,10 @@
         "name": "Netresearch DTT GmbH",
         "email": "info@netresearch.de"
       },
-      "source": "./skills/cli-tools",
+      "source": {
+        "source": "github",
+        "repo": "netresearch/cli-tools-skill"
+      },
       "category": "development"
     },
     {
@@ -115,7 +142,10 @@
         "name": "Netresearch DTT GmbH",
         "email": "info@netresearch.de"
       },
-      "source": "./skills/typo3-extension-upgrade",
+      "source": {
+        "source": "github",
+        "repo": "netresearch/typo3-extension-upgrade-skill"
+      },
       "category": "development"
     },
     {
@@ -126,7 +156,10 @@
         "name": "Netresearch DTT GmbH",
         "email": "info@netresearch.de"
       },
-      "source": "./skills/go-development",
+      "source": {
+        "source": "github",
+        "repo": "netresearch/go-development-skill"
+      },
       "category": "development"
     },
     {
@@ -137,7 +170,10 @@
         "name": "Netresearch DTT GmbH",
         "email": "info@netresearch.de"
       },
-      "source": "./skills/php-modernization",
+      "source": {
+        "source": "github",
+        "repo": "netresearch/php-modernization-skill"
+      },
       "category": "development"
     },
     {
@@ -148,7 +184,10 @@
         "name": "Netresearch DTT GmbH",
         "email": "info@netresearch.de"
       },
-      "source": "./skills/security-audit",
+      "source": {
+        "source": "github",
+        "repo": "netresearch/security-audit-skill"
+      },
       "category": "security"
     },
     {
@@ -159,7 +198,10 @@
         "name": "Netresearch DTT GmbH",
         "email": "info@netresearch.de"
       },
-      "source": "./skills/typo3-ckeditor5",
+      "source": {
+        "source": "github",
+        "repo": "netresearch/typo3-ckeditor5-skill"
+      },
       "category": "development"
     },
     {
@@ -170,7 +212,10 @@
         "name": "Netresearch DTT GmbH",
         "email": "info@netresearch.de"
       },
-      "source": "./skills/git-workflow",
+      "source": {
+        "source": "github",
+        "repo": "netresearch/git-workflow-skill"
+      },
       "category": "development"
     },
     {
@@ -189,7 +234,10 @@
         "name": "Netresearch DTT GmbH",
         "email": "info@netresearch.de"
       },
-      "source": "./skills/skill-repo",
+      "source": {
+        "source": "github",
+        "repo": "netresearch/skill-repo-skill"
+      },
       "category": "development"
     },
     {
@@ -206,22 +254,22 @@
       "source": "./",
       "strict": false,
       "skills": [
-        "./skills/enterprise-readiness",
-        "./skills/typo3-docs",
-        "./skills/typo3-testing",
-        "./skills/typo3-ddev",
-        "./skills/typo3-core-contributions",
-        "./skills/typo3-conformance",
-        "./skills/typo3-extension-upgrade",
-        "./skills/netresearch-branding",
-        "./skills/agents",
-        "./skills/cli-tools",
-        "./skills/go-development",
-        "./skills/php-modernization",
-        "./skills/security-audit",
-        "./skills/typo3-ckeditor5",
-        "./skills/git-workflow",
-        "./skills/skill-repo"
+        "netresearch/enterprise-readiness-skill",
+        "netresearch/typo3-docs-skill",
+        "netresearch/typo3-testing-skill",
+        "netresearch/typo3-ddev-skill",
+        "netresearch/typo3-core-contributions-skill",
+        "netresearch/typo3-conformance-skill",
+        "netresearch/typo3-extension-upgrade-skill",
+        "netresearch/netresearch-branding-skill",
+        "netresearch/agents-skill",
+        "netresearch/cli-tools-skill",
+        "netresearch/go-development-skill",
+        "netresearch/php-modernization-skill",
+        "netresearch/security-audit-skill",
+        "netresearch/typo3-ckeditor5-skill",
+        "netresearch/git-workflow-skill",
+        "netresearch/skill-repo-skill"
       ]
     }
   ]
