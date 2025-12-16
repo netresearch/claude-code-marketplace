@@ -39,7 +39,19 @@ Automatically detects project types and their requirements:
 
 ## Installation
 
-### As a Claude Code Skill
+### Option 1: Via Netresearch Marketplace (Recommended)
+
+```bash
+/plugin marketplace add netresearch/claude-code-marketplace
+```
+
+Then browse skills with `/plugin`.
+
+### Option 2: Download Release
+
+Download the [latest release](https://github.com/netresearch/cli-tools-skill/releases/latest) and extract to `~/.claude/skills/cli-tools/`
+
+### Option 3: Manual Installation
 
 ```bash
 # Copy to your skills directory

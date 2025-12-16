@@ -1,8 +1,8 @@
 {
-  "name": "netresearch/agents-skill",
-  "description": "Netresearch AI skill for generating AGENTS.md files following the agents.md convention",
+  "name": "netresearch/agent-typo3-extension-upgrade",
+  "description": "Netresearch AI skill for TYPO3 extension upgrades to newer LTS versions",
   "type": "ai-agent-skill",
-  "license": "GPL-2.0-or-later",
+  "license": "MIT",
   "authors": [
     {
       "name": "Netresearch DTT GmbH",
@@ -14,8 +14,7 @@
   "require": {
     "netresearch/composer-agent-skill-plugin": "*"
   },
-  "keywords": [
-    "ai-agent",
-    "skill"
-  ]
+  "extra": {
+    "ai-agent-skill": "SKILL.md"
+  }
 }

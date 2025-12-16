@@ -51,14 +51,19 @@ This skill provides complete brand guidelines, reference documentation, and read
 
 ## Installation
 
-### Via Claude Code Marketplace
+### Option 1: Via Netresearch Marketplace (Recommended)
 
 ```bash
 /plugin marketplace add netresearch/claude-code-marketplace
-/plugin install netresearch-branding
 ```
 
-### Manual Installation
+Then browse skills with `/plugin`.
+
+### Option 2: Download Release
+
+Download the [latest release](https://github.com/netresearch/netresearch-branding-skill/releases/latest) and extract to `~/.claude/skills/netresearch-branding/`
+
+### Option 3: Manual Installation
 
 ```bash
 # Using curl

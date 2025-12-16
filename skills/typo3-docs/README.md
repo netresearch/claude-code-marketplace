@@ -20,9 +20,19 @@ This skill provides guidance for working with TYPO3 extension documentation in r
 
 ## Installation
 
-### Download the Skill
+### Option 1: Via Netresearch Marketplace (Recommended)
 
-Download the latest release from the [releases page](https://github.com/netresearch/typo3-docs-skill/releases) or install directly:
+```bash
+/plugin marketplace add netresearch/claude-code-marketplace
+```
+
+Then browse skills with `/plugin`.
+
+### Option 2: Download Release
+
+Download the [latest release](https://github.com/netresearch/typo3-docs-skill/releases/latest) and extract to `~/.claude/skills/typo3-docs/`
+
+### Option 3: Manual Installation
 
 ```bash
 # Using curl
@@ -333,3 +343,7 @@ Based on:
 **Version:** 1.0.0
 **Maintained By:** Netresearch DTT GmbH
 **Last Updated:** 2025-10-18
+
+---
+
+**Made with ❤️ for Open Source by [Netresearch](https://www.netresearch.de/)**

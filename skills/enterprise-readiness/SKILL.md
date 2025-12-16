@@ -293,6 +293,27 @@ jobs:
 8. **Binary Artifacts**: Generated binaries in source repos are unverifiable
 9. **Solo Maintainer**: Some Silver/Gold criteria require justification (bus factor, 2-person review)
 10. **Self-Approval**: GitHub doesn't allow self-approval - affects review requirements
+11. **API Transient Errors**: GitHub API returns 502/503/504 during high load - add retry logic (see `references/github.md`)
+12. **Auto-merge --auto Flag**: Requires branch protection rules - use direct merge for unprotected repos
+13. **Merge Queue GraphQL**: `mergeMethod` is NOT valid for `enqueuePullRequest` - merge method is set by queue config
+
+## Installation
+
+### Option 1: Via Netresearch Marketplace (Recommended)
+
+```bash
+/plugin marketplace add netresearch/claude-code-marketplace
+```
+
+Then browse skills with `/plugin`.
+
+### Option 2: Download Release
+
+Download the [latest release](https://github.com/netresearch/enterprise-readiness-skill/releases/latest) and extract to `~/.claude/skills/enterprise-readiness/`
+
+### Option 3: Manual Installation
+
+Clone or download this repository to your Claude Code skills directory.
 
 ## Bundled Resources
 
@@ -408,3 +429,7 @@ The git-workflow-skill complements enterprise readiness with:
 - [slsa-github-generator](https://github.com/slsa-framework/slsa-github-generator) - SLSA builders
 - [Contributor Covenant](https://www.contributor-covenant.org/) - Code of conduct
 - [Developer Certificate of Origin](https://developercertificate.org/) - DCO
+
+---
+
+**Made with ❤️ for Open Source by [Netresearch](https://www.netresearch.de/)**

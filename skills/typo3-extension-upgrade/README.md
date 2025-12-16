@@ -36,18 +36,23 @@ This skill is for **extension developers** upgrading extension code. It does NOT
 
 ## Installation
 
-### Option 1: User Skill (Private)
+### Option 1: Via Netresearch Marketplace (Recommended)
+
+```bash
+/plugin marketplace add netresearch/claude-code-marketplace
+```
+
+Then browse skills with `/plugin`.
+
+### Option 2: Download Release
+
+Download the [latest release](https://github.com/netresearch/typo3-extension-upgrade-skill/releases/latest) and extract to `~/.claude/skills/typo3-extension-upgrade/`
+
+### Option 3: Manual Installation
 
 ```bash
 # Copy to your user skills directory
 cp -r typo3-extension-upgrade-skill ~/.claude/skills/
-```
-
-### Option 2: Project Skill (Shared)
-
-```bash
-# Copy to your project's skills directory
-cp -r typo3-extension-upgrade-skill .claude/skills/
 ```
 
 ## Usage
@@ -104,3 +109,7 @@ Netresearch is a Leipzig-based technology company specializing in e-commerce, lo
 ## License
 
 MIT
+
+---
+
+**Made with ❤️ for Open Source by [Netresearch](https://www.netresearch.de/)**

@@ -46,7 +46,21 @@ Ensure you have:
 - SSH key uploaded to review.typo3.org
 - Docker (for DDEV) or native PHP 8.2+ environment
 
-### Installation
+## Installation
+
+### Option 1: Via Netresearch Marketplace (Recommended)
+
+```bash
+/plugin marketplace add netresearch/claude-code-marketplace
+```
+
+Then browse skills with `/plugin`.
+
+### Option 2: Download Release
+
+Download the [latest release](https://github.com/netresearch/typo3-core-contributions-skill/releases/latest) and extract to `~/.claude/skills/typo3-core-contributions/`
+
+### Option 3: Manual Installation
 
 Use this skill in Claude Code by referencing it from your project's skill configuration.
 
@@ -271,3 +285,7 @@ For issues or questions:
 **Version**: 1.1.0
 **Last Updated**: 2025-10-27
 **Status**: Production-ready, validated on live submissions
+
+---
+
+**Made with ❤️ for Open Source by [Netresearch](https://www.netresearch.de/)**

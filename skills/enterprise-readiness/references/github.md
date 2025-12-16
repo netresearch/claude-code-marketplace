@@ -357,3 +357,117 @@ For Docker-heavy CI (Molecule, container builds):
 | Memory exhaustion | OOM killed | Reduce parallelism, add swap |
 | Timeout | Job exceeds 6h limit | Split into multiple jobs |
 | Rate limiting | API calls fail | Add retry logic, caching |
+| Transient API errors | 502/503/504 Bad Gateway | Retry with exponential backoff |
+
+---
+
+## API Resilience Patterns
+
+GitHub API can return transient errors (502, 503, 504) during high load. Scripts making API calls should include retry logic.
+
+### Retry Logic for Python Scripts
+
+```python
+import time
+import requests
+
+def github_request(url: str, token: str, max_retries: int = 3) -> dict | list:
+    """Make authenticated GitHub API request with retry logic."""
+    headers = {
+        "Authorization": f"Bearer {token}",
+        "Accept": "application/vnd.github+json",
+        "X-GitHub-Api-Version": "2022-11-28",
+    }
+
+    for attempt in range(max_retries):
+        try:
+            response = requests.get(url, headers=headers, timeout=30)
+
+            # Retry on transient errors
+            if response.status_code in (429, 502, 503, 504):
+                retry_after = int(response.headers.get("Retry-After", 2 ** attempt))
+                print(f"Retry {attempt + 1}/{max_retries}: {response.status_code}, waiting {retry_after}s")
+                time.sleep(retry_after)
+                continue
+
+            response.raise_for_status()
+            return response.json()
+
+        except requests.exceptions.RequestException as e:
+            if attempt < max_retries - 1:
+                wait_time = 2 ** attempt
+                print(f"Retry {attempt + 1}/{max_retries}: {e}, waiting {wait_time}s")
+                time.sleep(wait_time)
+            else:
+                raise
+
+    raise RuntimeError(f"Max retries exceeded for {url}")
+```
+
+### Retry Logic for Shell Scripts
+
+```bash
+#!/bin/bash
+# GitHub API with retry logic
+
+github_api_request() {
+    local url="$1"
+    local max_retries=3
+    local attempt=0
+
+    while [ $attempt -lt $max_retries ]; do
+        response=$(curl -s -w "\n%{http_code}" \
+            -H "Authorization: Bearer $GITHUB_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            "$url")
+
+        http_code=$(echo "$response" | tail -n1)
+        body=$(echo "$response" | sed '$d')
+
+        case $http_code in
+            200|201|204)
+                echo "$body"
+                return 0
+                ;;
+            429|502|503|504)
+                attempt=$((attempt + 1))
+                wait_time=$((2 ** attempt))
+                echo "Retry $attempt/$max_retries: HTTP $http_code, waiting ${wait_time}s" >&2
+                sleep $wait_time
+                ;;
+            *)
+                echo "Error: HTTP $http_code" >&2
+                echo "$body" >&2
+                return 1
+                ;;
+        esac
+    done
+
+    echo "Max retries exceeded for $url" >&2
+    return 1
+}
+```
+
+### Retry Logic for GitHub Actions
+
+```yaml
+- name: Call GitHub API with retry
+  run: |
+    for i in 1 2 3; do
+      response=$(gh api repos/${{ github.repository }}/releases/latest 2>&1) && break
+      echo "Attempt $i failed, retrying in $((i * 2)) seconds..."
+      sleep $((i * 2))
+    done
+    echo "$response"
+  env:
+    GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+```
+
+### When to Add Retry Logic
+
+| Scenario | Retry Needed? | Reason |
+|----------|---------------|--------|
+| CI workflow API calls | Yes | Transient failures break builds |
+| Release automation | Yes | Critical operations should be resilient |
+| One-time scripts | Optional | Manual retry is acceptable |
+| User-facing CLI tools | Yes | Better UX than cryptic errors |

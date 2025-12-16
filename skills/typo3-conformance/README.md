@@ -871,7 +871,19 @@ Tests run concurrently across combinations, providing fast feedback on compatibi
 
 ## Installation
 
-### Download the Skill
+### Option 1: Via Netresearch Marketplace (Recommended)
+
+```bash
+/plugin marketplace add netresearch/claude-code-marketplace
+```
+
+Then browse skills with `/plugin`.
+
+### Option 2: Download Release
+
+Download the [latest release](https://github.com/netresearch/typo3-conformance-skill/releases/latest) and extract to `~/.claude/skills/typo3-conformance/`
+
+### Option 3: Manual Installation
 
 ```bash
 # Using curl
@@ -1281,3 +1293,7 @@ Based on:
 **Version:** 1.8.0
 **Maintained By:** Netresearch DTT GmbH
 **Last Updated:** 2025-12-02
+
+---
+
+**Made with ❤️ for Open Source by [Netresearch](https://www.netresearch.de/)**

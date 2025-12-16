@@ -17,18 +17,23 @@ A comprehensive Claude Code skill for creating and managing TYPO3 extension test
 
 ## Installation
 
-Install the skill globally in Claude Code:
+### Option 1: Via Netresearch Marketplace (Recommended)
+
+```bash
+/plugin marketplace add netresearch/claude-code-marketplace
+```
+
+Then browse skills with `/plugin`.
+
+### Option 2: Download Release
+
+Download the [latest release](https://github.com/netresearch/typo3-testing-skill/releases/latest) and extract to `~/.claude/skills/typo3-testing/`
+
+### Option 3: Manual Installation
 
 ```bash
 cd ~/.claude/skills
 git clone https://github.com/netresearch/typo3-testing-skill.git typo3-testing
-```
-
-Or via Claude Code marketplace:
-
-```bash
-/plugin marketplace add netresearch/claude-code-marketplace
-/plugin install typo3-testing
 ```
 
 ## Quick Start
@@ -645,3 +650,7 @@ GPL-2.0-or-later
 ## Maintained By
 
 Netresearch DTT GmbH, Leipzig
+
+---
+
+**Made with ❤️ for Open Source by [Netresearch](https://www.netresearch.de/)**

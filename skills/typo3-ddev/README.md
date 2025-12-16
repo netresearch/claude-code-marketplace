@@ -37,21 +37,27 @@ Before using this skill, ensure you have:
 
 ## Installation
 
-### Option 1: Install as Claude Code Skill
+### Option 1: Via Netresearch Marketplace (Recommended)
+
+```bash
+/plugin marketplace add netresearch/claude-code-marketplace
+```
+
+Then browse skills with `/plugin`.
+
+### Option 2: Download Release
+
+Download the [latest release](https://github.com/netresearch/typo3-ddev-skill/releases/latest) and extract to `~/.claude/skills/typo3-ddev/`
+
+### Option 3: Manual Installation
 
 ```bash
 # Clone this repository into your Claude Code skills directory
-cd ~/.claude/skills/  # or your custom skills directory
+cd ~/.claude/skills/
 git clone https://github.com/netresearch/typo3-ddev-skill.git
 
 # The skill is now available in Claude Code
 ```
-
-### Option 2: Manual Setup
-
-1. Download this repository
-2. Copy the `skill.md` file to your project or reference it when needed
-3. Use the templates manually by copying from the `templates/` directory
 
 ## Usage
 
