@@ -1,7 +1,7 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "netresearch-claude-code-marketplace",
-  "version": "1.7.0",
+  "version": "1.8.0",
   "description": "Curated Claude Code plugins for TYPO3 development and technical documentation workflows",
   "owner": {
     "name": "Netresearch DTT GmbH",
@@ -269,7 +269,9 @@
         "./skills/security-audit",
         "./skills/typo3-ckeditor5",
         "./skills/git-workflow",
-        "./skills/skill-repo"
+        "./skills/skill-repo",
+        "./skills/github-project",
+        "./skills/jira-integration"
       ]
     }
   ]

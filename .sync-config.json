@@ -95,6 +95,18 @@
       "repository": "https://github.com/netresearch/skill-repo-skill.git",
       "target_path": "skills/skill-repo",
       "marketplace_name": "skill-repo"
+    },
+    {
+      "name": "github-project",
+      "repository": "https://github.com/netresearch/github-project-skill.git",
+      "target_path": "skills/github-project",
+      "marketplace_name": "github-project"
+    },
+    {
+      "name": "jira-integration",
+      "repository": "https://github.com/netresearch/jira-skill.git",
+      "target_path": "skills/jira-integration",
+      "marketplace_name": "jira-integration"
     }
   ],
   "sync_settings": {
