@@ -25,10 +25,19 @@ Then use `/plugin` to browse and install plugins.
 | TYPO3 DDEV Setup | [typo3-ddev-skill](https://github.com/netresearch/typo3-ddev-skill) | Automate DDEV environment setup |
 | TYPO3 Core Contributions | [typo3-core-contributions-skill](https://github.com/netresearch/typo3-core-contributions-skill) | Guide TYPO3 core contributions |
 | TYPO3 Conformance | [typo3-conformance-skill](https://github.com/netresearch/typo3-conformance-skill) | Evaluate TYPO3 standards compliance |
+| TYPO3 CKEditor 5 | [typo3-ckeditor5-skill](https://github.com/netresearch/typo3-ckeditor5-skill) | CKEditor 5 development for TYPO3 v12+ |
+| TYPO3 Extension Upgrade | [typo3-extension-upgrade-skill](https://github.com/netresearch/typo3-extension-upgrade-skill) | Systematic extension upgrades to newer LTS versions |
+| Jira Integration | [jira-skill](https://github.com/netresearch/jira-skill) | Jira API operations, wiki markup, and workflow automation |
+| Git Workflow | [git-workflow-skill](https://github.com/netresearch/git-workflow-skill) | Git branching strategies and Conventional Commits |
+| GitHub Project | [github-project-skill](https://github.com/netresearch/github-project-skill) | GitHub repository setup and platform features |
+| Enterprise Readiness | [enterprise-readiness-skill](https://github.com/netresearch/enterprise-readiness-skill) | OpenSSF security assessment and compliance |
+| Security Audit | [security-audit-skill](https://github.com/netresearch/security-audit-skill) | OWASP security audit patterns for PHP |
+| PHP Modernization | [php-modernization-skill](https://github.com/netresearch/php-modernization-skill) | PHP 8.x modernization and type safety |
+| Go Development | [go-development-skill](https://github.com/netresearch/go-development-skill) | Production-grade Go development patterns |
 | Netresearch Branding | [netresearch-branding-skill](https://github.com/netresearch/netresearch-branding-skill) | Apply Netresearch brand guidelines |
 | AGENTS.md Generator | [agents-skill](https://github.com/netresearch/agents-skill) | Generate AGENTS.md documentation |
 | CLI Tools | [cli-tools-skill](https://github.com/netresearch/cli-tools-skill) | Auto-install missing CLI tools |
-| TYPO3 Extension Upgrade | [typo3-extension-upgrade-skill](https://github.com/netresearch/typo3-extension-upgrade-skill) | Systematic extension upgrades to newer LTS versions |
+| Skill Repo | [skill-repo-skill](https://github.com/netresearch/skill-repo-skill) | Guide for structuring Netresearch skill repositories |
 
 ## Architecture
 
@@ -177,6 +186,129 @@ Automatic CLI tool management for coding agents with reactive and proactive mode
 - Smart installation method selection (GitHub releases, cargo, npm, apt/brew)
 - Support for Python, Node.js, Rust, Go, PHP, Ruby, and infrastructure projects
 - User-level installation priority (~/.local/bin, ~/.cargo/bin)
+
+### TYPO3 CKEditor 5
+CKEditor 5 development patterns for TYPO3 v12+ including custom plugin development and migration.
+
+**Repository:** https://github.com/netresearch/typo3-ckeditor5-skill
+
+**Features:**
+- CKEditor 5 plugin architecture (schema, conversion, commands)
+- TYPO3 RTE configuration via YAML
+- Custom plugin registration and UI components
+- ES6 module development patterns
+- Complete CKEditor 4 to 5 migration guides
+- Integration with TYPO3 backend modules
+
+### Jira Integration
+Comprehensive Jira integration through lightweight Python CLI scripts.
+
+**Repository:** https://github.com/netresearch/jira-skill
+
+**Features:**
+- JQL search queries and issue management
+- Issue creation, updates, and transitions
+- Comment and worklog management
+- Sprint and board operations
+- Issue linking and attachments
+- Jira wiki markup syntax (not Markdown)
+- Support for Jira Cloud and Server/Data Center
+
+### Git Workflow
+Git workflow best practices for teams and CI/CD pipelines.
+
+**Repository:** https://github.com/netresearch/git-workflow-skill
+
+**Features:**
+- Branching strategies (Git Flow, GitHub Flow, Trunk-based)
+- Conventional Commits for semantic versioning
+- Pull request workflows and code review
+- Branch protection configuration
+- GitHub Actions and GitLab CI integration
+- Advanced Git operations and troubleshooting
+
+### GitHub Project
+GitHub repository setup and platform-specific features configuration.
+
+**Repository:** https://github.com/netresearch/github-project-skill
+
+**Features:**
+- Repository creation and configuration
+- Branch protection rules and PR workflows
+- CODEOWNERS configuration
+- GitHub Issues, Discussions, and Projects
+- Sub-issues and issue hierarchies
+- Dependabot/Renovate auto-merge setup
+- Merge queue configuration with GraphQL
+
+### Enterprise Readiness
+Assess and enhance software projects for enterprise-grade security and compliance.
+
+**Repository:** https://github.com/netresearch/enterprise-readiness-skill
+
+**Features:**
+- OpenSSF Scorecard assessment
+- Best Practices Badge criteria (Passing/Silver/Gold)
+- SLSA Framework compliance
+- Supply chain security (SBOMs, signing)
+- CI/CD pipeline hardening
+- Quality gates and automation scripts
+- S2C2F alignment
+
+### Security Audit
+Security audit patterns for PHP applications following OWASP guidelines.
+
+**Repository:** https://github.com/netresearch/security-audit-skill
+
+**Features:**
+- OWASP Top 10 vulnerability detection
+- XXE, SQL injection, XSS, CSRF analysis
+- CVSS v3.1 risk scoring
+- Secure coding practice validation
+- Authentication/authorization assessment
+- Security hardening checklists
+- Remediation guidance
+
+### PHP Modernization
+PHP 8.x modernization patterns for upgrading legacy applications.
+
+**Repository:** https://github.com/netresearch/php-modernization-skill
+
+**Features:**
+- PHP 8.1/8.2/8.3 feature adoption
+- Constructor property promotion and readonly classes
+- Enums, attributes, and match expressions
+- Union/intersection types and nullsafe operator
+- PHPStan level 9+ compliance
+- Symfony best practices integration
+- Migration strategies and tooling
+
+### Go Development
+Production-grade Go development patterns for building resilient services.
+
+**Repository:** https://github.com/netresearch/go-development-skill
+
+**Features:**
+- Architecture patterns for Go services
+- Job scheduling and task orchestration
+- Docker API integration patterns
+- LDAP/Active Directory client implementation
+- Resilience patterns (retry, circuit breaker)
+- Middleware chains and buffer pooling
+- Comprehensive testing strategies
+
+### Skill Repo
+Guide for structuring Netresearch skill repositories.
+
+**Repository:** https://github.com/netresearch/skill-repo-skill
+
+**Features:**
+- Standard repository layout for skills
+- Multi-channel distribution (marketplace, releases, composer)
+- PHP ecosystem integration via Composer
+- Release workflow configuration
+- Validation scripts and templates
+- Documentation standards
 
 ---
 
