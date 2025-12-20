@@ -37,6 +37,7 @@ Then use `/plugin` to browse and install plugins.
 | Netresearch Branding | [netresearch-branding-skill](https://github.com/netresearch/netresearch-branding-skill) | Apply Netresearch brand guidelines |
 | AGENTS.md Generator | [agents-skill](https://github.com/netresearch/agents-skill) | Generate AGENTS.md documentation |
 | CLI Tools | [cli-tools-skill](https://github.com/netresearch/cli-tools-skill) | Auto-install missing CLI tools |
+| Coach | [claude-coach-plugin](https://github.com/netresearch/claude-coach-plugin) | Self-improving learning system with friction detection |
 | Skill Repo | [skill-repo-skill](https://github.com/netresearch/skill-repo-skill) | Guide for structuring Netresearch skill repositories |
 
 ## Architecture
@@ -186,6 +187,31 @@ Automatic CLI tool management for coding agents with reactive and proactive mode
 - Smart installation method selection (GitHub releases, cargo, npm, apt/brew)
 - Support for Python, Node.js, Rust, Go, PHP, Ruby, and infrastructure projects
 - User-level installation priority (~/.local/bin, ~/.cargo/bin)
+
+### Coach
+Self-improving learning system that detects friction signals and proposes rule updates.
+
+**Repository:** https://github.com/netresearch/claude-coach-plugin
+
+**Features:**
+- Automatic friction signal detection (user corrections, tool failures, repeated instructions, tone escalation)
+- LLM-assisted candidate generation using Claude Haiku
+- Session-end transcript analysis for comprehensive learning
+- Cross-repo learning with fingerprint-based deduplication
+- Explicit approval workflow via `/coach` slash commands
+- Project vs global scope determination with promotion support
+- Auto-configured hooks for UserPromptSubmit, PostToolUse, and Stop events
+
+**Slash Commands:**
+| Command | Description |
+|---------|-------------|
+| `/coach status` | Show system status and statistics |
+| `/coach review` | Show pending learning proposals |
+| `/coach approve <id>` | Approve and apply a proposal |
+| `/coach reject <id>` | Reject a proposal with reason |
+| `/coach edit <id>` | Edit a proposal before approving |
+| `/coach promote <id>` | Promote project rule to global |
+| `/coach init` | Initialize the coach system |
 
 ### TYPO3 CKEditor 5
 CKEditor 5 development patterns for TYPO3 v12+ including custom plugin development and migration.
