@@ -1,7 +1,7 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "netresearch-claude-code-marketplace",
-  "version": "1.8.0",
+  "version": "1.9.0",
   "description": "Curated Claude Code plugins for TYPO3 development and technical documentation workflows",
   "owner": {
     "name": "Netresearch DTT GmbH",
@@ -249,6 +249,20 @@
       },
       "description": "Comprehensive Jira integration with two specialized skills: jira-mcp for API operations via mcp-atlassian MCP server, and jira-syntax for wiki markup validation and templates. Covers issue CRUD operations, JQL searching, project management, worklog management, attachment handling, issue linking, and enforced Jira wiki markup syntax standards.",
       "version": "3.1.1-20251216"
+    },
+    {
+      "name": "coach",
+      "description": "Self-improving learning system that detects friction signals (corrections, tool failures, repetition) and proposes rule updates. Includes /coach slash commands for reviewing, approving, and managing learning candidates. Auto-configures hooks for signal detection.",
+      "version": "2.1.0",
+      "author": {
+        "name": "Netresearch DTT GmbH",
+        "email": "info@netresearch.de"
+      },
+      "source": {
+        "source": "github",
+        "repo": "netresearch/claude-coach-plugin"
+      },
+      "category": "productivity"
     },
     {
       "name": "netresearch-skills-bundle",

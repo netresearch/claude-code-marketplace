@@ -107,6 +107,12 @@
       "repository": "https://github.com/netresearch/jira-skill.git",
       "target_path": "skills/jira-integration",
       "marketplace_name": "jira-integration"
+    },
+    {
+      "name": "coach",
+      "repository": "https://github.com/netresearch/claude-coach-plugin.git",
+      "target_path": "plugins/coach",
+      "marketplace_name": "coach"
     }
   ],
   "sync_settings": {
