@@ -16,6 +16,72 @@ This skill provides production-grade patterns for Go application development, ex
 - Designing resilient systems with retry logic
 - Setting up comprehensive test suites
 
+## Core Principles
+
+### Type Safety is Non-Negotiable
+
+**Type safety is a MUST-HAVE requirement.** Go's compile-time type checking is one of its greatest strengths. Never sacrifice it for convenience.
+
+**Avoid:**
+- `interface{}` / `any` when concrete types are possible
+- `sync.Map` when a typed map with mutex works
+- Type assertions scattered throughout code
+- Reflection-heavy designs
+
+**Prefer:**
+- Generics (`[T any]`) for type-safe reusable code
+- Concrete types with explicit interfaces
+- Compile-time verification over runtime checks
+
+```go
+// BAD: Lost type safety
+var cache sync.Map
+cache.Store("key", value)
+v, _ := cache.Load("key")
+item := v.(*MyType)  // Runtime assertion - can panic!
+
+// GOOD: Type-safe with generics
+type Cache[T any] struct {
+    mu    sync.RWMutex
+    items map[string]T
+}
+
+func (c *Cache[T]) Get(key string) (T, bool) {
+    c.mu.RLock()
+    defer c.mu.RUnlock()
+    v, ok := c.items[key]
+    return v, ok  // Compile-time type safety
+}
+```
+
+### Consistency is Critical
+
+**Architectural consistency is VERY IMPORTANT.** A codebase should follow consistent patterns throughout. Mixed approaches create confusion and bugs.
+
+**Rules:**
+1. **One pattern per problem domain**: If using channels for synchronization, use channels everywhere for that purpose
+2. **Match existing patterns**: New code should follow established conventions in the codebase
+3. **Refactor holistically**: When changing a pattern, change it everywhere or don't change it at all
+
+**Example - Concurrency patterns:**
+```go
+// If your codebase uses channels for coordination:
+type Scheduler struct {
+    add      chan *Entry      // Channel-based
+    remove   chan EntryID     // Channel-based
+    snapshot chan chan []Entry // Channel-based
+    // DON'T mix in sync.Map or other patterns!
+}
+
+// Consistency means predictable behavior and easier debugging
+```
+
+**Why consistency matters:**
+- Reduces cognitive load for maintainers
+- Makes code review more effective
+- Prevents subtle bugs from pattern mismatches
+- Enables better tooling and static analysis
+
 ## Architecture Patterns
 
 ### Package Structure
@@ -277,6 +343,109 @@ func TestDockerExec(t *testing.T) { ... }
 func TestFullWorkflow(t *testing.T) { ... }
 ```
 
+### Testify Best Practices
+
+Use `stretchr/testify` for readable assertions:
+
+```go
+import (
+    "testing"
+    "github.com/stretchr/testify/assert"
+    "github.com/stretchr/testify/require"
+)
+
+func TestUserValidation(t *testing.T) {
+    t.Parallel()  // Enable parallel execution
+
+    user := NewUser("test@example.com")
+
+    // Use assert for non-fatal checks
+    assert.NotNil(t, user)
+    assert.Equal(t, "test@example.com", user.Email)
+
+    // Use require for fatal checks (stops test on failure)
+    require.NoError(t, user.Validate())
+
+    // Use specific assertions for better error messages
+    assert.Empty(t, user.Errors)           // NOT: assert.Equal(t, "", ...)
+    assert.True(t, user.IsActive)          // NOT: assert.Equal(t, true, ...)
+    assert.Nil(t, user.DeletedAt)          // NOT: assert.Equal(t, nil, ...)
+    assert.Len(t, user.Roles, 2)           // NOT: assert.Equal(t, 2, len(...))
+    assert.Contains(t, user.Roles, "admin")
+}
+```
+
+### Parallel Test Considerations
+
+```go
+// Tests that CAN run in parallel
+func TestPureFunction(t *testing.T) {
+    t.Parallel()  // Safe - no shared state
+    // ...
+}
+
+// Tests that CANNOT run in parallel (global state)
+//nolint:paralleltest // Tests modify global logrus state and cannot run in parallel
+func TestBuildLogger_ValidLevels(t *testing.T) {
+    // Modifies global logger - NOT parallel safe
+    logrus.SetLevel(logrus.DebugLevel)
+    // ...
+}
+
+// Tests that modify global variables
+//nolint:paralleltest // Modifies global newDockerHandler
+func TestBootLogsConfigError(t *testing.T) {
+    orig := newDockerHandler
+    defer func() { newDockerHandler = orig }()
+    // ...
+}
+```
+
+### Modern Go Syntax (1.22+)
+
+```go
+// Go 1.22+ integer range syntax
+for range 5 {  // Instead of: for i := 0; i < 5; i++
+    doSomething()
+}
+
+// With index when needed
+for i := range 5 {
+    doSomethingWith(i)
+}
+
+// Range over function (Go 1.23+)
+for item := range iter.Seq(items) {
+    process(item)
+}
+```
+
+### HTTP Test Patterns
+
+```go
+func TestAPIEndpoint(t *testing.T) {
+    t.Parallel()
+
+    // Use http.Method* constants
+    req := httptest.NewRequest(http.MethodPost, "/api/users", body)  // NOT: "POST"
+    req.Header.Set("Content-Type", "application/json")
+
+    rec := httptest.NewRecorder()
+    handler.ServeHTTP(rec, req)
+
+    assert.Equal(t, http.StatusCreated, rec.Code)  // NOT: 201
+}
+```
+
+### Common Linter Directives
+
+```go
+//nolint:paralleltest    // Test cannot run in parallel (modifies global state)
+//nolint:tparallel       // Subtests cannot run in parallel
+//nolint:testifylint     // Disable testify-specific checks (use sparingly)
+//nolint:gosec           // Security check false positive (document why)
+```
+
 ### Running Tests
 
 ```bash
@@ -400,6 +569,62 @@ func (j *Job) Run(ctx context.Context) error {
 }
 ```
 
+## Code Quality & Linting
+
+**Reference:** `references/linting.md`
+
+### Key Conventions
+
+```go
+// ST1005: Error strings must be lowercase, no punctuation
+return errors.New("invalid input")           // GOOD
+return errors.New("Invalid input.")          // BAD
+
+// gosec G104: Explicitly ignore known-nil errors
+_, _ = hash.Write(data)  // hash.Hash.Write never errors
+
+// Naming: Use ID, URL, HTTP (not Id, Url, Http)
+var userID string        // GOOD
+var userId string        // BAD (ST1003)
+```
+
+### golangci-lint v2
+
+See `references/linting.md` for complete configuration including:
+- Linter selection by category (bugs, security, style, performance)
+- Exclusion patterns for complex functions
+- Common fixes for staticcheck/revive
+
+## API Design Patterns
+
+**Reference:** `references/api-design.md`
+
+### Bitmask Options
+
+```go
+type ParseOption int
+
+const (
+    Second    ParseOption = 1 << iota
+    Minute
+    Hour
+    Descriptor
+    Hash
+)
+
+// Usage: parser := NewParser(Minute | Hour | Descriptor | Hash)
+```
+
+### Functional Options
+
+```go
+func WithTimeout(d time.Duration) Option {
+    return func(c *Config) { c.timeout = d }
+}
+
+// Usage: NewParser(WithTimeout(30*time.Second), WithHash("key"))
+```
+
 ## Error Handling Best Practices
 
 ```go
@@ -430,4 +655,6 @@ func (e *ValidationError) Error() string {
 - `references/resilience.md` - Retry, shutdown, recovery
 - `references/docker.md` - Docker client patterns
 - `references/ldap.md` - LDAP/Active Directory integration
-- `references/testing.md` - Test strategies and patterns
+- `references/testing.md` - Test strategies, fuzz testing, mutation testing
+- `references/linting.md` - golangci-lint v2, staticcheck, code quality
+- `references/api-design.md` - Bitmask options, functional options, builders

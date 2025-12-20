@@ -11,7 +11,7 @@
     {
       "name": "enterprise-readiness",
       "description": "Assess and enhance software projects for enterprise-grade security, quality, and automation. Includes supply chain security (SLSA, signing, SBOMs), quality gates, testing layers, and platform-specific hardening with dynamic scoring for fair cross-stack assessment.",
-      "version": "3.7.1-20251216",
+      "version": "3.7.1-20251220",
       "author": {
         "name": "Netresearch DTT GmbH",
         "email": "info@netresearch.de"
@@ -39,7 +39,7 @@
     {
       "name": "typo3-testing",
       "description": "Create and manage TYPO3 extension tests with comprehensive testing infrastructure. Includes unit, functional, and acceptance testing support, PHPUnit configurations, Docker setup, CI/CD templates, and automated test generation following TYPO3 best practices.",
-      "version": "2.2.0-20251216",
+      "version": "2.2.0-20251220",
       "author": {
         "name": "Netresearch DTT GmbH",
         "email": "info@netresearch.de"
@@ -81,7 +81,7 @@
     {
       "name": "typo3-conformance",
       "description": "Evaluate TYPO3 extensions for conformance to official TYPO3 coding standards, architecture patterns, and best practices. Includes automated validation scripts for file structure, PSR-12 compliance, dependency injection, testing infrastructure, and comprehensive conformance scoring with priority-based action items.",
-      "version": "1.9.1-20251216",
+      "version": "1.9.1-20251220",
       "author": {
         "name": "Netresearch DTT GmbH",
         "email": "info@netresearch.de"
@@ -151,7 +151,7 @@
     {
       "name": "go-development",
       "description": "Go (Golang) development patterns following best practices for cloud-native applications. Covers project structure, error handling, concurrency patterns, testing strategies, Docker containerization, LDAP integration, and resilience patterns. By Netresearch.",
-      "version": "1.0.1-20251216",
+      "version": "1.0.1-20251220",
       "author": {
         "name": "Netresearch DTT GmbH",
         "email": "info@netresearch.de"
@@ -207,7 +207,7 @@
     {
       "name": "git-workflow",
       "description": "Git workflow best practices for teams and CI/CD pipelines. Covers Git Flow, GitHub Flow, Trunk-based development, Conventional Commits, pull request workflows, and GitHub Actions integration. By Netresearch.",
-      "version": "1.0.1-20251216",
+      "version": "1.0.1-20251220",
       "author": {
         "name": "Netresearch DTT GmbH",
         "email": "info@netresearch.de"
@@ -225,12 +225,12 @@
         "source": "github",
         "repo": "netresearch/github-project-skill"
       },
-      "version": "1.1.1-20251216"
+      "version": "1.1.1-20251220"
     },
     {
       "name": "skill-repo",
       "description": "Guide for structuring Netresearch skill repositories with multi-channel distribution. Covers repository standards, README/SKILL.md separation, composer.json configuration, release workflows, and validation scripts for skill quality assurance. By Netresearch.",
-      "version": "1.0.1-20251216",
+      "version": "1.0.1-20251220",
       "author": {
         "name": "Netresearch DTT GmbH",
         "email": "info@netresearch.de"
@@ -248,7 +248,7 @@
         "repo": "netresearch/jira-skill"
       },
       "description": "Comprehensive Jira integration with two specialized skills: jira-mcp for API operations via mcp-atlassian MCP server, and jira-syntax for wiki markup validation and templates. Covers issue CRUD operations, JQL searching, project management, worklog management, attachment handling, issue linking, and enforced Jira wiki markup syntax standards.",
-      "version": "3.1.1-20251216"
+      "version": "3.1.1-20251218"
     },
     {
       "name": "coach",

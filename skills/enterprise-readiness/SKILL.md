@@ -296,6 +296,62 @@ jobs:
 11. **API Transient Errors**: GitHub API returns 502/503/504 during high load - add retry logic (see `references/github.md`)
 12. **Auto-merge --auto Flag**: Requires branch protection rules - use direct merge for unprotected repos
 13. **Merge Queue GraphQL**: `mergeMethod` is NOT valid for `enqueuePullRequest` - merge method is set by queue config
+14. **Action Version Guessing**: NEVER guess action versions - ALWAYS fetch latest from GitHub API (see below)
+15. **Imposter Commit Errors**: OpenSSF Scorecard rejects unverified commit hashes - always verify against official tags
+
+## GitHub Actions Version Management (CRITICAL)
+
+**NEVER guess or assume action versions.** Always fetch the latest verified versions from the GitHub API.
+
+### Fetching Latest Action Versions
+
+```bash
+# Get latest tags for any action (e.g., github/codeql-action)
+gh api repos/github/codeql-action/tags --jq '.[:5] | .[] | "\(.name) \(.commit.sha)"'
+
+# Get specific major version tags (e.g., v3.x)
+gh api repos/github/codeql-action/tags --jq '.[] | select(.name | startswith("v3")) | "\(.name) \(.commit.sha)"' | head -5
+
+# Get latest release (for actions that use releases)
+gh api repos/actions/checkout/releases/latest --jq '{tag: .tag_name, sha: .target_commitish}'
+```
+
+### Version Update Workflow
+
+1. **Identify outdated actions** - Check for Dependabot/Renovate PRs or security advisories
+2. **Fetch latest version** - Use GitHub API to get current tag and commit SHA
+3. **Update ALL occurrences** - Search entire `.github/workflows/` directory
+4. **Use specific version tags** - e.g., `v3.31.9` not `v3` (for auditability)
+5. **Verify commit SHA matches** - Cross-reference with official repository
+
+```bash
+# Find all occurrences of an action across workflows
+grep -r "codeql-action" .github/workflows/
+
+# Update all at once (example for codeql-action v3.31.9)
+# Commit SHA: 45c373516f557556c15d420e3f5e0aa3d64366bc
+sed -i 's|codeql-action/.*@[a-f0-9]*|codeql-action/upload-sarif@45c373516f557556c15d420e3f5e0aa3d64366bc|g' .github/workflows/*.yml
+```
+
+### Common Actions Version Reference
+
+Always fetch fresh versions, but here's the pattern:
+
+| Action | Version Pattern | API Endpoint |
+|--------|-----------------|--------------|
+| actions/checkout | `@SHA # vX.Y.Z` | `repos/actions/checkout/tags` |
+| github/codeql-action | `@SHA # vX.Y.Z` | `repos/github/codeql-action/tags` |
+| step-security/harden-runner | `@SHA # vX.Y.Z` | `repos/step-security/harden-runner/tags` |
+| ossf/scorecard-action | `@SHA # vX.Y.Z` | `repos/ossf/scorecard-action/tags` |
+
+### OpenSSF Scorecard Verification
+
+OpenSSF Scorecard verifies that action commit hashes match official releases. "Imposter commit" errors mean:
+- The commit hash doesn't exist in the official repository
+- The hash was from a fork or unofficial source
+- The version was removed or rewritten
+
+**Fix**: Always fetch and verify against official tags using the GitHub API
 
 ## Installation
 

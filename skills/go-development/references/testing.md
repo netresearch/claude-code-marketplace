@@ -457,10 +457,140 @@ func TestParseConfig(t *testing.T) {
 }
 ```
 
+## Fuzz Testing (Go 1.18+)
+
+Fuzz testing automatically generates inputs to find edge cases and crashes.
+
+### Basic Fuzz Test
+
+```go
+func FuzzParseSchedule(f *testing.F) {
+    // Seed corpus with known valid inputs
+    f.Add("* * * * *")
+    f.Add("0 0 1 1 *")
+    f.Add("*/5 * * * *")
+    f.Add("0 9 * * MON-FRI")
+
+    f.Fuzz(func(t *testing.T, input string) {
+        // Should not panic on any input
+        result, err := ParseSchedule(input)
+
+        // If no error, result should be usable
+        if err == nil && result != nil {
+            // Additional invariant checks
+            _ = result.Next(time.Now())
+        }
+    })
+}
+```
+
+### Running Fuzz Tests
+
+```bash
+# Run fuzz test for 30 seconds
+go test -fuzz=FuzzParseSchedule -fuzztime=30s
+
+# Run with specific corpus directory
+go test -fuzz=FuzzParseSchedule -fuzztime=1m -test.fuzzcachedir=./testdata/fuzz
+
+# Run all fuzz tests
+go test -fuzz=. -fuzztime=30s ./...
+```
+
+### CI Configuration for Fuzz Testing
+
+```yaml
+# GitHub Actions
+fuzz-testing:
+  runs-on: ubuntu-latest
+  steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-go@v5
+      with:
+        go-version: '1.22'
+    - name: Fuzz Tests
+      run: |
+        go test -fuzz=. -fuzztime=60s ./...
+```
+
+### Best Practices
+
+1. **Seed meaningful inputs**: Start with valid edge cases
+2. **Check invariants**: Verify properties that should always hold
+3. **Never crash**: Parser should never panic on malformed input
+4. **Run in CI**: Short fuzz duration (30-60s) catches regressions
+
+## Mutation Testing
+
+Mutation testing validates test quality by introducing bugs and checking if tests catch them.
+
+### Using go-mutesting
+
+```bash
+# Install
+go install github.com/zimmski/go-mutesting/cmd/go-mutesting@latest
+
+# Run mutation testing
+go-mutesting ./...
+
+# With specific mutators
+go-mutesting --mutator=branch ./...
+```
+
+### Common Mutators
+
+| Mutator | What It Does | Example |
+|---------|-------------|---------|
+| `branch` | Removes branches | `if x > 0` → ` ` |
+| `expression` | Modifies operators | `a + b` → `a - b` |
+| `statement` | Removes statements | Deletes return statements |
+
+### Interpreting Results
+
+```
+Mutation Score: 85% (68/80 mutations killed)
+
+Survived mutations:
+  - parser.go:45 removed branch (if err != nil)
+  - validate.go:78 changed == to !=
+```
+
+**Target**: 80%+ mutation score indicates robust tests.
+
+### Boundary Condition Testing
+
+Mutation testing often reveals missing boundary tests:
+
+```go
+// Original code
+func isValidMinute(m int) bool {
+    return m >= 0 && m <= 59
+}
+
+// Mutations that might survive:
+// - m >= 0 → m > 0    (boundary at 0)
+// - m <= 59 → m < 59  (boundary at 59)
+
+// Tests needed to kill mutations:
+func TestIsValidMinute(t *testing.T) {
+    tests := []struct {
+        input int
+        want  bool
+    }{
+        {-1, false},   // Below range
+        {0, true},     // Lower boundary (kills >= → >)
+        {30, true},    // Middle
+        {59, true},    // Upper boundary (kills <= → <)
+        {60, false},   // Above range
+    }
+    // ...
+}
+```
+
 ## Makefile Integration
 
 ```makefile
-.PHONY: test test-race test-cover test-integration test-e2e
+.PHONY: test test-race test-cover test-integration test-e2e test-fuzz test-mutation
 
 test:
 	go test -v ./...
@@ -478,6 +608,12 @@ test-integration:
 
 test-e2e:
 	go test -v -tags=e2e ./...
+
+test-fuzz:
+	go test -fuzz=. -fuzztime=30s ./...
+
+test-mutation:
+	go-mutesting ./...
 
 test-all:
 	go test -v -tags="integration e2e" -race ./...

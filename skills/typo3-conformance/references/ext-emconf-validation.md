@@ -31,6 +31,20 @@ $EM_CONF[$_EXTKEY] = [
 grep "declare(strict_types" ext_emconf.php && echo "❌ CRITICAL: TER upload will FAIL" || echo "✅ No strict_types"
 ```
 
+### ⚠️ MUST exclude from PHP-CS-Fixer
+
+**CRITICAL:** PHP-CS-Fixer will RE-ADD `declare(strict_types=1)` unless ext_emconf.php is explicitly excluded!
+
+**Build/.php-cs-fixer.dist.php:**
+```php
+$finder = PhpCsFixer\Finder::create()
+    ->in($repoRoot)
+    // CRITICAL: ext_emconf.php must NOT have strict_types - TER cannot parse it
+    ->notPath('ext_emconf.php');
+```
+
+**Why this matters:** Even if you manually remove strict_types, running `php-cs-fixer fix` or a pre-commit hook will add it back, causing TER upload failures.
+
 ### ✅ MUST use $_EXTKEY variable
 
 Extensions must reference the global `$_EXTKEY` variable, not hardcode the extension key.

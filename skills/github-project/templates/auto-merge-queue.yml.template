@@ -37,6 +37,19 @@ jobs:
           PR_URL: ${{ github.event.pull_request.html_url }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Wait for required status checks
+        env:
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "Waiting for all required status checks to pass..."
+          # Wait up to 30 minutes for checks to complete
+          timeout 1800 gh pr checks "$PR_URL" --watch --fail-fast || {
+            echo "Status checks did not pass within timeout"
+            exit 1
+          }
+          echo "All status checks passed!"
+
       - name: Add to merge queue
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -51,3 +64,4 @@ jobs:
               echo "Failed to enqueue PR in merge queue"
               exit 1
             }
+          echo "PR successfully added to merge queue!"

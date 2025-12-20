@@ -66,7 +66,7 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
-          coverage: xdebug
+          coverage: pcov
 
       - name: Install dependencies
         run: composer install --no-progress
@@ -185,6 +185,56 @@ steps:
     flags: unittests
     name: codecov-umbrella
 ```
+
+### PCOV vs Xdebug for Coverage
+
+**PCOV is recommended for CI/CD** due to significant performance advantages:
+
+| Aspect | PCOV | Xdebug |
+|--------|------|--------|
+| **Speed** | 2-5x faster | Slower (debugger overhead) |
+| **Purpose** | Coverage only | Debugger + Profiler + Coverage |
+| **Memory** | Lower footprint | Higher (full debugger loaded) |
+| **CI/CD** | Ideal | Overkill for just coverage |
+
+**Why PCOV is faster:**
+- Xdebug hooks into every opcode execution for debugging capabilities
+- PCOV only instruments line coverage — no step debugging, no profiling
+- Less overhead = faster test runs
+
+**When to use which:**
+- **PCOV**: CI pipelines, large test suites, coverage reports
+- **Xdebug**: Local debugging, step-through, profiling, breakpoints
+
+**GitHub Actions setup:**
+```yaml
+- name: Setup PHP with PCOV (recommended for CI)
+  uses: shivammathur/setup-php@v2
+  with:
+    php-version: ${{ matrix.php }}
+    coverage: pcov
+
+- name: Setup PHP with Xdebug (for debugging)
+  uses: shivammathur/setup-php@v2
+  with:
+    php-version: ${{ matrix.php }}
+    coverage: xdebug
+```
+
+**Local development with runTests.sh:**
+```bash
+# Fast coverage with PCOV (if available in Docker image)
+php -d pcov.enabled=1 -d xdebug.mode=off \
+    vendor/bin/phpunit --coverage-clover coverage.xml
+
+# Coverage with Xdebug
+php -d xdebug.mode=coverage \
+    vendor/bin/phpunit --coverage-clover coverage.xml
+```
+
+> **Note:** PHPUnit auto-detects available coverage drivers and prefers PCOV
+> if both are present. The TYPO3 core-testing Docker images
+> (`ghcr.io/typo3/core-testing-php*`) include both PCOV and Xdebug.
 
 ## GitLab CI
 

@@ -189,6 +189,63 @@ To enforce PR comment resolution:
    - Reply with explanation → Then resolve
    - "Won't fix" with reason → Then resolve
 
+### Programmatic Review Thread Resolution (CRITICAL)
+
+**IMPORTANT**: "Addressing" review comments means BOTH:
+1. Fixing the code
+2. **LITERALLY resolving** the thread via GitHub GraphQL API
+
+The `gh` CLI does not support resolving review threads directly. Use GraphQL API.
+
+**Step 1: Get unresolved review threads**
+```bash
+gh api graphql -f query='{
+  repository(owner: "OWNER", name: "REPO") {
+    pullRequest(number: NUMBER) {
+      reviewThreads(first: 50) {
+        nodes {
+          id
+          isResolved
+          path
+          line
+          comments(first: 1) {
+            nodes { body }
+          }
+        }
+      }
+    }
+  }
+}'
+```
+
+**Step 2: Resolve each thread by ID**
+```bash
+gh api graphql -f query='mutation {
+  resolveReviewThread(input: {threadId: "PRRT_xxxxxxxxxxxx"}) {
+    thread { isResolved }
+  }
+}'
+```
+
+**Step 3: Verify all threads resolved**
+```bash
+gh api graphql -f query='{
+  repository(owner: "OWNER", name: "REPO") {
+    pullRequest(number: NUMBER) {
+      reviewThreads(first: 50) {
+        nodes { id isResolved }
+      }
+    }
+  }
+}' | jq '.data.repository.pullRequest.reviewThreads.nodes | map(select(.isResolved == false))'
+```
+
+**PR Completion Checklist**:
+- [ ] Code changes pushed and CI passing
+- [ ] All review threads LITERALLY resolved via GraphQL API
+- [ ] PR title and description updated to reflect final changes
+- [ ] Added to merge queue or auto-merge enabled
+
 ### CODEOWNERS Setup
 
 To configure automatic reviewer assignment:

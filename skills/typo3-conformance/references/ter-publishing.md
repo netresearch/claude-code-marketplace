@@ -59,6 +59,28 @@ Bug fixes & improvements! See CHANGELOG.md for details...
 
 ---
 
+## CI TER Compatibility Check
+
+**CRITICAL:** Add this check to your CI workflow to catch ext_emconf.php issues BEFORE release attempts!
+
+**Add to `.github/workflows/ci.yml`:**
+```yaml
+- id: ter-compatibility
+  name: TER Compatibility Check
+  run: |
+    # ext_emconf.php must NOT contain strict_types - TER cannot parse it
+    # Use regex to match actual declaration (not comments mentioning it)
+    if grep -qE "^[[:space:]]*declare\(strict_types" ext_emconf.php; then
+      echo "::error file=ext_emconf.php::ext_emconf.php contains strict_types declaration which breaks TER publishing"
+      exit 1
+    fi
+    echo "TER compatibility check passed"
+```
+
+**Why this matters:** This check runs on every PR and push, catching strict_types issues before they reach a release attempt. Without this, you may only discover the problem when TER upload fails.
+
+---
+
 ## GitHub Actions Workflow
 
 ### Recommended Workflow Template
