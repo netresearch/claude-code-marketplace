@@ -143,7 +143,49 @@ Always use card-grid instead of plain toctree lists:
 
 For guides.xml structure and migration, see: `references/typo3-directives.md`
 
-**4. literalinclude for Code Examples**
+**4. Version Configuration (Dev vs Release)**
+
+Version settings differ between development branches and tagged releases:
+
+```xml
+<!-- For main/dev branch (dynamic): -->
+<project title="Extension Name"
+         version="main"
+         release="main"/>
+<extension typo3-core-preferred="stable"/>
+
+<!-- For tagged release (specific): -->
+<project title="Extension Name"
+         version="13.1"
+         release="13.1.5"/>
+<extension typo3-core-preferred="13.4"/>
+```
+
+**Settings.cfg equivalent:**
+```ini
+# For main/dev branch:
+version = main
+release = main
+
+# For tagged release:
+version = 13.1
+release = 13.1.5
+```
+
+**Interlink URLs:**
+```xml
+<!-- Dev branch: use /main/en-us/ -->
+<inventory id="t3coreapi"
+           url="https://docs.typo3.org/m/typo3/reference-coreapi/main/en-us/"/>
+
+<!-- Tagged release: use specific version -->
+<inventory id="t3coreapi"
+           url="https://docs.typo3.org/m/typo3/reference-coreapi/13.4/en-us/"/>
+```
+
+**Rule:** Release documentation should point to the versions it was designed for and tested with. Only dev branches use dynamic `main`/`stable` references.
+
+**5. literalinclude for Code Examples**
 
 Prefer `literalinclude` over inline code blocks for scripts longer than 20 lines:
 
