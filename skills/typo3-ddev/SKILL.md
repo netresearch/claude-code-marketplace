@@ -155,57 +155,6 @@ $GLOBALS["TYPO3_CONF_VARS"]["SYS"]["features"]["security.backend.enforceReferrer
 
 This prevents "Invalid Referrer" and "Trusted Host" errors in the multi-subdomain DDEV environment.
 
-## Security Best Practices
-
-### MySQL Credential Handling
-
-**Always use `MYSQL_PWD` environment variable** instead of `-p"$PASSWORD"` to avoid exposing passwords in process lists:
-
-```bash
-# Bad: Password visible in `ps aux` output
-mysql -h "$DB_HOST" -u "$DB_USER" -p"$DB_PASSWORD" -e "DROP DATABASE IF EXISTS v13"
-
-# Good: Password hidden via environment variable
-export MYSQL_PWD="${MYSQL_PASSWORD:-root}"
-mysql -h "$DB_HOST" -u "$DB_USER" -e "DROP DATABASE IF EXISTS v13"
-```
-
-**Why:**
-- Command-line arguments are visible to all users via `ps aux`
-- `MYSQL_PWD` is read by MySQL client but not exposed in process list
-- Use defaults for DDEV environment: `${MYSQL_PASSWORD:-root}`
-
-### Safe YAML Manipulation
-
-**Use PHP `yaml_parse()`/`yaml_emit()` instead of fragile `sed` commands** for modifying YAML config files:
-
-```bash
-# Bad: Fragile sed-based YAML editing
-sed -i '/^dependencies:/d' config/sites/main/config.yaml
-sed -i '/^  - /d' config/sites/main/config.yaml
-echo "dependencies:" >> config/sites/main/config.yaml
-echo "  - bootstrap-package/full" >> config/sites/main/config.yaml
-
-# Good: Safe PHP-based YAML manipulation
-php -r "
-    \$file = 'config/sites/main/config.yaml';
-    \$yaml = yaml_parse_file(\$file);
-    \$yaml['dependencies'] = ['bootstrap-package/full'];
-    file_put_contents(\$file, yaml_emit(\$yaml, YAML_UTF8_ENCODING));
-" 2>/dev/null || {
-    # Fallback: append if PHP yaml extension not available
-    if ! grep -q '^dependencies:' config/sites/main/config.yaml; then
-        echo "dependencies:" >> config/sites/main/config.yaml
-        echo "  - bootstrap-package/full" >> config/sites/main/config.yaml
-    fi
-}
-```
-
-**Why:**
-- `sed` can break YAML structure (indentation, multiline values)
-- PHP yaml functions properly parse and emit valid YAML
-- Fallback ensures compatibility when yaml extension unavailable
-
 ## Troubleshooting
 
 | Issue | Solution |

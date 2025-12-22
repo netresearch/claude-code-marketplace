@@ -285,55 +285,6 @@ $rectorConfig->sets([
 
 **Rule**: Always use v12-compatible APIs when supporting both versions.
 
-### TYPO3 v13 + v14 Dual Compatibility
-
-When supporting both v13.4 LTS and v14.0+, use runtime feature detection instead of try-catch:
-
-**Pattern: method_exists for Runtime Detection**
-
-```php
-// Good: Clear runtime detection
-if (method_exists(GridColumnItem::class, 'getRow')) {
-    // TYPO3 v14+ path - getRow() was added in v14
-    $record = $item->getRow();
-} else {
-    // TYPO3 v13 path - use legacy method
-    $record = $item->getRecord();
-}
-```
-
-```php
-// Bad: Try-catch masks real errors
-try {
-    $record = $item->getRow();
-} catch (Error $e) {
-    // Catches ALL errors, not just missing method
-    $record = $item->getRecord();
-}
-```
-
-**PHPStan Configuration for Dual Compatibility**
-
-```neon
-parameters:
-    ignoreErrors:
-        # v13/v14: method_exists check is always true/false depending on installed version
-        - identifier: function.alreadyNarrowedType
-          path: %currentWorkingDirectory%/Classes/Backend/MyClass.php
-          message: '#method_exists.*getRow#'
-          reportUnmatched: false
-        # v13/v14: method only exists in v14+
-        - identifier: method.notFound
-          path: %currentWorkingDirectory%/Classes/Backend/MyClass.php
-          message: '#getRow#'
-          reportUnmatched: false
-```
-
-**Key points:**
-- `reportUnmatched: false` - Prevents errors when pattern doesn't match (version-conditional)
-- Specific `path` and `message` patterns - Keep production code strict
-- `method_exists()` - Clear intent, self-documenting, no side effects
-
 ---
 
 ## Part 3: Common Issues & Solutions

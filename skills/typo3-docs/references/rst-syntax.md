@@ -19,19 +19,30 @@ Subsubsection heading
 ~~~~~~~~~~~~~~~~~~~~~
 
 Paragraph heading
-^^^^^^^^^^^^^^^^^
+"""""""""""""""""
+
+Deep heading
+''''''''''''
 ```
 
+**Heading Hierarchy:**
+
+| Level | Character | Usage |
+|-------|-----------|-------|
+| 1 (Title) | `=` above and below | Page title only |
+| 2 | `=` below | Major sections |
+| 3 | `-` below | Subsections |
+| 4 | `~` below | Sub-subsections |
+| 5 | `"` below | Paragraphs |
+| 6 | `'` below | Deep nesting |
+| 7+ | `^`, `#` | Rarely used |
+
 **Rules:**
-- Page titles: `=` above and below (must match title length)
-- Sections: `=` below
-- Subsections: `-` below
-- Subsubsections: `~` below
-- Paragraphs: `^` below
 - **CRITICAL**: Underline must be exactly the same length as the title text
 - **SENTENCE CASE**: Use sentence case for all headlines, NOT title case
   - ✅ Correct: "Mass approval on Crowdin", "API endpoints", "Best practices"
   - ❌ Wrong: "Mass Approval On Crowdin", "API Endpoints", "Best Practices"
+- **PERMALINK ANCHORS**: Every section MUST have a label (`.. _section-label:`)
 
 ## Inline Formatting
 
@@ -43,43 +54,121 @@ Paragraph heading
 
 ## Code Blocks
 
+### Basic Syntax
+
+```rst
+..  code-block:: php
+    :caption: Example PHP file
+
+    <?php
+    $code = 'example';
+```
+
+### Code Block Options
+
+| Option | Purpose | Example |
+|--------|---------|---------|
+| `:caption:` | Descriptive label (typically file path) | `:caption: ext_localconf.php` |
+| `:linenos:` | Display line numbers | `:linenos:` |
+| `:lineno-start:` | Start line numbers at N | `:lineno-start: 10` |
+| `:emphasize-lines:` | Highlight specific lines | `:emphasize-lines: 3,5-7` |
+| `:name:` | Unique reference label | `:name: code-example-auth` |
+
+**Example with All Options:**
+```rst
+..  code-block:: php
+    :caption: Classes/Service/AuthService.php
+    :linenos:
+    :lineno-start: 15
+    :emphasize-lines: 3,5
+    :name: auth-service-example
+
+    public function authenticate(string $token): bool
+    {
+        $user = $this->userRepository->findByToken($token);
+        if ($user === null) {
+            return false;
+        }
+        return $user->isActive();
+    }
+```
+
+### Supported Languages
+
+Over 200 languages supported including:
+
+| Language | Identifier |
+|----------|------------|
+| PHP | `php` |
+| TypoScript | `typoscript` |
+| YAML | `yaml` |
+| JavaScript | `javascript` or `js` |
+| HTML | `html` |
+| CSS | `css` |
+| XML | `xml` |
+| JSON | `json` |
+| SQL | `sql` |
+| Bash/Shell | `bash` or `shell` |
+| Diff | `diff` |
+| Plain text | `plaintext` or `text` |
+| reStructuredText | `rst` |
+| Markdown | `markdown` |
+
+### Language Examples
+
 **PHP:**
 ```rst
-.. code-block:: php
+..  code-block:: php
+    :caption: PHP example
 
-   <?php
-   $code = 'example';
+    <?php
+    declare(strict_types=1);
+    $code = 'example';
 ```
 
 **YAML:**
 ```rst
-.. code-block:: yaml
+..  code-block:: yaml
+    :caption: Configuration/RTE/Default.yaml
 
-   setting: value
-   nested:
-     item: value
+    setting: value
+    nested:
+      item: value
 ```
 
 **TypoScript:**
 ```rst
-.. code-block:: typoscript
+..  code-block:: typoscript
+    :caption: Configuration/TypoScript/setup.typoscript
 
-   config.tx_extension.setting = value
+    lib.parseFunc_RTE {
+        tags.img = TEXT
+    }
 ```
 
 **Bash:**
 ```rst
-.. code-block:: bash
+..  code-block:: bash
+    :caption: Install via Composer
 
-   composer install
+    composer require vendor/package
 ```
 
 **JavaScript:**
 ```rst
-.. code-block:: javascript
+..  code-block:: javascript
+    :caption: Resources/Public/JavaScript/Plugin.js
 
-   const example = 'value';
+    const example = 'value';
 ```
+
+### Best Practices
+
+1. **Always add captions** - Include file path where code should go
+2. **Use syntactically correct code** - Highlighting fails on syntax errors
+3. **Specify language explicitly** - Helps contributors and tools
+4. **Use placeholders** - `<placeholder-name>` for variable values
+5. **Avoid `::` shorthand** - Use explicit `code-block` directive
 
 ## literalinclude (External Files)
 

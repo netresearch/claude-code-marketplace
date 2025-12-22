@@ -82,20 +82,49 @@ Document configuration options with structured metadata.
 
 **Basic Syntax:**
 ```rst
-.. confval:: settingName
+..  confval:: settingName
+    :name: confval-settingname
+    :type: boolean
+    :Default: true
+    :Path: $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['ext_key']['setting']
 
-   :type: boolean
-   :Default: true
-   :Path: $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['ext_key']['setting']
-
-   Description of the configuration value.
+    Description of the configuration value.
 ```
 
-**Field Types:**
-- `:type:` - boolean, string, integer, array, object
-- `:Default:` - Default value (capitalize 'Default')
+**Reserved Attributes (Special Handling):**
+- `:name:` - **REQUIRED** Unique identifier for cross-referencing (case-insensitive, lowercase with hyphens)
+- `:type:` - Data type: boolean, string, integer, array, object
+- `:default:` or `:Default:` - Default value
+- `:required:` - Boolean indicating if the setting is mandatory
+- `:noindex:` - Exclude from indexes and references
+
+**Custom Attributes (Display as-is):**
 - `:Path:` - Full path to the setting in TYPO3 configuration
 - `:Scope:` - Where setting applies (frontend, backend, global)
+- Any other attribute displays as written
+
+**Cross-Referencing confvals:**
+```rst
+# Reference with :confval: role
+See :confval:`settingName <confval-settingname>` for details.
+
+# The <confval-settingname> part uses the :name: value
+```
+
+**confval-menu Directive:**
+List all confvals on a page:
+```rst
+..  confval-menu::
+    :name: confval-menu-settings
+    :display: table
+    :exclude-noindex:
+```
+
+Options:
+- `:display:` - `table`, `list`, or `tree` format
+- `:name:` - Unique identifier for "to top" button
+- `:exclude:` - Comma-separated confvals to omit
+- `:exclude-noindex:` - Remove entries marked with `:noindex:`
 
 **Example:**
 ```rst
@@ -261,44 +290,121 @@ Document version-specific changes with proper directives.
 
 ## PHP Domain
 
-Document PHP classes, methods, and properties.
+Document PHP classes, methods, and properties. Only document public, non-internal entities.
 
-**Class:**
+### Namespace Declaration
+
 ```rst
-.. php:class:: SelectImageController
-
-   Main controller for image selection wizard.
-
-   Extends: ``TYPO3\\CMS\\Backend\\Controller\\ElementBrowserController``
+..  php:namespace:: Netresearch\RteCKEditorImage\Controller
 ```
 
-**Method:**
+Sets the namespace context for all following PHP entities.
+
+### Class Documentation
+
 ```rst
-.. php:method:: infoAction(ServerRequestInterface $request): ResponseInterface
+..  php:class:: SelectImageController
 
-   Retrieves image information and processed file details.
+    Main controller for image selection wizard.
 
-   :param \\Psr\\Http\\Message\\ServerRequestInterface $request: PSR-7 server request
-   :returns: JSON response with image data or error response
-   :returntype: \\Psr\\Http\\Message\\ResponseInterface
-   :throws \\RuntimeException: When file is not found or invalid
+    Extends :php:`TYPO3\CMS\Backend\Controller\ElementBrowserController`.
 ```
 
-**Property:**
+### Interface Documentation
+
 ```rst
-.. php:attr:: resourceFactory
+..  php:interface:: ImageProcessorInterface
 
-   :type: \\TYPO3\\CMS\\Core\\Resource\\ResourceFactory
-
-   Resource factory for file operations.
+    Interface for image processing implementations.
 ```
 
-**Namespace:**
-```rst
-.. php:namespace:: Netresearch\\RteCKEditorImage\\Controller
+### Trait Documentation
 
-.. php:class:: SelectImageController
+```rst
+..  php:trait:: LoggerAwareTrait
+
+    Provides PSR-3 logger injection capability.
 ```
+
+### Method Documentation
+
+```rst
+..  php:method:: infoAction(ServerRequestInterface $request): ResponseInterface
+
+    Retrieves image information and processed file details.
+
+    :param \Psr\Http\Message\ServerRequestInterface $request: PSR-7 server request.
+    :returns: JSON response with image data or error response.
+    :returntype: \Psr\Http\Message\ResponseInterface
+    :throws \RuntimeException: When file is not found or invalid.
+```
+
+**Method Options:**
+- `:param type $name:` - Parameter with type and description
+- `:returns:` - Description of return value
+- `:returntype:` - Return type (use full namespace)
+- `:throws:` - Exception class and condition
+
+### Property Documentation
+
+```rst
+..  php:attr:: resourceFactory
+
+    :type: \TYPO3\CMS\Core\Resource\ResourceFactory
+
+    Resource factory for file operations.
+```
+
+### Constant Documentation
+
+```rst
+..  php:const:: QUALITY_RETINA
+
+    :type: string
+    :value: 'retina'
+
+    Quality multiplier for high-DPI displays (2x).
+```
+
+### Exception Documentation
+
+```rst
+..  php:exception:: InvalidFileException
+
+    Thrown when a file reference cannot be resolved.
+```
+
+### Cross-Referencing PHP Entities
+
+```rst
+# Reference a class
+:php:class:`SelectImageController`
+
+# Reference a method
+:php:meth:`SelectImageController::infoAction`
+
+# Reference an interface
+:php:interface:`ImageProcessorInterface`
+
+# Reference a trait
+:php:trait:`LoggerAwareTrait`
+
+# Reference an exception
+:php:exc:`InvalidFileException`
+
+# Reference a constant
+:php:const:`QUALITY_RETINA`
+
+# Universal reference (auto-detects type)
+:any:`SelectImageController`
+```
+
+### PHP Domain Best Practices
+
+1. **Use full namespaces** in `:returntype:` and `:throws:`
+2. **Document only public methods** - skip internal/private
+3. **Include meaningful descriptions** - not just type signatures
+4. **Link related classes** using `:php:` role in descriptions
 
 ## Card Grids
 
@@ -514,6 +620,106 @@ function getItems(int $id): array
 2. Run `make fix-cgl` before committing
 3. Fix any reported issues before pushing
 4. If build fails on CI, check CGL compliance first
+
+## PlantUML Diagrams
+
+Create UML diagrams using PlantUML syntax, rendered during documentation build.
+
+### Inline Diagrams
+
+```rst
+..  uml::
+    :caption: Service pipeline architecture
+
+    skinparam componentStyle rectangle
+
+    component "Parser" as Parser {
+        note right: HTML Parsing
+    }
+
+    component "Resolver" as Resolver {
+        note right: Business Logic
+    }
+
+    component "Renderer" as Renderer {
+        note right: Fluid Templates
+    }
+
+    Parser --> Resolver : Raw attributes
+    Resolver --> Renderer : DTO
+```
+
+### External Diagram Files
+
+For complex diagrams, create a `.plantuml` file:
+
+```rst
+..  uml:: _diagrams/architecture.plantuml
+    :caption: System architecture
+    :align: center
+    :width: 800
+```
+
+### Directive Options
+
+| Option | Purpose | Example |
+|--------|---------|---------|
+| `:caption:` | Figure caption | `:caption: Security layers` |
+| `:align:` | Alignment (left, center, right) | `:align: center` |
+| `:width:` | Width in pixels | `:width: 1000` |
+| `:height:` | Height in pixels | `:height: 600` |
+
+### Diagram Types
+
+**Sequence Diagrams:**
+```plantuml
+@startuml
+participant Client
+participant Server
+Client -> Server: Request
+Server --> Client: Response
+@enduml
+```
+
+**Class Diagrams:**
+```plantuml
+@startuml
+interface ImageProcessorInterface
+class ImageResolverService implements ImageProcessorInterface
+class ImageRenderingService
+ImageResolverService --> ImageRenderingService
+@enduml
+```
+
+**Component Diagrams:**
+```plantuml
+@startuml
+component "Frontend" as FE
+component "Backend" as BE
+database "Database" as DB
+FE --> BE
+BE --> DB
+@enduml
+```
+
+### Skinparam Options
+
+Common styling options:
+```plantuml
+skinparam componentStyle rectangle
+skinparam backgroundColor white
+skinparam shadowing false
+skinparam defaultFontName Arial
+skinparam monochrome true
+```
+
+### Best Practices
+
+1. **Use for architecture visualization** - not for simple flows
+2. **Keep diagrams focused** - one concept per diagram
+3. **Add captions** - always include descriptive captions
+4. **External files for complex diagrams** - improves maintainability
+5. **Test rendering** - diagrams are rendered via PlantUML server
 
 ## Best Practices
 
