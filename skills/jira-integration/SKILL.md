@@ -33,6 +33,19 @@ Comprehensive Jira integration through lightweight Python CLI scripts.
    - Validate credentials before saving
    - Create `~/.env.jira` with secure permissions (600)
 
+## When to Use This Skill
+
+Use when:
+- Searching Jira issues with JQL queries
+- Getting or updating issue details
+- Creating new issues (bugs, features, tasks)
+- Transitioning issue status (To Do → In Progress → Done)
+- Adding comments to issues
+- Logging work time (worklogs)
+- Managing sprints and boards
+- Creating or listing issue links
+- Writing Jira wiki markup (NOT Markdown)
+
 ## Sub-Skills
 
 This plugin contains two specialized skills:
@@ -84,10 +97,13 @@ uv run scripts/workflow/jira-transition.py PROJ-123 "In Progress"
 - **Jira Server/DC + Cloud** - Works with both deployment types
 - **Automatic auth detection** - API token, PAT, or basic auth
 
-## Sub-Skill Documentation
+## Documentation
 
-- **skills/jira-communication/SKILL.md** - API operations (scripts, JQL, worklogs)
-- **skills/jira-syntax/SKILL.md** - Wiki markup syntax, templates, validation
+- **README.md** - Installation and usage guide
+- **MIGRATION.md** - Migration from older versions
+- **CHANGELOG.md** - Version history
+- **skills/jira-communication/SKILL.md** - API operations
+- **skills/jira-syntax/SKILL.md** - Wiki markup and templates
 
 ## Scripts Reference
 
