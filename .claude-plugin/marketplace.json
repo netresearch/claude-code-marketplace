@@ -151,7 +151,7 @@
     {
       "name": "go-development",
       "description": "Go (Golang) development patterns following best practices for cloud-native applications. Covers project structure, error handling, concurrency patterns, testing strategies, Docker containerization, LDAP integration, and resilience patterns. By Netresearch.",
-      "version": "1.0.1-20251220",
+      "version": "1.0.1-20251222",
       "author": {
         "name": "Netresearch DTT GmbH",
         "email": "info@netresearch.de"
@@ -248,7 +248,7 @@
         "repo": "netresearch/jira-skill"
       },
       "description": "Comprehensive Jira integration with two specialized skills: jira-mcp for API operations via mcp-atlassian MCP server, and jira-syntax for wiki markup validation and templates. Covers issue CRUD operations, JQL searching, project management, worklog management, attachment handling, issue linking, and enforced Jira wiki markup syntax standards.",
-      "version": "3.1.1-20251218"
+      "version": "3.1.2-20251222"
     },
     {
       "name": "coach",
