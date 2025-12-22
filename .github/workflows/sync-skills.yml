@@ -52,7 +52,7 @@ jobs:
           rm -rf skills/enterprise-readiness/*
           rm -rf skills/enterprise-readiness/.[!.]*
           cp -r .sync-temp/enterprise-readiness/* skills/enterprise-readiness/
-          cp -r .sync-temp/enterprise-readiness/.[!.]* skills/enterprise-readiness/ 2>/dev/null || true
+          cp -r .sync-temp/enterprise-readiness/.claude-plugin skills/enterprise-readiness/ 2>/dev/null || true
           echo "ENTERPRISE_READINESS_VERSION=$VERSION" >> $GITHUB_ENV
           echo "✓ enterprise-readiness synced (version: $VERSION)"
 
@@ -72,7 +72,7 @@ jobs:
           rm -rf skills/typo3-docs/*
           rm -rf skills/typo3-docs/.[!.]*
           cp -r .sync-temp/typo3-docs/* skills/typo3-docs/
-          cp -r .sync-temp/typo3-docs/.[!.]* skills/typo3-docs/ 2>/dev/null || true
+          cp -r .sync-temp/typo3-docs/.claude-plugin skills/typo3-docs/ 2>/dev/null || true
           echo "TYPO3_DOCS_VERSION=$VERSION" >> $GITHUB_ENV
           echo "✓ typo3-docs synced (version: $VERSION)"
 
@@ -92,7 +92,7 @@ jobs:
           rm -rf skills/typo3-testing/*
           rm -rf skills/typo3-testing/.[!.]*
           cp -r .sync-temp/typo3-testing/* skills/typo3-testing/
-          cp -r .sync-temp/typo3-testing/.[!.]* skills/typo3-testing/ 2>/dev/null || true
+          cp -r .sync-temp/typo3-testing/.claude-plugin skills/typo3-testing/ 2>/dev/null || true
           echo "TYPO3_TESTING_VERSION=$VERSION" >> $GITHUB_ENV
           echo "✓ typo3-testing synced (version: $VERSION)"
 
@@ -112,7 +112,7 @@ jobs:
           rm -rf skills/typo3-ddev/*
           rm -rf skills/typo3-ddev/.[!.]*
           cp -r .sync-temp/typo3-ddev/* skills/typo3-ddev/
-          cp -r .sync-temp/typo3-ddev/.[!.]* skills/typo3-ddev/ 2>/dev/null || true
+          cp -r .sync-temp/typo3-ddev/.claude-plugin skills/typo3-ddev/ 2>/dev/null || true
           echo "TYPO3_DDEV_VERSION=$VERSION" >> $GITHUB_ENV
           echo "✓ typo3-ddev synced (version: $VERSION)"
 
@@ -132,7 +132,7 @@ jobs:
           rm -rf skills/typo3-core-contributions/*
           rm -rf skills/typo3-core-contributions/.[!.]*
           cp -r .sync-temp/typo3-core-contributions/* skills/typo3-core-contributions/
-          cp -r .sync-temp/typo3-core-contributions/.[!.]* skills/typo3-core-contributions/ 2>/dev/null || true
+          cp -r .sync-temp/typo3-core-contributions/.claude-plugin skills/typo3-core-contributions/ 2>/dev/null || true
           echo "TYPO3_CORE_CONTRIBUTIONS_VERSION=$VERSION" >> $GITHUB_ENV
           echo "✓ typo3-core-contributions synced (version: $VERSION)"
 
@@ -152,7 +152,7 @@ jobs:
           rm -rf skills/typo3-conformance/*
           rm -rf skills/typo3-conformance/.[!.]*
           cp -r .sync-temp/typo3-conformance/* skills/typo3-conformance/
-          cp -r .sync-temp/typo3-conformance/.[!.]* skills/typo3-conformance/ 2>/dev/null || true
+          cp -r .sync-temp/typo3-conformance/.claude-plugin skills/typo3-conformance/ 2>/dev/null || true
           echo "TYPO3_CONFORMANCE_VERSION=$VERSION" >> $GITHUB_ENV
           echo "✓ typo3-conformance synced (version: $VERSION)"
 
@@ -172,7 +172,7 @@ jobs:
           rm -rf skills/typo3-extension-upgrade/*
           rm -rf skills/typo3-extension-upgrade/.[!.]*
           cp -r .sync-temp/typo3-extension-upgrade/* skills/typo3-extension-upgrade/
-          cp -r .sync-temp/typo3-extension-upgrade/.[!.]* skills/typo3-extension-upgrade/ 2>/dev/null || true
+          cp -r .sync-temp/typo3-extension-upgrade/.claude-plugin skills/typo3-extension-upgrade/ 2>/dev/null || true
           echo "TYPO3_EXTENSION_UPGRADE_VERSION=$VERSION" >> $GITHUB_ENV
           echo "✓ typo3-extension-upgrade synced (version: $VERSION)"
 
@@ -192,7 +192,7 @@ jobs:
           rm -rf skills/netresearch-branding/*
           rm -rf skills/netresearch-branding/.[!.]*
           cp -r .sync-temp/netresearch-branding/* skills/netresearch-branding/
-          cp -r .sync-temp/netresearch-branding/.[!.]* skills/netresearch-branding/ 2>/dev/null || true
+          cp -r .sync-temp/netresearch-branding/.claude-plugin skills/netresearch-branding/ 2>/dev/null || true
           echo "NETRESEARCH_BRANDING_VERSION=$VERSION" >> $GITHUB_ENV
           echo "✓ netresearch-branding synced (version: $VERSION)"
 
@@ -212,7 +212,7 @@ jobs:
           rm -rf skills/agents/*
           rm -rf skills/agents/.[!.]*
           cp -r .sync-temp/agents/* skills/agents/
-          cp -r .sync-temp/agents/.[!.]* skills/agents/ 2>/dev/null || true
+          cp -r .sync-temp/agents/.claude-plugin skills/agents/ 2>/dev/null || true
           echo "AGENTS_VERSION=$VERSION" >> $GITHUB_ENV
           echo "✓ agents synced (version: $VERSION)"
 
@@ -232,7 +232,7 @@ jobs:
           rm -rf skills/cli-tools/*
           rm -rf skills/cli-tools/.[!.]*
           cp -r .sync-temp/cli-tools/* skills/cli-tools/
-          cp -r .sync-temp/cli-tools/.[!.]* skills/cli-tools/ 2>/dev/null || true
+          cp -r .sync-temp/cli-tools/.claude-plugin skills/cli-tools/ 2>/dev/null || true
           echo "CLI_TOOLS_VERSION=$VERSION" >> $GITHUB_ENV
           echo "✓ cli-tools synced (version: $VERSION)"
 
@@ -252,7 +252,7 @@ jobs:
           rm -rf skills/go-development/*
           rm -rf skills/go-development/.[!.]*
           cp -r .sync-temp/go-development/* skills/go-development/
-          cp -r .sync-temp/go-development/.[!.]* skills/go-development/ 2>/dev/null || true
+          cp -r .sync-temp/go-development/.claude-plugin skills/go-development/ 2>/dev/null || true
           echo "GO_DEVELOPMENT_VERSION=$VERSION" >> $GITHUB_ENV
           echo "✓ go-development synced (version: $VERSION)"
 
@@ -272,7 +272,7 @@ jobs:
           rm -rf skills/php-modernization/*
           rm -rf skills/php-modernization/.[!.]*
           cp -r .sync-temp/php-modernization/* skills/php-modernization/
-          cp -r .sync-temp/php-modernization/.[!.]* skills/php-modernization/ 2>/dev/null || true
+          cp -r .sync-temp/php-modernization/.claude-plugin skills/php-modernization/ 2>/dev/null || true
           echo "PHP_MODERNIZATION_VERSION=$VERSION" >> $GITHUB_ENV
           echo "✓ php-modernization synced (version: $VERSION)"
 
@@ -292,7 +292,7 @@ jobs:
           rm -rf skills/security-audit/*
           rm -rf skills/security-audit/.[!.]*
           cp -r .sync-temp/security-audit/* skills/security-audit/
-          cp -r .sync-temp/security-audit/.[!.]* skills/security-audit/ 2>/dev/null || true
+          cp -r .sync-temp/security-audit/.claude-plugin skills/security-audit/ 2>/dev/null || true
           echo "SECURITY_AUDIT_VERSION=$VERSION" >> $GITHUB_ENV
           echo "✓ security-audit synced (version: $VERSION)"
 
@@ -312,7 +312,7 @@ jobs:
           rm -rf skills/typo3-ckeditor5/*
           rm -rf skills/typo3-ckeditor5/.[!.]*
           cp -r .sync-temp/typo3-ckeditor5/* skills/typo3-ckeditor5/
-          cp -r .sync-temp/typo3-ckeditor5/.[!.]* skills/typo3-ckeditor5/ 2>/dev/null || true
+          cp -r .sync-temp/typo3-ckeditor5/.claude-plugin skills/typo3-ckeditor5/ 2>/dev/null || true
           echo "TYPO3_CKEDITOR5_VERSION=$VERSION" >> $GITHUB_ENV
           echo "✓ typo3-ckeditor5 synced (version: $VERSION)"
 
@@ -332,7 +332,7 @@ jobs:
           rm -rf skills/git-workflow/*
           rm -rf skills/git-workflow/.[!.]*
           cp -r .sync-temp/git-workflow/* skills/git-workflow/
-          cp -r .sync-temp/git-workflow/.[!.]* skills/git-workflow/ 2>/dev/null || true
+          cp -r .sync-temp/git-workflow/.claude-plugin skills/git-workflow/ 2>/dev/null || true
           echo "GIT_WORKFLOW_VERSION=$VERSION" >> $GITHUB_ENV
           echo "✓ git-workflow synced (version: $VERSION)"
 
@@ -352,7 +352,7 @@ jobs:
           rm -rf skills/skill-repo/*
           rm -rf skills/skill-repo/.[!.]*
           cp -r .sync-temp/skill-repo/* skills/skill-repo/
-          cp -r .sync-temp/skill-repo/.[!.]* skills/skill-repo/ 2>/dev/null || true
+          cp -r .sync-temp/skill-repo/.claude-plugin skills/skill-repo/ 2>/dev/null || true
           echo "SKILL_REPO_VERSION=$VERSION" >> $GITHUB_ENV
           echo "✓ skill-repo synced (version: $VERSION)"
 
@@ -372,7 +372,7 @@ jobs:
           rm -rf skills/github-project/*
           rm -rf skills/github-project/.[!.]*
           cp -r .sync-temp/github-project/* skills/github-project/
-          cp -r .sync-temp/github-project/.[!.]* skills/github-project/ 2>/dev/null || true
+          cp -r .sync-temp/github-project/.claude-plugin skills/github-project/ 2>/dev/null || true
           echo "GITHUB_PROJECT_VERSION=$VERSION" >> $GITHUB_ENV
           echo "✓ github-project synced (version: $VERSION)"
 
@@ -392,7 +392,7 @@ jobs:
           rm -rf skills/jira-integration/*
           rm -rf skills/jira-integration/.[!.]*
           cp -r .sync-temp/jira-integration/* skills/jira-integration/
-          cp -r .sync-temp/jira-integration/.[!.]* skills/jira-integration/ 2>/dev/null || true
+          cp -r .sync-temp/jira-integration/.claude-plugin skills/jira-integration/ 2>/dev/null || true
           echo "JIRA_INTEGRATION_VERSION=$VERSION" >> $GITHUB_ENV
           echo "✓ jira-integration synced (version: $VERSION)"
 
