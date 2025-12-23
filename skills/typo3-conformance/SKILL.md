@@ -1,6 +1,6 @@
 ---
 name: typo3-conformance
-description: "Evaluate TYPO3 extensions for conformance to TYPO3 12/13 LTS standards, coding guidelines (PSR-12), and architecture patterns. Use when assessing extension quality, generating conformance reports, identifying technical debt, or planning modernization. Validates extension architecture, composer.json, ext_emconf.php, backend module v13 compliance, dependency injection, testing, and Extbase patterns. Provides dual scoring (0-100 base + 0-22 excellence). Delegates to typo3-tests and typo3-docs skills for deep analysis. By Netresearch."
+description: "Agent Skill: Evaluate TYPO3 extensions for conformance to TYPO3 12/13 LTS standards, coding guidelines (PSR-12), and architecture patterns. Use when assessing extension quality, generating conformance reports, identifying technical debt, or planning modernization. Validates extension architecture, composer.json, ext_emconf.php, backend module v13 compliance, dependency injection, testing, and Extbase patterns. Provides dual scoring (0-100 base + 0-22 excellence). Delegates to typo3-tests and typo3-docs skills for deep analysis. By Netresearch."
 file_triggers:
   # TYPO3-only extension root files
   - "ext_emconf.php"

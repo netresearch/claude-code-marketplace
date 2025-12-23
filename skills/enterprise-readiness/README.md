@@ -2,6 +2,19 @@
 
 Netresearch AI skill for assessing and enhancing software projects to meet enterprise-grade standards for security, quality, and automation.
 
+## 🔌 Compatibility
+
+This is an **Agent Skill** following the [open standard](https://agentskills.io) originally developed by Anthropic and released for cross-platform use.
+
+**Supported Platforms:**
+- ✅ Claude Code (Anthropic)
+- ✅ Cursor
+- ✅ GitHub Copilot
+- ✅ Other skills-compatible AI agents
+
+> Skills are portable packages of procedural knowledge that work across any AI agent supporting the Agent Skills specification.
+
+
 ## Features
 
 - **OpenSSF Framework Alignment** - Complete coverage across Scorecard, Best Practices Badge (Passing/Silver/Gold), SLSA, and S2C2F

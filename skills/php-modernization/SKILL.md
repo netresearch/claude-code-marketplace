@@ -1,6 +1,6 @@
 ---
 name: php-modernization
-description: "PHP 8.x modernization patterns for upgrading legacy PHP applications. This skill should be used when modernizing PHP codebases to PHP 8.1/8.2/8.3, implementing type safety and strict typing, adopting Symfony best practices, or achieving PHPStan level 9+ compliance. Covers constructor property promotion, readonly classes, enums, attributes, generics via PHPDoc, and migration strategies. By Netresearch."
+description: "Agent Skill: PHP 8.x modernization patterns for upgrading legacy PHP applications. This skill should be used when modernizing PHP codebases to PHP 8.1/8.2/8.3, implementing type safety and strict typing, adopting Symfony best practices, or achieving PHPStan level 9+ compliance. Covers constructor property promotion, readonly classes, enums, attributes, generics via PHPDoc, and migration strategies. By Netresearch."
 ---
 
 # PHP Modernization Skill

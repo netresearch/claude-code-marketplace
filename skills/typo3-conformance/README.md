@@ -2,6 +2,19 @@
 
 A comprehensive Claude Code skill for evaluating TYPO3 extensions against official TYPO3 coding standards, architecture patterns, and best practices.
 
+## 🔌 Compatibility
+
+This is an **Agent Skill** following the [open standard](https://agentskills.io) originally developed by Anthropic and released for cross-platform use.
+
+**Supported Platforms:**
+- ✅ Claude Code (Anthropic)
+- ✅ Cursor
+- ✅ GitHub Copilot
+- ✅ Other skills-compatible AI agents
+
+> Skills are portable packages of procedural knowledge that work across any AI agent supporting the Agent Skills specification.
+
+
 ## Overview
 
 This skill enables systematic evaluation of TYPO3 extensions for conformance to official TYPO3 standards.

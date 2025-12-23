@@ -2,6 +2,19 @@
 
 A Claude Code skill for automatic CLI tool management. Detects missing tools, installs them via optimal package managers, and audits project environments.
 
+## 🔌 Compatibility
+
+This is an **Agent Skill** following the [open standard](https://agentskills.io) originally developed by Anthropic and released for cross-platform use.
+
+**Supported Platforms:**
+- ✅ Claude Code (Anthropic)
+- ✅ Cursor
+- ✅ GitHub Copilot
+- ✅ Other skills-compatible AI agents
+
+> Skills are portable packages of procedural knowledge that work across any AI agent supporting the Agent Skills specification.
+
+
 ## Features
 
 - **Reactive Mode**: Auto-detect "command not found" errors and install missing tools

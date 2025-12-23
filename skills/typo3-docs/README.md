@@ -2,6 +2,19 @@
 
 A comprehensive Claude Code skill for creating and maintaining TYPO3 extension documentation following official TYPO3 documentation standards.
 
+## 🔌 Compatibility
+
+This is an **Agent Skill** following the [open standard](https://agentskills.io) originally developed by Anthropic and released for cross-platform use.
+
+**Supported Platforms:**
+- ✅ Claude Code (Anthropic)
+- ✅ Cursor
+- ✅ GitHub Copilot
+- ✅ Other skills-compatible AI agents
+
+> Skills are portable packages of procedural knowledge that work across any AI agent supporting the Agent Skills specification.
+
+
 ## Overview
 
 This skill provides guidance for working with TYPO3 extension documentation in reStructuredText (RST) format, including TYPO3-specific directives, local rendering with Docker, validation procedures, and automated deployment through TYPO3 Intercept.

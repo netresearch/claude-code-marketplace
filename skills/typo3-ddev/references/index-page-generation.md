@@ -17,10 +17,58 @@ Check for branding skills in this priority order:
 3. **Generic clean design** (last resort - neutral colors)
 
 **Detection Method:**
+
+For Claude Code / AI agents, check available skills:
 ```bash
-# Check if branding skill exists
-list-skills | grep -i branding
+# In Claude Code context
+/sc:help | grep -i branding
+# Or check skill directories
+ls ~/.claude/plugins/cache/*/netresearch-branding/*/SKILL.md 2>/dev/null
 ```
+
+For manual detection, check if the project is a Netresearch project:
+```bash
+# Check composer.json vendor
+grep -q '"netresearch/' composer.json && echo "Netresearch project"
+# Check git remote
+git remote -v | grep -q 'netresearch' && echo "Netresearch repo"
+```
+
+### Branding Detection Troubleshooting
+
+**Common Issue: Landing page generated without proper branding**
+
+Symptoms:
+- Generic colors instead of Netresearch turquoise (#2F99A4)
+- Missing logo
+- Wrong fonts (system fonts instead of Raleway/Open Sans)
+- Extension name shows underscores (`nr_llm`) instead of hyphens (`nr-llm`)
+
+**Root Causes and Fixes:**
+
+1. **Branding skill not read** - The agent generated a page without consulting branding references
+   - Fix: Explicitly invoke `netresearch-branding` skill before generating
+   - Fix: Read the branding SKILL.md file for color/font values
+
+2. **Logo not embedded** - The logo SVG wasn't included
+   - Fix: Use the embedded SVG provided in this document (see below)
+   - Fix: Do NOT rely on external logo URLs - embed inline
+
+3. **Wrong extension name format** - Used internal key instead of display name
+   - Fix: Read `composer.json` "name" field for authoritative name
+   - Fix: Use hyphens (`nr-llm`) not underscores (`nr_llm`)
+
+4. **Fallback to generic design** - Branding detection returned false negative
+   - Fix: Check if repo URL or composer vendor contains "netresearch"
+   - Fix: If Netresearch project, ALWAYS apply Netresearch branding
+
+**Verification Checklist:**
+- [ ] Header background is turquoise gradient (#2F99A4 → #247a82)
+- [ ] Logo SVG is embedded (turquoise frame, grey "n")
+- [ ] Headlines use Raleway font
+- [ ] Body uses Open Sans font
+- [ ] Extension name uses hyphens (from composer.json)
+- [ ] Git branch and commit are displayed
 
 ### Step 2: Apply Branding Based on Detection
 
@@ -61,6 +109,56 @@ This pre-built template includes:
 - Compact header: 20px padding
 - High white space: 40px container padding
 - Card shadows: subtle with turquoise glow on hover
+
+**Official Netresearch Logo SVG:**
+
+The logo MUST be included when Netresearch branding is detected. Embed this SVG directly:
+
+```svg
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="40" height="40">
+  <!-- Turquoise frame -->
+  <rect x="5" y="5" width="90" height="90" rx="8" ry="8"
+        fill="none" stroke="#2999A4" stroke-width="6"/>
+  <!-- Grey "n" letter -->
+  <text x="50" y="72" text-anchor="middle"
+        font-family="Arial, sans-serif" font-size="60" font-weight="bold"
+        fill="#595A62">n</text>
+</svg>
+```
+
+**CSS for logo in header:**
+```css
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+.logo svg {
+    flex-shrink: 0;
+}
+.logo-text {
+    font-family: 'Raleway', sans-serif;
+    font-weight: 700;
+    font-size: 1.5rem;
+    color: #2F99A4;
+}
+```
+
+**Complete header example:**
+```html
+<header style="background: linear-gradient(135deg, #2F99A4 0%, #247a82 100%); padding: 20px;">
+    <div class="logo">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="40" height="40">
+            <rect x="5" y="5" width="90" height="90" rx="8" ry="8"
+                  fill="none" stroke="#ffffff" stroke-width="6"/>
+            <text x="50" y="72" text-anchor="middle"
+                  font-family="Arial, sans-serif" font-size="60" font-weight="bold"
+                  fill="#ffffff">n</text>
+        </svg>
+        <span class="logo-text" style="color: #ffffff;">Extension Name</span>
+    </div>
+</header>
+```
 
 #### If TYPO3 Branding (Fallback)
 
@@ -285,6 +383,106 @@ ddev exec cp /var/www/hello_world/.ddev/web-build/index.html /var/www/html/
    - Descriptive link text (not just "click here")
    - Alt text for images (if any)
 
+## Git Status Display
+
+**The landing page SHOULD display git repository information:**
+
+### Git Information to Show
+- **Branch name**: Current git branch (e.g., `main`, `feature/xyz`)
+- **Commit hash**: Short commit hash (7 characters)
+
+### PHP Implementation (No shell_exec)
+
+Read git info directly from files for security and compatibility:
+
+```php
+// Git info from files (no shell_exec needed)
+$gitBranch = 'unknown';
+$gitCommitShort = 'unknown';
+$gitHeadFile = dirname(__DIR__) . '/.git/HEAD';
+
+if (file_exists($gitHeadFile)) {
+    $headContent = trim(file_get_contents($gitHeadFile));
+    if (str_starts_with($headContent, 'ref: refs/heads/')) {
+        $gitBranch = substr($headContent, 16);
+        $refFile = dirname(__DIR__) . '/.git/refs/heads/' . $gitBranch;
+        if (file_exists($refFile)) {
+            $gitCommitShort = substr(trim(file_get_contents($refFile)), 0, 7);
+        }
+    }
+}
+```
+
+### Display Format
+
+```html
+<div class="git-info">
+    <span class="branch">📌 <?= htmlspecialchars($gitBranch) ?></span>
+    <span class="commit">@<?= htmlspecialchars($gitCommitShort) ?></span>
+</div>
+```
+
+**Why file-based instead of shell_exec?**
+- Security: No command injection risk
+- Compatibility: Works in restricted PHP environments
+- Performance: Direct file read is faster than spawning shell
+
+## Single-Extension Mode
+
+**For projects with a single extension (not multi-version testing):**
+
+When building a simple landing page for a single TYPO3 extension project:
+
+### File Location
+
+Place the landing page at `public/index.php` (not `.ddev/web-build/index.html`).
+
+This approach:
+- ✅ Works immediately without DDEV custom commands
+- ✅ Can be served by the default DDEV web root
+- ✅ Allows PHP for dynamic content (git info, extension metadata)
+
+### Extension Naming Convention
+
+**Use hyphenated names** in display, not underscored:
+- ✅ `nr-llm` (composer package style)
+- ✅ `t3x-nr-llm` (TYPO3 package prefix)
+- ❌ `nr_llm` (internal extension key only)
+
+The composer package name from `composer.json` (`name` field) is authoritative.
+
+### Minimal Single-Extension Template
+
+```php
+<?php
+declare(strict_types=1);
+
+// Read extension info from composer.json
+$composerJson = json_decode(file_get_contents(__DIR__ . '/../composer.json'), true);
+$extensionName = $composerJson['name'] ?? 'extension';
+$description = $composerJson['description'] ?? '';
+
+// Git info (see implementation above)
+// ... git file reading code ...
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title><?= htmlspecialchars($extensionName) ?></title>
+    <!-- Apply branding per detection logic -->
+</head>
+<body>
+    <header>
+        <h1><?= htmlspecialchars($extensionName) ?></h1>
+        <p><?= htmlspecialchars($description) ?></p>
+        <div class="git-info">Branch: <?= $gitBranch ?> @ <?= $gitCommitShort ?></div>
+    </header>
+    <!-- Links to TYPO3 backends, documentation, etc. -->
+</body>
+</html>
+```
+
 ## Quality Checklist
 
 Before finalizing the index page:
@@ -294,10 +492,12 @@ Before finalizing the index page:
 - [ ] Proper fonts loaded (if external fonts used)
 - [ ] All TYPO3 version links present
 - [ ] Backend credentials displayed
+- [ ] **Git branch and commit displayed**
+- [ ] **Extension name uses correct format (hyphens, not underscores)**
 - [ ] Responsive design works on mobile/tablet/desktop
 - [ ] Color contrast passes WCAG AA
 - [ ] No console errors
-- [ ] File copied to /var/www/html/
+- [ ] File copied to /var/www/html/ (or public/index.php for single-extension)
 - [ ] Accessible at https://{sitename}.ddev.site/
 
 ## Integration with SKILL.md

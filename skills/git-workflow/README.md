@@ -2,6 +2,19 @@
 
 Expert patterns for Git version control workflows including branching strategies, commit conventions, collaborative workflows, and CI/CD integration.
 
+## 🔌 Compatibility
+
+This is an **Agent Skill** following the [open standard](https://agentskills.io) originally developed by Anthropic and released for cross-platform use.
+
+**Supported Platforms:**
+- ✅ Claude Code (Anthropic)
+- ✅ Cursor
+- ✅ GitHub Copilot
+- ✅ Other skills-compatible AI agents
+
+> Skills are portable packages of procedural knowledge that work across any AI agent supporting the Agent Skills specification.
+
+
 ## Features
 
 - **Branching Strategies**: Git Flow (feature/release/hotfix branches), GitHub Flow (simple feature branches), trunk-based development, release management patterns

@@ -1,6 +1,6 @@
 ---
 name: typo3-core-contributions
-description: "Guide contributors through the complete TYPO3 Core contribution workflow from account setup to patch submission for both code and documentation contributions. Use when working with TYPO3 Forge issues, preparing patches for TYPO3 Core, contributing to TYPO3, submitting patches to Gerrit or GitHub PRs, fixing TYPO3 bugs, managing WIP state, or debugging CI failures. By Netresearch."
+description: "Agent Skill: Guide contributors through the complete TYPO3 Core contribution workflow from account setup to patch submission for both code and documentation contributions. Use when working with TYPO3 Forge issues, preparing patches for TYPO3 Core, contributing to TYPO3, submitting patches to Gerrit or GitHub PRs, fixing TYPO3 bugs, managing WIP state, or debugging CI failures. By Netresearch."
 ---
 
 # TYPO3 Core Contributions

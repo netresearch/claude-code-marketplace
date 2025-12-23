@@ -2,6 +2,19 @@
 
 Expert patterns for conducting security audits, vulnerability assessment, and implementing secure coding practices aligned with OWASP guidelines.
 
+## 🔌 Compatibility
+
+This is an **Agent Skill** following the [open standard](https://agentskills.io) originally developed by Anthropic and released for cross-platform use.
+
+**Supported Platforms:**
+- ✅ Claude Code (Anthropic)
+- ✅ Cursor
+- ✅ GitHub Copilot
+- ✅ Other skills-compatible AI agents
+
+> Skills are portable packages of procedural knowledge that work across any AI agent supporting the Agent Skills specification.
+
+
 ## Features
 
 - **Vulnerability Assessment**: XXE (XML External Entity) injection detection, SQL injection pattern recognition, XSS (Cross-Site Scripting) analysis, CSRF protection verification, authentication/authorization flaws, insecure deserialization

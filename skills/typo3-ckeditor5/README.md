@@ -2,6 +2,19 @@
 
 Expert patterns for CKEditor 5 integration in TYPO3, including custom plugin development, configuration, and migration from CKEditor 4.
 
+## 🔌 Compatibility
+
+This is an **Agent Skill** following the [open standard](https://agentskills.io) originally developed by Anthropic and released for cross-platform use.
+
+**Supported Platforms:**
+- ✅ Claude Code (Anthropic)
+- ✅ Cursor
+- ✅ GitHub Copilot
+- ✅ Other skills-compatible AI agents
+
+> Skills are portable packages of procedural knowledge that work across any AI agent supporting the Agent Skills specification.
+
+
 ## Features
 
 - **CKEditor 5 Architecture**: Plugin system, schema and conversion system, command pattern implementation, UI component development

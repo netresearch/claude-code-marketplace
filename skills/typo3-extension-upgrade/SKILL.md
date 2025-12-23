@@ -1,6 +1,6 @@
 ---
 name: typo3-extension-upgrade
-description: "Systematic TYPO3 extension upgrades to newer LTS versions with modern PHP compatibility. Covers Extension Scanner assessment, Rector for PHP migrations, Fractor for non-PHP file migrations, PHPStan for static analysis, and testing setup. This skill should be used when upgrading extension code to support newer TYPO3 versions, fixing extension compatibility issues, or modernizing TYPO3 extensions. Developed by Netresearch DTT GmbH."
+description: "Agent Skill: Systematic TYPO3 extension upgrades to newer LTS versions with modern PHP compatibility. Covers Extension Scanner assessment, Rector for PHP migrations, Fractor for non-PHP file migrations, PHPStan for static analysis, and testing setup. This skill should be used when upgrading extension code to support newer TYPO3 versions, fixing extension compatibility issues, or modernizing TYPO3 extensions. Developed by Netresearch DTT GmbH."
 ---
 
 # TYPO3 Extension Upgrade

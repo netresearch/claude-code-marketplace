@@ -1,6 +1,6 @@
 ---
 name: skill-repo
-description: "Guide for structuring Netresearch skill repositories. Use when creating new skills, standardizing existing skill repos, setting up composer distribution, or creating release workflows. Extends Anthropic's skill-creator with Netresearch-specific repository layout, multi-channel distribution (marketplace, releases, composer), and PHP ecosystem integration. By Netresearch."
+description: "Agent Skill: Guide for structuring Netresearch skill repositories. Use when creating new skills, standardizing existing skill repos, setting up composer distribution, or creating release workflows. Extends Anthropic's skill-creator with Netresearch-specific repository layout, multi-channel distribution (marketplace, releases, composer), and PHP ecosystem integration. By Netresearch."
 ---
 
 # Skill Repository Structure Guide
@@ -49,7 +49,7 @@ Follow Anthropic's skill-creator specification:
 ```yaml
 ---
 name: skill-name          # lowercase, hyphens, max 64 chars
-description: "When to use this skill and what it does. By Netresearch."
+description: "Agent Skill: When to use this skill and what it does. By Netresearch."
 ---
 ```
 

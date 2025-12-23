@@ -2,6 +2,19 @@
 
 Expert patterns for modernizing PHP applications to PHP 8.x with type safety, Symfony best practices, and static analysis compliance.
 
+## 🔌 Compatibility
+
+This is an **Agent Skill** following the [open standard](https://agentskills.io) originally developed by Anthropic and released for cross-platform use.
+
+**Supported Platforms:**
+- ✅ Claude Code (Anthropic)
+- ✅ Cursor
+- ✅ GitHub Copilot
+- ✅ Other skills-compatible AI agents
+
+> Skills are portable packages of procedural knowledge that work across any AI agent supporting the Agent Skills specification.
+
+
 ## Features
 
 - **PHP 8.x Features**: Constructor property promotion, readonly properties and classes, named arguments, enums and match expressions, attributes (replacing annotations), union and intersection types, nullsafe operator

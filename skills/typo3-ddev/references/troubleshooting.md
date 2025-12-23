@@ -147,3 +147,116 @@ Docker creates files as root. Solutions:
   3. Prevent in future: Run Docker with --user "$(id -u):$(id -g)"
 ```
 
+**8. PCOV Installation Fails**
+```
+❌ pecl: command not found
+   OR
+❌ pecl install pcov fails
+
+DDEV containers don't include pecl. Use apt-get instead:
+
+# In .ddev/web-build/Dockerfile
+RUN apt-get update && apt-get install -y php${PHP_VERSION}-pcov
+
+NOT:
+RUN pecl install pcov && docker-php-ext-enable pcov  # ❌ Won't work
+```
+
+**9. PHP Version Outdated**
+```
+❌ PHP 8.5.0RC3 instead of PHP 8.5.1 (or similar)
+
+DDEV ships with specific PHP versions. When a new patch release is
+available but DDEV hasn't updated yet, use Dockerfile.apt:
+
+# Create .ddev/web-build/Dockerfile.apt
+RUN apt-get update
+RUN apt-get install --only-upgrade -y php${PHP_VERSION}-*
+
+Then run: ddev restart
+
+Note: This upgrades all PHP packages to latest available in DDEV's
+apt repository. The new version takes effect after restart.
+```
+
+**10. PHP Configuration Path Confusion**
+```
+❌ Custom PHP settings not applied
+
+Wrong location:
+  /usr/local/etc/php/conf.d/custom.ini  ❌ (DDEV-managed path)
+
+Correct location:
+  .ddev/php/custom.ini                   ✅
+
+Example .ddev/php/custom.ini:
+  memory_limit = 512M
+  max_execution_time = 300
+  upload_max_filesize = 50M
+
+After creating/modifying, run: ddev restart
+```
+
+**11. Extension Naming Confusion**
+```
+❌ Inconsistent extension naming (underscores vs hyphens)
+
+TYPO3 uses different naming conventions in different contexts:
+
+Extension key (internal, underscores):
+  nr_llm                          ← ext_emconf.php, ext_tables.php
+
+Composer package name (hyphens):
+  netresearch/nr-llm              ← composer.json "name" field
+
+Display name (human readable):
+  NR LLM                          ← Title case, spaces
+
+For landing pages and documentation, use the composer package
+name format (hyphens) as the authoritative display name:
+  ✅ nr-llm
+  ✅ t3x-nr-llm
+  ❌ nr_llm (only for internal TYPO3 references)
+```
+
+**12. Landing Page Missing Branding**
+```
+❌ Landing page has generic styling instead of Netresearch branding
+
+Symptoms:
+  - Generic blue/grey colors instead of turquoise (#2F99A4)
+  - Missing Netresearch logo
+  - System fonts instead of Raleway/Open Sans
+  - Extension name shows underscores instead of hyphens
+
+Causes:
+  1. Branding skill not consulted before generating page
+  2. Logo SVG not embedded (relying on external URL)
+  3. Extension name taken from ext_emconf instead of composer.json
+
+Solutions:
+  1. For Netresearch projects, ALWAYS check composer.json vendor:
+     grep '"netresearch/' composer.json
+
+  2. Apply Netresearch branding if detected:
+     - Primary color: #2F99A4 (turquoise)
+     - Accent color: #FF4D00 (orange)
+     - Text color: #585961 (anthracite)
+     - Headlines: Raleway font
+     - Body: Open Sans font
+
+  3. Embed logo SVG directly (don't use external URLs):
+     <svg viewBox="0 0 100 100" width="40" height="40">
+       <rect x="5" y="5" width="90" height="90" rx="8"
+             fill="none" stroke="#2999A4" stroke-width="6"/>
+       <text x="50" y="72" text-anchor="middle"
+             font-family="Arial" font-size="60" font-weight="bold"
+             fill="#595A62">n</text>
+     </svg>
+
+  4. Get extension name from composer.json "name" field:
+     jq -r '.name' composer.json  # Returns: netresearch/nr-llm
+
+See: references/index-page-generation.md for complete branding guide
+```
+

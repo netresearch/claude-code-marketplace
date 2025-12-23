@@ -5,8 +5,58 @@
 If extension requires different PHP version:
 ```yaml
 # In .ddev/config.yaml
-php_version: "8.1"  # or "8.3"
+php_version: "8.1"  # or "8.3" or "8.5"
 ```
+
+### Upgrade PHP Packages (Dockerfile.apt)
+
+DDEV ships with specific PHP patch versions. When a newer patch release is available
+(e.g., PHP 8.5.1 when DDEV includes 8.5.0RC3), use `Dockerfile.apt` to upgrade:
+
+```dockerfile
+# .ddev/web-build/Dockerfile.apt
+RUN apt-get update
+RUN apt-get install --only-upgrade -y php${PHP_VERSION}-*
+```
+
+**When to use:**
+- New PHP patch release fixes bugs affecting your project
+- Security updates available before DDEV updates
+- Need specific PHP version for testing compatibility
+
+**After creating:** Run `ddev restart` to apply.
+
+**Note:** This upgrades within the same minor version (8.5.x). To change minor version (e.g., 8.4 → 8.5), use `php_version` in config.yaml instead.
+
+### Custom PHP Configuration
+
+Place PHP settings in `.ddev/php/custom.ini`:
+
+```ini
+# .ddev/php/custom.ini
+memory_limit = 512M
+max_execution_time = 300
+upload_max_filesize = 50M
+post_max_size = 50M
+```
+
+**Important:** Do NOT place files directly in `/usr/local/etc/php/conf.d/` - DDEV manages that path internally. Use `.ddev/php/` instead.
+
+### Installing PHP Extensions
+
+Use `apt-get` in `.ddev/web-build/Dockerfile` (not pecl):
+
+```dockerfile
+# .ddev/web-build/Dockerfile
+RUN apt-get update && apt-get install -y php${PHP_VERSION}-pcov
+RUN apt-get update && apt-get install -y php${PHP_VERSION}-redis
+RUN apt-get update && apt-get install -y php${PHP_VERSION}-imagick
+```
+
+**Why apt-get instead of pecl?**
+- DDEV containers don't include pecl
+- apt packages are pre-compiled and faster to install
+- Better compatibility with DDEV's PHP setup
 
 ### Database Selection (Tiered Approach)
 

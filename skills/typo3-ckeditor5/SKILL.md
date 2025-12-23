@@ -1,6 +1,6 @@
 ---
 name: typo3-ckeditor5
-description: "CKEditor 5 development patterns for TYPO3 v12+. This skill should be used when developing custom CKEditor 5 plugins for TYPO3, configuring RTE presets, integrating CKEditor with TYPO3 backend modules, or migrating from CKEditor 4. Covers plugin architecture (schema, conversion, commands), TYPO3 YAML configuration, ES6 module development, and complete migration guides. By Netresearch."
+description: "Agent Skill: CKEditor 5 development patterns for TYPO3 v12+. This skill should be used when developing custom CKEditor 5 plugins for TYPO3, configuring RTE presets, integrating CKEditor with TYPO3 backend modules, or migrating from CKEditor 4. Covers plugin architecture (schema, conversion, commands), TYPO3 YAML configuration, ES6 module development, and complete migration guides. By Netresearch."
 ---
 
 # TYPO3 CKEditor 5 Skill

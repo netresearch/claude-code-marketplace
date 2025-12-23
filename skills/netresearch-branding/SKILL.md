@@ -1,6 +1,6 @@
 ---
 name: netresearch-branding
-description: "Apply Netresearch brand identity and design standards to web projects, documentation, presentations, and digital content. This skill should be used when creating branded materials, designing web interfaces, building presentations, or ensuring brand consistency. Covers: color system (turquoise #40B4B4, orange #F08C1F), typography (Raleway, Open Sans, Calibri), logo usage, web design patterns, social media templates, and image guidelines. This skill ensures professional, unified Netresearch appearance across all digital touchpoints."
+description: "Agent Skill: Apply Netresearch brand identity and design standards to web projects, documentation, presentations, and digital content. MANDATORY for all Netresearch projects. ALWAYS include: (1) Netresearch [n] logo in header/navbar, (2) brand colors (#2F99A4 turquoise, #FF4D00 orange, #585961 text), (3) Raleway + Open Sans fonts. This skill ensures professional, unified Netresearch appearance across all digital touchpoints."
 ---
 
 # Netresearch Brand Guidelines
@@ -8,6 +8,28 @@ description: "Apply Netresearch brand identity and design standards to web proje
 **Purpose:** Apply Netresearch brand identity and design standards to web projects, documentation, presentations, and digital content.
 
 **Activation:** This skill activates when working on Netresearch-branded projects, designing web interfaces, creating presentations, or producing digital content for Netresearch.
+
+## MANDATORY Requirements (ALWAYS Apply)
+
+When branding ANY web project, dashboard, or interface for Netresearch, you MUST:
+
+1. **Include the Netresearch [n] Logo** in the header/navbar
+   - Use `assets/logos/netresearch-symbol-only.svg`
+   - Minimum size: 32×32px
+   - On dark/turquoise backgrounds: use white fill
+
+2. **Apply Brand Colors**
+   - Primary: `#2F99A4` (turquoise) for headers, buttons, links
+   - Accent: `#FF4D00` (orange) for highlights only
+   - Text: `#585961` (anthracite, not pure black)
+
+3. **Load Brand Typography**
+   - Raleway: Headlines (h1-h6), navbar
+   - Open Sans: Body text, paragraphs
+
+4. **Include Brand Footer**
+   - Link to https://www.netresearch.de/
+   - Mention "Netresearch DTT GmbH"
 
 ## Brand Identity
 

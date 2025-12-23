@@ -1,6 +1,6 @@
 ---
 name: typo3-testing
-description: "Create, configure, and manage TYPO3 extension tests (unit, functional, E2E, fuzz, mutation) following official TYPO3 testing framework patterns. Use when setting up test infrastructure, writing test cases, configuring PHPUnit, managing fixtures, or integrating CI/CD pipelines. Covers PHPUnit 11/12, TYPO3 v12/v13 LTS, Playwright E2E with axe-core, nikic/php-fuzzer, Infection mutation testing, and quality tooling (PHPStan level 10, Rector, php-cs-fixer). By Netresearch."
+description: "Agent Skill: Create, configure, and manage TYPO3 extension tests (unit, functional, E2E, fuzz, mutation) following official TYPO3 testing framework patterns. Use when setting up test infrastructure, writing test cases, configuring PHPUnit, managing fixtures, or integrating CI/CD pipelines. Covers PHPUnit 11/12, TYPO3 v12/v13 LTS, Playwright E2E with axe-core, nikic/php-fuzzer, Infection mutation testing, and quality tooling (PHPStan level 10, Rector, php-cs-fixer). By Netresearch."
 ---
 
 # TYPO3 Testing Skill
