@@ -109,6 +109,12 @@
       "marketplace_name": "jira-integration"
     },
     {
+      "name": "context7",
+      "repository": "https://github.com/netresearch/context7-skill.git",
+      "target_path": "skills/context7",
+      "marketplace_name": "context7"
+    },
+    {
       "name": "coach",
       "repository": "https://github.com/netresearch/claude-coach-plugin.git",
       "target_path": "plugins/coach",
