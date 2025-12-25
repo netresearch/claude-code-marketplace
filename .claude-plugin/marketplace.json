@@ -2,7 +2,7 @@
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "netresearch-claude-code-marketplace",
   "version": "1.9.0",
-  "description": "Curated agentic skills for Claude Code - TYPO3 development and technical documentation workflows",
+  "description": "Curated Agentic Skills for AI coding agents - TYPO3 development, PHP modernization, and technical documentation workflows. Platform-agnostic skills following the open Agentic Skills specification.",
   "owner": {
     "name": "Netresearch DTT GmbH",
     "email": "info@netresearch.de"

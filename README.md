@@ -1,18 +1,19 @@
 # Netresearch Agentic Skills Marketplace
 
-Agentic Skills for Claude Code - TYPO3 development and technical documentation.
+Curated collection of **Agentic Skills** for TYPO3 development, PHP modernization, and technical documentation workflows.
 
-## 🔌 Compatibility
+## 🔌 What are Agentic Skills?
 
-This is an **Agent Skill** following the [open standard](https://agentskills.io) originally developed by Anthropic and released for cross-platform use.
+**Agentic Skills** are portable packages of procedural knowledge that work across any AI coding agent supporting the [Agent Skills specification](https://agentskills.io). Originally developed by Anthropic, the specification is now an open standard.
 
 **Supported Platforms:**
 - ✅ Claude Code (Anthropic)
 - ✅ Cursor
 - ✅ GitHub Copilot
-- ✅ Other skills-compatible AI agents
+- ✅ Windsurf
+- ✅ Any agent supporting the Agentic Skills specification
 
-> Agentic skills are portable packages of procedural knowledge that work across any AI agent supporting the Agent Skills specification.
+> These skills are **platform-agnostic** - they work with any AI coding agent that implements the agentic skills standard, not just Claude Code.
 
 
 ## Installation
