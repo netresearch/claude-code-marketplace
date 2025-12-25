@@ -1,18 +1,18 @@
-# Skill Sync Setup Documentation
+# Agentic Skill Sync Setup Documentation
 
-This marketplace uses automated GitHub Actions to sync skills from their individual source repositories. This document explains how to set up and maintain the sync automation.
+This marketplace uses automated GitHub Actions to sync agentic skills from their individual source repositories. This document explains how to set up and maintain the sync automation.
 
 ## ⚠️ CURRENT STATUS (2025-12-06)
 
 **Sync Mechanism**: ✅ Fixed and operational
-- All 10 skills configured in sync workflow
+- All 10 agentic skills configured in sync workflow
 - Version extraction from git tags (not SKILL.md)
 - Weekly schedule working (Monday 2 AM UTC)
 
 **Immediate Sync**: ❌ NOT WORKING
 - Source repositories missing `.github/workflows/notify-marketplace.yml`
 - No repository_dispatch events being sent
-- Skills only sync once per week via cron
+- Agentic skills only sync once per week via cron
 
 **Action Required**: Add notify workflow to all 10 source repositories (see step 3 below)
 
@@ -20,21 +20,21 @@ This marketplace uses automated GitHub Actions to sync skills from their individ
 
 **Problem**: Claude Code does not checkout git submodules when cloning marketplaces
 
-**Solution**: GitHub Actions workflow that automatically syncs skill repositories into the marketplace
+**Solution**: GitHub Actions workflow that automatically syncs agentic skill repositories into the marketplace
 
-**Trigger**: Repository dispatch events from individual skill repositories (immediate sync on updates)
+**Trigger**: Repository dispatch events from individual agentic skill repositories (immediate sync on updates)
 
 ## Architecture
 
 ```
-Individual Skill Repo (e.g., typo3-conformance-skill)
+Individual Agentic Skill Repo (e.g., typo3-conformance-skill)
     ↓ (on release/push to main)
 GitHub Actions: notify-marketplace.yml
     ↓ (sends repository_dispatch event)
 Marketplace Repo: netresearch/claude-code-marketplace
     ↓ (receives event)
 GitHub Actions: sync-skills.yml
-    ↓ (clones skill, copies files)
+    ↓ (clones agentic skill, copies files)
 Marketplace Updated (push to main)
     ↓
 Claude Code Users (receive update on next refresh)
@@ -44,12 +44,12 @@ Claude Code Users (receive update on next refresh)
 
 ### `.github/workflows/sync-skills.yml`
 Main automation workflow with three triggers:
-- **Primary**: `repository_dispatch` (immediate sync when skills update)
+- **Primary**: `repository_dispatch` (immediate sync when agentic skills update)
 - **Backup**: `schedule` (weekly cron - Monday 2 AM UTC)
 - **Manual**: `workflow_dispatch` (for testing/emergency)
 
 ### `.sync-config.json`
-Configuration mapping skill repositories to marketplace paths:
+Configuration mapping agentic skill repositories to marketplace paths:
 ```json
 {
   "skills": [
@@ -72,9 +72,9 @@ Configuration mapping skill repositories to marketplace paths:
 
 The workflow is ready and will respond to repository dispatch events.
 
-### 2. Individual Skill Repositories
+### 2. Individual Agentic Skill Repositories
 
-Each skill repository needs a workflow to notify the marketplace on updates.
+Each agentic skill repository needs a workflow to notify the marketplace on updates.
 
 #### Step 1: Create GitHub Personal Access Token
 
@@ -86,9 +86,9 @@ Each skill repository needs a workflow to notify the marketplace on updates.
 6. Click "Generate token"
 7. **Copy the token** (you won't see it again)
 
-#### Step 2: Add Token to Skill Repository Secrets
+#### Step 2: Add Token to Agentic Skill Repository Secrets
 
-For **each skill repository** (typo3-docs-skill, typo3-conformance-skill, typo3-testing-skill, netresearch-branding-skill):
+For **each agentic skill repository** (typo3-docs-skill, typo3-conformance-skill, typo3-testing-skill, netresearch-branding-skill):
 
 1. Go to skill repository → Settings → Secrets and variables → Actions
 2. Click "New repository secret"
@@ -96,11 +96,11 @@ For **each skill repository** (typo3-docs-skill, typo3-conformance-skill, typo3-
 4. Value: Paste the personal access token from Step 1
 5. Click "Add secret"
 
-#### Step 3: Create Workflow in Each Skill Repository
+#### Step 3: Create Workflow in Each Agentic Skill Repository
 
 **Quick Deploy**: Use the template file `notify-marketplace.yml` at the root of this repository.
 
-For each skill repository, copy the workflow:
+For each agentic skill repository, copy the workflow:
 
 ```bash
 # For each repository:
@@ -171,9 +171,9 @@ jobs:
 
 ## Testing the Automation
 
-### Test Individual Skill Notification
+### Test Individual Agentic Skill Notification
 
-1. Make a change in a skill repository (e.g., update README)
+1. Make a change in an agentic skill repository (e.g., update README)
 2. Commit and push to main
 3. Go to skill repo → Actions → Check "Notify Marketplace on Update" workflow
 4. Should show ✓ success
@@ -199,17 +199,17 @@ jobs:
 
 ### Successful Sync Indicators
 
-✅ Marketplace Actions tab shows completed "Sync Skills" workflow
-✅ Latest commit message: "chore: sync skills from source repositories"
+✅ Marketplace Actions tab shows completed "Sync Agentic Skills" workflow
+✅ Latest commit message: "chore: sync agentic skills from source repositories"
 ✅ Skills directory contains up-to-date content
 ✅ `marketplace.json` has latest version numbers
 
 ### Troubleshooting
 
-#### Problem: Workflow not triggering on skill updates
+#### Problem: Workflow not triggering on agentic skill updates
 
 **Check**:
-- Is `MARKETPLACE_SYNC_TOKEN` secret set in skill repository?
+- Is `MARKETPLACE_SYNC_TOKEN` secret set in agentic skill repository?
 - Does token have `repo` scope?
 - Is workflow file present: `.github/workflows/notify-marketplace.yml`?
 - Check skill repo Actions tab for workflow runs
@@ -244,9 +244,9 @@ jobs:
 
 ## Maintenance
 
-### Adding a New Skill
+### Adding a New Agentic Skill
 
-1. Create skill repository following SKILL.md format
+1. Create agentic skill repository following SKILL.md format
 2. Add workflow: `.github/workflows/notify-marketplace.yml`
 3. Add `MARKETPLACE_SYNC_TOKEN` secret
 4. Update marketplace `.sync-config.json`:
@@ -261,7 +261,7 @@ jobs:
 5. Add skill to `.github/workflows/sync-skills.yml` (add sync step)
 6. Update `marketplace.json` manually or trigger workflow
 
-### Removing a Skill
+### Removing an Agentic Skill
 
 1. Remove from `.sync-config.json`
 2. Remove sync step from `.github/workflows/sync-skills.yml`
@@ -299,16 +299,16 @@ schedule:
 
 ### Code Review
 
-- Skill content is synced automatically (no PR review)
-- For sensitive changes: manually review skill repos before pushing
-- Consider adding branch protection to skill repos if needed
+- Agentic skill content is synced automatically (no PR review)
+- For sensitive changes: manually review agentic skill repos before pushing
+- Consider adding branch protection to agentic skill repos if needed
 
 ## Support
 
 ### Questions or Issues
 
 - **Marketplace sync issues**: Open issue in `netresearch/claude-code-marketplace`
-- **Skill-specific issues**: Open issue in individual skill repository
+- **Agentic skill-specific issues**: Open issue in individual agentic skill repository
 - **General questions**: Contact Netresearch DTT GmbH (info@netresearch.de)
 
 ### Useful Commands
@@ -321,10 +321,10 @@ git log --oneline -5
 # Manually trigger sync (requires GitHub CLI)
 gh workflow run sync-skills.yml
 
-# Check skill versions in marketplace
+# Check agentic skill versions in marketplace
 jq '.plugins[] | {name, version}' .claude-plugin/marketplace.json
 
-# Verify skill content is up-to-date
+# Verify agentic skill content is up-to-date
 diff -r skills/typo3-conformance /path/to/typo3-conformance-skill
 ```
 

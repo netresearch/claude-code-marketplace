@@ -2,7 +2,7 @@
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "netresearch-claude-code-marketplace",
   "version": "1.9.0",
-  "description": "Curated Claude Code plugins for TYPO3 development and technical documentation workflows",
+  "description": "Curated agentic skills for Claude Code - TYPO3 development and technical documentation workflows",
   "owner": {
     "name": "Netresearch DTT GmbH",
     "email": "info@netresearch.de"

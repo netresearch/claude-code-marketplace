@@ -1,6 +1,6 @@
-# Netresearch Claude Code Marketplace
+# Netresearch Agentic Skills Marketplace
 
-Claude Code plugins for TYPO3 development and technical documentation.
+Agentic Skills for Claude Code - TYPO3 development and technical documentation.
 
 ## 🔌 Compatibility
 
@@ -12,7 +12,7 @@ This is an **Agent Skill** following the [open standard](https://agentskills.io)
 - ✅ GitHub Copilot
 - ✅ Other skills-compatible AI agents
 
-> Skills are portable packages of procedural knowledge that work across any AI agent supporting the Agent Skills specification.
+> Agentic skills are portable packages of procedural knowledge that work across any AI agent supporting the Agent Skills specification.
 
 
 ## Installation
@@ -29,9 +29,9 @@ Then use `/plugin` to browse and install plugins.
 **Sync Frequency:** Weekly (Monday 2 AM UTC)
 **Immediate Sync:** ⚠️ Not configured (requires notify workflow in source repos - see [SYNC-SETUP.md](SYNC-SETUP.md))
 
-## Installed Skills
+## Installed Agentic Skills
 
-| Skill | Repository | Description |
+| Agentic Skill | Repository | Description |
 |-------|------------|-------------|
 | TYPO3 Documentation | [typo3-docs-skill](https://github.com/netresearch/typo3-docs-skill) | Create TYPO3 extension documentation |
 | TYPO3 Testing | [typo3-testing-skill](https://github.com/netresearch/typo3-testing-skill) | Manage TYPO3 extension tests |
@@ -55,24 +55,24 @@ Then use `/plugin` to browse and install plugins.
 
 ## Architecture
 
-This marketplace uses an **automated sync workflow** to maintain skills from individual source repositories. Each skill is maintained in its own repository and synced to this marketplace via GitHub Actions.
+This marketplace uses an **automated sync workflow** to maintain agentic skills from individual source repositories. Each agentic skill is maintained in its own repository and synced to this marketplace via GitHub Actions.
 
 **Benefits:**
-- ✅ Single source of truth - each skill in its own repository
+- ✅ Single source of truth - each agentic skill in its own repository
 - ✅ Independent development and testing
 - ✅ Automated version tracking with semantic versioning + commit dates
 - ✅ Scheduled and on-demand synchronization
 - ✅ Consistent marketplace structure
 
 **Sync Workflow:**
-1. Skills are developed and versioned in separate repositories (see "Installed Skills" table for repository links)
+1. Agentic skills are developed and versioned in separate repositories (see "Installed Agentic Skills" table for repository links)
 2. GitHub Actions sync workflow clones each skill repository
 3. Semantic version is extracted from skill's `SKILL.md`
 4. Last commit date is appended to create final version (e.g., `1.2.3-20251021`)
 5. Skills are copied to `skills/` directory
 6. Marketplace metadata is updated with current versions
 
-## Available Plugins
+## Available Agentic Skills
 
 ### TYPO3 Documentation
 Create and maintain TYPO3 extension documentation following official TYPO3 standards.

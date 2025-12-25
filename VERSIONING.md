@@ -4,7 +4,7 @@ This marketplace uses a **hybrid versioning approach** that combines semantic ve
 
 ## Version Format
 
-All skills use the format: `MAJOR.MINOR.PATCH-YYYYMMDD`
+All agentic skills use the format: `MAJOR.MINOR.PATCH-YYYYMMDD`
 
 **Example:** `2.1.0-20251206`
 
@@ -13,7 +13,7 @@ All skills use the format: `MAJOR.MINOR.PATCH-YYYYMMDD`
 
 ## Semantic Versioning Rules
 
-Skill maintainers control the semantic version (MAJOR.MINOR.PATCH) by creating git tags:
+Agentic skill maintainers control the semantic version (MAJOR.MINOR.PATCH) by creating git tags:
 
 ### MAJOR version (X.0.0)
 Increment when making **incompatible changes**:
@@ -44,12 +44,12 @@ Increment for **backward-compatible bug fixes** and improvements:
 
 ## How Version Generation Works
 
-### 1. Skill Maintainer Creates Release
+### 1. Agentic Skill Maintainer Creates Release
 
-When a skill maintainer makes changes and wants to release:
+When an agentic skill maintainer makes changes and wants to release:
 
 ```bash
-# In skill repository
+# In agentic skill repository
 git add .
 git commit -m "feat: add new feature"
 git tag v2.1.0  # or 2.1.0 (both formats supported)
@@ -60,7 +60,7 @@ git push && git push --tags
 
 When the sync workflow runs, it:
 
-1. **Clones the skill repository** (full clone, not shallow)
+1. **Clones the agentic skill repository** (full clone, not shallow)
    ```bash
    git clone https://github.com/netresearch/typo3-docs-skill.git
    ```
@@ -103,7 +103,7 @@ Versions are tracked in multiple places for different purposes:
 
 | Location | Format | Purpose | Updated By |
 |----------|--------|---------|------------|
-| Skill repository git tags | `v2.1.0` or `2.1.0` | Semantic version declaration | Skill maintainer |
+| Agentic skill repository git tags | `v2.1.0` or `2.1.0` | Semantic version declaration | Agentic skill maintainer |
 | `.claude-plugin/marketplace.json` | `2.1.0-20251206` | Final version with date | Sync workflow |
 
 ## Checking for Updates
@@ -111,7 +111,7 @@ Versions are tracked in multiple places for different purposes:
 ### For Users
 
 Check the marketplace.json or run the sync workflow to see:
-- **Current version** of each skill
+- **Current version** of each agentic skill
 - **Last updated date** (from the YYYYMMDD suffix)
 - **Semantic version** for understanding change scope
 
@@ -146,11 +146,11 @@ Monitor the sync workflow results to see:
 4. **Sync Workflow Integration**
    - Version generation happens automatically
    - No possibility of stale dates
-   - Consistent versioning across all skills
+   - Consistent versioning across all agentic skills
 
 5. **Update Detection**
    - Compare date suffixes to check freshness
-   - Identify skills needing updates
+   - Identify agentic skills needing updates
    - Track sync frequency
 
 ### Trade-offs
@@ -166,9 +166,9 @@ Monitor the sync workflow results to see:
 
 ## Example Workflow
 
-### Scenario: Adding New Feature to TYPO3 Testing Skill
+### Scenario: Adding New Feature to TYPO3 Testing Agentic Skill
 
-1. **Maintainer makes changes** in skill repository
+1. **Maintainer makes changes** in agentic skill repository
    - Adds new Codeception templates
    - Updates documentation
 
@@ -236,11 +236,11 @@ if [ -z "$SEMVER" ]; then
 fi
 ```
 
-**Best Practice:** Create at least one version tag (e.g., `v1.0.0`) for your skill.
+**Best Practice:** Create at least one version tag (e.g., `v1.0.0`) for your agentic skill.
 
-### Q: Can I see version history for a skill?
+### Q: Can I see version history for an agentic skill?
 
-**A:** Yes, check the skill's source repository tag history:
+**A:** Yes, check the agentic skill's source repository tag history:
 ```bash
 git tag --sort=-v:refname
 ```
@@ -255,7 +255,7 @@ git log --oneline -- .claude-plugin/marketplace.json
 **A:** Three triggers:
 1. **Manual:** `workflow_dispatch` for immediate sync
 2. **Scheduled:** Weekly on Mondays at 2 AM UTC
-3. **Automatic:** `repository_dispatch` when skill repositories update (requires notify workflow)
+3. **Automatic:** `repository_dispatch` when agentic skill repositories update (requires notify workflow)
 
 ### Q: What about pre-release versions?
 
@@ -263,7 +263,7 @@ git log --oneline -- .claude-plugin/marketplace.json
 
 ## Creating Your First Release
 
-For new skill repositories:
+For new agentic skill repositories:
 
 ```bash
 # After initial development is complete
