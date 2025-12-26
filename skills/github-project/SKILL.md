@@ -1,104 +1,47 @@
 ---
 name: github-project
-description: "GitHub repository setup and platform-specific features. Use when creating new GitHub repositories, configuring branch protection rules, setting up GitHub Issues/Discussions/Projects, creating sub-issues, managing PR review workflows, configuring Dependabot/Renovate auto-merge, or setting up merge queues. By Netresearch."
+description: "GitHub repository setup and configuration. This skill should be used when creating new GitHub repositories, configuring branch protection or rulesets, setting up CODEOWNERS, or troubleshooting PR merge issues. By Netresearch."
 ---
 
 # GitHub Project Skill
 
-## When to Use
+## Triggers
 
 - Creating a new GitHub repository
-- Configuring branch protection rules
-- Setting up GitHub Issues/Discussions/Projects
-- Creating sub-issues and issue hierarchies
-- Managing PR review workflows
-- Configuring Dependabot/Renovate auto-merge
-- Setting up merge queues
-- Resolving PR merge blockers
+- Configuring branch protection rules or rulesets
+- Setting up CODEOWNERS
+- Troubleshooting "merge is blocked" or "not allowed merge method" errors
+- Configuring auto-merge for Dependabot/Renovate
 
-## Scope
+## Usage
 
-**This Skill:** Branch protection, CODEOWNERS, Issues, Discussions, Projects, auto-merge, releases
+For workflows, CLI commands, templates, and troubleshooting guides, see `README.md`.
 
-**Delegate To:**
-- CI/CD pipelines → `go-development`, `php-modernization`, `typo3-testing`
-- Security scanning → `security-audit`
-- Supply chain → `enterprise-readiness`
-- Git workflows → `git-workflow`
+Key references:
+- `references/repository-structure.md` - Standard repo layout
+- `references/sub-issues.md` - Sub-issues GraphQL API
+- `references/dependency-management.md` - Dependabot/Renovate configuration
+- `templates/` - Auto-merge workflow templates
 
-## References
+## Go Project CI Checklist
 
-| Reference | Purpose |
-|-----------|---------|
-| `references/repository-structure.md` | Standard files and directory layout |
-| `references/dependency-management.md` | Dependabot/Renovate auto-merge patterns |
-| `references/sub-issues.md` | Sub-issues GraphQL API |
-| `references/branch-migration.md` | Master to main migration |
+For Go projects, ensure these GitHub configurations:
 
-## Templates
+| Setting | Purpose | How |
+|---------|---------|-----|
+| Branch protection | Require tests pass before merge | Branch settings or Rulesets |
+| Dependabot/Renovate | Automated dependency updates | `.github/dependabot.yml` or `renovate.json` |
+| Auto-merge workflow | Merge minor/patch updates automatically | `templates/auto-merge*.yml` |
+| Required checks | CI workflow names in branch protection | Match exact workflow job names |
 
-| Template | Purpose |
-|----------|---------|
-| `templates/auto-merge.yml.template` | Auto-merge with branch protection |
-| `templates/auto-merge-queue.yml.template` | Auto-merge with merge queue (GraphQL) |
-| `templates/auto-merge-direct.yml.template` | Auto-merge without branch protection |
-| `templates/CODEOWNERS.template` | Code ownership patterns |
-| `templates/dependabot.yml.template` | Dependabot configuration |
+For CI/CD workflow content (test, lint, build), see `go-development` skill.
+For security workflows (Scorecard, CodeQL, SLSA), see `enterprise-readiness` skill.
 
-## Quick CLI Reference
+## Related Skills
 
-```bash
-# Branch settings
-gh repo edit --enable-rebase-merge --disable-merge-commit --disable-squash-merge --delete-branch-on-merge
-
-# Branch protection
-gh api repos/{owner}/{repo}/branches/main/protection
-
-# PR workflow
-gh pr review --approve
-gh pr merge --rebase
-
-# Releases
-gh release create v1.0.0 --generate-notes
-```
-
-## Critical: Review Thread Resolution
-
-The `gh` CLI cannot resolve review threads. Use GraphQL:
-
-```bash
-# Get thread IDs
-gh api graphql -f query='{repository(owner:"OWNER",name:"REPO"){pullRequest(number:N){reviewThreads(first:50){nodes{id isResolved}}}}}'
-
-# Resolve thread
-gh api graphql -f query='mutation{resolveReviewThread(input:{threadId:"PRRT_xxx"}){thread{isResolved}}}'
-```
-
-## Auto-Merge Decision Matrix
-
-| Configuration | Template | Method |
-|---------------|----------|--------|
-| Merge queue enabled | `auto-merge-queue.yml.template` | GraphQL `enqueuePullRequest` |
-| Branch protection | `auto-merge.yml.template` | `gh pr merge --auto` |
-| No branch protection | `auto-merge-direct.yml.template` | `gh pr merge --rebase` |
-
-## Common Errors
-
-| Error | Cause | Fix |
-|-------|-------|-----|
-| "Protected branch rules not configured" | `--auto` requires branch protection | Use direct merge template |
-| "mergeMethod" invalid for enqueuePullRequest | Queue config sets merge method | Remove mergeMethod param |
-| "Merge method X is not allowed" | Repo settings mismatch | Align workflow with repo settings |
-
-## Verification
-
-```bash
-./scripts/verify-github-project.sh /path/to/repo
-```
-
-Checks: documentation, CODEOWNERS, dependency management, templates, auto-merge workflow, release configuration.
-
----
-
-> **Contributing:** Improvements to this skill should be submitted to the source repository:
-> https://github.com/netresearch/github-project-skill
+| Skill | Purpose |
+|-------|---------|
+| `go-development` | Go code patterns, Makefile interface, testing, linting |
+| `enterprise-readiness` | OpenSSF Scorecard, SLSA provenance, signed releases |
+| `git-workflow` | Git branching strategies, conventional commits |
+| `security-audit` | Deep security audits (OWASP, CVE analysis) |

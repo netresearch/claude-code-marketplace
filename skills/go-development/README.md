@@ -68,7 +68,12 @@ go-development-skill/
     ├── resilience.md                     # Retry, shutdown, recovery
     ├── docker.md                         # Docker client patterns
     ├── ldap.md                           # LDAP/Active Directory integration
-    └── testing.md                        # Test strategies and patterns
+    ├── testing.md                        # Test strategies and patterns
+    ├── linting.md                        # golangci-lint v2 configuration
+    ├── api-design.md                     # Bitmask options, functional options
+    ├── fuzz-testing.md                   # Go fuzzing patterns, security seeds
+    ├── mutation-testing.md               # Gremlins test quality measurement
+    └── makefile.md                       # Standard Makefile interface
 ```
 
 ## Expertise Areas
@@ -173,6 +178,16 @@ test:
 2. **Connection Reuse**: Single client instance, connection pooling
 3. **Lazy Initialization**: Initialize resources on first use
 4. **Context Deadlines**: Prevent runaway operations
+
+## Related Skills
+
+This skill focuses on Go code patterns and quality. For complete project setup:
+
+| Skill | Purpose |
+|-------|---------|
+| `github-project` | Repository setup, branch protection, auto-merge workflows |
+| `enterprise-readiness` | OpenSSF Scorecard, SLSA provenance, signed releases |
+| `security-audit` | OWASP Top 10, CVE analysis, security hardening |
 
 ## License
 

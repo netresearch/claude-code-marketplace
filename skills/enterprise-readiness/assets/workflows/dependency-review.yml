@@ -1,0 +1,41 @@
+# Dependency Review
+# https://github.com/actions/dependency-review-action
+#
+# Scans PR dependency changes for:
+# - Known vulnerabilities (CVEs)
+# - License compliance issues
+# - Supply chain risks
+#
+# Blocks PRs with high-severity vulnerabilities or banned licenses.
+
+name: Dependency Review
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions: read-all
+
+jobs:
+  dependency-review:
+    name: Dependency Review
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+
+    steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@v2
+        with:
+          egress-policy: audit
+
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Dependency Review
+        uses: actions/dependency-review-action@v4
+        with:
+          fail-on-severity: high
+          deny-licenses: GPL-3.0, AGPL-3.0
+          comment-summary-in-pr: always

@@ -1,0 +1,80 @@
+# SLSA Provenance (Level 3)
+# https://slsa.dev/
+#
+# Generates cryptographic provenance attestations for release assets.
+# Proves WHERE and HOW artifacts were built.
+#
+# Prerequisites:
+# 1. Release assets must already exist (uploaded by release workflow)
+# 2. Repository must allow GitHub Actions to write to releases
+#
+# For Go projects with GoReleaser, consider using the SLSA Go builder instead:
+# https://github.com/slsa-framework/slsa-github-generator/blob/main/internal/builders/go/README.md
+
+name: SLSA Provenance
+
+on:
+  release:
+    types: [published]
+
+permissions: read-all
+
+jobs:
+  # Prepare subjects (SHA256 hashes of release assets)
+  prepare:
+    name: Prepare Provenance Subjects
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    outputs:
+      subjects: ${{ steps.subjects.outputs.subjects }}
+      has_subjects: ${{ steps.subjects.outputs.has_subjects }}
+    steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@v2
+        with:
+          egress-policy: audit
+
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download release assets
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          mkdir -p release-assets
+          gh release download "${{ github.event.release.tag_name }}" -D release-assets || true
+          ls -la release-assets/
+
+      - name: Generate provenance subjects
+        id: subjects
+        run: |
+          cd release-assets
+          if ls * 1> /dev/null 2>&1; then
+            sha256sum * > ../provenance-subjects.txt
+            cat ../provenance-subjects.txt
+
+            SUBJECTS=$(cat ../provenance-subjects.txt | awk '{print "{\"name\":\""$2"\",\"digest\":{\"sha256\":\""$1"\"}}"}' | jq -s -c '.')
+            SUBJECTS_BASE64=$(echo "$SUBJECTS" | base64 -w0)
+            echo "subjects=$SUBJECTS_BASE64" >> "$GITHUB_OUTPUT"
+            echo "has_subjects=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "No assets to hash"
+            echo "has_subjects=false" >> "$GITHUB_OUTPUT"
+          fi
+
+  # Generate SLSA Level 3 provenance
+  provenance:
+    name: Generate SLSA Provenance
+    needs: prepare
+    if: needs.prepare.outputs.has_subjects == 'true'
+    permissions:
+      actions: read
+      id-token: write
+      contents: write
+    uses: slsa-framework/slsa-github-generator/.github/workflows/generator_generic_slsa3.yml@v2.1.0
+    with:
+      base64-subjects: ${{ needs.prepare.outputs.subjects }}
+      upload-assets: true

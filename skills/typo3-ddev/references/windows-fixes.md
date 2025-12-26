@@ -140,8 +140,9 @@ volumes:
 </Location>
 
 # Main project overview
+# NOTE: Use ${DDEV_SITENAME} (Apache env var), not {{DDEV_SITENAME}} (template placeholder)
 <VirtualHost *:80>
-    ServerName {{DDEV_SITENAME}}.ddev.site
+    ServerName ${DDEV_SITENAME}.ddev.site
     DocumentRoot /var/www/html
     <Directory /var/www/html>
         AllowOverride All
@@ -151,7 +152,7 @@ volumes:
 
 # Additional VirtualHosts for multi-version setup
 <VirtualHost *:80>
-    ServerName v12.{{DDEV_SITENAME}}.ddev.site
+    ServerName v12.${DDEV_SITENAME}.ddev.site
     DocumentRoot /var/www/html/v12/public
     <Directory /var/www/html/v12/public>
         AllowOverride All

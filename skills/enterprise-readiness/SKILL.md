@@ -63,6 +63,20 @@ Templates in `assets/templates/`:
 - `SECURITY_AUDIT.md` - Security audit (Gold)
 - `BADGE_EXCEPTIONS.md` - N/A justifications
 
+## CI Workflow Templates
+
+GitHub Actions workflows in `assets/workflows/`:
+
+| Workflow | Purpose |
+|----------|---------|
+| `scorecard.yml` | OpenSSF Scorecard security analysis |
+| `codeql.yml` | Semantic code security scanning |
+| `dependency-review.yml` | PR dependency CVE/license check |
+| `slsa-provenance.yml` | SLSA Level 3 build attestation |
+| `dco-check.yml` | Developer Certificate of Origin |
+
+Copy workflows to `.github/workflows/` and pin action versions with SHA hashes.
+
 ## Scoring Interpretation
 
 | Score | Grade | Status |
@@ -82,8 +96,12 @@ Templates in `assets/templates/`:
 
 ## Related Skills
 
-- `security-audit-skill` - Deep PHP security audits (OWASP, XXE, SQLi)
-- `git-workflow-skill` - Git branching, commits, PR workflows
+| Skill | Purpose |
+|-------|---------|
+| `go-development` | Go code patterns, Makefile interface, testing |
+| `github-project` | Repository setup, branch protection, auto-merge |
+| `security-audit` | Deep security audits (OWASP, XXE, SQLi) |
+| `git-workflow` | Git branching, commits, PR workflows |
 
 ## Resources
 

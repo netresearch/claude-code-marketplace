@@ -74,6 +74,12 @@ This is an **Agent Skill** following the [open standard](https://agentskills.io)
 - "Protected branch rules not configured" (--auto requires branch protection)
 - Merge queue not processing PRs
 
+**Troubleshooting (Ruleset Conflicts):**
+- "Rebase is not an allowed merge method"
+- "Squash is not an allowed merge method"
+- "Merge commit is not an allowed merge method"
+- Ruleset merge method mismatch warning on PR
+
 **Merge Queue Configuration:**
 - "set up merge queue"
 - "enqueuePullRequest"
@@ -130,7 +136,7 @@ Run verification: `./scripts/verify-github-project.sh /path/to/repo`
 |---------|-------|-----------|
 | Default branch name | `main` | Industry standard |
 | Default branch protected | ✅ | Prevent direct pushes |
-| Allowed merge method | **Rebase only** | Clean linear history |
+| Allowed merge method | **Merge commits only** | Preserve complete history |
 | Delete branch on merge | ✅ | Keep repo clean |
 
 To configure via GitHub CLI:
@@ -139,9 +145,11 @@ To configure via GitHub CLI:
 # Ensure default branch is named "main"
 gh api repos/{owner}/{repo} --jq '.default_branch'
 
-# Configure merge settings (rebase only, delete on merge)
-gh repo edit --enable-rebase-merge --disable-merge-commit --disable-squash-merge --delete-branch-on-merge
+# Configure merge settings (merge commits only, delete on merge)
+gh repo edit --enable-merge-commit --disable-rebase-merge --disable-squash-merge --delete-branch-on-merge
 ```
+
+**Note:** If you prefer rebase merging for linear history, use `--enable-rebase-merge --disable-merge-commit` instead. Ensure consistency with any GitHub Rulesets (see [Rulesets Configuration](#github-rulesets-configuration)).
 
 ### Renaming "master" to "main"
 
@@ -182,10 +190,73 @@ gh api repos/{owner}/{repo}/branches/main/protection \
 | Require CODEOWNERS review | ✅ | Domain expert review |
 | Require conversation resolution | ✅ | All comments addressed |
 | Do not allow force pushes | ✅ | Protect history |
-| Allow rebase merge | ✅ | Clean linear history |
-| Disable merge commits | ✅ | No merge bubbles |
+| Allow merge commits | ✅ | Preserve complete history |
+| Disable rebase merge | ✅ | Avoid linear-only restriction |
 | Disable squash merge | ✅ | Preserve commit granularity |
 | Delete branch on merge | ✅ | Auto-cleanup merged branches |
+
+### GitHub Rulesets Configuration
+
+GitHub Rulesets provide repository rules that can override or conflict with repository-level settings. **Critical:** The `pull_request` rule in rulesets has its own `allowed_merge_methods` setting that must match repository settings.
+
+**View existing rulesets:**
+```bash
+# List all rulesets
+gh api repos/{owner}/{repo}/rulesets
+
+# Get specific ruleset details
+gh api repos/{owner}/{repo}/rulesets/{ruleset_id}
+```
+
+**Common Issue: "Rebase is not an allowed merge method" Warning**
+
+This warning appears on PRs when there's a mismatch between:
+1. **Repository settings** (`allow_rebase_merge: false`)
+2. **Ruleset settings** (`allowed_merge_methods` includes `"rebase"`)
+
+**Diagnosis:**
+```bash
+# Check repository merge settings
+gh api repos/{owner}/{repo} --jq '{allow_merge_commit, allow_rebase_merge, allow_squash_merge}'
+
+# Check ruleset merge settings
+gh api repos/{owner}/{repo}/rulesets/{ruleset_id} --jq '.rules[] | select(.type == "pull_request") | .parameters.allowed_merge_methods'
+
+# Check merge queue settings
+gh api repos/{owner}/{repo}/rulesets/{ruleset_id} --jq '.rules[] | select(.type == "merge_queue") | .parameters.merge_method'
+```
+
+**Fix: Update ruleset to match repository settings**
+
+For merge commits only:
+```bash
+gh api repos/{owner}/{repo}/rulesets/{ruleset_id} -X PUT --input - << 'EOF'
+{
+  "rules": [
+    {
+      "type": "pull_request",
+      "parameters": {
+        "allowed_merge_methods": ["merge"]
+      }
+    },
+    {
+      "type": "merge_queue",
+      "parameters": {
+        "merge_method": "MERGE"
+      }
+    }
+  ]
+}
+EOF
+```
+
+**Ruleset merge method alignment:**
+
+| Repository Setting | Ruleset `allowed_merge_methods` | Ruleset `merge_queue.merge_method` |
+|-------------------|--------------------------------|-----------------------------------|
+| `allow_merge_commit: true` only | `["merge"]` | `"MERGE"` |
+| `allow_rebase_merge: true` only | `["rebase"]` | `"REBASE"` |
+| `allow_squash_merge: true` only | `["squash"]` | `"SQUASH"` |
 
 ### PR Comment Resolution Workflow
 
@@ -567,6 +638,29 @@ gh project create --title "Project Name"
 | `templates/auto-merge-queue.yml.template` | Auto-merge with merge queue (GraphQL mutation) |
 | `templates/auto-merge-direct.yml.template` | Auto-merge without branch protection |
 | `scripts/verify-github-project.sh` | Verification script for project setup |
+
+## Related Skills
+
+This skill focuses on GitHub platform configuration. For complete project setup:
+
+| Skill | Purpose |
+|-------|---------|
+| `go-development` | Go code patterns, Makefile interface, testing, linting |
+| `enterprise-readiness` | OpenSSF Scorecard, SLSA provenance, signed releases, CI workflow templates |
+| `git-workflow` | Git branching strategies, conventional commits |
+| `security-audit` | Deep security audits (OWASP, CVE analysis) |
+
+### Skill Coordination
+
+```
+github-project (this skill)
+├── Repository configuration
+├── Branch protection / rulesets
+├── Dependabot/Renovate auto-merge
+└── Coordinates with:
+    ├── go-development → CI workflow content (test, lint, build)
+    └── enterprise-readiness → Security workflows (Scorecard, CodeQL, SLSA)
+```
 
 ---
 

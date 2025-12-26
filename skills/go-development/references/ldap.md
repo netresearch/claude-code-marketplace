@@ -483,4 +483,119 @@ func (c *Client) ListComputers(filter string) ([]*Computer, error) {
 
     return computers, nil
 }
+
+## Testing LDAP with Testcontainers
+
+### LDAP Lazy Binding Behavior
+
+**Critical**: LDAP connections use **lazy binding**. The `Dial()` or `DialTLS()` call only establishes a TCP connection - authentication is not validated until the first LDAP operation.
+
+```go
+// Connection succeeds even with invalid credentials!
+conn, err := ldap.Dial("tcp", "ldap.example.com:389")
+if err != nil {
+    // Only fails on network/DNS errors, NOT auth errors
+}
+
+// Auth is validated HERE, on first operation
+err = conn.Bind("cn=admin,dc=example,dc=com", "wrong-password")
+// NOW you get auth errors
 ```
+
+### OpenLDAP Anonymous Reads
+
+OpenLDAP allows anonymous read access by default. This affects health checks:
+
+```go
+// Health check using Search works WITHOUT authentication
+func (c *Client) HealthCheck() error {
+    _, err := c.conn.Search(&ldap.SearchRequest{
+        BaseDN:     c.baseDN,
+        Scope:      ldap.ScopeBaseObject,
+        Filter:     "(objectClass=*)",
+        Attributes: []string{"1.1"}, // Request no attributes
+        SizeLimit:  1,
+    })
+    return err  // Works even without Bind!
+}
+
+// For true auth validation, use Bind explicitly
+func (c *Client) ValidateCredentials() error {
+    return c.conn.Bind(c.bindDN, c.bindPassword)
+}
+```
+
+### Testcontainers Pattern for LDAP
+
+Use ephemeral OpenLDAP containers for integration tests:
+
+```go
+//go:build integration
+
+package ldap_test
+
+import (
+    "context"
+    "testing"
+
+    "github.com/testcontainers/testcontainers-go"
+    "github.com/testcontainers/testcontainers-go/wait"
+)
+
+func setupOpenLDAPContainer(t *testing.T) (host string, port int, cleanup func()) {
+    ctx := context.Background()
+
+    req := testcontainers.ContainerRequest{
+        Image:        "osixia/openldap:1.5.0",  // Pin version!
+        ExposedPorts: []string{"389/tcp"},
+        Env: map[string]string{
+            "LDAP_ORGANISATION":    "Test Org",
+            "LDAP_DOMAIN":          "example.com",
+            "LDAP_ADMIN_PASSWORD":  "admin",  // OK for ephemeral test container
+            "LDAP_BASE_DN":         "dc=example,dc=com",
+        },
+        WaitingFor: wait.ForListeningPort("389/tcp"),
+    }
+
+    container, err := testcontainers.GenericContainer(ctx, testcontainers.GenericContainerRequest{
+        ContainerRequest: req,
+        Started:          true,
+    })
+    if err != nil {
+        t.Fatalf("Failed to start container: %v", err)
+    }
+
+    mappedPort, _ := container.MappedPort(ctx, "389")
+    hostIP, _ := container.Host(ctx)
+
+    return hostIP, mappedPort.Int(), func() {
+        container.Terminate(ctx)
+    }
+}
+
+func TestLDAPIntegration(t *testing.T) {
+    host, port, cleanup := setupOpenLDAPContainer(t)
+    defer cleanup()
+
+    client, err := NewClient(Config{
+        Host:   host,
+        Port:   port,
+        BindDN: "cn=admin,dc=example,dc=com",
+        BindPW: "admin",
+        BaseDN: "dc=example,dc=com",
+    })
+    require.NoError(t, err)
+    defer client.Close()
+
+    // Test operations...
+}
+```
+
+### Security Note: Test Credentials
+
+Hardcoded credentials in testcontainer setup are acceptable because:
+1. Containers are ephemeral (destroyed after test)
+2. Run on isolated localhost ports
+3. Contain no real data
+
+**Never** use production credentials in tests. Always use dedicated test accounts with minimal permissions.

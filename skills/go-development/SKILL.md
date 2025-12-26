@@ -38,6 +38,9 @@ description: "Production-grade Go development patterns for building resilient se
 | `references/testing.md` | Test strategies, build tags, table-driven tests |
 | `references/linting.md` | golangci-lint v2, staticcheck, code quality |
 | `references/api-design.md` | Bitmask options, functional options, builders |
+| `references/fuzz-testing.md` | Go fuzzing patterns, security seeds |
+| `references/mutation-testing.md` | Gremlins configuration, test quality measurement |
+| `references/makefile.md` | Standard Makefile interface for CI/CD |
 
 ## Package Structure
 
@@ -109,6 +112,27 @@ return fmt.Errorf("failed to process: %w", err)
 ```
 
 See reference files for complete patterns and examples.
+
+## Related Skills
+
+This skill is the primary entry point for Go development. For complete project setup, coordinate with:
+
+| Task | Skill |
+|------|-------|
+| Repository setup, branch protection, auto-merge | `github-project` |
+| OpenSSF Scorecard, SLSA provenance, signed releases | `enterprise-readiness` |
+| Security audits (OWASP, CVE analysis) | `security-audit` |
+
+### Workflow
+
+```
+go-development (this skill)
+├── Code quality: linting, testing, fuzzing
+├── Standard Makefile: test, build, lint, fuzz
+└── Delegates to:
+    ├── github-project → repo setup, CI workflows, branch protection
+    └── enterprise-readiness → supply chain security, SLSA, signing
+```
 
 ---
 

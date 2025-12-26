@@ -957,6 +957,36 @@ value := cache.GetOrSet(key, func() string {
 })
 ```
 
+**4. RLock vs Lock - Know When to Upgrade:**
+
+```go
+// BAD: RLock used when writing to a field
+func (c *Cache) Get(key string) ([]byte, bool) {
+    c.mu.RLock()
+    defer c.mu.RUnlock()
+
+    entry, ok := c.entries[key]
+    if ok {
+        entry.accessedAt = time.Now()  // RACE! Writing under RLock
+    }
+    return entry.data, ok
+}
+
+// GOOD: Use Lock when any write occurs
+func (c *Cache) Get(key string) ([]byte, bool) {
+    c.mu.Lock()  // Full lock needed for accessedAt update
+    defer c.mu.Unlock()
+
+    entry, ok := c.entries[key]
+    if ok {
+        entry.accessedAt = time.Now()  // Safe
+    }
+    return entry.data, ok
+}
+```
+
+**Rule**: RLock is ONLY safe when the entire operation is read-only. Any write (including updating timestamps, counters, or "metadata") requires a full Lock.
+
 ### CI Integration
 
 ```yaml
@@ -1077,6 +1107,100 @@ func TestIsValidMinute(t *testing.T) {
     }
     // ...
 }
+```
+
+## Common Gotchas
+
+### Integer to String Conversion
+
+A common trap in Go: `string(rune(i))` does NOT convert an integer to its string representation:
+
+```go
+// BAD - Produces unicode codepoint, not numeric string!
+for i := range 10 {
+    key := "key" + string(rune(i))  // key + "\x00", "\x01", etc.
+}
+
+// GOOD - Correct integer to string conversion
+for i := range 10 {
+    key := "key" + strconv.Itoa(i)  // "key0", "key1", etc.
+}
+
+// Also acceptable
+key := fmt.Sprintf("key%d", i)
+```
+
+**Why this happens**: `string(rune(i))` interprets `i` as a Unicode code point. `string(rune(65))` produces `"A"`, not `"65"`.
+
+### Test Assertion Precision
+
+Choose the right assertion for nil checks:
+
+```go
+// BAD - assert.Empty works but is less precise
+assert.Empty(t, err)  // Passes for nil, "", 0, empty slices...
+
+// GOOD - assert.Nil is explicit about intent
+assert.Nil(t, err)    // Only passes for nil
+
+// For error checking, even better:
+assert.NoError(t, err)
+require.NoError(t, err)  // Fails test immediately
+```
+
+### Unused Test Parameters
+
+Always name `*testing.T` parameters to enable helper functions:
+
+```go
+// BAD - Cannot use require.NotPanics or t.Helper()
+func TestSomething(_ *testing.T) {
+    // ...
+}
+
+// GOOD - Full access to testing helpers
+func TestSomething(t *testing.T) {
+    require.NotPanics(t, func() {
+        // test code
+    })
+}
+```
+
+### Fuzz Target Naming
+
+Fuzz targets must match the `Fuzz*` pattern exactly:
+
+```go
+// BAD - Target name doesn't match function
+//go:build ignore
+
+func FuzzParser(f *testing.F) {
+    f.Fuzz(func(t *testing.T, data []byte) {
+        // ...
+    })
+}
+
+// GOOD - Target exists and matches name in fuzz command
+// go test -fuzz=FuzzParser
+func FuzzParser(f *testing.F) {
+    f.Fuzz(func(t *testing.T, data []byte) {
+        // ...
+    })
+}
+```
+
+### Always Check app.Test() Errors
+
+When testing Fiber/Echo handlers, always check the error:
+
+```go
+// BAD - Ignores potential test setup errors
+resp, _ := app.Test(req)
+
+// GOOD - Fails test if request setup fails
+resp, err := app.Test(req)
+require.NoError(t, err)
+defer resp.Body.Close()
 ```
 
 ## Makefile Integration

@@ -89,13 +89,32 @@ ddev install-all    # Installs TYPO3 + extension + Introduction Package
 
 ## Generated Files Reference
 
+### Variable Syntax
+
+**CRITICAL DISTINCTION:**
+- `{{VAR}}` - Template placeholder, replaced at setup time (static substitution)
+- `${VAR}` - Environment variable, evaluated at runtime by Apache/Docker
+
+**Apache configs (`apache-site.conf`)** use `${DDEV_SITENAME}` (env var) because:
+- DDEV sets this environment variable in the container
+- Apache evaluates it at runtime, no template substitution needed
+- Allows the same config to work without modification
+
+**Docker Compose** uses `${DDEV_SITENAME}` (env var) for the same reason.
+
+**DDEV config.yaml** uses `{{DDEV_SITENAME}}` because DDEV config doesn't support env vars.
+
 ### config.yaml Variables
-- `{{DDEV_SITENAME}}`: DDEV project name (from extension key)
+- `{{DDEV_SITENAME}}`: DDEV project name (from extension key) - requires substitution
 
 ### docker-compose.web.yaml Variables
-- `{{EXTENSION_KEY}}`: Extension key with underscores
-- `{{PACKAGE_NAME}}`: Composer package name
-- `{{DDEV_SITENAME}}`: For volume naming
+- `{{EXTENSION_KEY}}`: Extension key with underscores - requires substitution
+- `{{PACKAGE_NAME}}`: Composer package name - requires substitution
+- `${DDEV_SITENAME}`: For volume naming - runtime env var
+
+### apache-site.conf Variables
+- `${DDEV_SITENAME}`: Apache env var, evaluated at runtime
+- `{{EXTENSION_KEY}}`: Extension key for paths - requires substitution
 
 ### Volume Architecture
 - Extension source: Bind-mounted from project root

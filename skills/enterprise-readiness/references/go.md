@@ -257,6 +257,40 @@ func doSomething() error {
 
 ---
 
+## CI Workflow Checklist
+
+Essential security and quality workflows for production Go projects:
+
+| Workflow | Purpose | Template |
+|----------|---------|----------|
+| OpenSSF Scorecard | Security practices measurement | `assets/workflows/scorecard.yml` |
+| CodeQL | Semantic security analysis | `assets/workflows/codeql.yml` |
+| Dependency Review | CVE/license scanning on PRs | `assets/workflows/dependency-review.yml` |
+| SLSA Provenance | Build attestation (L3) | `assets/workflows/slsa-provenance.yml` |
+
+### Implementation Priority
+
+1. **Dependency Review** - Immediate PR protection against known vulnerabilities
+2. **CodeQL** - Catches security bugs before merge
+3. **Scorecard** - Measures and tracks security posture
+4. **SLSA** - Supply chain security for releases
+
+### Standard Makefile Interface
+
+Enterprise-ready workflows depend on consistent Makefile targets:
+
+```bash
+make test      # Run tests with race detection and coverage
+make build     # Build the application binary
+make lint      # Run golangci-lint
+make fuzz      # Run fuzz tests
+make vuln-check # Run govulncheck
+```
+
+See `go-development` skill for Makefile templates.
+
+---
+
 ## Go-Specific Tools Reference
 
 | Tool | Purpose | Install |
