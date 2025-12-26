@@ -270,3 +270,8 @@ Run the security audit script:
 - **enterprise-readiness-skill**: References this skill for security assessment
 - **php-modernization-skill**: Type safety enhances security
 - **typo3-testing-skill**: Security test patterns
+
+---
+
+> **Contributing:** Improvements to this skill should be submitted to the source repository:
+> https://github.com/netresearch/security-audit-skill

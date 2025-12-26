@@ -306,3 +306,8 @@ Run the verification script to check PHP modernization status:
 
 - **security-audit-skill**: Security patterns for PHP applications
 - **typo3-testing-skill**: PHPUnit patterns (applicable to any PHP project)
+
+---
+
+> **Contributing:** Improvements to this skill should be submitted to the source repository:
+> https://github.com/netresearch/php-modernization-skill

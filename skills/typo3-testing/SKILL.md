@@ -286,3 +286,8 @@ Consult these resources for additional context:
 | [PHPUnit Documentation](https://phpunit.de/documentation.html) | Assertions, test doubles, configuration |
 | [Playwright Documentation](https://playwright.dev/docs/intro) | Browser automation, Page Object Model |
 | [TYPO3 Core Playwright Tests](https://github.com/TYPO3/typo3/tree/main/Build/tests/playwright) | E2E patterns, authentication, accessibility testing |
+
+---
+
+> **Contributing:** Improvements to this skill should be submitted to the source repository:
+> https://github.com/netresearch/typo3-testing-skill

@@ -109,3 +109,8 @@ return fmt.Errorf("failed to process: %w", err)
 ```
 
 See reference files for complete patterns and examples.
+
+---
+
+> **Contributing:** Improvements to this skill should be submitted to the source repository:
+> https://github.com/netresearch/go-development-skill

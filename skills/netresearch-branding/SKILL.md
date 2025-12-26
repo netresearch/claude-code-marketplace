@@ -9,6 +9,31 @@ description: "Agent Skill: Apply Netresearch brand identity and design standards
 
 **Activation:** This skill activates when working on Netresearch-branded projects, designing web interfaces, creating presentations, or producing digital content for Netresearch.
 
+## Auto-Trigger Conditions
+
+**PROACTIVELY apply this skill** when ANY of these conditions are met:
+
+1. **Repository Detection**
+   - GitHub organization is `netresearch`
+   - `composer.json` contains `netresearch/` vendor prefix
+   - Project path contains `netresearch` (case-insensitive)
+
+2. **Content Creation**
+   - Creating HTML landing pages, dashboards, or index pages
+   - Generating web UI components with custom styling
+   - Creating documentation with visual styling
+   - Designing email templates or notifications
+
+3. **Skill Cross-Reference**
+   - Another skill (e.g., `typo3-ddev`) generates visual content
+   - The generated content includes HTML/CSS styling
+
+**Detection Example:**
+```bash
+# Check if Netresearch project
+grep -q '"netresearch/' composer.json && echo "Apply branding"
+```
+
 ## MANDATORY Requirements (ALWAYS Apply)
 
 When branding ANY web project, dashboard, or interface for Netresearch, you MUST:
@@ -198,3 +223,8 @@ a { color: #2F99A4; } a:hover { color: #FF4D00; }
 ---
 
 *For detailed specifications, see the reference files in `references/`.*
+
+---
+
+> **Contributing:** Improvements to this skill should be submitted to the source repository:
+> https://github.com/netresearch/netresearch-branding-skill

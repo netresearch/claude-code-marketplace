@@ -91,3 +91,8 @@ Templates in `assets/templates/`:
 - [Best Practices Badge](https://www.bestpractices.dev/)
 - [SLSA Framework](https://slsa.dev/)
 - [S2C2F](https://github.com/ossf/s2c2f)
+
+---
+
+> **Contributing:** Improvements to this skill should be submitted to the source repository:
+> https://github.com/netresearch/enterprise-readiness-skill

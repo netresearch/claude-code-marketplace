@@ -199,3 +199,8 @@ Full troubleshooting: `references/troubleshooting.md`
 - [Gerrit](https://review.typo3.org)
 - [Forger](https://forger.typo3.com)
 - [Slack](https://typo3.slack.com) (#typo3-cms-coredev)
+
+---
+
+> **Contributing:** Improvements to this skill should be submitted to the source repository:
+> https://github.com/netresearch/typo3-core-contributions-skill

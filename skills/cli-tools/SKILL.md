@@ -177,3 +177,8 @@ If installation fails:
 - **PATH updates**: After installation, may need to reload shell or update PATH.
 - **Permissions**: User-level installs do not need sudo. System installs may.
 - **Offline mode**: Cannot install without network, but can audit local tools.
+
+---
+
+> **Contributing:** Improvements to this skill should be submitted to the source repository:
+> https://github.com/netresearch/cli-tools-skill

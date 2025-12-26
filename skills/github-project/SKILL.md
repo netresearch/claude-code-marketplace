@@ -97,3 +97,8 @@ gh api graphql -f query='mutation{resolveReviewThread(input:{threadId:"PRRT_xxx"
 ```
 
 Checks: documentation, CODEOWNERS, dependency management, templates, auto-merge workflow, release configuration.
+
+---
+
+> **Contributing:** Improvements to this skill should be submitted to the source repository:
+> https://github.com/netresearch/github-project-skill

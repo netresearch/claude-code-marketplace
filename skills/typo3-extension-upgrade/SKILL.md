@@ -371,3 +371,8 @@ See `references/real-world-patterns.md` - includes:
 - SC_OPTIONS hooks to PSR-14 events
 - Fractor migrations applied
 - Site Sets for TYPO3 13
+
+---
+
+> **Contributing:** Improvements to this skill should be submitted to the source repository:
+> https://github.com/netresearch/typo3-extension-upgrade-skill

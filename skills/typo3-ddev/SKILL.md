@@ -1,6 +1,6 @@
 ---
 name: typo3-ddev
-description: "Agent Skill: Automate DDEV environment setup for TYPO3 extension development. Use when setting up local development environment, configuring DDEV for TYPO3 extensions, or creating multi-version TYPO3 testing environments. Covers DDEV configuration generation, TYPO3 11.5/12.4/13.4 LTS installation, custom DDEV commands, Apache vhost setup, Docker volume management, and .gitignore best practices. By Netresearch."
+description: "Agent Skill: Automate DDEV environment setup for TYPO3 extension development. Use when setting up local development environment, configuring DDEV for TYPO3 extensions, or creating multi-version TYPO3 testing environments. Covers DDEV configuration generation, TYPO3 11.5/12.4/13.4/14.0 LTS installation, custom DDEV commands, Apache vhost setup, Docker volume management, and .gitignore best practices. By Netresearch."
 ---
 
 # TYPO3 DDEV Setup Skill
@@ -12,7 +12,7 @@ Automates DDEV environment setup for TYPO3 extension development projects with m
 Use when:
 - Setting up DDEV for a TYPO3 extension project
 - Project contains `ext_emconf.php` or is a TYPO3 extension in `composer.json`
-- Testing extension across multiple TYPO3 versions (11.5, 12.4, 13.4 LTS)
+- Testing extension across multiple TYPO3 versions (11.5, 12.4, 13.4, 14.0 LTS)
 - Quick development environment spin-up is needed
 
 ## Quick Start
@@ -99,7 +99,7 @@ ddev install-all    # Installs TYPO3 + extension + Introduction Package
 
 ### Volume Architecture
 - Extension source: Bind-mounted from project root
-- TYPO3 installations: Docker volumes (`v11-data`, `v12-data`, `v13-data`)
+- TYPO3 installations: Docker volumes (`v11-data`, `v12-data`, `v13-data`, `v14-data`)
 
 ### .envrc Variables
 - `{{EXTENSION_KEY}}`: Extension key for display
@@ -120,6 +120,8 @@ ddev generate-index
 ```
 Creates overview dashboard at main domain.
 
+**Branding**: When generating visual content (landing pages, dashboards), check if a company/organization branding skill is available (e.g., `netresearch-branding`) and apply brand identity: logo, colors, fonts. This ensures consistent visual identity across all generated assets.
+
 ### Render Documentation
 ```bash
 ddev docs
@@ -136,7 +138,7 @@ PCOV is faster than Xdebug for code coverage collection.
 
 ```bash
 # In .ddev/web-build/Dockerfile
-RUN apt-get update && apt-get install -y php${PHP_VERSION}-pcov
+RUN apt-get update && apt-get install -y php${PHP_VERSION}-pcov && rm -rf /var/lib/apt/lists/*
 ```
 
 **Note**: DDEV containers don't include `pecl`. Use `apt-get` for PHP extensions instead.
@@ -247,3 +249,8 @@ See `references/advanced-options.md` for site set configuration details.
 | Script | Purpose |
 |--------|---------|
 | `scripts/validate-prerequisites.sh` | Check Docker, DDEV, project structure |
+
+---
+
+> **Contributing:** Improvements to this skill should be submitted to the source repository:
+> https://github.com/netresearch/typo3-ddev-skill

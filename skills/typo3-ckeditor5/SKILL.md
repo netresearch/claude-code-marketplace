@@ -354,3 +354,8 @@ Run the verification script:
 
 - **typo3-extension-upgrade-skill**: References this skill for RTE migration
 - **php-modernization-skill**: Modern PHP patterns for backend integration
+
+---
+
+> **Contributing:** Improvements to this skill should be submitted to the source repository:
+> https://github.com/netresearch/typo3-ckeditor5-skill

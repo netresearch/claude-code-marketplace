@@ -210,3 +210,8 @@ Generate conformance reports with dual scoring: Base (0-100) + Excellence (0-22 
 ---
 
 *For detailed validation rules, consult the reference files in `references/`.*
+
+---
+
+> **Contributing:** Improvements to this skill should be submitted to the source repository:
+> https://github.com/netresearch/typo3-conformance-skill

@@ -218,3 +218,8 @@ Run `scripts/validate-skill.sh` or manually check:
 - **Anthropic skill-creator** - SKILL.md content creation (this skill extends it)
 - **enterprise-readiness-skill** - OpenSSF compliance for skill repos
 - **git-workflow-skill** - Git best practices for releases
+
+---
+
+> **Contributing:** Improvements to this skill should be submitted to the source repository:
+> https://github.com/netresearch/skill-repo-skill

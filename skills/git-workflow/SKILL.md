@@ -452,3 +452,8 @@ GitHub's immutable releases feature blocks tag names after deletion.
 - **enterprise-readiness-skill**: Git workflow is part of CI/CD maturity
 - **security-audit-skill**: Git hooks for security checks
 - **typo3-conformance-skill**: TER publishing requirements and validation
+
+---
+
+> **Contributing:** Improvements to this skill should be submitted to the source repository:
+> https://github.com/netresearch/git-workflow-skill

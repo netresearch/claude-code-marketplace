@@ -386,3 +386,8 @@ GPL-2.0-or-later (matching other Netresearch skills)
 - **Prompt**: `references/prompt.md` - Original generation prompt/rule
 - **Examples**: `references/examples/` - Real-world AGENTS.md files
 - **Best Practices**: `references/best-practices.md` - Writing guide
+
+---
+
+> **Contributing:** Improvements to this skill should be submitted to the source repository:
+> https://github.com/netresearch/agents-skill

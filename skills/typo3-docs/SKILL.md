@@ -83,3 +83,8 @@ Documentation/
 4. `Documentation-GENERATED-temp/` is in `.gitignore`
 
 For detailed guidelines, read the appropriate reference file before starting work.
+
+---
+
+> **Contributing:** Improvements to this skill should be submitted to the source repository:
+> https://github.com/netresearch/typo3-docs-skill

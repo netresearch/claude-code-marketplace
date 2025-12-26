@@ -5,32 +5,42 @@
 If extension requires different PHP version:
 ```yaml
 # In .ddev/config.yaml
-php_version: "8.1"  # or "8.3" or "8.5"
+php_version: "8.1"  # or "8.3", "8.4", "8.5"
 ```
 
-### Upgrade PHP Packages (Dockerfile.apt)
+### Upgrade PHP Packages
 
-DDEV ships with specific PHP patch versions. When a newer patch release is available
-(e.g., PHP 8.5.1 when DDEV includes 8.5.0RC3), use `Dockerfile.apt` to upgrade:
+To get the latest PHP patch version (e.g., PHP 8.5.1 when DDEV ships 8.5.0):
 
 ```dockerfile
-# .ddev/web-build/Dockerfile.apt
-RUN apt-get update
-RUN apt-get install --only-upgrade -y php${PHP_VERSION}-*
+# .ddev/web-build/Dockerfile
+RUN apt-get update && \
+    apt-get dist-upgrade -y && \
+    rm -rf /var/lib/apt/lists/*
 ```
 
-**When to use:**
-- New PHP patch release fixes bugs affecting your project
-- Security updates available before DDEV updates
-- Need specific PHP version for testing compatibility
+This is useful when a new PHP patch release fixes bugs but DDEV hasn't updated yet.
 
-**After creating:** Run `ddev restart` to apply.
+**Example: PHP 8.5.1 with PCOV for code coverage:**
 
-**Note:** This upgrades within the same minor version (8.5.x). To change minor version (e.g., 8.4 → 8.5), use `php_version` in config.yaml instead.
+```dockerfile
+# .ddev/web-build/Dockerfile
+
+# Install PCOV for fast code coverage using apt-get (pecl not available in DDEV)
+RUN apt-get update && apt-get install -y php${PHP_VERSION}-pcov && rm -rf /var/lib/apt/lists/*
+
+# Upgrade PHP to latest patch version (get fixes before DDEV updates)
+# Use dist-upgrade to handle dependency changes between versions
+RUN apt-get update && \
+    apt-get dist-upgrade -y && \
+    rm -rf /var/lib/apt/lists/*
+```
+
+**Note**: DDEV containers don't include `pecl`. Use `apt-get` for PHP extensions instead.
 
 ### Custom PHP Configuration
 
-Place PHP settings in `.ddev/php/custom.ini`:
+Place custom PHP settings in `.ddev/php/custom.ini`:
 
 ```ini
 # .ddev/php/custom.ini
@@ -38,6 +48,10 @@ memory_limit = 512M
 max_execution_time = 300
 upload_max_filesize = 50M
 post_max_size = 50M
+
+# PCOV for code coverage
+pcov.enabled = 1
+pcov.directory = /var/www/extension
 ```
 
 **Important:** Do NOT place files directly in `/usr/local/etc/php/conf.d/` - DDEV manages that path internally. Use `.ddev/php/` instead.
@@ -48,9 +62,9 @@ Use `apt-get` in `.ddev/web-build/Dockerfile` (not pecl):
 
 ```dockerfile
 # .ddev/web-build/Dockerfile
-RUN apt-get update && apt-get install -y php${PHP_VERSION}-pcov
-RUN apt-get update && apt-get install -y php${PHP_VERSION}-redis
-RUN apt-get update && apt-get install -y php${PHP_VERSION}-imagick
+RUN apt-get update && apt-get install -y php${PHP_VERSION}-pcov && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y php${PHP_VERSION}-redis && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y php${PHP_VERSION}-imagick && rm -rf /var/lib/apt/lists/*
 ```
 
 **Why apt-get instead of pecl?**
