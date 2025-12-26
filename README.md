@@ -51,6 +51,7 @@ Then use `/plugin` to browse and install plugins.
 | Netresearch Branding | [netresearch-branding-skill](https://github.com/netresearch/netresearch-branding-skill) | Apply Netresearch brand guidelines |
 | AGENTS.md Generator | [agents-skill](https://github.com/netresearch/agents-skill) | Generate AGENTS.md documentation |
 | CLI Tools | [cli-tools-skill](https://github.com/netresearch/cli-tools-skill) | Auto-install missing CLI tools |
+| Context7 | [context7-skill](https://github.com/netresearch/context7-skill) | Library documentation lookup via Context7 REST API |
 | Coach | [claude-coach-plugin](https://github.com/netresearch/claude-coach-plugin) | Self-improving learning system with friction detection |
 | Skill Repo | [skill-repo-skill](https://github.com/netresearch/skill-repo-skill) | Guide for structuring Netresearch skill repositories |
 
@@ -201,6 +202,19 @@ Automatic CLI tool management for coding agents with reactive and proactive mode
 - Smart installation method selection (GitHub releases, cargo, npm, apt/brew)
 - Support for Python, Node.js, Rust, Go, PHP, Ruby, and infrastructure projects
 - User-level installation priority (~/.local/bin, ~/.cargo/bin)
+
+### Context7
+Fetch up-to-date library documentation via Context7 REST API. Lightweight alternative to Context7 MCP with no persistent context overhead.
+
+**Repository:** https://github.com/netresearch/context7-skill
+
+**Features:**
+- No MCP overhead - uses REST API directly without consuming context through tool schemas
+- Current documentation access from Context7's curated database
+- Topic filtering for specific areas (hooks, routing, middleware, etc.)
+- Multi-library support covering 50+ libraries (React, Next.js, Vue, Express, Prisma, etc.)
+- On-demand fetching - retrieves documentation only when needed
+- Lightweight shell script implementation
 
 ### Coach
 Self-improving learning system that detects friction signals and proposes rule updates.
