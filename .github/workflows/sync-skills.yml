@@ -396,6 +396,26 @@ jobs:
           echo "JIRA_INTEGRATION_VERSION=$VERSION" >> $GITHUB_ENV
           echo "✓ jira-integration synced (version: $VERSION)"
 
+      - name: Sync context7 skill
+        run: |
+          echo "=== Syncing context7-skill ==="
+          git clone https://github.com/netresearch/context7-skill.git .sync-temp/context7
+          cd .sync-temp/context7
+          COMMIT_DATE=$(git log -1 --format=%cd --date=format:%Y%m%d)
+          LATEST_TAG=$(git tag --sort=-v:refname | grep -E '^v?[0-9]+\.[0-9]+' | head -1)
+          SEMVER=$(echo "$LATEST_TAG" | sed 's/^v//')
+          if [ -z "$SEMVER" ]; then SEMVER="1.0.0"; fi
+          VERSION="${SEMVER}-${COMMIT_DATE}"
+          cd ../..
+          rm -rf .sync-temp/context7/.git
+          mkdir -p skills/context7
+          rm -rf skills/context7/*
+          rm -rf skills/context7/.[!.]*
+          cp -r .sync-temp/context7/* skills/context7/
+          cp -r .sync-temp/context7/.claude-plugin skills/context7/ 2>/dev/null || true
+          echo "CONTEXT7_VERSION=$VERSION" >> $GITHUB_ENV
+          echo "✓ context7 synced (version: $VERSION)"
+
       - name: Update marketplace.json versions
         run: |
           echo "=== Updating marketplace.json with latest versions ==="
@@ -418,6 +438,7 @@ jobs:
              --arg v16 "$SKILL_REPO_VERSION" \
              --arg v17 "$GITHUB_PROJECT_VERSION" \
              --arg v18 "$JIRA_INTEGRATION_VERSION" \
+             --arg v19 "$CONTEXT7_VERSION" \
              '(.plugins[] | select(.name == "enterprise-readiness") | .version) = $v1 |
               (.plugins[] | select(.name == "typo3-docs") | .version) = $v2 |
               (.plugins[] | select(.name == "typo3-testing") | .version) = $v3 |
@@ -435,12 +456,13 @@ jobs:
               (.plugins[] | select(.name == "git-workflow") | .version) = $v15 |
               (.plugins[] | select(.name == "skill-repo") | .version) = $v16 |
               (.plugins[] | select(.name == "github-project") | .version) = $v17 |
-              (.plugins[] | select(.name == "jira-integration") | .version) = $v18' \
+              (.plugins[] | select(.name == "jira-integration") | .version) = $v18 |
+              (.plugins[] | select(.name == "context7") | .version) = $v19' \
              .claude-plugin/marketplace.json > .claude-plugin/marketplace.json.tmp
 
           mv .claude-plugin/marketplace.json.tmp .claude-plugin/marketplace.json
 
-          echo "✓ marketplace.json updated with all 18 skill versions"
+          echo "✓ marketplace.json updated with all 19 skill versions"
 
       - name: Cleanup temporary directories
         run: |
@@ -463,7 +485,7 @@ jobs:
       - name: Commit and push changes
         if: steps.changes.outputs.has_changes == 'true' || github.event.inputs.force_sync == 'true'
         run: |
-          git commit -m "chore: sync all 18 skills from source repositories
+          git commit -m "chore: sync all 19 skills from source repositories
 
           Synced versions:
           - enterprise-readiness: $ENTERPRISE_READINESS_VERSION
@@ -484,6 +506,7 @@ jobs:
           - skill-repo: $SKILL_REPO_VERSION
           - github-project: $GITHUB_PROJECT_VERSION
           - jira-integration: $JIRA_INTEGRATION_VERSION
+          - context7: $CONTEXT7_VERSION
 
           Triggered by: ${{ github.event_name }}"
 
@@ -493,11 +516,11 @@ jobs:
       - name: Summary
         run: |
           echo "=== Skill Sync Complete ==="
-          echo "✓ All 18 skills synchronized successfully"
+          echo "✓ All 19 skills synchronized successfully"
           echo ""
           echo "Skills synced:"
           echo "  - enterprise-readiness, typo3-docs, typo3-testing, typo3-ddev"
           echo "  - typo3-core-contributions, typo3-conformance, typo3-extension-upgrade"
           echo "  - netresearch-branding, agents, cli-tools"
           echo "  - go-development, php-modernization, security-audit, typo3-ckeditor5"
-          echo "  - git-workflow, skill-repo, github-project, jira-integration"
+          echo "  - git-workflow, skill-repo, github-project, jira-integration, context7"

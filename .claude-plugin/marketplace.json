@@ -251,6 +251,20 @@
       "version": "3.1.2-20251225"
     },
     {
+      "name": "context7",
+      "description": "Fetch up-to-date library documentation via Context7 REST API. Lightweight alternative to Context7 MCP with no persistent context overhead. Covers 50+ libraries including React, Next.js, Vue, Express, Prisma, and more.",
+      "version": "1.0.0",
+      "author": {
+        "name": "Netresearch DTT GmbH",
+        "email": "info@netresearch.de"
+      },
+      "source": {
+        "source": "github",
+        "repo": "netresearch/context7-skill"
+      },
+      "category": "development"
+    },
+    {
       "name": "coach",
       "description": "Self-improving learning system that detects friction signals (corrections, tool failures, repetition) and proposes rule updates. Includes /coach slash commands for reviewing, approving, and managing learning candidates. Auto-configures hooks for signal detection.",
       "version": "2.1.0",
@@ -287,7 +301,8 @@
         "./skills/git-workflow",
         "./skills/skill-repo",
         "./skills/github-project",
-        "./skills/jira-integration"
+        "./skills/jira-integration",
+        "./skills/context7"
       ]
     }
   ]
