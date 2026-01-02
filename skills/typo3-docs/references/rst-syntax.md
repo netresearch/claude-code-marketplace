@@ -446,6 +446,33 @@ Section
    Text with 3-space indentation
 ```
 
+## README.md and Documentation/ Synchronization
+
+Keep README.md and Documentation/ in sync to avoid contradictions.
+
+**Content Parity:**
+- Topics covered in README.md should have corresponding coverage in Documentation/.
+- New features added to README.md should be documented in the appropriate .rst files.
+- README.md serves as a quick-start; Documentation/ provides comprehensive details.
+
+**Consistency (No Contradictions):**
+When README.md and Documentation/ cover the same topics, they must not contradict each other:
+
+- **CLI commands**: Command names and option flags must match.
+  - ❌ README: `vault:master-key:rotate --new-key-file=...`
+  - ✅ Docs: `vault:rotate-master-key --new-key=...`
+  - Fix: Update README to match Documentation/.
+- **Code examples**: TCA configs, API usage, class names must be consistent.
+  - ❌ README: `'type' => 'user'`
+  - ✅ Docs: `'type' => 'input'`
+  - Fix: Update README to match Documentation/.
+- **Configuration values**: Defaults and option names must align.
+
+**Source of Truth:**
+- Documentation/ is the authoritative source.
+- When inconsistencies are found, update README.md to match Documentation/.
+- Commit README.md and Documentation/ changes together atomically.
+
 ## References
 
 - **Sphinx RST Guide:** https://www.sphinx-doc.org/en/master/usage/restructuredtext/basics.html

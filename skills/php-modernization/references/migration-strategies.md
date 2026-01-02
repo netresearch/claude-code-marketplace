@@ -365,6 +365,40 @@ if (FeatureFlags::useNewParser()) {
 return $this->legacyParser->parse($input);
 ```
 
+## Anti-Patterns to Avoid
+
+### Premature Backwards Compatibility
+
+Don't add backwards compatibility code for features or versions that haven't been released yet:
+
+```php
+// ❌ BAD: BC code for unreleased extension
+// Adding complexity for versions that don't exist in the wild
+if ($options['auth_type'] !== null) {
+    // Convert legacy string to enum for BC
+    $placement = SecretPlacement::tryFrom($options['auth_type']);
+}
+
+// ✅ GOOD: Clean implementation without BC for unreleased code
+public function request(array $options): Response
+{
+    $placement = $options['placement'];  // Just use the enum directly
+    // ...
+}
+```
+
+**When BC is appropriate:**
+- After a public release with real installations
+- When deprecating a feature (provide migration path)
+- When API contracts exist with external consumers
+
+**When BC is NOT needed:**
+- Pre-release/unreleased extensions
+- Internal refactoring during development
+- Private/internal APIs
+
+**Rule:** Only add BC code when there are actual installations to support. Premature BC creates unnecessary complexity and maintenance burden.
+
 ## Post-Migration Checklist
 
 - [ ] All tests pass on target PHP version

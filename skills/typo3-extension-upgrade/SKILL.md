@@ -18,16 +18,28 @@ Systematic framework for upgrading TYPO3 extensions to newer LTS versions.
 | Fractor | Non-PHP migrations | FlexForms, TypoScript, YAML, Fluid |
 | PHPStan | Static analysis | `.php` |
 
+## Planning Phase (Required)
+
+Before ANY code changes for major upgrades (PHP version drops, TYPO3 major versions):
+
+1. **List all files with hardcoded versions** (composer.json, CI, Docker, Rector)
+2. **Document scope** - how many places need changes?
+3. **Present plan to user** for approval
+4. **Track progress** with todo list
+
+See `references/pre-upgrade.md` for detailed planning checklist.
+
 ## Generic Upgrade Workflow
 
-1. Create feature branch (verify git clean)
-2. Update `composer.json` constraints for target version
-3. Run `rector process --dry-run` → review → apply
-4. Run `fractor process --dry-run` → review → apply
-5. Run `php-cs-fixer fix`
-6. Run `phpstan analyse` → fix errors
-7. Run `phpunit` → fix tests
-8. Test in target TYPO3 version(s)
+1. Complete planning phase (above)
+2. Create feature branch (verify git clean)
+3. Update `composer.json` constraints for target version
+4. Run `rector process --dry-run` → review → apply
+5. Run `fractor process --dry-run` → review → apply
+6. Run `php-cs-fixer fix`
+7. Run `phpstan analyse` → fix errors
+8. Run `phpunit` → fix tests
+9. Test in target TYPO3 version(s)
 
 ## Quick Commands
 
@@ -42,20 +54,13 @@ Systematic framework for upgrading TYPO3 extensions to newer LTS versions.
 Copy from `assets/` and adjust for target version:
 - `rector.php`, `fractor.php`, `phpstan.neon`, `phpunit.xml`, `.php-cs-fixer.php`
 
-## Version-Specific Guides
+## References
 
-- `references/upgrade-v11-to-v12.md` - TYPO3 v11→v12 specifics
-- `references/upgrade-v12-to-v13.md` - TYPO3 v12→v13 specifics
-- `references/dual-compatibility.md` - Supporting ^12.4 || ^13.4
-- `references/api-changes.md` - Detailed deprecation patterns
-- `references/real-world-patterns.md` - Fixes from actual upgrades
-
-## Success Criteria
-
-- `rector/fractor --dry-run` show no changes
-- `phpstan analyse` passes
-- All tests pass
-- Extension works in target TYPO3 version
+| Topic | File |
+|-------|------|
+| Pre-upgrade checklist | `references/pre-upgrade.md` |
+| API changes by version | `references/api-changes.md` |
+| Real-world patterns | `references/real-world-patterns.md` |
 
 ## TYPO3 Changelogs
 
@@ -64,6 +69,13 @@ Copy from `assets/` and adjust for target version:
 | v14 | [Changelog-14](https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog-14.html) |
 | v13 | [Changelog-13](https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog-13.html) |
 | v12 | [Changelog-12](https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog-12.html) |
+
+## Success Criteria
+
+- `rector/fractor --dry-run` show no changes
+- `phpstan analyse` passes
+- All tests pass
+- Extension works in target TYPO3 version
 
 ---
 

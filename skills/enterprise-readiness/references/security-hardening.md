@@ -214,6 +214,97 @@ func unsafeCommand(filename string) error {
 }
 ```
 
+## PHP Secrets Management
+
+### Memory-Safe Secret Handling
+
+Always clear secrets from memory after use with `sodium_memzero()`:
+
+```php
+// Retrieve and use secret safely
+$secret = $this->vault->retrieve($identifier);
+
+try {
+    $result = $this->processSecret($secret);
+    return $result;
+} finally {
+    // ALWAYS clear sensitive data from memory
+    if ($secret !== null) {
+        sodium_memzero($secret);
+    }
+}
+```
+
+### Type-Safe Authentication Options
+
+Use backed enums for authentication configuration instead of strings:
+
+```php
+enum SecretPlacement: string
+{
+    case Bearer = 'bearer';
+    case BasicAuth = 'basic';
+    case Header = 'header';
+    case QueryParam = 'query';
+    case OAuth2 = 'oauth2';
+}
+
+// Type-safe usage - prevents typos and enables IDE completion
+public function injectAuth(
+    array $options,
+    SecretPlacement $placement,  // Compile-time type safety
+): array {
+    return match ($placement) {
+        SecretPlacement::Bearer => $this->addBearerAuth($options),
+        SecretPlacement::BasicAuth => $this->addBasicAuth($options),
+        // match() ensures all cases are handled
+    };
+}
+```
+
+### Vault-Integrated HTTP Client Pattern
+
+HTTP clients that use vault secrets should never expose the secret to calling code:
+
+```php
+final class VaultHttpClient implements VaultHttpClientInterface
+{
+    public function request(string $method, string $url, array $options = []): ResponseInterface
+    {
+        $secret = null;
+
+        try {
+            if (isset($options['auth_secret'])) {
+                // Retrieve secret just-in-time
+                $secret = $this->vault->retrieve($options['auth_secret']);
+
+                if ($secret === null) {
+                    throw new SecretNotFoundException($options['auth_secret']);
+                }
+
+                // Inject auth - secret never leaves this method
+                $options = $this->injectAuthentication($options, $secret);
+            }
+
+            return $this->httpClient->request($method, $url, $options);
+        } finally {
+            // Clear secret from memory immediately after use
+            if ($secret !== null) {
+                sodium_memzero($secret);
+            }
+        }
+    }
+}
+```
+
+### Security Requirements for Secret Handling
+
+- **Clear from memory**: Use `sodium_memzero()` after processing
+- **Never log values**: Only log identifiers, never actual secrets
+- **Audit all access**: Log who accessed what secret and when
+- **Type-safe configuration**: Use enums for auth placement options
+- **Encrypt at rest**: Use envelope encryption (DEK + KEK pattern)
+
 ## Dependency Security
 
 ### Automated Vulnerability Scanning

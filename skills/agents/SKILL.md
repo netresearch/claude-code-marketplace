@@ -20,6 +20,21 @@ Generate and maintain AGENTS.md files following the public agents.md convention.
 - Existing projects: Standardize agent documentation
 - Multi-repo consistency: Apply same standards across repositories
 
+## Directory Coverage
+
+Create AGENTS.md in ALL key directories, not just root:
+
+| Directory | Purpose |
+|-----------|---------|
+| Root | Precedence, architecture overview |
+| `Classes/` or `src/` | Source code patterns |
+| `Configuration/` or `config/` | Framework config |
+| `Documentation/` or `docs/` | Doc standards |
+| `Resources/` or `assets/` | Templates, assets |
+| `Tests/` | Testing patterns |
+
+See `references/directory-coverage.md` for full guidance.
+
 ## Commands
 
 ```bash

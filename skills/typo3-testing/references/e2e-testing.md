@@ -451,9 +451,253 @@ await page.click('[data-testid="add-to-cart"]');
 await page.click('#product-add-button');
 ```
 
+## E2E Testing for AJAX Endpoints
+
+Backend modules often use AJAX routes for dynamic functionality. Test these endpoints thoroughly:
+
+### Intercepting AJAX Requests
+
+```typescript
+// Build/tests/playwright/e2e/backend/ajax-module.spec.ts
+import { test, expect } from '../../fixtures/setup-fixtures';
+
+test.describe('AJAX Endpoint Testing', () => {
+  test('validates form via AJAX', async ({ page, backend }) => {
+    await backend.gotoModule('web_myextension_wizard');
+
+    // Intercept the AJAX validation request
+    const validationPromise = page.waitForResponse(
+      (response) =>
+        response.url().includes('/ajax/myext/wizard/validate') &&
+        response.status() === 200
+    );
+
+    // Fill form and trigger validation
+    await backend.contentFrame.getByLabel('Provider Name').fill('My Provider');
+    await backend.contentFrame.getByLabel('API Key').fill('sk-test-123');
+    await backend.contentFrame.getByRole('button', { name: 'Next' }).click();
+
+    // Verify AJAX response
+    const response = await validationPromise;
+    const json = await response.json();
+    expect(json.success).toBe(true);
+    expect(json.errors).toEqual({});
+  });
+
+  test('handles validation errors from AJAX', async ({ page, backend }) => {
+    await backend.gotoModule('web_myextension_wizard');
+
+    // Submit without required fields
+    await backend.contentFrame.getByRole('button', { name: 'Next' }).click();
+
+    // Wait for error response
+    const response = await page.waitForResponse(
+      (r) => r.url().includes('/ajax/myext/wizard/validate')
+    );
+    const json = await response.json();
+
+    expect(json.success).toBe(false);
+    expect(json.errors).toHaveProperty('name');
+
+    // Verify error is displayed in UI
+    await expect(
+      backend.contentFrame.locator('.invalid-feedback')
+    ).toBeVisible();
+  });
+});
+```
+
+### Testing Connection/Test Buttons
+
+```typescript
+test('tests API connection via AJAX', async ({ page, backend }) => {
+  await backend.gotoModule('web_myextension_wizard');
+
+  // Fill connection details
+  await backend.contentFrame.getByLabel('API Key').fill('sk-test-123');
+
+  // Mock successful connection response
+  await page.route('**/ajax/myext/wizard/test-connection', async (route) => {
+    await route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: JSON.stringify({
+        success: true,
+        message: 'Connection successful',
+        models: [
+          { id: 'gpt-4o', name: 'GPT-4o' },
+          { id: 'gpt-4o-mini', name: 'GPT-4o Mini' },
+        ],
+      }),
+    });
+  });
+
+  // Click test button
+  const testButton = backend.contentFrame.getByRole('button', {
+    name: 'Test Connection',
+  });
+  await testButton.click();
+
+  // Verify success notification
+  await expect(page.locator('.alert-success')).toBeVisible();
+
+  // Verify models were populated
+  const modelSelect = backend.contentFrame.getByLabel('Model');
+  await expect(modelSelect.locator('option')).toHaveCount(3); // including empty option
+});
+
+test('handles connection failure gracefully', async ({ page, backend }) => {
+  await backend.gotoModule('web_myextension_wizard');
+  await backend.contentFrame.getByLabel('API Key').fill('invalid-key');
+
+  // Mock failed connection
+  await page.route('**/ajax/myext/wizard/test-connection', async (route) => {
+    await route.fulfill({
+      status: 400,
+      contentType: 'application/json',
+      body: JSON.stringify({
+        success: false,
+        message: 'Invalid API key',
+      }),
+    });
+  });
+
+  await backend.contentFrame
+    .getByRole('button', { name: 'Test Connection' })
+    .click();
+
+  // Verify error notification
+  await expect(page.locator('.alert-danger')).toBeVisible();
+  await expect(page.locator('.alert-danger')).toContainText('Invalid API key');
+});
+```
+
+### Testing Multi-Step Wizards
+
+```typescript
+test('completes multi-step wizard', async ({ page, backend }) => {
+  await backend.gotoModule('web_myextension_wizard');
+
+  // Step 1: Provider
+  await backend.contentFrame.getByLabel('Provider Name').fill('OpenAI Prod');
+  await backend.contentFrame.getByLabel('API Key').fill('sk-test-key');
+  await backend.contentFrame
+    .getByRole('button', { name: 'Test Connection' })
+    .click();
+
+  // Wait for test to complete
+  await page.waitForResponse((r) =>
+    r.url().includes('/ajax/myext/wizard/test-connection')
+  );
+  await backend.contentFrame.getByRole('button', { name: 'Next' }).click();
+
+  // Step 2: Model (verify we advanced)
+  await expect(backend.contentFrame.locator('h2')).toContainText('Step 2');
+  await backend.contentFrame.getByLabel('Model').selectOption('gpt-4o');
+  await backend.contentFrame.getByRole('button', { name: 'Next' }).click();
+
+  // Step 3: Configuration
+  await expect(backend.contentFrame.locator('h2')).toContainText('Step 3');
+  await backend.contentFrame.getByLabel('Temperature').fill('0.7');
+  await backend.contentFrame.getByRole('button', { name: 'Finish' }).click();
+
+  // Verify completion
+  const saveResponse = await page.waitForResponse(
+    (r) =>
+      r.url().includes('/ajax/myext/wizard/save') && r.status() === 200
+  );
+  const result = await saveResponse.json();
+  expect(result.success).toBe(true);
+
+  // Verify redirect or success message
+  await expect(backend.contentFrame.locator('.wizard-complete')).toBeVisible();
+});
+```
+
+### Testing Toggle Actions
+
+```typescript
+test('toggles record active state via AJAX', async ({ page, backend }) => {
+  await backend.gotoModule('web_myextension');
+
+  // Wait for list to load
+  await expect(backend.contentFrame.locator('table tbody tr')).toHaveCount(3);
+
+  // Click toggle button
+  const toggleButton = backend.contentFrame
+    .locator('tr')
+    .first()
+    .getByRole('button', { name: 'Toggle' });
+  await toggleButton.click();
+
+  // Verify AJAX call succeeded
+  const response = await page.waitForResponse(
+    (r) =>
+      r.url().includes('/ajax/myext/toggle') && r.status() === 200
+  );
+  const json = await response.json();
+  expect(json.success).toBe(true);
+
+  // Verify UI updated
+  await expect(toggleButton).toHaveAttribute('data-active', 'false');
+});
+```
+
+### Network Request Assertions
+
+```typescript
+test('sends correct request payload', async ({ page, backend }) => {
+  await backend.gotoModule('web_myextension_wizard');
+
+  // Capture the request
+  const requestPromise = page.waitForRequest(
+    (r) => r.url().includes('/ajax/myext/wizard/validate')
+  );
+
+  await backend.contentFrame.getByLabel('Name').fill('Test Provider');
+  await backend.contentFrame.getByLabel('Type').selectOption('openai');
+  await backend.contentFrame.getByRole('button', { name: 'Validate' }).click();
+
+  const request = await requestPromise;
+  const postData = request.postDataJSON();
+
+  expect(postData).toEqual({
+    step: 'provider',
+    data: {
+      name: 'Test Provider',
+      type: 'openai',
+    },
+  });
+});
+```
+
+### AJAX Timeout and Error Handling
+
+```typescript
+test('handles AJAX timeout gracefully', async ({ page, backend }) => {
+  await backend.gotoModule('web_myextension_wizard');
+
+  // Simulate slow/timeout response
+  await page.route('**/ajax/myext/wizard/test-connection', async (route) => {
+    await new Promise((resolve) => setTimeout(resolve, 35000)); // Exceed timeout
+    await route.abort('timedout');
+  });
+
+  await backend.contentFrame.getByLabel('API Key').fill('sk-test');
+  await backend.contentFrame
+    .getByRole('button', { name: 'Test Connection' })
+    .click();
+
+  // Verify timeout error displayed
+  await expect(page.locator('.alert-warning')).toBeVisible({ timeout: 40000 });
+  await expect(page.locator('.alert-warning')).toContainText('timed out');
+});
+```
+
 ## Resources
 
 - [Playwright Documentation](https://playwright.dev/docs/intro)
 - [TYPO3 Core Playwright Tests](https://github.com/TYPO3/typo3/tree/main/Build/tests/playwright)
 - [Playwright Test API](https://playwright.dev/docs/api/class-test)
 - [Page Object Model](https://playwright.dev/docs/pom)
+- [Playwright Network Mocking](https://playwright.dev/docs/mock)

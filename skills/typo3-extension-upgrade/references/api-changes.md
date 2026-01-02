@@ -466,14 +466,213 @@ grep -rn "'type'\s*=>\s*'text'" Configuration/TCA/
 
 ## v13 → v14 Upgrade
 
-### Upcoming Changes
+### ExtensionConfiguration::getAll() Removed (Critical)
 
-Monitor [Changelog-14](https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog-14.html) for breaking changes.
+**Search Pattern**
+```bash
+grep -rn "ExtensionConfiguration::getAll\|->getAll()" Classes/
+```
 
-**Known Deprecations to Watch**
-- Further TSFE deprecations
-- Additional Request attribute migrations
-- Continued Site Set enhancements
+**Replace**
+```php
+// Before (removed in v14)
+$allConfig = GeneralUtility::makeInstance(ExtensionConfiguration::class)->getAll();
+
+// After - use $GLOBALS directly
+$allConfig = $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS'] ?? [];
+
+// Or for specific extension
+$extConfig = $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['my_extension'] ?? [];
+```
+
+### Doctrine DBAL 4.x Type::getName() Removed
+
+**Search Pattern**
+```bash
+grep -rn "->getName()\|Type::getName" Classes/
+```
+
+**Replace**
+```php
+// Before (DBAL 3.x)
+use Doctrine\DBAL\Types\Type;
+$typeName = $column->getType()->getName();
+if ($typeName === 'string' || $typeName === 'text') { }
+
+// After (DBAL 4.x) - use instanceof checks
+use Doctrine\DBAL\Types\StringType;
+use Doctrine\DBAL\Types\TextType;
+use Doctrine\DBAL\Types\BlobType;
+
+$type = $column->getType();
+if ($type instanceof StringType || $type instanceof TextType) { }
+```
+
+### Icon::SIZE_* Constants Replaced with IconSize Enum
+
+**Search Pattern**
+```bash
+grep -rn "Icon::SIZE_SMALL\|Icon::SIZE_DEFAULT\|Icon::SIZE_MEDIUM\|Icon::SIZE_LARGE" Classes/
+```
+
+**Replace**
+```php
+// Before (deprecated)
+use TYPO3\CMS\Core\Imaging\Icon;
+$icon = $iconFactory->getIcon('actions-edit', Icon::SIZE_SMALL);
+
+// After (v14+)
+use TYPO3\CMS\Core\Imaging\IconSize;
+$icon = $iconFactory->getIcon('actions-edit', IconSize::SMALL);
+```
+
+| Before | After |
+|--------|-------|
+| `Icon::SIZE_SMALL` | `IconSize::SMALL` |
+| `Icon::SIZE_DEFAULT` | `IconSize::DEFAULT` |
+| `Icon::SIZE_MEDIUM` | `IconSize::MEDIUM` |
+| `Icon::SIZE_LARGE` | `IconSize::LARGE` |
+| `Icon::SIZE_MEGA` | `IconSize::MEGA` |
+| `Icon::SIZE_OVERLAY` | `IconSize::OVERLAY` |
+
+### f:uri.resource Not Available in Non-Extbase Modules
+
+**Search Pattern**
+```bash
+grep -rn "f:uri.resource\|<f:uri.resource" Resources/Private/
+```
+
+**Replace**
+```html
+<!-- Before (fails in non-Extbase backend modules) -->
+<link rel="stylesheet" href="{f:uri.resource(path:'Css/backend.css')}" />
+
+<!-- After - use EXT: syntax directly -->
+<link rel="stylesheet" href="EXT:my_extension/Resources/Public/Css/backend.css" />
+```
+
+**Reason**: In TYPO3 v14, `f:uri.resource` requires an Extbase Request object which is not available in non-Extbase backend modules. Using `EXT:` syntax works in all contexts.
+
+### Scheduler Interface Signature Changes
+
+**Search Pattern**
+```bash
+grep -rn "AdditionalFieldProviderInterface\|getAdditionalFields" Classes/Task/
+```
+
+**Fix**: Match exact interface signature - remove type hints that don't match:
+```php
+// Before (may have extra type hints)
+public function getAdditionalFields(
+    array &$taskInfo,
+    AbstractTask $task,  // ❌ Type hint not in interface
+    SchedulerModuleController $parentObject
+): array
+
+// After - match interface exactly
+public function getAdditionalFields(
+    array &$taskInfo,
+    $task,  // ✅ No type hint (matches interface)
+    SchedulerModuleController $parentObject
+): array
+```
+
+### Bootstrap 5 CSS Class Changes
+
+TYPO3 v14 uses Bootstrap 5. Update CSS classes in templates.
+
+**Search Pattern**
+```bash
+grep -rn "btn-default\|badge-primary\|badge-success\|badge-danger\|badge-warning\|badge-info" Resources/
+```
+
+**Replace**
+
+| Before (Bootstrap 4) | After (Bootstrap 5) |
+|---------------------|---------------------|
+| `btn-default` | `btn-secondary` |
+| `badge-primary` | `text-bg-primary` |
+| `badge-success` | `text-bg-success` |
+| `badge-danger` | `text-bg-danger` |
+| `badge-warning` | `text-bg-warning` |
+| `badge-info` | `text-bg-info` |
+
+### TCA renderType vs type
+
+When checking for custom TCA field types, use `renderType`, not `type`.
+
+**Search Pattern**
+```bash
+grep -rn "\['config'\]\['type'\]" Classes/Hook/
+```
+
+**Fix**
+```php
+// ❌ Wrong - checks base type (input, text, etc.)
+$renderType = $fieldConfig['config']['type'] ?? '';
+
+// ✅ Correct - checks custom render type
+$renderType = $fieldConfig['config']['renderType'] ?? '';
+```
+
+### ARIA Accessibility Requirements
+
+TYPO3 v14 enforces stricter WCAG 2.1 AA compliance. Add ARIA attributes to templates.
+
+**Search Pattern**
+```bash
+grep -rn "role=\"main\"\|aria-label\|aria-describedby" Resources/Private/
+```
+
+**Required Additions**
+```html
+<!-- Main content wrapper -->
+<div class="module" role="main" aria-label="My Module">
+
+<!-- Tables need captions -->
+<table>
+    <caption class="visually-hidden">List of items</caption>
+    <thead>
+        <tr>
+            <th scope="col">Name</th>
+        </tr>
+    </thead>
+</table>
+
+<!-- Interactive elements need labels -->
+<button aria-label="Delete item">
+    <core:icon identifier="actions-delete" />
+</button>
+```
+
+### Dual v13/v14 Compatibility Pattern
+
+For extensions supporting both versions:
+
+```php
+// IconSize enum compatibility
+use TYPO3\CMS\Core\Imaging\Icon;
+use TYPO3\CMS\Core\Imaging\IconSize;
+
+// Check if IconSize enum exists (v14+)
+if (class_exists(IconSize::class)) {
+    $size = IconSize::SMALL;
+} else {
+    $size = Icon::SIZE_SMALL;
+}
+
+// Or use string (works in both)
+$icon = $iconFactory->getIcon('actions-edit', 'small');
+```
+
+### Additional v14 Changes
+
+Monitor [Changelog-14](https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog-14.html) for additional breaking changes.
+
+**Known Removals**
+- `ExtensionConfiguration::getAll()` - use `$GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']`
+- `Type::getName()` in Doctrine DBAL - use `instanceof` checks
+- `Icon::SIZE_*` constants - use `IconSize` enum
 
 ---
 

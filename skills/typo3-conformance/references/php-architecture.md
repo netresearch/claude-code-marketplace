@@ -873,6 +873,98 @@ public function __construct(
 ) {}
 ```
 
+## PSR-17/PSR-18 HTTP Client Integration
+
+TYPO3 provides HTTP client functionality through factory classes, not direct PSR interface aliases.
+
+### Correct Pattern: Use TYPO3 Core Factories
+
+```php
+// ✅ Right: Inject TYPO3 Core factories
+<?php
+declare(strict_types=1);
+
+namespace Vendor\ExtensionKey\Service;
+
+use Psr\Http\Message\RequestInterface;
+use TYPO3\CMS\Core\Http\RequestFactory;
+
+final class ApiClientService
+{
+    public function __construct(
+        private readonly RequestFactory $requestFactory,
+    ) {}
+
+    public function fetchData(string $url): array
+    {
+        $response = $this->requestFactory->request($url, 'GET', [
+            'headers' => ['Accept' => 'application/json'],
+        ]);
+
+        return json_decode($response->getBody()->getContents(), true);
+    }
+}
+```
+
+### Services.yaml Configuration
+
+```yaml
+# ✅ Right: Use TYPO3 Core factories (no custom aliases needed)
+services:
+  Vendor\ExtensionKey\Service\ApiClientService:
+    arguments:
+      $requestFactory: '@TYPO3\CMS\Core\Http\RequestFactory'
+
+# ❌ Wrong: Don't create custom PSR-17 interface aliases
+# TYPO3 Core doesn't register these interfaces directly
+# services:
+#   Psr\Http\Message\RequestFactoryInterface:
+#     class: GuzzleHttp\Psr7\HttpFactory
+```
+
+### Why This Matters
+
+TYPO3 uses a **factory pattern** for HTTP client functionality:
+
+| What You Need | Use This |
+|---------------|----------|
+| Create HTTP requests | `TYPO3\CMS\Core\Http\RequestFactory` |
+| Create PSR-7 responses | `TYPO3\CMS\Core\Http\ResponseFactory` |
+| Create streams | `TYPO3\CMS\Core\Http\StreamFactory` |
+| Send HTTP requests | `RequestFactory::request()` method |
+
+**Common Mistake:** Creating custom `Psr\Http\Message\RequestFactoryInterface` aliases in `Services.yaml` conflicts with TYPO3 Core's existing service definitions and causes container compilation errors.
+
+### For Custom HTTP Client Wrappers
+
+```php
+// ✅ Right: Use TYPO3's GuzzleClientFactory for advanced configuration
+<?php
+declare(strict_types=1);
+
+namespace Vendor\ExtensionKey\Service;
+
+use GuzzleHttp\ClientInterface;
+use TYPO3\CMS\Core\Http\Client\GuzzleClientFactory;
+
+final class CustomHttpClient
+{
+    private ClientInterface $client;
+
+    public function __construct(
+        GuzzleClientFactory $clientFactory,
+    ) {
+        $this->client = $clientFactory->getClient([
+            'timeout' => 30,
+            'verify' => true,
+            'headers' => [
+                'User-Agent' => 'MyExtension/1.0',
+            ],
+        ]);
+    }
+}
+```
+
 ## Conformance Checklist
 
 ### Basic Dependency Injection
@@ -882,6 +974,11 @@ public function __construct(
 - [ ] No GeneralUtility::makeInstance() for new services
 - [ ] PSR interfaces used (ResponseInterface, LoggerInterface, etc.)
 - [ ] No global state access ($GLOBALS)
+
+### PSR-17/PSR-18 HTTP Client (Important)
+- [ ] Use TYPO3\CMS\Core\Http\RequestFactory for HTTP requests
+- [ ] No custom PSR-17 interface aliases in Services.yaml
+- [ ] Use GuzzleClientFactory for custom client configuration
 
 ### PSR-14 Events (Mandatory)
 - [ ] PSR-14 events used instead of hooks

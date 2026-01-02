@@ -1,6 +1,6 @@
 ---
 name: typo3-conformance
-description: "Agent Skill: Evaluate TYPO3 extensions for conformance to v12/v13 standards. Use when assessing quality, generating reports, or planning modernization. By Netresearch."
+description: "Agent Skill: Evaluate TYPO3 extensions for conformance to v12/v13/v14 standards. Use when assessing quality, generating reports, or planning modernization. By Netresearch."
 file_triggers:
   - "ext_emconf.php"
   - "ext_localconf.php"
@@ -48,9 +48,11 @@ scripts/check-conformance.sh /path/to/extension
 | `extension-architecture.md` | Directory structure |
 | `coding-guidelines.md` | PSR-12, naming |
 | `backend-module-v13.md` | Backend modernization |
-| `php-architecture.md` | DI, events, services |
+| `php-architecture.md` | DI, events, services, PSR-17/18 |
 | `testing-standards.md` | PHPUnit, Playwright |
 | `excellence-indicators.md` | Bonus scoring |
+| `multi-tier-configuration.md` | Provider → Model → Config architecture |
+| `backend-wizard-patterns.md` | Setup wizard DTOs, AJAX, ES6 |
 
 ---
 

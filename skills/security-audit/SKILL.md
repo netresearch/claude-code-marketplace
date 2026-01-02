@@ -18,6 +18,7 @@ Security audits, vulnerability assessment, and secure coding patterns aligned wi
 - `references/xxe-prevention.md` - XXE detection and prevention
 - `references/owasp-top10.md` - OWASP Top 10 patterns
 - `references/cvss-scoring.md` - CVSS scoring methodology
+- `references/api-key-encryption.md` - API key encryption at rest (sodium)
 - `references/secure-php.md` - PHP-specific security patterns
 - `references/secure-config.md` - Secure configuration checklists
 
@@ -39,12 +40,19 @@ $stmt->execute([$id]);
 echo htmlspecialchars($input, ENT_QUOTES | ENT_HTML5, 'UTF-8');
 ```
 
+**API keys (encrypt at rest):**
+```php
+$nonce = random_bytes(SODIUM_CRYPTO_SECRETBOX_NONCEBYTES);
+$encrypted = 'enc:' . base64_encode($nonce . sodium_crypto_secretbox($apiKey, $nonce, $key));
+```
+
 ## Security Checklist
 
 - [ ] bcrypt/Argon2 for passwords, CSRF tokens on state changes
 - [ ] All input validated server-side, parameterized SQL
 - [ ] XML external entities disabled, file uploads restricted
 - [ ] Context-appropriate output encoding, CSP configured
+- [ ] API keys encrypted at rest (sodium_crypto_secretbox)
 - [ ] TLS 1.2+, secrets not in VCS, audit logging
 
 ## Verification

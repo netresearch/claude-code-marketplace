@@ -345,6 +345,53 @@ Sets the namespace context for all following PHP entities.
 - `:returntype:` - Return type (use full namespace)
 - `:throws:` - Exception class and condition
 
+### Method Signature Limitations
+
+The `php:method` directive has strict syntax requirements that differ from PHP 8+ syntax.
+
+**Nullable Return Types:**
+```rst
+# ❌ WRONG - Parser rejects ?string and string|null in signature
+..  php:method:: retrieve(string $identifier): ?string
+..  php:method:: retrieve(string $identifier): string|null
+
+# ✅ CORRECT - Use :returntype: annotation instead
+..  php:method:: retrieve(string $identifier)
+
+   Retrieve a secret from the vault.
+
+   :param string $identifier: The secret identifier
+   :returns: The decrypted secret value or null if not found
+   :returntype: string|null
+```
+
+**Nullable Parameters:**
+```rst
+# ❌ WRONG - ?string syntax in parameters
+..  php:method:: list(?string $pattern): array
+
+# ✅ CORRECT - Use = null for nullable parameters
+..  php:method:: list(string $pattern = null): array
+
+   :param string|null $pattern: Optional pattern to filter
+```
+
+**Union Types:**
+```rst
+# ❌ WRONG - Union types in signature
+..  php:method:: process(string|array $data): ResponseInterface
+
+# ✅ CORRECT - Simplify signature, document types in :param:
+..  php:method:: process($data): ResponseInterface
+
+   :param string|array $data: Data to process
+```
+
+**Why this matters:**
+- The Sphinx PHP domain parser uses older syntax
+- Build will fail or produce warnings with modern PHP type syntax
+- Use `:returntype:` and `:param type:` annotations for complex types
+
 ### Property Documentation
 
 ```rst

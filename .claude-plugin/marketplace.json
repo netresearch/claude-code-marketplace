@@ -11,7 +11,7 @@
     {
       "name": "enterprise-readiness",
       "description": "Assess and enhance software projects for enterprise-grade security, quality, and automation. Includes supply chain security (SLSA, signing, SBOMs), quality gates, testing layers, and platform-specific hardening with dynamic scoring for fair cross-stack assessment.",
-      "version": "3.7.1-20251226",
+      "version": "3.7.1-20251230",
       "author": {
         "name": "Netresearch DTT GmbH",
         "email": "info@netresearch.de"
@@ -25,7 +25,7 @@
     {
       "name": "typo3-docs",
       "description": "Create and maintain TYPO3 extension documentation following official TYPO3 documentation standards. Includes automated documentation extraction with priority-weighted gap analysis based on TYPO3 architecture, RST syntax reference, TYPO3-specific directives, local rendering, validation, and TYPO3 Intercept deployment setup.",
-      "version": "1.6.1-20251225",
+      "version": "1.6.1-20260102",
       "author": {
         "name": "Netresearch DTT GmbH",
         "email": "info@netresearch.de"
@@ -39,7 +39,7 @@
     {
       "name": "typo3-testing",
       "description": "Create and manage TYPO3 extension tests with comprehensive testing infrastructure. Includes unit, functional, and acceptance testing support, PHPUnit configurations, Docker setup, CI/CD templates, and automated test generation following TYPO3 best practices.",
-      "version": "2.2.0-20251228",
+      "version": "2.2.0-20251231",
       "author": {
         "name": "Netresearch DTT GmbH",
         "email": "info@netresearch.de"
@@ -53,7 +53,7 @@
     {
       "name": "typo3-ddev",
       "description": "Set up and manage TYPO3 development environments using DDEV. Includes DDEV configuration, local development workflows, container management, database handling, and integration with TYPO3-specific tooling.",
-      "version": "1.10.1-20251226",
+      "version": "1.10.1-20260101",
       "author": {
         "name": "Netresearch DTT GmbH",
         "email": "info@netresearch.de"
@@ -81,7 +81,7 @@
     {
       "name": "typo3-conformance",
       "description": "Evaluate TYPO3 extensions for conformance to official TYPO3 coding standards, architecture patterns, and best practices. Includes automated validation scripts for file structure, PSR-12 compliance, dependency injection, testing infrastructure, and comprehensive conformance scoring with priority-based action items.",
-      "version": "1.9.1-20251226",
+      "version": "1.9.1-20251230",
       "author": {
         "name": "Netresearch DTT GmbH",
         "email": "info@netresearch.de"
@@ -109,7 +109,7 @@
     {
       "name": "agents",
       "description": "Generate and maintain AGENTS.md files following the public agents.md convention. Creates thin root files with precedence rules, scoped files for subsystems, auto-extracts commands from build tools, and supports Go, PHP, TypeScript, and Python projects with language-specific templates.",
-      "version": "1.2.1-20251226",
+      "version": "1.2.1-20260101",
       "author": {
         "name": "Netresearch DTT GmbH",
         "email": "info@netresearch.de"
@@ -137,7 +137,7 @@
     {
       "name": "typo3-extension-upgrade",
       "description": "Systematic TYPO3 extension upgrades to newer LTS versions with modern PHP compatibility. Covers Extension Scanner assessment, Rector for PHP migrations, Fractor for non-PHP file migrations (FlexForms, TypoScript, YAML, Fluid), PHPStan for static analysis, and testing setup. Includes version-specific guidance for v11→v12, v12→v13, and dual-compatibility scenarios.",
-      "version": "1.2.1-20251226",
+      "version": "1.2.1-20260101",
       "author": {
         "name": "Netresearch DTT GmbH",
         "email": "info@netresearch.de"
@@ -165,7 +165,7 @@
     {
       "name": "php-modernization",
       "description": "PHP 8.x modernization patterns for upgrading legacy PHP applications. Covers constructor property promotion, readonly classes, enums, attributes, generics via PHPDoc, PHPStan level 9+ compliance, and Symfony best practices. By Netresearch.",
-      "version": "1.0.1-20251228",
+      "version": "1.0.1-20251231",
       "author": {
         "name": "Netresearch DTT GmbH",
         "email": "info@netresearch.de"
@@ -179,7 +179,7 @@
     {
       "name": "security-audit",
       "description": "Security audit patterns for PHP applications following OWASP guidelines. Covers XXE, SQL injection, XSS, CSRF detection, CVSS v3.1 scoring, and secure coding practices. By Netresearch.",
-      "version": "1.0.1-20251226",
+      "version": "1.0.1-20251230",
       "author": {
         "name": "Netresearch DTT GmbH",
         "email": "info@netresearch.de"

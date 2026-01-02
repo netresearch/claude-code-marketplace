@@ -45,6 +45,21 @@ Use this checklist before starting a TYPO3 extension upgrade.
 - [ ] Read TYPO3 v13 changelog: https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/13.0/Index.html
 - [ ] Review breaking changes relevant to extension
 
+## Version Hardcoding Locations
+
+Check ALL files with hardcoded PHP/TYPO3 versions before starting:
+
+- [ ] `composer.json` (require.php, require.typo3/cms-core)
+- [ ] `.github/workflows/*.yml` (PHP version matrix)
+- [ ] `.ddev/config.yaml` (php_version)
+- [ ] `Dockerfile`, `docker-compose.yml`
+- [ ] `rector.php` (LevelSetList, SetList)
+- [ ] `fractor.php` (Typo3LevelSetList)
+- [ ] `phpstan.neon` (phpVersion)
+- [ ] `Build/phpstan/*.neon`
+- [ ] `README.md`, `Documentation/*.rst` (version requirements)
+- [ ] `ext_emconf.php` (constraints)
+
 ## Team Communication
 
 - [ ] Inform team about upgrade work

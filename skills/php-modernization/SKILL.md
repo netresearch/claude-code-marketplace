@@ -17,9 +17,11 @@ Modernize PHP applications to PHP 8.x with type safety, Symfony patterns, and st
 
 - `references/php8-features.md` - PHP 8.0-8.5 features
 - `references/type-safety.md` - Type system strategies
+- `references/request-dtos.md` - Request DTOs, safe integer handling
 - `references/symfony-patterns.md` - Modern Symfony architecture
 - `references/phpstan-compliance.md` - Static analysis configuration
 - `references/migration-strategies.md` - Version upgrade planning
+- `references/adapter-registry-pattern.md` - Dynamic adapter instantiation
 
 ## Quick Patterns
 

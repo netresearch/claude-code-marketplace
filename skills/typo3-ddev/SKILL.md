@@ -13,6 +13,16 @@ Automates DDEV environment for TYPO3 extension development with multi-version te
 - Testing extension across multiple TYPO3 versions
 - Quick development environment spin-up
 
+## Container Priority
+
+**Always check for existing containers first:**
+
+1. Check `.ddev/` exists → use `ddev exec`
+2. Check `docker-compose.yml` exists → use `docker compose exec`
+3. Only use system tools if no container environment
+
+> **Critical**: Use the project's configured PHP version, not system PHP.
+
 ## Quick Start
 
 ```bash
@@ -65,6 +75,7 @@ ddev docs                 # Render Documentation/*.rst
 | Advanced options | `references/advanced-options.md` |
 | Windows fixes | `references/windows-fixes.md` |
 | Troubleshooting | `references/troubleshooting.md` |
+| PHP version management | `references/0003-php-version-management.md` |
 
 ---
 

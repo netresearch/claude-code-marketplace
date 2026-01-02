@@ -259,6 +259,86 @@ enum Priority: int
 }
 ```
 
+### Enums for Type-Safe Options
+
+Replace string/array constants with backed enums for type-safe API design:
+
+```php
+/**
+ * Defines how a secret should be placed in an HTTP request.
+ */
+enum SecretPlacement: string
+{
+    case Bearer = 'bearer';
+    case BasicAuth = 'basic';
+    case Header = 'header';
+    case QueryParam = 'query';
+    case BodyField = 'body_field';
+    case OAuth2 = 'oauth2';
+    case ApiKey = 'api_key';
+
+    /**
+     * Human-readable description for UI/docs.
+     */
+    public function description(): string
+    {
+        return match ($this) {
+            self::Bearer => 'Bearer token in Authorization header',
+            self::BasicAuth => 'HTTP Basic Authentication',
+            self::Header => 'Custom header value',
+            self::QueryParam => 'URL query parameter',
+            self::BodyField => 'Request body field',
+            self::OAuth2 => 'OAuth 2.0 with automatic token refresh',
+            self::ApiKey => 'X-API-Key header',
+        };
+    }
+
+    /**
+     * Check if this placement requires additional config.
+     */
+    public function requiresConfig(): bool
+    {
+        return match ($this) {
+            self::Header, self::QueryParam, self::BodyField, self::OAuth2 => true,
+            default => false,
+        };
+    }
+
+    /**
+     * Default config key if applicable.
+     */
+    public function defaultConfigKey(): ?string
+    {
+        return match ($this) {
+            self::Header, self::ApiKey => 'X-API-Key',
+            self::QueryParam, self::BodyField => 'api_key',
+            default => null,
+        };
+    }
+}
+
+// Usage with type safety
+public function injectAuth(
+    array $options,
+    SecretPlacement $placement,  // Type-safe, IDE autocompletion
+): array {
+    return match ($placement) {
+        SecretPlacement::Bearer => $this->addBearerAuth($options),
+        SecretPlacement::BasicAuth => $this->addBasicAuth($options),
+        SecretPlacement::Header => $this->addHeaderAuth($options),
+        // match() ensures all cases are handled!
+    };
+}
+```
+
+**Benefits over string constants:**
+- Compile-time type checking
+- IDE autocompletion
+- Exhaustive match() enforcement
+- Methods encapsulate related logic
+- Self-documenting API
+```
+
 ### Readonly Properties
 
 ```php
