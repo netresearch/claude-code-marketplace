@@ -247,11 +247,12 @@ if command -v gh &> /dev/null && [ -n "$REPO_SLUG" ]; then
             esac
         fi
 
-        # Check for rebase-only configuration (recommended)
-        if [ "$ALLOW_REBASE" = "true" ] && [ "$ALLOW_MERGE" = "false" ] && [ "$ALLOW_SQUASH" = "false" ]; then
-            pass "Repo configured for rebase-only merges (recommended)"
-        elif [ "$ALLOW_REBASE" = "true" ]; then
-            info "Multiple merge methods allowed. Consider enabling rebase-only for clean history."
+        # Check for merge-commit-only configuration (recommended)
+        # Merge commits preserve complete history while strict branch protection ensures PRs are rebased before merge
+        if [ "$ALLOW_MERGE" = "true" ] && [ "$ALLOW_REBASE" = "false" ] && [ "$ALLOW_SQUASH" = "false" ]; then
+            pass "Repo configured for merge-commits-only (recommended)"
+        elif [ "$ALLOW_MERGE" = "true" ]; then
+            info "Multiple merge methods allowed. Consider enabling merge-commits-only for clean history with visible PR integration points."
         fi
     fi
 else
@@ -373,22 +374,22 @@ if command -v gh &> /dev/null && [ -n "$REPO_SLUG" ]; then
         ALLOW_SQUASH=$(echo "$REPO_SETTINGS" | jq -r '.allow_squash_merge // true')
         DELETE_ON_MERGE=$(echo "$REPO_SETTINGS" | jq -r '.delete_branch_on_merge // false')
 
-        if [ "$ALLOW_REBASE" = "true" ]; then
-            pass "Rebase merge enabled"
+        if [ "$ALLOW_MERGE" = "true" ]; then
+            pass "Merge commits enabled"
         else
-            fail "Rebase merge disabled (should be enabled)"
+            fail "Merge commits disabled (should be enabled)"
         fi
 
-        if [ "$ALLOW_MERGE" = "false" ]; then
-            pass "Merge commits disabled"
+        if [ "$ALLOW_REBASE" = "false" ]; then
+            pass "Rebase merge disabled"
         else
-            fail "Merge commits enabled (should be disabled - rebase only)"
+            fail "Rebase merge enabled (should be disabled - merge commits only)"
         fi
 
         if [ "$ALLOW_SQUASH" = "false" ]; then
             pass "Squash merge disabled"
         else
-            fail "Squash merge enabled (should be disabled - rebase only)"
+            fail "Squash merge enabled (should be disabled - merge commits only)"
         fi
 
         if [ "$DELETE_ON_MERGE" = "true" ]; then
@@ -416,7 +417,7 @@ echo "  - Require review from CODEOWNERS"
 echo "  - Require conversation resolution"
 echo "  - Do not allow force pushes"
 echo "  - Do not allow deletions"
-echo "  - Allow rebase merge only (disable merge & squash)"
+echo "  - Allow merge commits only (disable rebase & squash)"
 echo "  - Delete branch on merge"
 info "Check with: gh api repos/{owner}/{repo}/branches/main/protection"
 
