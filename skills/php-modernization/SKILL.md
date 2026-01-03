@@ -12,7 +12,7 @@ Modernize PHP applications to PHP 8.x with type safety, PSR compliance, Symfony 
 - **PHP 8.x**: Constructor promotion, readonly, enums, match, attributes, union types
 - **PSR/PER Compliance**: Active PHP-FIG standards (PSR-1,3,4,6,7,11,12,13,14,15,16,17,18,20, PER Coding Style)
 - **Static Analysis**: PHPStan (level 9+), PHPat, Rector, PHP-CS-Fixer
-- **Type Safety**: Generics via PHPDoc, ArrayTypeHelper, PHPStan level 10 (max)
+- **Type Safety**: DTOs/VOs over arrays, generics via PHPDoc, PHPStan level 10 (max)
 - **Symfony**: DI patterns, PHP config, PSR-14 events
 
 ## Reference Files
@@ -107,6 +107,26 @@ All modern PHP code must follow active PHP-FIG standards:
 
 **Source of truth:** https://www.php-fig.org/psr/ and https://www.php-fig.org/per/
 
+## DTOs and Value Objects (Required)
+
+**Never pass or return raw arrays** for structured data. Use typed objects:
+
+```php
+// ❌ Bad: Array passing
+public function createUser(array $data): array
+
+// ✅ Good: DTO pattern
+public function createUser(CreateUserDTO $dto): UserDTO
+```
+
+| Instead of | Use |
+|------------|-----|
+| `array $userData` | `UserDTO` |
+| `array $config` | `readonly class Config` |
+| `return ['success' => true]` | `return new ResultDTO()` |
+
+See `references/request-dtos.md` for Request DTOs, Command/Query DTOs, and Value Objects.
+
 ## Quick Patterns
 
 **Constructor promotion (PHP 8.0+):**
@@ -155,6 +175,8 @@ public function getUsers(): array
 - [ ] PHPat architecture tests for layer dependencies
 - [ ] Rector with no remaining suggestions
 - [ ] Return types and parameter types on all methods
+- [ ] **DTOs for data transfer, Value Objects for domain concepts**
+- [ ] **No array parameters/returns for structured data**
 - [ ] Replace annotations with attributes
 - [ ] Use readonly, enums, match expressions
 - [ ] Type-hint against PSR interfaces (not implementations)
@@ -168,6 +190,7 @@ public function getUsers(): array
 | Rector | No remaining suggestions |
 | PHP-CS-Fixer | `@PER-CS` with zero violations |
 | PSR Compliance | Type-hint against PSR interfaces |
+| DTOs/VOs | No array params/returns for structured data |
 
 > **Note:** PHPStan level 8 or below is insufficient for production code. Level 9+ enforces strict `mixed` type handling.
 

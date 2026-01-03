@@ -165,7 +165,7 @@
     {
       "name": "php-modernization",
       "description": "PHP 8.x modernization patterns for upgrading legacy PHP applications. Covers constructor property promotion, readonly classes, enums, attributes, generics via PHPDoc, PHPStan level 9+ compliance, and Symfony best practices. By Netresearch.",
-      "version": "1.1.0-20260103",
+      "version": "1.2.0-20260103",
       "author": {
         "name": "Netresearch DTT GmbH",
         "email": "info@netresearch.de"

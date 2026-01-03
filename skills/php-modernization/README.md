@@ -20,7 +20,7 @@ This is an **Agent Skill** following the [open standard](https://agentskills.io)
 - **PHP 8.x Features**: Constructor property promotion, readonly properties and classes, named arguments, enums and match expressions, attributes (replacing annotations), union and intersection types, nullsafe operator
 - **Static Analysis Tools**: PHPStan (level 9+), PHPat (architecture testing), Rector (automated refactoring), PHP-CS-Fixer (coding style)
 - **PSR/PER Compliance**: Enforces all active PHP-FIG standards (PSR-1, 3, 4, 6, 7, 11, 12, 13, 14, 15, 16, 17, 18, 20) and PER Coding Style
-- **Type Safety Patterns**: Generic collection typing via PHPDoc, ArrayTypeHelper for type-safe array operations, strict typing enforcement, PHPStan level 10 compliance, runtime type validation
+- **Type Safety Patterns**: DTOs and Value Objects over arrays, generic collection typing via PHPDoc, strict typing enforcement, PHPStan level 10 compliance, runtime type validation
 - **Symfony Integration**: Dependency injection patterns, service configuration (YAML to PHP), event dispatcher and PSR-14, form handling modernization, security component updates
 
 ## Installation
@@ -125,11 +125,40 @@ All modern PHP code must follow active PHP-FIG standards:
 - Nullsafe operator
 
 ### Type Safety Patterns
+- **DTOs and Value Objects over arrays** (see below)
 - Generic collection typing via PHPDoc
-- ArrayTypeHelper for type-safe array operations
 - Strict typing enforcement
 - PHPStan level 9+/10 compliance
 - Runtime type validation
+
+### DTOs and Value Objects (Required)
+
+**Never pass or return raw arrays** for structured data. Use typed objects instead:
+
+| Instead of | Use |
+|------------|-----|
+| `array $userData` | `UserDTO $user` |
+| `array{email: string, name: string}` | `readonly class UserDTO` |
+| `array $config` | `readonly class Config` or Value Object |
+| `array $request` | `RequestDTO::fromRequest($request)` |
+| `return ['success' => true, 'data' => $x]` | `return new ResultDTO($x)` |
+
+**Why:**
+- Arrays lack type safety at runtime
+- No IDE autocompletion for array keys
+- PHPStan cannot verify array shapes across boundaries
+- Refactoring arrays is error-prone
+
+**Pattern:**
+```php
+// ❌ Bad: Array passing
+public function createUser(array $data): array
+
+// ✅ Good: DTO pattern
+public function createUser(CreateUserDTO $dto): UserDTO
+```
+
+See `references/request-dtos.md` for complete patterns including Request DTOs, Command/Query DTOs, and Value Objects
 
 ### Symfony Integration
 - Dependency injection patterns
@@ -168,7 +197,9 @@ All modern PHP code must follow active PHP-FIG standards:
 - Add return types to all methods
 - Add parameter types to all methods
 - Use union types instead of mixed
-- Implement ArrayTypeHelper for collections
+- **Replace array parameters with DTOs**
+- **Replace array returns with typed objects**
+- **Use Value Objects for domain concepts (Email, Money, etc.)**
 - Add @template annotations for generics
 - Remove @var annotations where inferrable
 
