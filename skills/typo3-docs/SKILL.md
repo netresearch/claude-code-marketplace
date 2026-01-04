@@ -129,20 +129,35 @@ See `references/text-roles-inline-code.md` for complete list.
 
 | Content Type | Element |
 |--------------|---------|
-| Multi-line code | `..  code-block:: <language>` |
-| External code files | `..  literalinclude::` |
+| **Complete code examples (5+ lines)** | **`..  literalinclude::` (preferred)** |
+| Short inline snippets (< 5 lines) | `..  code-block:: <language>` |
 | Configuration options | `..  confval::` |
 | PHP API documentation | `..  php:class::`, `..  php:method::` |
 | Site settings | `..  typo3:site-set-settings::` |
 
-### Code Block Requirements
+### literalinclude (Preferred for Code)
+
+Store code as source files with underscore prefix, include via `literalinclude`:
+
+```rst
+..  literalinclude:: _TranslationService.php
+    :language: php
+    :caption: EXT:my_ext/Classes/Service/TranslationService.php
+```
+
+**File naming:** `_ClassName.php`, `_config.yaml`, `_tca-table.php`
+
+**Benefits:** IDE support, syntax validation, reusability, maintainability.
+
+### code-block (Short Snippets Only)
+
+Use only for very short examples (< 5 lines):
 
 ```rst
 ..  code-block:: php
-    :caption: EXT:my_ext/Classes/Service/MyService.php
+    :caption: Quick example
 
-    <?php
-    // Always include :caption: with file path
+    $vault->http()->withAuthentication($key, SecretPlacement::Bearer);
 ```
 
 **Always include:**

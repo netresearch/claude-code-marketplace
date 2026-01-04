@@ -127,6 +127,28 @@ public function createUser(CreateUserDTO $dto): UserDTO
 
 See `references/request-dtos.md` for Request DTOs, Command/Query DTOs, and Value Objects.
 
+## Enums (Required)
+
+**Never use string/integer constants** for fixed sets of values. Use PHP 8.1+ backed enums:
+
+```php
+// ❌ Bad: String constants
+public const STATUS_DRAFT = 'draft';
+public function setStatus(string $status): void
+
+// ✅ Good: Backed enum
+enum Status: string { case Draft = 'draft'; }
+public function setStatus(Status $status): void
+```
+
+| Instead of | Use |
+|------------|-----|
+| `const STATUS_X = 'x'` | `enum Status: string` |
+| `string $status` param | `Status $status` param |
+| `switch ($status)` | `match($status)` with enum |
+
+See `references/php8-features.md` for complete enum patterns.
+
 ## Quick Patterns
 
 **Constructor promotion (PHP 8.0+):**
@@ -177,8 +199,10 @@ public function getUsers(): array
 - [ ] Return types and parameter types on all methods
 - [ ] **DTOs for data transfer, Value Objects for domain concepts**
 - [ ] **No array parameters/returns for structured data**
+- [ ] **Backed enums for all status, type, and option values**
+- [ ] **No string/int constants for fixed value sets**
 - [ ] Replace annotations with attributes
-- [ ] Use readonly, enums, match expressions
+- [ ] Use readonly, match expressions
 - [ ] Type-hint against PSR interfaces (not implementations)
 
 ## Scoring
@@ -191,6 +215,7 @@ public function getUsers(): array
 | PHP-CS-Fixer | `@PER-CS` with zero violations |
 | PSR Compliance | Type-hint against PSR interfaces |
 | DTOs/VOs | No array params/returns for structured data |
+| Enums | Backed enums for all fixed value sets (no string/int constants) |
 
 > **Note:** PHPStan level 8 or below is insufficient for production code. Level 9+ enforces strict `mixed` type handling.
 

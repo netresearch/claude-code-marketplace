@@ -160,6 +160,57 @@ public function createUser(CreateUserDTO $dto): UserDTO
 
 See `references/request-dtos.md` for complete patterns including Request DTOs, Command/Query DTOs, and Value Objects
 
+### Enums (Required)
+
+**Never use string/integer constants or arrays** for fixed sets of values. Use PHP 8.1+ backed enums instead:
+
+| Instead of | Use |
+|------------|-----|
+| `const STATUS_DRAFT = 'draft'` | `enum Status: string { case Draft = 'draft'; }` |
+| `['draft', 'published', 'archived']` | `Status::cases()` |
+| `string $status` parameter | `Status $status` parameter |
+| `switch ($status)` | `match($status)` with enum |
+
+**Why enums are required:**
+- Compile-time type checking (invalid values caught before runtime)
+- IDE autocompletion for all valid values
+- Exhaustive `match()` enforcement (compiler ensures all cases handled)
+- Methods encapsulate related logic (labels, colors, validation)
+- Self-documenting API with clear valid options
+
+**Pattern:**
+```php
+// ❌ Bad: String constants
+class Order {
+    public const STATUS_DRAFT = 'draft';
+    public const STATUS_PENDING = 'pending';
+    public const STATUS_COMPLETED = 'completed';
+
+    public function setStatus(string $status): void // Any string accepted!
+}
+
+// ✅ Good: Backed enum
+enum OrderStatus: string {
+    case Draft = 'draft';
+    case Pending = 'pending';
+    case Completed = 'completed';
+
+    public function label(): string {
+        return match($this) {
+            self::Draft => 'Draft Order',
+            self::Pending => 'Awaiting Payment',
+            self::Completed => 'Order Complete',
+        };
+    }
+}
+
+class Order {
+    public function setStatus(OrderStatus $status): void // Only valid statuses!
+}
+```
+
+See `references/php8-features.md` for complete enum patterns including methods, validation, and database integration.
+
 ### Symfony Integration
 - Dependency injection patterns
 - Service configuration (YAML to PHP)
@@ -182,7 +233,8 @@ See `references/request-dtos.md` for complete patterns including Request DTOs, C
 - Convert to constructor property promotion
 - Use readonly where applicable
 - Replace switch with match expressions
-- Adopt enums for status/type constants
+- **Replace string/int constants with backed enums**
+- **Use enums for all status, type, and option values**
 
 ### PSR/PER Compliance
 - Configure PSR-4 autoloading in composer.json
@@ -200,6 +252,7 @@ See `references/request-dtos.md` for complete patterns including Request DTOs, C
 - **Replace array parameters with DTOs**
 - **Replace array returns with typed objects**
 - **Use Value Objects for domain concepts (Email, Money, etc.)**
+- **Use backed enums for all fixed value sets (status, type, options)**
 - Add @template annotations for generics
 - Remove @var annotations where inferrable
 

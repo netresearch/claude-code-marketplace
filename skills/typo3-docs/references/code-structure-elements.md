@@ -13,7 +13,8 @@ Based on:
 
 | Content Type | Element | Example |
 |--------------|---------|---------|
-| Multi-line code | `code-block` directive | PHP classes, TypoScript setup |
+| Short inline examples (< 5 lines) | `code-block` directive | Quick syntax demos |
+| **Complete code snippets** | **`literalinclude` directive (preferred)** | PHP classes, services, TCA |
 | External code files | `literalinclude` directive | Full example files |
 | Configuration options | `confval` directive | Extension settings, TCA fields |
 | Inline PHP | `:php:` role | Class names, method calls |
@@ -115,49 +116,137 @@ For XML/HTML, use comments:
     <property><!-- your-value --></property>
 ```
 
-## literalinclude Directive
+## literalinclude Directive (Preferred for Code)
 
-Include code from external files. Preferred for longer examples or testable code.
+**`literalinclude` is the preferred way to include code examples** in TYPO3 documentation. It provides:
+
+- **Syntax validation**: IDE support catches errors in source files
+- **Reusability**: Same snippet can be included in multiple places
+- **Maintainability**: Update code in one place, documentation stays in sync
+- **Testability**: Code files can be validated/linted separately
+
+### File Naming Convention
+
+Code snippet files use an **underscore prefix** to indicate they are include files:
+
+| File Type | Naming Pattern | Example |
+|-----------|----------------|---------|
+| PHP classes | `_ClassName.php` | `_TranslationService.php` |
+| Configuration | `_config-name.yaml` | `_services.yaml` |
+| TCA | `_tca-tablename.php` | `_tca-apiendpoint.php` |
+| TypoScript | `_setup.typoscript` | `_setup.typoscript` |
+
+### File Organization
+
+Store code snippets in the same directory as the RST file that uses them, or in a shared location:
+
+```
+Documentation/
+├── Usage/
+│   ├── Index.rst
+│   ├── ApiEndpointExample.rst
+│   ├── _ApiEndpoint.php           ← DTO class
+│   ├── _ApiClientService.php      ← Service class
+│   └── _tca-apiendpoint.php       ← TCA definition
+├── Developer/
+│   ├── Adr/
+│   │   ├── ADR-009-ExtensionConfig.rst
+│   │   ├── _TranslationService.php
+│   │   └── _DirectUsage.php
+```
 
 ### Basic Syntax
 
 ```rst
-..  literalinclude:: _codesnippets/MyClass.php
+..  literalinclude:: _MyClass.php
     :language: php
-    :caption: Classes/MyClass.php
+    :caption: EXT:my_ext/Classes/Service/MyClass.php
 ```
 
 ### Options
 
 | Option | Purpose |
 |--------|---------|
-| `:language:` | Syntax highlighting language |
-| `:caption:` | Display caption |
-| `:lines:` | Include only specific lines |
+| `:language:` | Syntax highlighting language (required) |
+| `:caption:` | Display caption showing target file path |
+| `:lines:` | Include only specific lines (e.g., `15-30`) |
 | `:linenos:` | Show line numbers |
-| `:emphasize-lines:` | Highlight lines |
-| `:start-after:` | Start after matching text |
-| `:end-before:` | End before matching text |
+| `:emphasize-lines:` | Highlight specific lines |
+| `:start-after:` | Start after matching text marker |
+| `:end-before:` | End before matching text marker |
 
-### Example with Line Selection
+### Example: Complete Service Class
+
+**Source file:**
+```php
+// Documentation/Usage/_TranslationService.php
+<?php
+
+declare(strict_types=1);
+
+namespace Acme\AcmeTranslate\Service;
+
+use Netresearch\NrVault\Http\SecretPlacement;
+use Netresearch\NrVault\Service\VaultServiceInterface;
+
+final class TranslationService
+{
+    public function __construct(
+        private readonly VaultServiceInterface $vault,
+    ) {}
+
+    public function translate(string $text): string
+    {
+        return $this->vault->http()
+            ->withAuthentication($this->apiKey, SecretPlacement::Bearer)
+            ->sendRequest($request);
+    }
+}
+```
+
+**RST usage:**
+```rst
+..  literalinclude:: _TranslationService.php
+    :language: php
+    :caption: EXT:acme_translate/Classes/Service/TranslationService.php
+    :linenos:
+```
+
+### Example: Extract Specific Lines
 
 ```rst
-..  literalinclude:: _codesnippets/CompleteClass.php
+..  literalinclude:: _TranslationService.php
     :language: php
-    :caption: Relevant excerpt
-    :lines: 15-30
-    :emphasize-lines: 5,10
+    :caption: Key method implementation
+    :lines: 17-22
+    :emphasize-lines: 3-4
 ```
 
-### File Organization
+### Example: Using Text Markers
 
+For more maintainable line selection, use text markers:
+
+**Source file with markers:**
+```php
+// ... class definition ...
+
+// START: translate-method
+public function translate(string $text): string
+{
+    return $this->vault->http()
+        ->withAuthentication($this->apiKey, SecretPlacement::Bearer)
+        ->sendRequest($request);
+}
+// END: translate-method
 ```
-Documentation/
-├── Section/
-│   ├── Index.rst
-│   └── _codesnippets/
-│       ├── MyClass.php
-│       └── config.yaml
+
+**RST usage:**
+```rst
+..  literalinclude:: _TranslationService.php
+    :language: php
+    :caption: Translation method
+    :start-after: // START: translate-method
+    :end-before: // END: translate-method
 ```
 
 ## Inline Code Roles
@@ -344,17 +433,20 @@ The `PROJECT:` prefix loads files from the extension directory.
 
 ## Decision Guide
 
+### Use `literalinclude` When (Preferred)
+
+- **Complete code examples** (classes, services, configuration)
+- Code is **5+ lines** or represents a complete unit
+- Code should be **syntactically valid** and testable
+- Same code might be **referenced multiple times**
+- You want **IDE support** for the source files
+
 ### Use `code-block` When
 
-- Showing example code inline in documentation
-- Code is short (< 30 lines)
-- Code is illustrative, not production-ready
-
-### Use `literalinclude` When
-
-- Code is long (> 30 lines)
-- Code should be executable/testable
-- Same code is referenced multiple times
+- Very short snippets (< 5 lines)
+- Pseudocode or conceptual examples
+- Code with intentional placeholders like `<your-value>`
+- Quick syntax demonstrations
 
 ### Use `confval` When
 
@@ -376,15 +468,15 @@ The `PROJECT:` prefix loads files from the extension directory.
 
 ## Pre-Commit Checklist
 
-1. ✅ Code blocks have `:caption:` with file path
-2. ✅ Correct language identifier used
-3. ✅ Syntax is valid (highlighting works)
-4. ✅ Placeholders use angle brackets
-5. ✅ Long code uses `literalinclude`
-6. ✅ Configuration uses `confval` directive
-7. ✅ Inline code uses appropriate roles
-8. ✅ UI elements use `:guilabel:`
-9. ✅ File paths use `:file:` or `:path:`
+1. ✅ **Complete code examples use `literalinclude`** with `_filename.ext` source files
+2. ✅ Source files have underscore prefix (`_MyClass.php`)
+3. ✅ All code blocks/includes have `:caption:` with target file path
+4. ✅ Correct `:language:` identifier used
+5. ✅ Code syntax is valid (highlighting works)
+6. ✅ Placeholders use angle brackets `<your-value>`
+7. ✅ Configuration uses `confval` directive
+8. ✅ Inline code uses appropriate roles (`:php:`, `:file:`, etc.)
+9. ✅ UI elements use `:guilabel:`
 
 ## References
 
