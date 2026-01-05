@@ -81,7 +81,7 @@
     {
       "name": "typo3-conformance",
       "description": "Evaluate TYPO3 extensions for conformance to official TYPO3 coding standards, architecture patterns, and best practices. Includes automated validation scripts for file structure, PSR-12 compliance, dependency injection, testing infrastructure, and comprehensive conformance scoring with priority-based action items.",
-      "version": "1.9.1-20251230",
+      "version": "1.10.0-20260104",
       "author": {
         "name": "Netresearch DTT GmbH",
         "email": "info@netresearch.de"

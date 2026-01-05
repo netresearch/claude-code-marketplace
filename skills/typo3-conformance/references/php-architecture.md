@@ -846,30 +846,198 @@ public function __construct(
 ) {}
 ```
 
-## Anti-Patterns to Avoid
+## Prohibited Patterns (Mandatory Compliance)
 
-### ❌ Wrong: Direct instantiation
+These patterns are **strictly forbidden** in modern TYPO3 extensions (v12+). Using them will result in conformance failure.
+
+### ❌ PROHIBITED: $GLOBALS Access
+
+**All `$GLOBALS` access is forbidden.** Use proper TYPO3 APIs instead.
+
+| Prohibited Pattern | Modern Alternative |
+|-------------------|-------------------|
+| `$GLOBALS['TCA']` | `TcaSchemaFactory` (TYPO3 v14+) or inject TCA via DI |
+| `$GLOBALS['BE_USER']` | `Context` API or `BackendUserAuthentication` via DI |
+| `$GLOBALS['TSFE']` | PSR-7 Request attributes, middleware, or `TypoScriptFrontendController` via DI |
+| `$GLOBALS['TYPO3_CONF_VARS']` | `ExtensionConfiguration` or Site Settings |
+| `$GLOBALS['LANG']` | `LanguageServiceFactory` or `LocalizationUtility` |
+
 ```php
-$repository = new ProductRepository();  // Missing dependencies
+// ❌ PROHIBITED: Direct $GLOBALS access
+$tca = $GLOBALS['TCA']['tx_myext_table'];
+$user = $GLOBALS['BE_USER'];
+$tsfe = $GLOBALS['TSFE'];
+$config = $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['my_ext'];
+
+// ✅ REQUIRED: Use TYPO3 APIs with dependency injection
+use TYPO3\CMS\Core\Schema\TcaSchemaFactory;
+use TYPO3\CMS\Core\Context\Context;
+use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
+
+final class MyService
+{
+    public function __construct(
+        private readonly TcaSchemaFactory $tcaSchemaFactory,
+        private readonly Context $context,
+        private readonly ExtensionConfiguration $extensionConfiguration,
+    ) {}
+
+    public function getTableSchema(string $table): ?TcaSchema
+    {
+        if (!$this->tcaSchemaFactory->has($table)) {
+            return null;
+        }
+        return $this->tcaSchemaFactory->get($table);
+    }
+
+    public function getCurrentUser(): ?BackendUserAuthentication
+    {
+        return $this->context->getAspect('backend.user')?->get('user');
+    }
+
+    public function getExtensionConfig(): array
+    {
+        return $this->extensionConfiguration->get('my_ext');
+    }
+}
 ```
 
-### ❌ Wrong: Using GeneralUtility::makeInstance()
+**Detection Command:**
+```bash
+# Find all $GLOBALS usage in Classes/
+grep -rn '\$GLOBALS\[' Classes/
+
+# Should return NO results for compliant extensions
+```
+
+### ❌ PROHIBITED: GeneralUtility::makeInstance() for Services
+
+**Service locator pattern is forbidden.** All dependencies must be injected via constructor.
+
 ```php
+// ❌ PROHIBITED: Service locator pattern
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-$repository = GeneralUtility::makeInstance(ProductRepository::class);
+
+class MyController
+{
+    public function listAction(): ResponseInterface
+    {
+        // WRONG: Service locator anti-pattern
+        $repository = GeneralUtility::makeInstance(ProductRepository::class);
+        $logger = GeneralUtility::makeInstance(LogManager::class)->getLogger(__CLASS__);
+        $vaultService = GeneralUtility::makeInstance(VaultServiceInterface::class);
+    }
+}
+
+// ✅ REQUIRED: Constructor dependency injection
+final class MyController extends ActionController
+{
+    public function __construct(
+        private readonly ProductRepository $repository,
+        private readonly LoggerInterface $logger,
+        private readonly VaultServiceInterface $vaultService,
+    ) {}
+
+    public function listAction(): ResponseInterface
+    {
+        // Dependencies already available via $this->
+        $products = $this->repository->findAll();
+        $this->logger->info('Products loaded');
+    }
+}
 ```
 
-### ❌ Wrong: Global state access
-```php
-$user = $GLOBALS['BE_USER'];  // Avoid global state
-$typoScript = $GLOBALS['TSFE']->tmpl->setup;
+**Allowed Exceptions (only these cases):**
+| Context | Reason | Example |
+|---------|--------|---------|
+| Form Elements | FormEngine instantiation | `VaultSecretElement extends AbstractFormElement` |
+| Scheduler Tasks | Serialization constraints | `OrphanCleanupTask extends AbstractTask` |
+| ext_localconf.php | Bootstrap context | Configuration registration |
+| TCA files | No DI available | `TCA/Overrides/*.php` |
+
+**Detection Command:**
+```bash
+# Find GeneralUtility::makeInstance in Classes/
+grep -rn 'GeneralUtility::makeInstance' Classes/ \
+  --include='*.php' \
+  | grep -v 'Form/Element/' \
+  | grep -v 'Task/'
+
+# Should return NO results for compliant extensions (except allowed exceptions)
 ```
 
-### ✅ Right: Dependency injection
+### ❌ PROHIBITED: Direct Class Instantiation
+
 ```php
+// ❌ PROHIBITED: Direct instantiation bypasses DI
+$repository = new ProductRepository();  // Missing dependencies!
+$service = new MyService($dep1, $dep2); // Manual wiring!
+
+// ✅ REQUIRED: Let container handle instantiation
 public function __construct(
     private readonly ProductRepository $repository,
-    private readonly Context $context
+    private readonly MyService $service,
+) {}
+```
+
+## Anti-Patterns to Avoid
+
+### Service Locator in Hooks
+
+TYPO3 hooks support constructor injection when autowiring is enabled:
+
+```php
+// ❌ Wrong: Service locator in hooks
+final class DataHandlerHook
+{
+    public function processDatamap_afterDatabaseOperations(...): void
+    {
+        $vaultService = GeneralUtility::makeInstance(VaultServiceInterface::class);
+    }
+}
+
+// ✅ Right: Constructor injection in hooks
+final class DataHandlerHook
+{
+    public function __construct(
+        private readonly VaultServiceInterface $vaultService,
+    ) {}
+
+    public function processDatamap_afterDatabaseOperations(...): void
+    {
+        $this->vaultService->store(...);
+    }
+}
+```
+
+### Static Method Calls for Services
+
+```php
+// ❌ Wrong: Static calls hide dependencies
+$result = MyUtility::processData($input);
+$config = ConfigurationManager::getConfiguration();
+
+// ✅ Right: Inject services
+public function __construct(
+    private readonly DataProcessor $dataProcessor,
+    private readonly ConfigurationManager $configManager,
+) {}
+```
+
+### Lazy Service Resolution
+
+```php
+// ❌ Wrong: Lazy resolution defeats DI benefits
+private ?MyService $service = null;
+
+private function getService(): MyService
+{
+    return $this->service ??= GeneralUtility::makeInstance(MyService::class);
+}
+
+// ✅ Right: Eager constructor injection
+public function __construct(
+    private readonly MyService $service,
 ) {}
 ```
 
@@ -967,13 +1135,22 @@ final class CustomHttpClient
 
 ## Conformance Checklist
 
-### Basic Dependency Injection
-- [ ] Constructor injection used for all dependencies
+### Prohibited Patterns (Zero Tolerance)
+- [ ] **No `$GLOBALS['TCA']`** - Use `TcaSchemaFactory` instead
+- [ ] **No `$GLOBALS['BE_USER']`** - Use `Context` API instead
+- [ ] **No `$GLOBALS['TSFE']`** - Use PSR-7 Request or DI instead
+- [ ] **No `$GLOBALS['TYPO3_CONF_VARS']`** - Use `ExtensionConfiguration` instead
+- [ ] **No `$GLOBALS['LANG']`** - Use `LanguageServiceFactory` instead
+- [ ] **No `GeneralUtility::makeInstance()`** in Classes/ (except Form Elements and Tasks)
+- [ ] **No direct `new Service()`** instantiation for DI-managed classes
+
+### Dependency Injection (Mandatory)
+- [ ] Constructor injection for ALL service dependencies
+- [ ] `readonly` properties for injected dependencies
 - [ ] Services registered in Configuration/Services.yaml
-- [ ] No direct class instantiation (new MyClass())
-- [ ] No GeneralUtility::makeInstance() for new services
-- [ ] PSR interfaces used (ResponseInterface, LoggerInterface, etc.)
-- [ ] No global state access ($GLOBALS)
+- [ ] `autowire: true` and `autoconfigure: true` in Services.yaml
+- [ ] PSR interfaces used (LoggerInterface, EventDispatcherInterface, etc.)
+- [ ] Hooks use constructor injection (TYPO3 supports this with autowiring)
 
 ### PSR-17/PSR-18 HTTP Client (Important)
 - [ ] Use TYPO3\CMS\Core\Http\RequestFactory for HTTP requests

@@ -40,29 +40,48 @@ else
     has_issues=1
 fi
 
-### Check for deprecated patterns
+### Check for PROHIBITED patterns
 echo ""
-echo "### Deprecated Pattern Detection"
+echo "### Prohibited Pattern Detection (Zero Tolerance)"
 echo ""
 
-# Check for GeneralUtility::makeInstance
-makeinstance_count=$(grep -r "GeneralUtility::makeInstance" Classes/ 2>/dev/null | wc -l)
-if [ $makeinstance_count -eq 0 ]; then
-    echo "- ✅ No GeneralUtility::makeInstance() usage found"
-else
-    echo "- ❌ ${makeinstance_count} instances of GeneralUtility::makeInstance() found"
-    echo "  - Should use constructor injection instead"
-    has_issues=1
-fi
-
-# Check for global state access
-globals_count=$(grep -r '\$GLOBALS\[' Classes/ 2>/dev/null | wc -l)
+# Check for $GLOBALS usage (ALWAYS prohibited in Classes/)
+globals_count=$(grep -rn '\$GLOBALS\[' Classes/ 2>/dev/null | wc -l)
 if [ $globals_count -eq 0 ]; then
     echo "- ✅ No \$GLOBALS access found"
 else
-    echo "- ❌ ${globals_count} instances of \$GLOBALS access found"
-    echo "  - Should use dependency injection instead"
+    echo "- ❌ **CRITICAL:** ${globals_count} instances of \$GLOBALS access found"
+    echo "  - \$GLOBALS['TCA'] → Use TcaSchemaFactory"
+    echo "  - \$GLOBALS['BE_USER'] → Use Context API"
+    echo "  - \$GLOBALS['TSFE'] → Use PSR-7 Request or DI"
+    echo "  - \$GLOBALS['TYPO3_CONF_VARS'] → Use ExtensionConfiguration"
+    echo ""
+    grep -rn '\$GLOBALS\[' Classes/ 2>/dev/null | head -10 || true
     has_issues=1
+fi
+
+# Check for GeneralUtility::makeInstance (prohibited except Form Elements and Tasks)
+# First check total count
+total_makeinstance=$(grep -r "GeneralUtility::makeInstance" Classes/ 2>/dev/null | wc -l)
+
+if [ $total_makeinstance -eq 0 ]; then
+    echo "- ✅ No GeneralUtility::makeInstance() usage found"
+else
+    # Count allowed exceptions (Form/Element/ and Task/)
+    allowed_makeinstance=$(grep -r "GeneralUtility::makeInstance" Classes/ 2>/dev/null | grep -E '(Form/Element/|Task/)' | wc -l)
+    prohibited_makeinstance=$((total_makeinstance - allowed_makeinstance))
+
+    if [ $prohibited_makeinstance -eq 0 ]; then
+        echo "- ✅ GeneralUtility::makeInstance() only in allowed contexts (Form Elements, Tasks)"
+        echo "  - ${allowed_makeinstance} allowed occurrences in Form/Element/ or Task/"
+    else
+        echo "- ❌ **CRITICAL:** ${prohibited_makeinstance} prohibited instances of GeneralUtility::makeInstance() found"
+        echo "  - Use constructor dependency injection instead"
+        echo "  - Allowed only in: Form/Element/, Task/ directories"
+        echo ""
+        grep -rn "GeneralUtility::makeInstance" Classes/ 2>/dev/null | grep -vE '(Form/Element/|Task/)' | head -10 || true
+        has_issues=1
+    fi
 fi
 
 ### Check for constructor injection

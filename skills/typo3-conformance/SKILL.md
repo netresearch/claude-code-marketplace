@@ -24,10 +24,11 @@ Evaluate TYPO3 extensions for standards compliance, architecture patterns, and b
 1. **Initial Assessment** - Extension key, TYPO3 version, type
 2. **File Structure** - composer.json, ext_emconf.php, required directories
 3. **Coding Standards** - strict_types, types, PSR-12
-4. **Backend Module v13** - ES6 modules, Modal API, CSRF
-5. **PHP Architecture** - Services.yaml, DI, PSR-14 events
-6. **Testing** - PHPUnit, Playwright E2E, coverage >70%
-7. **Best Practices** - DDEV, runTests.sh, quality tools, CI/CD
+4. **Prohibited Patterns** - No `$GLOBALS`, no `GeneralUtility::makeInstance()` for services
+5. **PHP Architecture** - Constructor DI, Services.yaml, PSR-14 events, TcaSchemaFactory
+6. **Backend Module v13** - ES6 modules, Modal API, CSRF
+7. **Testing** - PHPUnit, Playwright E2E, coverage >70%
+8. **Best Practices** - DDEV, runTests.sh, quality tools, CI/CD
 
 ## Scoring
 
