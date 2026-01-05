@@ -267,7 +267,7 @@
     {
       "name": "coach",
       "description": "Self-improving learning system that detects friction signals (corrections, tool failures, repetition) and proposes rule updates. Includes /coach slash commands for reviewing, approving, and managing learning candidates. Auto-configures hooks for signal detection.",
-      "version": "2.1.0",
+      "version": "2.2.1-20251226",
       "author": {
         "name": "Netresearch DTT GmbH",
         "email": "info@netresearch.de"

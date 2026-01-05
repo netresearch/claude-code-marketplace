@@ -9,7 +9,7 @@ import sys
 import sqlite3
 import json
 from pathlib import Path
-from datetime import datetime
+from datetime import datetime, UTC
 
 COACH_DIR = Path.home() / ".claude-coach"
 EVENTS_DB = COACH_DIR / "events.sqlite"
@@ -132,7 +132,7 @@ DEFAULT_CONFIG = {
             r"commit"
         ]
     },
-    "created_at": datetime.utcnow().isoformat()
+    "created_at": datetime.now(UTC).isoformat()
 }
 
 

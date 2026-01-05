@@ -11,7 +11,7 @@ import sqlite3
 import hashlib
 import subprocess
 from pathlib import Path
-from datetime import datetime
+from datetime import datetime, UTC
 from typing import Dict, List, Optional, Tuple
 
 COACH_DIR = Path.home() / ".claude-coach"
@@ -83,7 +83,7 @@ class Ledger:
         )
         row = cursor.fetchone()
 
-        now = datetime.utcnow().isoformat()
+        now = datetime.now(UTC).isoformat()
 
         if row:
             repo_ids = json.loads(row['repo_ids']) if row['repo_ids'] else []
@@ -141,7 +141,7 @@ class Ledger:
     def mark_promoted(self, fingerprint: str):
         """Mark a candidate as promoted to global."""
         conn = self._connect()
-        now = datetime.utcnow().isoformat()
+        now = datetime.now(UTC).isoformat()
 
         conn.execute("""
             UPDATE candidates

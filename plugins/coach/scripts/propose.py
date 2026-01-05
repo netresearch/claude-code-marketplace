@@ -9,7 +9,7 @@ import sys
 import json
 import subprocess
 from pathlib import Path
-from datetime import datetime
+from datetime import datetime, UTC
 from typing import Dict, List, Optional, Tuple
 
 sys.path.insert(0, str(Path(__file__).parent))
@@ -149,7 +149,7 @@ class ProposalGenerator:
             "diff": '\n'.join(diff_lines),
             "old_content": old_content,
             "new_content": combined,
-            "generated_at": datetime.utcnow().isoformat()
+            "generated_at": datetime.now(UTC).isoformat()
         }
 
     def _generate_unified_diff(self, filename: str, old: str, new: str) -> List[str]:
@@ -171,7 +171,7 @@ class ProposalGenerator:
 
     def create_branch(self, candidate: Dict) -> Tuple[bool, str]:
         """Create a git branch for the proposal."""
-        timestamp = datetime.utcnow().strftime("%Y%m%d-%H%M")
+        timestamp = datetime.now(UTC).strftime("%Y%m%d-%H%M")
         candidate_id = candidate.get('id', 'unknown')[:8]
         branch_name = f"coach/learn-{timestamp}-{candidate_id}"
 

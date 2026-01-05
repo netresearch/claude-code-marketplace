@@ -3,11 +3,13 @@
 Detect friction signals from user messages, assistant responses, and tool results.
 Stores detected signals in the events database for later aggregation.
 
-v2.0 - Improved with:
+v2.1 - Improved with:
 - Proper stdin handling for hooks
 - Expanded failure patterns
 - Context capture from preceding messages
 - Better error pattern matching
+- Skill supplement detection (suggests skill updates)
+- Outdated tool/version detection
 """
 
 import os
@@ -18,7 +20,7 @@ import sqlite3
 import hashlib
 import argparse
 from pathlib import Path
-from datetime import datetime
+from datetime import datetime, UTC
 from typing import Optional, Dict, Any, List
 import uuid
 
@@ -34,6 +36,9 @@ class SignalDetector:
     SIGNAL_TYPES = {
         "COMMAND_FAILURE": 100,  # Priority weight
         "USER_CORRECTION": 80,
+        "SKILL_SUPPLEMENT": 75,  # User supplementing a skill with additional info
+        "VERIFICATION_QUESTION": 72,  # User asking if something was done (implicit expectation)
+        "VERSION_ISSUE": 70,     # Outdated tool/dependency detected
         "REPETITION": 60,
         "TONE_ESCALATION": 40
     }
@@ -80,6 +85,9 @@ class SignalDetector:
                     r"compilation failed", r"build failed", r"test failed",
                     # Package manager errors
                     r"npm ERR", r"yarn error", r"pip error", r"go: ",
+                    r"composer.*(?:error|failed)", r"--ignore-platform-req",
+                    r"ext-\w+", r"php.*(?:fatal|error|warning)",
+                    r"require.*php", r"platform.*requirement",
                     # Generic failure indicators
                     r"fatal:", r"panic:", r"exception", r"traceback"
                 ],
@@ -89,7 +97,38 @@ class SignalDetector:
                     r"git push",
                     r"git rebase",
                     r"npm install",
-                    r"docker build"
+                    r"docker build",
+                    r"composer (?:install|update|require|remove)",
+                    r"phpunit",
+                    r"phpstan"
+                ],
+                "skill_supplement": [
+                    # Patterns indicating user is supplementing a skill
+                    r"also\s+(?:need|remember|make\s+sure)",
+                    r"but\s+(?:also|don'?t\s+forget)",
+                    r"(?:the\s+)?skill\s+(?:doesn'?t|does\s+not|didn'?t)",
+                    r"(?:it|skill)\s+(?:missed|forgot|should\s+also)",
+                    r"add\s+(?:this\s+)?to\s+(?:the\s+)?skill",
+                    r"update\s+(?:the\s+)?skill",
+                    r"skill\s+(?:is\s+)?(?:wrong|outdated|incomplete)"
+                ],
+                "verification_question": [
+                    # User asking if something was done (implies expectation)
+                    r"did you\s+(?:also\s+)?(?:run|test|check|update|add|fix|commit|push|build)",
+                    r"have you\s+(?:also\s+)?(?:run|tested|checked|updated|added|fixed)",
+                    r"was\s+(?:the|this|that)\s+(?:test|build|check)",
+                    r"(?:were|are)\s+(?:the\s+)?tests?\s+(?:run|passed|executed)",
+                    r"what about\s+(?:the\s+)?(?:tests?|build|commit)",
+                    r"you\s+(?:didn'?t|did\s+not)\s+(?:run|test|check|commit|push)",
+                ],
+                "version_issues": [
+                    # Patterns indicating version/outdated issues
+                    r"(?:requires|needs|minimum)\s+(?:version\s+)?(\d+\.[\d.]+)",
+                    r"(?:deprecated|obsolete|outdated)",
+                    r"upgrade\s+(?:to\s+)?(?:version\s+)?",
+                    r"(?:npm|yarn|pnpm)\s+(?:WARN|warn).*(?:deprecated|outdated)",
+                    r"pip.*(?:WARNING|warning).*(?:deprecated|outdated)",
+                    r"version\s+(\d+\.[\d.]+).*(?:is\s+)?(?:old|outdated|unsupported)"
                 ]
             }
         }
@@ -117,6 +156,7 @@ class SignalDetector:
             if isinstance(self.recent_context[key], list):
                 self.recent_context[key] = self.recent_context[key][-20:]
 
+        COACH_DIR.mkdir(parents=True, exist_ok=True)
         CONTEXT_FILE.write_text(json.dumps(self.recent_context, indent=2))
 
     def add_tool_call_context(self, command: str, exit_code: int, stderr: str):
@@ -125,7 +165,7 @@ class SignalDetector:
             "command": command[:500],
             "exit_code": exit_code,
             "stderr": stderr[:500] if stderr else "",
-            "timestamp": datetime.utcnow().isoformat()
+            "timestamp": datetime.now(UTC).isoformat()
         })
         self._save_recent_context()
 
@@ -133,7 +173,7 @@ class SignalDetector:
         """Track what the assistant did (for correction context)."""
         self.recent_context["assistant_actions"].append({
             "action": action[:500],
-            "timestamp": datetime.utcnow().isoformat()
+            "timestamp": datetime.now(UTC).isoformat()
         })
         self._save_recent_context()
 
@@ -275,6 +315,116 @@ class SignalDetector:
 
         return base(cmd1) == base(cmd2)
 
+    def detect_skill_supplement(self, content: str) -> Optional[Dict]:
+        """Detect when user is supplementing a skill with additional info."""
+        matches = []
+        for pattern in self.patterns.get("skill_supplement", []):
+            if pattern.search(content):
+                matches.append(pattern.pattern)
+
+        if matches:
+            # Try to extract which skill is being referenced
+            skill_name = self._extract_skill_reference(content)
+
+            return {
+                "signal_type": "SKILL_SUPPLEMENT",
+                "matches": matches,
+                "skill_name": skill_name,
+                "supplement_text": content[:500],
+                "confidence": min(0.5 + (len(matches) * 0.15), 0.90),
+                "preceding_context": self.get_preceding_context()
+            }
+        return None
+
+    def detect_verification_question(self, content: str) -> Optional[Dict]:
+        """Detect when user asks if something was done (implies missed expectation)."""
+        matches = []
+        for pattern in self.patterns.get("verification_question", []):
+            match = pattern.search(content)
+            if match:
+                matches.append({
+                    "pattern": pattern.pattern,
+                    "matched_text": match.group(0)
+                })
+
+        if matches:
+            # Extract what action was being verified
+            action = self._extract_verified_action(content)
+
+            return {
+                "signal_type": "VERIFICATION_QUESTION",
+                "matches": matches,
+                "verified_action": action,
+                "question_text": content[:500],
+                "confidence": min(0.6 + (len(matches) * 0.1), 0.85),
+                "preceding_context": self.get_preceding_context()
+            }
+        return None
+
+    def _extract_verified_action(self, content: str) -> Optional[str]:
+        """Extract what action was being verified from the question."""
+        content_lower = content.lower()
+
+        # Common actions being verified
+        actions = {
+            'run': ['run', 'execute', 'ran'],
+            'test': ['test', 'tested', 'tests'],
+            'check': ['check', 'checked', 'verify'],
+            'commit': ['commit', 'committed'],
+            'push': ['push', 'pushed'],
+            'build': ['build', 'built', 'compile'],
+            'update': ['update', 'updated'],
+            'fix': ['fix', 'fixed'],
+        }
+
+        for action, keywords in actions.items():
+            for kw in keywords:
+                if kw in content_lower:
+                    return action
+
+        return None
+
+    def _extract_skill_reference(self, content: str) -> Optional[str]:
+        """Extract skill name from message."""
+        # Pattern to find skill names
+        skill_patterns = [
+            r'(?:the\s+)?(\w+[-_]?\w*)\s+skill',
+            r'skill\s+(?:for\s+)?(\w+[-_]?\w*)',
+        ]
+
+        for pattern in skill_patterns:
+            match = re.search(pattern, content, re.IGNORECASE)
+            if match:
+                return match.group(1)
+
+        return None
+
+    def detect_version_issue(self, stderr: str, command: str) -> Optional[Dict]:
+        """Detect version/outdated tool issues from command output."""
+        matches = []
+        for pattern in self.patterns.get("version_issues", []):
+            match = pattern.search(stderr)
+            if match:
+                matches.append({
+                    "pattern": pattern.pattern,
+                    "match": match.group(0)
+                })
+
+        if matches:
+            # Extract tool name from command
+            tool = command.split()[0] if command else "unknown"
+
+            return {
+                "signal_type": "VERSION_ISSUE",
+                "tool": tool,
+                "command": command[:200],
+                "matches": matches,
+                "stderr_preview": stderr[:500],
+                "confidence": min(0.6 + (len(matches) * 0.1), 0.85),
+                "preceding_context": self.get_preceding_context()
+            }
+        return None
+
     def process_user_message(self, content: str, context: Dict = None) -> List[Dict]:
         """Process a user message for friction signals."""
         signals = []
@@ -282,7 +432,7 @@ class SignalDetector:
         # Add to message history
         self.recent_context.setdefault("messages", []).append({
             "text": content[:500],
-            "timestamp": datetime.utcnow().isoformat()
+            "timestamp": datetime.now(UTC).isoformat()
         })
         self._save_recent_context()
 
@@ -313,6 +463,24 @@ class SignalDetector:
                 "context": context
             })
 
+        # Check for skill supplementation
+        skill_supplement = self.detect_skill_supplement(content)
+        if skill_supplement:
+            signals.append({
+                **skill_supplement,
+                "content": content[:500],
+                "context": context
+            })
+
+        # Check for verification questions (user asking if something was done)
+        verification = self.detect_verification_question(content)
+        if verification:
+            signals.append({
+                **verification,
+                "content": content[:500],
+                "context": context
+            })
+
         return signals
 
     def process_tool_result(self, exit_code: int, stderr: str,
@@ -326,6 +494,15 @@ class SignalDetector:
                 **failure,
                 "context": context
             })
+
+        # Check for version/outdated issues in stderr
+        if stderr:
+            version_issue = self.detect_version_issue(stderr, command)
+            if version_issue:
+                signals.append({
+                    **version_issue,
+                    "context": context
+                })
 
         return signals
 
@@ -352,7 +529,7 @@ def store_signal(signal: Dict, event_type: str) -> str:
         return None
 
     event_id = str(uuid.uuid4())[:8]
-    timestamp = datetime.utcnow().isoformat()
+    timestamp = datetime.now(UTC).isoformat()
     repo_id = get_repo_id()
 
     conn = sqlite3.connect(EVENTS_DB)

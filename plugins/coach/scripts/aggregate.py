@@ -3,12 +3,14 @@
 Aggregate friction signals into learning candidates.
 Runs after turns or at session end to batch process signals.
 
-v2.1 - Improved with:
+v2.2 - Improved with:
 - Better context extraction from signals
 - LLM-assisted candidate generation (when available)
 - Smarter failure pattern recognition
 - Repeated failure detection
 - Session-end transcript analysis
+- Skill update suggestions (from SKILL_SUPPLEMENT signals)
+- Outdated tool detection (from VERSION_ISSUE signals)
 """
 
 import os
@@ -27,111 +29,20 @@ from collections import defaultdict
 # Import local modules
 sys.path.insert(0, str(Path(__file__).parent))
 from fingerprint import Fingerprinter, fingerprint_candidate
+from root_cause_analyzer import RootCauseAnalyzer
 
 COACH_DIR = Path.home() / ".claude-coach"
 EVENTS_DB = COACH_DIR / "events.sqlite"
 LEDGER_DB = COACH_DIR / "ledger.sqlite"
 CANDIDATES_FILE = COACH_DIR / "candidates.json"
+RAW_ANALYSIS_FILE = COACH_DIR / "raw_analysis.json"  # For Claude Code to process at review time
 CONFIG_FILE = COACH_DIR / "config.json"
 CONTEXT_FILE = COACH_DIR / "recent_context.json"
 
 
-class LLMCandidateGenerator:
-    """Generate high-quality candidates using LLM when available."""
-
-    def __init__(self):
-        self.available = self._check_availability()
-
-    def _check_availability(self) -> bool:
-        """Check if LLM generation is available."""
-        try:
-            import anthropic
-            return bool(os.environ.get("ANTHROPIC_API_KEY"))
-        except ImportError:
-            return False
-
-    def generate_candidate_from_failure(self, command: str, stderr: str, exit_code: int,
-                                        context: Dict) -> Optional[Dict]:
-        """Use LLM to generate a better candidate from failure context."""
-        if not self.available:
-            return None
-
-        try:
-            import anthropic
-            client = anthropic.Anthropic()
-
-            prompt = f"""Analyze this command failure and generate a learning rule.
-
-Command: {command}
-Exit code: {exit_code}
-Error: {stderr[:500]}
-
-Recent context:
-{json.dumps(context.get('recent_tool_calls', [])[-3:], indent=2)}
-
-Generate a JSON object with:
-- title: Short descriptive title (5-10 words)
-- trigger: When this situation occurs (be specific)
-- action: What should be done instead (be specific and actionable)
-- candidate_type: "rule" or "snippet"
-
-Focus on the ROOT CAUSE and provide a specific, actionable solution.
-Return ONLY valid JSON, no explanation."""
-
-            response = client.messages.create(
-                model="claude-3-haiku-20240307",  # Fast and cheap for this
-                max_tokens=300,
-                messages=[{"role": "user", "content": prompt}]
-            )
-
-            result = json.loads(response.content[0].text)
-            return result
-
-        except Exception as e:
-            return None
-
-    def generate_candidate_from_correction(self, user_message: str, context: Dict) -> Optional[Dict]:
-        """Use LLM to understand what was being corrected."""
-        if not self.available:
-            return None
-
-        try:
-            import anthropic
-            client = anthropic.Anthropic()
-
-            recent_actions = context.get('recent_actions', [])
-            recent_tools = context.get('recent_tool_calls', [])
-
-            prompt = f"""Analyze this user correction and generate a learning rule.
-
-User said: {user_message}
-
-Recent assistant actions:
-{json.dumps(recent_actions[-3:], indent=2)}
-
-Recent tool calls:
-{json.dumps(recent_tools[-3:], indent=2)}
-
-Generate a JSON object with:
-- title: Short descriptive title (5-10 words)
-- trigger: When this situation occurs (be specific about what action triggered the correction)
-- action: What should be done instead (be specific and actionable)
-- candidate_type: "rule"
-
-Focus on understanding WHAT the assistant did wrong and HOW to do it correctly.
-Return ONLY valid JSON, no explanation."""
-
-            response = client.messages.create(
-                model="claude-3-haiku-20240307",
-                max_tokens=300,
-                messages=[{"role": "user", "content": prompt}]
-            )
-
-            result = json.loads(response.content[0].text)
-            return result
-
-        except Exception as e:
-            return None
+# NOTE: LLM generation removed from aggregate.py
+# Claude Code now does the reasoning at review time via /coach:review skill
+# This avoids separate API calls and uses the parent Claude session
 
 
 class TranscriptAnalyzer:
@@ -154,8 +65,7 @@ class TranscriptAnalyzer:
         r'[!]{2,}',
     ]
 
-    def __init__(self, llm_generator: Optional[LLMCandidateGenerator] = None):
-        self.llm_generator = llm_generator
+    def __init__(self):
         self.correction_patterns = [re.compile(p, re.IGNORECASE) for p in self.CORRECTION_PATTERNS]
 
     def find_recent_transcript(self) -> Optional[Path]:
@@ -230,11 +140,32 @@ class TranscriptAnalyzer:
             return []
 
     def extract_messages(self, transcript: List[Dict]) -> Tuple[List[str], List[str], List[Dict]]:
-        """Extract user messages, assistant messages, and tool calls from transcript."""
+        """Extract user messages, assistant messages, and tool calls with results from transcript."""
         user_messages = []
         assistant_messages = []
         tool_calls = []
+        tool_results = {}  # Map tool_use_id -> result
 
+        # First pass: collect tool_results from user messages
+        for entry in transcript:
+            role = entry.get('role', '')
+            content = entry.get('content', '')
+
+            if role == 'user' and isinstance(content, list):
+                for item in content:
+                    if isinstance(item, dict) and item.get('type') == 'tool_result':
+                        tool_use_id = item.get('tool_use_id', '')
+                        result_content = item.get('content', '')
+                        # Extract text from content if it's a list
+                        if isinstance(result_content, list):
+                            texts = [c.get('text', '') for c in result_content if c.get('type') == 'text']
+                            result_content = '\n'.join(texts)
+                        tool_results[tool_use_id] = {
+                            'content': result_content,
+                            'is_error': item.get('is_error', False),
+                        }
+
+        # Second pass: extract messages and pair tool_use with results
         for entry in transcript:
             role = entry.get('role', '')
             content = entry.get('content', '')
@@ -256,6 +187,20 @@ class TranscriptAnalyzer:
                             if item.get('type') == 'text':
                                 assistant_messages.append(item.get('text', ''))
                             elif item.get('type') == 'tool_use':
+                                # Pair with result if available
+                                tool_use_id = item.get('id', '')
+                                result = tool_results.get(tool_use_id, {})
+                                item['result'] = result.get('content', '')
+                                item['is_error'] = result.get('is_error', False)
+                                # Detect failure from result content
+                                result_text = item['result'].lower() if item['result'] else ''
+                                item['is_failure'] = (
+                                    item['is_error'] or
+                                    'error:' in result_text or
+                                    'exit code 1' in result_text or
+                                    'failed' in result_text[:100] or
+                                    'command not found' in result_text
+                                )
                                 tool_calls.append(item)
 
         return user_messages, assistant_messages, tool_calls
@@ -312,8 +257,9 @@ class TranscriptAnalyzer:
     }
 
     def detect_repeated_failures(self, tool_calls: List[Dict]) -> List[Dict]:
-        """Detect repeated concerning tool calls in transcript."""
-        command_counts = defaultdict(list)
+        """Detect repeated concerning tool calls in transcript with variation analysis."""
+        # Track command sequences with more detail - now properly tracking failures vs successes
+        command_sequences = defaultdict(lambda: {'attempts': [], 'failures': [], 'successes': []})
 
         for call in tool_calls:
             tool_name = call.get('name', '')
@@ -331,29 +277,95 @@ class TranscriptAnalyzer:
                 if is_benign:
                     continue
 
-                command_counts[base].append({
+                # Capture more details for root cause analysis
+                cmd_info = {
                     'command': command,
-                    'tool': tool_name
-                })
+                    'tool': tool_name,
+                    'flags': [p for p in command.split() if p.startswith('-')],
+                    'args': [p for p in command.split() if not p.startswith('-')][2:],  # Skip base cmd
+                    'result': call.get('result', ''),
+                    'is_failure': call.get('is_failure', False),
+                }
 
-        # Return only concerning commands that ran many times
+                command_sequences[base]['attempts'].append(cmd_info)
+                if cmd_info['is_failure']:
+                    command_sequences[base]['failures'].append(cmd_info)
+                else:
+                    command_sequences[base]['successes'].append(cmd_info)
+
+        # Analyze sequences for patterns - now only flagging actual failure sequences
         repeated = []
-        for base, calls in command_counts.items():
-            # Only flag if it ran 3+ times (suggests retry loop)
-            if len(calls) >= 3:
+        for base, seq in command_sequences.items():
+            failures = seq['failures']
+            successes = seq['successes']
+            attempts = seq['attempts']
+
+            # Only flag if there were actual failures (2+ failures)
+            if len(failures) >= 2:
                 # Prioritize known concerning commands
                 is_concerning = any(concern in base for concern in self.CONCERNING_COMMANDS)
-                if is_concerning or len(calls) >= 5:
+                if is_concerning or len(failures) >= 3:
+                    # Detect if flags/args changed between attempts
+                    variation_analysis = self._analyze_attempt_variations(attempts)
+
+                    # Detect if issue was eventually resolved
+                    resolution_found = len(successes) > 0 and len(failures) > 0
+                    resolution_command = None
+                    if resolution_found and successes:
+                        # Find the first success after failures
+                        resolution_command = successes[-1].get('command', '')
+
                     repeated.append({
                         'base_command': base,
-                        'occurrences': len(calls),
-                        'commands': calls[:5],  # Limit to 5 examples
-                        'is_concerning': is_concerning
+                        'occurrences': len(failures),
+                        'total_attempts': len(attempts),
+                        'commands': failures[:5],  # Limit to 5 examples of failures
+                        'is_concerning': is_concerning,
+                        'variation_analysis': variation_analysis,
+                        'resolution_found': resolution_found,
+                        'resolution_command': resolution_command,
+                        'error_samples': [f.get('result', '')[:200] for f in failures[:3] if f.get('result')],
                     })
 
         # Sort by concern level and occurrence count
         repeated.sort(key=lambda x: (not x.get('is_concerning', False), -x['occurrences']))
         return repeated
+
+    def _analyze_attempt_variations(self, attempts: List[Dict]) -> Dict:
+        """Analyze how command attempts varied over time."""
+        if len(attempts) < 2:
+            return {'type': 'single_attempt', 'details': None}
+
+        # Track flag changes
+        all_flags = [set(a.get('flags', [])) for a in attempts]
+        flag_changes = []
+        for i in range(1, len(all_flags)):
+            added = all_flags[i] - all_flags[i-1]
+            removed = all_flags[i-1] - all_flags[i]
+            if added or removed:
+                flag_changes.append({'index': i, 'added': list(added), 'removed': list(removed)})
+
+        # Track argument changes
+        all_args = [a.get('args', []) for a in attempts]
+        arg_changes = sum(1 for i in range(1, len(all_args)) if all_args[i] != all_args[i-1])
+
+        # Determine variation type
+        if flag_changes:
+            return {
+                'type': 'flag_iteration',
+                'details': f"Tried different flags: {len(flag_changes)} flag changes across {len(attempts)} attempts",
+                'flag_changes': flag_changes[:3],  # Limit stored changes
+            }
+        elif arg_changes > 0:
+            return {
+                'type': 'argument_iteration',
+                'details': f"Tried different arguments: {arg_changes} changes across {len(attempts)} attempts",
+            }
+        else:
+            return {
+                'type': 'simple_retry',
+                'details': f"Same command retried {len(attempts)} times (possible transient failure)",
+            }
 
     def detect_implicit_corrections(self, user_messages: List[str], assistant_messages: List[str]) -> List[Dict]:
         """Detect implicit corrections - user doing what Claude should have done."""
@@ -435,58 +447,166 @@ class TranscriptAnalyzer:
             }
         }
 
+    def _analyze_command_variations(self, commands: List[Dict], base_cmd: str, occurrences: int) -> str:
+        """Analyze command variations to extract specific patterns."""
+        if not commands:
+            return f"investigate why {base_cmd} fails repeatedly ({occurrences}x)"
+
+        # Extract all flags used across variations
+        all_flags = set()
+        for cmd_info in commands:
+            cmd = cmd_info.get('command', '')
+            flags = [p for p in cmd.split() if p.startswith('-')]
+            all_flags.update(flags)
+
+        # Look for flag patterns
+        if all_flags:
+            common_flags = ', '.join(sorted(all_flags)[:5])
+            return f"check if flags ({common_flags}) are correct for {base_cmd}"
+
+        # Look for common subcommands
+        subcommands = set()
+        for cmd_info in commands:
+            parts = cmd_info.get('command', '').split()
+            if len(parts) >= 2:
+                subcommands.add(parts[1])
+
+        if len(subcommands) > 1:
+            # Multiple subcommands tried - suggest checking which is correct
+            subs = ', '.join(sorted(subcommands))
+            return f"determine correct subcommand for {base_cmd} (tried: {subs})"
+
+        # Generic but still more specific than before
+        return f"review {base_cmd} syntax and parameters - {occurrences} failures suggest systemic issue"
+
     def generate_candidates_from_analysis(self, analysis: Dict) -> List[Dict]:
         """Generate learning candidates from session analysis."""
         candidates = []
         patterns = analysis.get('patterns', {})
 
         # Generate from high-intensity corrections
+        # NOTE: Raw data saved for Claude Code to analyze at review time
         for correction in patterns.get('corrections', []):
             if correction.get('intensity', 0) >= 2:
-                # Try LLM-assisted generation
-                if self.llm_generator and self.llm_generator.available:
-                    context = {
-                        'preceding_messages': correction.get('context_before', []),
-                        'patterns_matched': correction.get('patterns_matched', [])
-                    }
-                    llm_result = self.llm_generator.generate_candidate_from_correction(
-                        correction['message'], context
-                    )
-                    if llm_result:
-                        candidate = {
-                            "id": str(uuid.uuid4())[:8],
-                            "title": llm_result.get('title', 'Learn from correction'),
-                            "candidate_type": llm_result.get('candidate_type', 'rule'),
-                            "trigger": llm_result.get('trigger', ''),
-                            "action": llm_result.get('action', ''),
-                            "evidence": [{"source": "transcript_analysis", "quote": correction['message'][:100]}],
-                            "confidence": 0.85,
-                            "status": "pending",
-                            "created_at": datetime.now(timezone.utc).isoformat(),
-                            "llm_generated": True,
-                            "from_transcript": True
-                        }
-                        candidate["fingerprint"] = fingerprint_candidate(candidate)
-                        candidates.append(candidate)
-
-        # Generate from repeated failures
-        for failure in patterns.get('repeated_failures', []):
-            if failure.get('occurrences', 0) >= 2:
-                base_cmd = failure.get('base_command', 'command')
+                # Save raw correction data - Claude Code analyzes at /coach:review time
                 candidate = {
                     "id": str(uuid.uuid4())[:8],
-                    "title": f"Investigate repeated {base_cmd} failures",
-                    "candidate_type": "rule",
-                    "trigger": f"when {base_cmd} fails multiple times",
-                    "action": f"stop and investigate root cause before retrying - {failure['occurrences']}x failures detected",
-                    "evidence": [{"source": "transcript_analysis", "commands": failure.get('commands', [])[:2]}],
-                    "confidence": 0.80,
+                    "title": f"Correction detected (intensity {correction.get('intensity', 0)})",
+                    "candidate_type": "raw_correction",
+                    "trigger": "needs_analysis",
+                    "action": "needs_analysis",
+                    "raw_data": {
+                        "message": correction['message'][:500],
+                        "context_before": correction.get('context_before', [])[-3:],
+                        "patterns_matched": correction.get('patterns_matched', []),
+                        "intensity": correction.get('intensity', 0),
+                    },
+                    "evidence": [{"source": "transcript_analysis", "quote": correction['message'][:200]}],
+                    "confidence": 0.0,  # Will be set by Claude Code at review
                     "status": "pending",
                     "created_at": datetime.now(timezone.utc).isoformat(),
+                    "needs_llm_analysis": True,
                     "from_transcript": True
                 }
                 candidate["fingerprint"] = fingerprint_candidate(candidate)
                 candidates.append(candidate)
+
+        # Generate from repeated failures using root cause analysis
+        repeated_failures = patterns.get('repeated_failures', [])
+        if repeated_failures:
+            # Use root cause analyzer for deeper analysis
+            root_analyzer = RootCauseAnalyzer()
+
+            for failure in repeated_failures:
+                if failure.get('occurrences', 0) >= 2:
+                    # Feed failed commands to root cause analyzer with actual error messages
+                    error_samples = failure.get('error_samples', [])
+                    for i, cmd_info in enumerate(failure.get('commands', [])):
+                        stderr = error_samples[i] if i < len(error_samples) else cmd_info.get('result', '')
+                        root_analyzer.add_command(
+                            command=cmd_info.get('command', ''),
+                            exit_code=1,  # These are failures
+                            stderr=stderr,
+                            timestamp=datetime.now(timezone.utc).isoformat()
+                        )
+
+                    # If resolution was found, add the successful command
+                    if failure.get('resolution_found') and failure.get('resolution_command'):
+                        root_analyzer.add_command(
+                            command=failure['resolution_command'],
+                            exit_code=0,  # Success
+                            stderr='',
+                            timestamp=datetime.now(timezone.utc).isoformat()
+                        )
+
+            # Generate candidates from root cause analysis
+            rca_candidates = root_analyzer.generate_candidates()
+
+            if rca_candidates:
+                # Use the analyzed candidates
+                for rca_candidate in rca_candidates:
+                    rca_candidate["from_transcript"] = True
+                    candidates.append(rca_candidate)
+            else:
+                # Fallback: create candidates based on variation analysis
+                for failure in repeated_failures:
+                    if failure.get('occurrences', 0) >= 2:
+                        base_cmd = failure.get('base_command', 'command')
+                        commands = failure.get('commands', [])
+                        variation = failure.get('variation_analysis', {})
+                        variation_type = variation.get('type', 'unknown')
+
+                        # Generate specific proposal based on variation type
+                        if variation_type == 'flag_iteration':
+                            flag_changes = variation.get('flag_changes', [])
+                            if flag_changes:
+                                # Extract the flags that were tried
+                                tried_flags = set()
+                                for fc in flag_changes:
+                                    tried_flags.update(fc.get('added', []))
+                                    tried_flags.update(fc.get('removed', []))
+                                flags_str = ', '.join(sorted(tried_flags)[:4])
+                                title = f"Determine correct flags for {base_cmd}"
+                                action = f"verify which flags are appropriate for {base_cmd} - tried: {flags_str}"
+                            else:
+                                title = f"Fix {base_cmd} flag usage"
+                                action = self._analyze_command_variations(commands, base_cmd, failure['occurrences'])
+                            confidence = 0.80
+
+                        elif variation_type == 'argument_iteration':
+                            title = f"Fix {base_cmd} argument syntax"
+                            action = f"check {base_cmd} argument requirements - {failure['occurrences']} attempts with different args"
+                            confidence = 0.78
+
+                        elif variation_type == 'simple_retry':
+                            title = f"Add retry logic for {base_cmd}"
+                            action = f"{base_cmd} may have transient failures - implement exponential backoff"
+                            confidence = 0.65
+
+                        else:
+                            title = f"Fix repeated {base_cmd} failures"
+                            action = self._analyze_command_variations(commands, base_cmd, failure['occurrences'])
+                            confidence = 0.70
+
+                        candidate = {
+                            "id": str(uuid.uuid4())[:8],
+                            "title": title,
+                            "candidate_type": "rule",
+                            "trigger": f"when using {base_cmd}",
+                            "action": action,
+                            "evidence": [{
+                                "source": "transcript_analysis",
+                                "commands": commands[:2],
+                                "variation_type": variation_type,
+                                "variation_details": variation.get('details'),
+                            }],
+                            "confidence": confidence,
+                            "status": "pending",
+                            "created_at": datetime.now(timezone.utc).isoformat(),
+                            "from_transcript": True
+                        }
+                        candidate["fingerprint"] = fingerprint_candidate(candidate)
+                        candidates.append(candidate)
 
         return candidates
 
@@ -494,12 +614,12 @@ class TranscriptAnalyzer:
 class CandidateAggregator:
     """Aggregates signals into learning candidates."""
 
-    def __init__(self, use_llm: bool = True, analyze_transcript: bool = True):
+    def __init__(self, analyze_transcript: bool = True):
         self.fingerprinter = Fingerprinter()
         self.config = self._load_config()
         self.min_evidence = self.config.get("min_evidence_count", 1)  # Lowered for failures
-        self.llm_generator = LLMCandidateGenerator() if use_llm else None
-        self.transcript_analyzer = TranscriptAnalyzer(self.llm_generator) if analyze_transcript else None
+        # LLM analysis now done by Claude Code at /coach:review time
+        self.transcript_analyzer = TranscriptAnalyzer() if analyze_transcript else None
 
     def _load_config(self) -> Dict:
         if CONFIG_FILE.exists():
@@ -572,30 +692,7 @@ class CandidateAggregator:
             exit_code = content.get('exit_code', 1)
             stderr_matches = content.get('stderr_matches', [])
 
-            # Try LLM-assisted generation first
-            if self.llm_generator and self.llm_generator.available:
-                llm_result = self.llm_generator.generate_candidate_from_failure(
-                    command, stderr, exit_code, context
-                )
-                if llm_result:
-                    candidate = {
-                        "id": str(uuid.uuid4())[:8],
-                        "title": llm_result.get('title', f"Handle {base_cmd} failures"),
-                        "candidate_type": llm_result.get('candidate_type', 'rule'),
-                        "trigger": llm_result.get('trigger', f"when running {base_cmd}"),
-                        "action": llm_result.get('action', 'handle error appropriately'),
-                        "evidence": [{"event_id": e['id'], "stderr": json.loads(e.get('content', '{}')).get('stderr_preview', '')[:100]}
-                                    for e in cmd_events[:3]],
-                        "confidence": 0.90,
-                        "status": "pending",
-                        "created_at": datetime.now(timezone.utc).isoformat(),
-                        "llm_generated": True
-                    }
-                    candidate["fingerprint"] = fingerprint_candidate(candidate)
-                    candidates.append(candidate)
-                    continue
-
-            # Fall back to pattern-based extraction
+            # Pattern-based extraction (LLM analysis done by Claude Code at review time)
             trigger, action, candidate_type = self._extract_failure_pattern(
                 command, stderr, stderr_matches, len(cmd_events)
             )
@@ -654,6 +751,24 @@ class CandidateAggregator:
                 return (
                     "when git rebase encounters conflicts",
                     "resolve conflicts file by file, use git rebase --continue, or abort with --abort",
+                    "rule"
+                )
+
+        # Composer/PHP patterns
+        if 'composer' in command.lower():
+            if 'ext-' in stderr_lower or 'ignore-platform-req' in stderr_lower:
+                # Extract missing extensions
+                ext_matches = re.findall(r'ext-(\w+)', stderr_lower)
+                extensions = ', '.join(ext_matches) if ext_matches else 'required extensions'
+                return (
+                    f"when composer fails due to missing PHP extensions ({extensions})",
+                    f"install missing PHP extensions or use --ignore-platform-req flags for development",
+                    "rule"
+                )
+            if 'platform' in stderr_lower and 'requirement' in stderr_lower:
+                return (
+                    "when composer fails with platform requirements",
+                    "check PHP version compatibility or configure platform in composer.json",
                     "rule"
                 )
 
@@ -720,28 +835,7 @@ class CandidateAggregator:
             user_message = content_raw
             context = json.loads(event.get('context', '{}'))
 
-        # Try LLM-assisted generation
-        if self.llm_generator and self.llm_generator.available:
-            llm_result = self.llm_generator.generate_candidate_from_correction(
-                user_message, context
-            )
-            if llm_result:
-                candidate = {
-                    "id": str(uuid.uuid4())[:8],
-                    "title": llm_result.get('title', 'Follow correct procedure'),
-                    "candidate_type": llm_result.get('candidate_type', 'rule'),
-                    "trigger": llm_result.get('trigger', 'when performing this action'),
-                    "action": llm_result.get('action', 'follow the correct procedure'),
-                    "evidence": [{"event_id": e['id'], "quote": e.get('content', '')[:100]} for e in events[:3]],
-                    "confidence": 0.85,
-                    "status": "pending",
-                    "created_at": datetime.now(timezone.utc).isoformat(),
-                    "llm_generated": True
-                }
-                candidate["fingerprint"] = fingerprint_candidate(candidate)
-                return candidate
-
-        # Fall back to pattern matching
+        # Pattern matching (LLM analysis done by Claude Code at review time)
         trigger = self._infer_trigger_from_context(user_message, context)
         action = self._infer_action(user_message)
 
@@ -869,6 +963,139 @@ class CandidateAggregator:
         candidate["fingerprint"] = fingerprint_candidate(candidate)
         return candidate
 
+    def extract_candidate_from_skill_supplement(self, events: List[Dict]) -> List[Dict]:
+        """Extract skill update candidates from skill supplement signals."""
+        candidates = []
+
+        for event in events:
+            try:
+                content = json.loads(event.get('content', '{}'))
+            except:
+                content = {"supplement_text": event.get('content', '')}
+
+            skill_name = content.get('skill_name')
+            supplement_text = content.get('supplement_text', '')
+
+            if not supplement_text or len(supplement_text) < 20:
+                continue
+
+            # Create skill update candidate (LLM analysis done at review time)
+            candidate = {
+                "id": str(uuid.uuid4())[:8],
+                "title": f"Update {skill_name or 'skill'} with missing guidance",
+                "candidate_type": "skill",
+                "trigger": f"when using {skill_name or 'this'} skill",
+                "action": f"add guidance: {supplement_text[:200]}",
+                "evidence": [{"event_id": event['id'], "supplement": supplement_text[:100]}],
+                "confidence": 0.65,
+                "status": "pending",
+                "created_at": datetime.now(timezone.utc).isoformat(),
+                "target_skill": skill_name
+            }
+            candidate["fingerprint"] = fingerprint_candidate(candidate)
+            candidates.append(candidate)
+
+        return candidates
+
+    def extract_candidate_from_verification(self, events: List[Dict]) -> List[Dict]:
+        """Extract checklist candidates from verification questions.
+
+        When user asks 'did you run the tests?' it implies an expectation
+        that wasn't automatically met - this should become a checklist item.
+        """
+        candidates = []
+
+        # Group by verified action
+        action_events = defaultdict(list)
+        for event in events:
+            try:
+                content = json.loads(event.get('content', '{}'))
+            except:
+                content = {}
+
+            action = content.get('verified_action', 'unknown')
+            if action and action != 'unknown':
+                action_events[action].append((event, content))
+
+        for action, events_contents in action_events.items():
+            # More occurrences = higher confidence this is a real pattern
+            occurrence_count = len(events_contents)
+            event, content = events_contents[-1]
+
+            question_text = content.get('question_text', '')
+
+            # Generate checklist candidate
+            candidate = {
+                "id": str(uuid.uuid4())[:8],
+                "title": f"Remember to {action} before completing task",
+                "candidate_type": "checklist",
+                "trigger": f"before marking a task as complete",
+                "action": f"always {action} - user had to ask '{question_text[:50]}...'",
+                "evidence": [{"event_id": event['id'], "question": question_text[:100], "action": action}],
+                "confidence": min(0.5 + (occurrence_count * 0.15), 0.85),
+                "status": "pending",
+                "created_at": datetime.now(timezone.utc).isoformat(),
+                "verified_action": action,
+                "occurrence_count": occurrence_count
+            }
+            candidate["fingerprint"] = fingerprint_candidate(candidate)
+            candidates.append(candidate)
+
+        return candidates
+
+    def extract_candidate_from_version_issue(self, events: List[Dict]) -> List[Dict]:
+        """Extract tool update candidates from version issue signals."""
+        candidates = []
+
+        # Group by tool
+        tool_events = defaultdict(list)
+        for event in events:
+            try:
+                content = json.loads(event.get('content', '{}'))
+            except:
+                content = {}
+
+            tool = content.get('tool', 'unknown')
+            tool_events[tool].append((event, content))
+
+        for tool, events_contents in tool_events.items():
+            if tool == 'unknown':
+                continue
+
+            event, content = events_contents[-1]  # Most recent
+            matches = content.get('matches', [])
+            stderr = content.get('stderr_preview', '')
+
+            # Determine if deprecated or just outdated
+            is_deprecated = any('deprecated' in str(m).lower() for m in matches)
+
+            if is_deprecated:
+                title = f"Replace deprecated {tool}"
+                action = f"find alternative for {tool} - deprecated warnings detected"
+                confidence = 0.80
+            else:
+                title = f"Update {tool} to latest version"
+                action = f"upgrade {tool} - version issues detected in output"
+                confidence = 0.70
+
+            candidate = {
+                "id": str(uuid.uuid4())[:8],
+                "title": title,
+                "candidate_type": "snippet",  # Tool updates are snippets
+                "trigger": f"when using {tool}",
+                "action": action,
+                "evidence": [{"event_id": event['id'], "tool": tool, "matches": matches[:3]}],
+                "confidence": confidence,
+                "status": "pending",
+                "created_at": datetime.now(timezone.utc).isoformat(),
+                "tool_name": tool,
+                "is_deprecated": is_deprecated
+            }
+            candidate["fingerprint"] = fingerprint_candidate(candidate)
+            candidates.append(candidate)
+
+        return candidates
+
     def _extract_core_instruction(self, messages: List[str]) -> str:
         """Extract the core repeated instruction."""
         if not messages:
@@ -910,6 +1137,24 @@ class CandidateAggregator:
             if candidate:
                 candidates.append(candidate)
             processed_ids.extend([e['id'] for e in groups['REPETITION']])
+
+        # Process SKILL_SUPPLEMENT (new: detect skill update opportunities)
+        if 'SKILL_SUPPLEMENT' in groups:
+            skill_candidates = self.extract_candidate_from_skill_supplement(groups['SKILL_SUPPLEMENT'])
+            candidates.extend(skill_candidates)
+            processed_ids.extend([e['id'] for e in groups['SKILL_SUPPLEMENT']])
+
+        # Process VERSION_ISSUE (new: detect outdated tools)
+        if 'VERSION_ISSUE' in groups:
+            version_candidates = self.extract_candidate_from_version_issue(groups['VERSION_ISSUE'])
+            candidates.extend(version_candidates)
+            processed_ids.extend([e['id'] for e in groups['VERSION_ISSUE']])
+
+        # Process VERIFICATION_QUESTION (user asking if something was done)
+        if 'VERIFICATION_QUESTION' in groups:
+            verification_candidates = self.extract_candidate_from_verification(groups['VERIFICATION_QUESTION'])
+            candidates.extend(verification_candidates)
+            processed_ids.extend([e['id'] for e in groups['VERIFICATION_QUESTION']])
 
         # Process TONE_ESCALATION (mark as processed, combine with other signals for context)
         if 'TONE_ESCALATION' in groups:
@@ -1017,6 +1262,7 @@ class CandidateAggregator:
 
         existing['last_proposal'] = datetime.now(timezone.utc).isoformat()
 
+        COACH_DIR.mkdir(parents=True, exist_ok=True)
         CANDIDATES_FILE.write_text(json.dumps(existing, indent=2))
         self._update_ledger(new_candidates)
 
@@ -1084,14 +1330,13 @@ def main():
     parser = argparse.ArgumentParser(description="Aggregate signals into candidates")
     parser.add_argument("--verbose", "-v", action="store_true", help="Verbose output")
     parser.add_argument("--dry-run", action="store_true", help="Don't save candidates")
-    parser.add_argument("--no-llm", action="store_true", help="Disable LLM-assisted generation")
     parser.add_argument("--no-transcript", action="store_true", help="Skip transcript analysis")
     parser.add_argument("--transcript-only", action="store_true", help="Only analyze transcript")
+    # Note: --no-llm removed - LLM analysis now done by Claude Code at /coach:review time
 
     args = parser.parse_args()
 
     aggregator = CandidateAggregator(
-        use_llm=not args.no_llm,
         analyze_transcript=not args.no_transcript
     )
 

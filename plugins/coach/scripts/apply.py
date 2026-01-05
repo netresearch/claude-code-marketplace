@@ -10,7 +10,7 @@ import json
 import subprocess
 import shutil
 from pathlib import Path
-from datetime import datetime
+from datetime import datetime, UTC
 from typing import Dict, List, Optional, Tuple
 
 sys.path.insert(0, str(Path(__file__).parent))
@@ -100,7 +100,7 @@ class ProposalApplier:
         # Update candidate status
         data["pending"] = [c for c in data["pending"] if c.get('id') != candidate.get('id')]
         candidate["status"] = "approved"
-        candidate["approved_at"] = datetime.utcnow().isoformat()
+        candidate["approved_at"] = datetime.now(UTC).isoformat()
         candidate["applied_to"] = proposal.get('target_file')
         data["approved"].append(candidate)
 
@@ -123,7 +123,7 @@ class ProposalApplier:
         # Update status
         data["pending"] = [c for c in data["pending"] if c.get('id') != candidate.get('id')]
         candidate["status"] = "rejected"
-        candidate["rejected_at"] = datetime.utcnow().isoformat()
+        candidate["rejected_at"] = datetime.now(UTC).isoformat()
         candidate["rejection_reason"] = reason
         data["rejected"].append(candidate)
 
@@ -159,7 +159,7 @@ class ProposalApplier:
             from fingerprint import fingerprint_candidate
             candidate["fingerprint"] = fingerprint_candidate(candidate)
 
-        candidate["edited_at"] = datetime.utcnow().isoformat()
+        candidate["edited_at"] = datetime.now(UTC).isoformat()
         self.save_candidates(data)
 
         return {
@@ -191,7 +191,7 @@ class ProposalApplier:
 
         # Update candidate
         candidate["scope"] = "global"
-        candidate["promoted_at"] = datetime.utcnow().isoformat()
+        candidate["promoted_at"] = datetime.now(UTC).isoformat()
         candidate["global_file"] = proposal.get('target_file')
 
         self.save_candidates(data)
@@ -242,7 +242,7 @@ class ProposalApplier:
         conn = sqlite3.connect(LEDGER_DB)
         conn.execute(
             "UPDATE candidates SET status = ?, updated_at = ? WHERE fingerprint = ?",
-            (status, datetime.utcnow().isoformat(), fingerprint)
+            (status, datetime.now(UTC).isoformat(), fingerprint)
         )
         conn.commit()
         conn.close()
