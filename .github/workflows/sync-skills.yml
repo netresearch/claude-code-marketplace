@@ -416,6 +416,26 @@ jobs:
           echo "CONTEXT7_VERSION=$VERSION" >> $GITHUB_ENV
           echo "✓ context7 synced (version: $VERSION)"
 
+      - name: Sync coach plugin
+        run: |
+          echo "=== Syncing claude-coach-plugin ==="
+          git clone https://github.com/netresearch/claude-coach-plugin.git .sync-temp/coach
+          cd .sync-temp/coach
+          COMMIT_DATE=$(git log -1 --format=%cd --date=format:%Y%m%d)
+          LATEST_TAG=$(git tag --sort=-v:refname | grep -E '^v?[0-9]+\.[0-9]+' | head -1)
+          SEMVER=$(echo "$LATEST_TAG" | sed 's/^v//')
+          if [ -z "$SEMVER" ]; then SEMVER="1.0.0"; fi
+          VERSION="${SEMVER}-${COMMIT_DATE}"
+          cd ../..
+          rm -rf .sync-temp/coach/.git
+          mkdir -p plugins/coach
+          rm -rf plugins/coach/*
+          rm -rf plugins/coach/.[!.]*
+          cp -r .sync-temp/coach/* plugins/coach/
+          cp -r .sync-temp/coach/.claude-plugin plugins/coach/ 2>/dev/null || true
+          echo "COACH_VERSION=$VERSION" >> $GITHUB_ENV
+          echo "✓ coach synced (version: $VERSION)"
+
       - name: Update marketplace.json versions
         run: |
           echo "=== Updating marketplace.json with latest versions ==="
@@ -439,6 +459,7 @@ jobs:
              --arg v17 "$GITHUB_PROJECT_VERSION" \
              --arg v18 "$JIRA_INTEGRATION_VERSION" \
              --arg v19 "$CONTEXT7_VERSION" \
+             --arg v20 "$COACH_VERSION" \
              '(.plugins[] | select(.name == "enterprise-readiness") | .version) = $v1 |
               (.plugins[] | select(.name == "typo3-docs") | .version) = $v2 |
               (.plugins[] | select(.name == "typo3-testing") | .version) = $v3 |
@@ -457,12 +478,13 @@ jobs:
               (.plugins[] | select(.name == "skill-repo") | .version) = $v16 |
               (.plugins[] | select(.name == "github-project") | .version) = $v17 |
               (.plugins[] | select(.name == "jira-integration") | .version) = $v18 |
-              (.plugins[] | select(.name == "context7") | .version) = $v19' \
+              (.plugins[] | select(.name == "context7") | .version) = $v19 |
+              (.plugins[] | select(.name == "coach") | .version) = $v20' \
              .claude-plugin/marketplace.json > .claude-plugin/marketplace.json.tmp
 
           mv .claude-plugin/marketplace.json.tmp .claude-plugin/marketplace.json
 
-          echo "✓ marketplace.json updated with all 19 skill versions"
+          echo "✓ marketplace.json updated with all 19 skills + coach plugin versions"
 
       - name: Cleanup temporary directories
         run: |
@@ -485,7 +507,7 @@ jobs:
       - name: Commit and push changes
         if: steps.changes.outputs.has_changes == 'true' || github.event.inputs.force_sync == 'true'
         run: |
-          git commit -m "chore: sync all 19 skills from source repositories
+          git commit -m "chore: sync all 19 skills + coach plugin from source repositories
 
           Synced versions:
           - enterprise-readiness: $ENTERPRISE_READINESS_VERSION
@@ -507,6 +529,7 @@ jobs:
           - github-project: $GITHUB_PROJECT_VERSION
           - jira-integration: $JIRA_INTEGRATION_VERSION
           - context7: $CONTEXT7_VERSION
+          - coach: $COACH_VERSION
 
           Triggered by: ${{ github.event_name }}"
 
@@ -516,7 +539,7 @@ jobs:
       - name: Summary
         run: |
           echo "=== Skill Sync Complete ==="
-          echo "✓ All 19 skills synchronized successfully"
+          echo "✓ All 19 skills + coach plugin synchronized successfully"
           echo ""
           echo "Skills synced:"
           echo "  - enterprise-readiness, typo3-docs, typo3-testing, typo3-ddev"
@@ -524,3 +547,6 @@ jobs:
           echo "  - netresearch-branding, agents, cli-tools"
           echo "  - go-development, php-modernization, security-audit, typo3-ckeditor5"
           echo "  - git-workflow, skill-repo, github-project, jira-integration, context7"
+          echo ""
+          echo "Plugins synced:"
+          echo "  - coach"
