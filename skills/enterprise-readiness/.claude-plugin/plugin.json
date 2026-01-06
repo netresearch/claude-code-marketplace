@@ -1,6 +1,6 @@
 {
   "name": "enterprise-readiness",
-  "version": "3.8.1",
+  "version": "3.8.2",
   "description": "Assess and enhance software projects for enterprise-grade security, quality, and automation",
   "repository": "https://github.com/netresearch/enterprise-readiness-skill",
   "license": "MIT",
@@ -9,9 +9,6 @@
     "email": "info@netresearch.de"
   },
   "skills": [
-    {
-      "name": "enterprise-readiness",
-      "path": "skills/enterprise-readiness"
-    }
+    "./skills/enterprise-readiness"
   ]
 }

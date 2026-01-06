@@ -1,6 +1,6 @@
 {
   "name": "typo3-extension-upgrade",
-  "version": "1.3.1",
+  "version": "1.3.2",
   "description": "Systematic TYPO3 extension upgrades to newer LTS versions",
   "repository": "https://github.com/netresearch/typo3-extension-upgrade-skill",
   "license": "MIT",
@@ -9,9 +9,6 @@
     "email": "info@netresearch.de"
   },
   "skills": [
-    {
-      "name": "typo3-extension-upgrade",
-      "path": "skills/typo3-extension-upgrade"
-    }
+    "./skills/typo3-extension-upgrade"
   ]
 }

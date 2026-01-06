@@ -1,6 +1,6 @@
 {
   "name": "security-audit",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "Security audit patterns for PHP/OWASP vulnerability assessment",
   "repository": "https://github.com/netresearch/security-audit-skill",
   "license": "MIT",
@@ -9,9 +9,6 @@
     "email": "info@netresearch.de"
   },
   "skills": [
-    {
-      "name": "security-audit",
-      "path": "skills/security-audit"
-    }
+    "./skills/security-audit"
   ]
 }

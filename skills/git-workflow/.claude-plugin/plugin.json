@@ -1,6 +1,6 @@
 {
   "name": "git-workflow",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "Git workflow best practices for teams and CI/CD",
   "repository": "https://github.com/netresearch/git-workflow-skill",
   "license": "MIT",
@@ -9,9 +9,6 @@
     "email": "info@netresearch.de"
   },
   "skills": [
-    {
-      "name": "git-workflow",
-      "path": "skills/git-workflow"
-    }
+    "./skills/git-workflow"
   ]
 }

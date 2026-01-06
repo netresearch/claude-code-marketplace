@@ -1,6 +1,6 @@
 {
   "name": "cli-tools",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "description": "CLI tool management for installation, auditing, and updates",
   "repository": "https://github.com/netresearch/cli-tools-skill",
   "license": "MIT",
@@ -9,9 +9,6 @@
     "email": "info@netresearch.de"
   },
   "skills": [
-    {
-      "name": "cli-tools",
-      "path": "skills/cli-tools"
-    }
+    "./skills/cli-tools"
   ]
 }

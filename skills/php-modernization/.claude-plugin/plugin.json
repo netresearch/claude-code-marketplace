@@ -1,6 +1,6 @@
 {
   "name": "php-modernization",
-  "version": "1.4.1",
+  "version": "1.4.2",
   "description": "PHP 8.x modernization patterns with type safety and PHPStan",
   "repository": "https://github.com/netresearch/php-modernization-skill",
   "license": "MIT",
@@ -9,9 +9,6 @@
     "email": "info@netresearch.de"
   },
   "skills": [
-    {
-      "name": "php-modernization",
-      "path": "skills/php-modernization"
-    }
+    "./skills/php-modernization"
   ]
 }

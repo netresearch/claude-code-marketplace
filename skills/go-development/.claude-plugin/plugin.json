@@ -1,6 +1,6 @@
 {
   "name": "go-development",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "description": "Production-grade Go development patterns for resilient services",
   "repository": "https://github.com/netresearch/go-development-skill",
   "license": "MIT",
@@ -9,9 +9,6 @@
     "email": "info@netresearch.de"
   },
   "skills": [
-    {
-      "name": "go-development",
-      "path": "skills/go-development"
-    }
+    "./skills/go-development"
   ]
 }

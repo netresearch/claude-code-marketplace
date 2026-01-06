@@ -1,6 +1,6 @@
 {
   "name": "typo3-core-contributions",
-  "version": "1.6.1",
+  "version": "1.6.2",
   "description": "TYPO3 Core contribution workflow (Forge, Gerrit, docs)",
   "repository": "https://github.com/netresearch/typo3-core-contributions-skill",
   "license": "MIT",
@@ -9,9 +9,6 @@
     "email": "info@netresearch.de"
   },
   "skills": [
-    {
-      "name": "typo3-core-contributions",
-      "path": "skills/typo3-core-contributions"
-    }
+    "./skills/typo3-core-contributions"
   ]
 }

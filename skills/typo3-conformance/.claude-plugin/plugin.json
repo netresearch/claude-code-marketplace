@@ -1,6 +1,6 @@
 {
   "name": "typo3-conformance",
-  "version": "1.11.1",
+  "version": "1.11.2",
   "description": "Evaluate TYPO3 extensions for conformance to v12/v13/v14 standards",
   "repository": "https://github.com/netresearch/typo3-conformance-skill",
   "license": "MIT",
@@ -9,9 +9,6 @@
     "email": "info@netresearch.de"
   },
   "skills": [
-    {
-      "name": "typo3-conformance",
-      "path": "skills/typo3-conformance"
-    }
+    "./skills/typo3-conformance"
   ]
 }
