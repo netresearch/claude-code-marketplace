@@ -1,6 +1,6 @@
 {
   "name": "skill-repo",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Guide for structuring Netresearch skill repositories",
   "repository": "https://github.com/netresearch/skill-repo-skill",
   "license": "MIT",
@@ -8,11 +8,10 @@
     "name": "Netresearch DTT GmbH",
     "email": "info@netresearch.de"
   },
-  "keywords": [
-    "skill",
-    "repository",
-    "structure",
-    "template"
-  ],
-  "skills": ["."]
+  "skills": [
+    {
+      "name": "skill-repo",
+      "path": "skills/skill-repo"
+    }
+  ]
 }

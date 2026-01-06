@@ -1,6 +1,6 @@
 {
   "name": "netresearch-branding",
-  "version": "1.3.0",
+  "version": "1.3.1",
   "description": "Apply Netresearch brand identity to web projects and documentation",
   "repository": "https://github.com/netresearch/netresearch-branding-skill",
   "license": "MIT",
@@ -8,11 +8,10 @@
     "name": "Netresearch DTT GmbH",
     "email": "info@netresearch.de"
   },
-  "keywords": [
-    "netresearch",
-    "branding",
-    "design",
-    "identity"
-  ],
-  "skills": ["."]
+  "skills": [
+    {
+      "name": "netresearch-branding",
+      "path": "skills/netresearch-branding"
+    }
+  ]
 }

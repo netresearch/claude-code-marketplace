@@ -1,6 +1,6 @@
 {
   "name": "typo3-ckeditor5",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "CKEditor 5 development for TYPO3 v12+ with plugins and migration",
   "repository": "https://github.com/netresearch/typo3-ckeditor5-skill",
   "license": "MIT",
@@ -8,11 +8,10 @@
     "name": "Netresearch DTT GmbH",
     "email": "info@netresearch.de"
   },
-  "keywords": [
-    "typo3",
-    "ckeditor5",
-    "rte",
-    "rich-text"
-  ],
-  "skills": ["."]
+  "skills": [
+    {
+      "name": "typo3-ckeditor5",
+      "path": "skills/typo3-ckeditor5"
+    }
+  ]
 }

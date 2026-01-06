@@ -1,6 +1,6 @@
 {
   "name": "cli-tools",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "CLI tool management for installation, auditing, and updates",
   "repository": "https://github.com/netresearch/cli-tools-skill",
   "license": "MIT",
@@ -8,11 +8,10 @@
     "name": "Netresearch DTT GmbH",
     "email": "info@netresearch.de"
   },
-  "keywords": [
-    "cli",
-    "tools",
-    "installation",
-    "environment"
-  ],
-  "skills": ["."]
+  "skills": [
+    {
+      "name": "cli-tools",
+      "path": "skills/cli-tools"
+    }
+  ]
 }

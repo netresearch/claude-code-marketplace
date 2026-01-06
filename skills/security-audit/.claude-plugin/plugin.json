@@ -1,6 +1,6 @@
 {
   "name": "security-audit",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Security audit patterns for PHP/OWASP vulnerability assessment",
   "repository": "https://github.com/netresearch/security-audit-skill",
   "license": "MIT",
@@ -8,12 +8,10 @@
     "name": "Netresearch DTT GmbH",
     "email": "info@netresearch.de"
   },
-  "keywords": [
-    "security",
-    "audit",
-    "owasp",
-    "vulnerabilities",
-    "cvss"
-  ],
-  "skills": ["."]
+  "skills": [
+    {
+      "name": "security-audit",
+      "path": "skills/security-audit"
+    }
+  ]
 }

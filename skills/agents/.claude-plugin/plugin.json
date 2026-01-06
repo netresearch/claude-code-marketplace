@@ -1,6 +1,6 @@
 {
   "name": "agents",
-  "version": "1.3.0",
+  "version": "1.3.1",
   "description": "Generate and maintain AGENTS.md files following public convention",
   "repository": "https://github.com/netresearch/agents-skill",
   "license": "MIT",
@@ -8,11 +8,10 @@
     "name": "Netresearch DTT GmbH",
     "email": "info@netresearch.de"
   },
-  "keywords": [
-    "agents",
-    "agents.md",
-    "ai",
-    "documentation"
-  ],
-  "skills": ["."]
+  "skills": [
+    {
+      "name": "agents",
+      "path": "skills/agents"
+    }
+  ]
 }
