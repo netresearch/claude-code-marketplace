@@ -1,0 +1,19 @@
+{
+  "name": "typo3-testing",
+  "version": "2.3.0",
+  "description": "TYPO3 extension testing (unit, functional, E2E, architecture, mutation)",
+  "repository": "https://github.com/netresearch/typo3-testing-skill",
+  "license": "MIT",
+  "author": {
+    "name": "Netresearch DTT GmbH",
+    "email": "info@netresearch.de"
+  },
+  "keywords": [
+    "typo3",
+    "testing",
+    "phpunit",
+    "functional-testing",
+    "unit-testing"
+  ],
+  "skills": ["."]
+}

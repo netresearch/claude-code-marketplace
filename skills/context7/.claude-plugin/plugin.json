@@ -1,0 +1,18 @@
+{
+  "name": "context7",
+  "version": "1.0.0",
+  "description": "Fetch up-to-date library documentation via Context7 REST API",
+  "repository": "https://github.com/netresearch/context7-skill",
+  "license": "MIT",
+  "author": {
+    "name": "Netresearch DTT GmbH",
+    "email": "info@netresearch.de"
+  },
+  "keywords": [
+    "context7",
+    "documentation",
+    "api",
+    "library"
+  ],
+  "skills": ["."]
+}

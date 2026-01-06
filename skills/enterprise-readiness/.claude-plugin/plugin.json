@@ -1,0 +1,21 @@
+{
+  "name": "enterprise-readiness",
+  "version": "3.8.0",
+  "description": "Assess and enhance software projects for enterprise-grade security, quality, and automation",
+  "repository": "https://github.com/netresearch/enterprise-readiness-skill",
+  "license": "MIT",
+  "author": {
+    "name": "Netresearch DTT GmbH",
+    "email": "info@netresearch.de"
+  },
+  "keywords": [
+    "enterprise",
+    "security",
+    "quality",
+    "slsa",
+    "sbom",
+    "openssf",
+    "ci-cd"
+  ],
+  "skills": ["."]
+}
