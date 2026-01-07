@@ -15,14 +15,28 @@ Curated collection of **Agentic Skills** for TYPO3 development, PHP modernizatio
 
 > These skills are **platform-agnostic** - they work with any AI coding agent that implements the agentic skills standard, not just Claude Code.
 
+## Plugin Types
+
+This marketplace provides two types of plugins:
+
+| Type | Description | Count |
+|------|-------------|-------|
+| **Skill Plugins** | Provide knowledge, patterns, and references via `SKILL.md` files | 19 |
+| **Feature Plugins** | Provide automation via hooks, slash commands, and scripts | 1 |
+
+**Skill Plugins** are agentic skills wrapped as plugins for Claude Code compatibility. They contain domain expertise (TYPO3, PHP, security, etc.) that the AI agent can reference during development.
+
+**Feature Plugins** (like Coach) go beyond knowledge - they include automation that runs during your session (hooks for learning from corrections, slash commands for review workflows).
 
 ## Installation
+
+For Claude Code, skills are distributed as plugins via this marketplace:
 
 ```bash
 /plugin marketplace add netresearch/claude-code-marketplace
 ```
 
-Then use `/plugin` to browse and install plugins.
+Then use `/plugin` to browse and install individual skill or feature plugins.
 
 ## Sync Status
 
@@ -30,30 +44,30 @@ Then use `/plugin` to browse and install plugins.
 **Sync Frequency:** Weekly (Monday 2 AM UTC)
 **Immediate Sync:** ⚠️ Not configured (requires notify workflow in source repos - see [SYNC-SETUP.md](SYNC-SETUP.md))
 
-## Installed Agentic Skills
+## Available Plugins
 
-| Agentic Skill | Repository | Description |
-|-------|------------|-------------|
-| TYPO3 Documentation | [typo3-docs-skill](https://github.com/netresearch/typo3-docs-skill) | Create TYPO3 extension documentation |
-| TYPO3 Testing | [typo3-testing-skill](https://github.com/netresearch/typo3-testing-skill) | Manage TYPO3 extension tests |
-| TYPO3 DDEV Setup | [typo3-ddev-skill](https://github.com/netresearch/typo3-ddev-skill) | Automate DDEV environment setup |
-| TYPO3 Core Contributions | [typo3-core-contributions-skill](https://github.com/netresearch/typo3-core-contributions-skill) | Guide TYPO3 core contributions |
-| TYPO3 Conformance | [typo3-conformance-skill](https://github.com/netresearch/typo3-conformance-skill) | Evaluate TYPO3 standards compliance |
-| TYPO3 CKEditor 5 | [typo3-ckeditor5-skill](https://github.com/netresearch/typo3-ckeditor5-skill) | CKEditor 5 development for TYPO3 v12+ |
-| TYPO3 Extension Upgrade | [typo3-extension-upgrade-skill](https://github.com/netresearch/typo3-extension-upgrade-skill) | Systematic extension upgrades to newer LTS versions |
-| Jira Integration | [jira-skill](https://github.com/netresearch/jira-skill) | Jira API operations, wiki markup, and workflow automation |
-| Git Workflow | [git-workflow-skill](https://github.com/netresearch/git-workflow-skill) | Git branching strategies and Conventional Commits |
-| GitHub Project | [github-project-skill](https://github.com/netresearch/github-project-skill) | GitHub repository setup and platform features |
-| Enterprise Readiness | [enterprise-readiness-skill](https://github.com/netresearch/enterprise-readiness-skill) | OpenSSF security assessment and compliance |
-| Security Audit | [security-audit-skill](https://github.com/netresearch/security-audit-skill) | OWASP security audit patterns for PHP |
-| PHP Modernization | [php-modernization-skill](https://github.com/netresearch/php-modernization-skill) | PHP 8.x modernization and type safety |
-| Go Development | [go-development-skill](https://github.com/netresearch/go-development-skill) | Production-grade Go development patterns |
-| Netresearch Branding | [netresearch-branding-skill](https://github.com/netresearch/netresearch-branding-skill) | Apply Netresearch brand guidelines |
-| AGENTS.md Generator | [agents-skill](https://github.com/netresearch/agents-skill) | Generate AGENTS.md documentation |
-| CLI Tools | [cli-tools-skill](https://github.com/netresearch/cli-tools-skill) | Auto-install missing CLI tools |
-| Context7 | [context7-skill](https://github.com/netresearch/context7-skill) | Library documentation lookup via Context7 REST API |
-| Coach | [claude-coach-plugin](https://github.com/netresearch/claude-coach-plugin) | Self-improving learning system with friction detection |
-| Skill Repo | [skill-repo-skill](https://github.com/netresearch/skill-repo-skill) | Guide for structuring Netresearch skill repositories |
+| Plugin | Type | Repository | Description |
+|--------|------|------------|-------------|
+| TYPO3 Documentation | Skill | [typo3-docs-skill](https://github.com/netresearch/typo3-docs-skill) | Create TYPO3 extension documentation |
+| TYPO3 Testing | Skill | [typo3-testing-skill](https://github.com/netresearch/typo3-testing-skill) | Manage TYPO3 extension tests |
+| TYPO3 DDEV Setup | Skill | [typo3-ddev-skill](https://github.com/netresearch/typo3-ddev-skill) | Automate DDEV environment setup |
+| TYPO3 Core Contributions | Skill | [typo3-core-contributions-skill](https://github.com/netresearch/typo3-core-contributions-skill) | Guide TYPO3 core contributions |
+| TYPO3 Conformance | Skill | [typo3-conformance-skill](https://github.com/netresearch/typo3-conformance-skill) | Evaluate TYPO3 standards compliance |
+| TYPO3 CKEditor 5 | Skill | [typo3-ckeditor5-skill](https://github.com/netresearch/typo3-ckeditor5-skill) | CKEditor 5 development for TYPO3 v12+ |
+| TYPO3 Extension Upgrade | Skill | [typo3-extension-upgrade-skill](https://github.com/netresearch/typo3-extension-upgrade-skill) | Systematic extension upgrades to newer LTS versions |
+| Jira Integration | Skill | [jira-skill](https://github.com/netresearch/jira-skill) | Jira API operations, wiki markup, and workflow automation |
+| Git Workflow | Skill | [git-workflow-skill](https://github.com/netresearch/git-workflow-skill) | Git branching strategies and Conventional Commits |
+| GitHub Project | Skill | [github-project-skill](https://github.com/netresearch/github-project-skill) | GitHub repository setup and platform features |
+| Enterprise Readiness | Skill | [enterprise-readiness-skill](https://github.com/netresearch/enterprise-readiness-skill) | OpenSSF security assessment and compliance |
+| Security Audit | Skill | [security-audit-skill](https://github.com/netresearch/security-audit-skill) | OWASP security audit patterns for PHP |
+| PHP Modernization | Skill | [php-modernization-skill](https://github.com/netresearch/php-modernization-skill) | PHP 8.x modernization and type safety |
+| Go Development | Skill | [go-development-skill](https://github.com/netresearch/go-development-skill) | Production-grade Go development patterns |
+| Netresearch Branding | Skill | [netresearch-branding-skill](https://github.com/netresearch/netresearch-branding-skill) | Apply Netresearch brand guidelines |
+| AGENTS.md Generator | Skill | [agents-skill](https://github.com/netresearch/agents-skill) | Generate AGENTS.md documentation |
+| CLI Tools | Skill | [cli-tools-skill](https://github.com/netresearch/cli-tools-skill) | Auto-install missing CLI tools |
+| Context7 | Skill | [context7-skill](https://github.com/netresearch/context7-skill) | Library documentation lookup via Context7 REST API |
+| Skill Repo | Skill | [skill-repo-skill](https://github.com/netresearch/skill-repo-skill) | Guide for structuring Netresearch skill repositories |
+| **Coach** | **Feature** | [claude-coach-plugin](https://github.com/netresearch/claude-coach-plugin) | Self-improving learning system with hooks and commands |
 
 ## Architecture
 
@@ -74,7 +88,7 @@ This marketplace uses an **automated sync workflow** to maintain agentic skills 
 5. Skills are copied to `skills/` directory
 6. Marketplace metadata is updated with current versions
 
-## Available Agentic Skills
+## Skill Plugin Details
 
 ### TYPO3 Documentation
 Create and maintain TYPO3 extension documentation following official TYPO3 standards.
@@ -216,8 +230,10 @@ Fetch up-to-date library documentation via Context7 REST API. Lightweight altern
 - On-demand fetching - retrieves documentation only when needed
 - Lightweight shell script implementation
 
-### Coach
+### Coach (Feature Plugin)
 Self-improving learning system that detects friction signals and proposes rule updates.
+
+> **Feature Plugin:** Unlike skill plugins, Coach provides active automation via hooks and slash commands that run during your session.
 
 **Repository:** https://github.com/netresearch/claude-coach-plugin
 
