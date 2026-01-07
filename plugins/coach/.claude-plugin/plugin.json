@@ -1,11 +1,17 @@
 {
   "name": "coach",
-  "version": "2.2.1",
+  "version": "2.2.2",
   "description": "Self-improving learning system that detects friction signals (corrections, repetitions, tool failures), extracts improvement candidates, and proposes rule/skill updates with explicit approval workflow.",
   "author": {
     "name": "Netresearch",
     "url": "https://github.com/netresearch"
   },
   "repository": "https://github.com/netresearch/claude-coach-plugin",
-  "keywords": ["learning", "self-improvement", "friction-detection", "rules", "meta"]
+  "keywords": [
+    "learning",
+    "self-improvement",
+    "friction-detection",
+    "rules",
+    "meta"
+  ]
 }
