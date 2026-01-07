@@ -1,7 +1,7 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "netresearch-claude-code-marketplace",
-  "version": "1.9.0",
+  "version": "1.10.0",
   "description": "Curated Agentic Skills for AI coding agents - TYPO3 development, PHP modernization, and technical documentation workflows. Platform-agnostic skills following the open Agentic Skills specification.",
   "owner": {
     "name": "Netresearch DTT GmbH",
@@ -277,33 +277,6 @@
         "repo": "netresearch/claude-coach-plugin"
       },
       "category": "productivity"
-    },
-    {
-      "name": "netresearch-skills-bundle",
-      "description": "Temporary container plugin for skill visibility workaround (Claude Code issue #10568)",
-      "source": "./",
-      "strict": false,
-      "skills": [
-        "./skills/enterprise-readiness",
-        "./skills/typo3-docs",
-        "./skills/typo3-testing",
-        "./skills/typo3-ddev",
-        "./skills/typo3-core-contributions",
-        "./skills/typo3-conformance",
-        "./skills/typo3-extension-upgrade",
-        "./skills/netresearch-branding",
-        "./skills/agents",
-        "./skills/cli-tools",
-        "./skills/go-development",
-        "./skills/php-modernization",
-        "./skills/security-audit",
-        "./skills/typo3-ckeditor5",
-        "./skills/git-workflow",
-        "./skills/skill-repo",
-        "./skills/github-project",
-        "./skills/jira-integration",
-        "./skills/context7"
-      ]
     }
   ]
 }
