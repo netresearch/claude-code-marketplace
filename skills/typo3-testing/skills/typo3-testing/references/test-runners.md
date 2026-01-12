@@ -1,19 +1,26 @@
 # Test Runners and Orchestration
 
-The `runTests.sh` script is the standard TYPO3 pattern for orchestrating all quality checks and test suites.
+The `runTests.sh` script is the **required** TYPO3 pattern for test orchestration, following TYPO3 core conventions.
 
-## Purpose
+## Requirements
 
-- Single entry point for all testing and quality checks
-- Consistent environment across local and CI/CD
-- Handles Docker, database setup, and test execution
-- Based on [TYPO3 Best Practices tea extension](https://github.com/TYPO3BestPractices/tea)
+Extensions **MUST** have a Docker-based `Build/Scripts/runTests.sh` that:
 
-## Script Location
+1. Uses **TYPO3 core-testing images** (`ghcr.io/typo3/core-testing-php*`)
+2. Supports **multiple databases** (SQLite default, MariaDB, MySQL, PostgreSQL)
+3. Supports **multiple PHP versions** (8.2, 8.3, 8.4, 8.5)
+4. Works in **CI environments** (auto-detects non-TTY)
+5. Handles **database container orchestration** for functional tests
+6. Uses **--user flag** on Linux to prevent root-owned files
 
-```
-Build/Scripts/runTests.sh
-```
+## Template
+
+Use `assets/Build/Scripts/runTests.sh` as starting point. Customize:
+
+1. `NETWORK` variable: Replace `my-extension` with your extension key
+2. `COMPOSER_ROOT_VERSION`: Set to your extension version
+3. `TYPO3_BASE_URL`: Set default ddev URL for E2E tests
+4. Add ddev hostnames to `DDEV_PARAMS` for E2E tests
 
 ## Basic Usage
 
@@ -21,494 +28,278 @@ Build/Scripts/runTests.sh
 # Show help
 ./Build/Scripts/runTests.sh -h
 
-# Run specific test suite
+# Run unit tests (default)
 ./Build/Scripts/runTests.sh -s unit
+
+# Run functional tests with SQLite (fastest, no container)
 ./Build/Scripts/runTests.sh -s functional
-./Build/Scripts/runTests.sh -s acceptance
+
+# Run functional tests in parallel (2-3x faster)
+./Build/Scripts/runTests.sh -s functionalParallel
+
+# Run functional tests with MariaDB
+./Build/Scripts/runTests.sh -s functional -d mariadb
+
+# Run with specific PHP version
+./Build/Scripts/runTests.sh -p 8.3 -s unit
+
+# Run E2E tests (requires running TYPO3)
+ddev start && ./Build/Scripts/runTests.sh -s e2e
 
 # Run quality tools
 ./Build/Scripts/runTests.sh -s lint
 ./Build/Scripts/runTests.sh -s phpstan
 ./Build/Scripts/runTests.sh -s cgl
-./Build/Scripts/runTests.sh -s rector
 ```
 
 ## Script Options
 
+| Option | Description | Values |
+|--------|-------------|--------|
+| `-s` | Test suite | `unit`, `functional`, `functionalParallel`, `e2e`, `lint`, `phpstan`, `cgl`, `rector`, `fuzz`, `mutation` |
+| `-d` | Database | `sqlite` (default), `mariadb`, `mysql`, `postgres` |
+| `-i` | DB version | mariadb: 10.11, mysql: 8.0, postgres: 16 |
+| `-p` | PHP version | `8.2`, `8.3`, `8.4`, `8.5` |
+| `-x` | Enable Xdebug | |
+| `-n` | Dry-run | For cgl, rector |
+| `-u` | Update images | |
+
+## Test Parallelization
+
+### E2E Tests (Playwright)
+
+Playwright parallelizes by spec file. Configure in `playwright.config.ts`:
+
+```typescript
+export default defineConfig({
+  fullyParallel: false, // Tests within file run sequentially (safer)
+  workers: process.env.CI ? 4 : undefined, // CI: fixed, Local: half of CPUs
+});
 ```
--s <suite>     Test suite to run (required)
-               unit, functional, acceptance, lint, phpstan, cgl, rector
 
--d <driver>    Database driver for functional tests
-               mysqli (default), pdo_mysql, postgres, sqlite
+**Performance**: 3x speedup (3.8min → 1.3min for 111 tests)
 
--p <version>   PHP version (7.4, 8.1, 8.2, 8.3)
+**Note**: Workers are capped at the number of spec files when `fullyParallel: false`.
 
--e <command>   Execute specific command in container
+### Functional Tests (functionalParallel)
 
--n             Don't pull Docker images
-
--u             Update composer dependencies
-
--v             Enable verbose output
-
--x             Stop on first error (PHPUnit --stop-on-error)
-```
-
-## Examples
-
-### Run Unit Tests
+Uses `xargs -P` to run test files concurrently with SQLite:
 
 ```bash
-# Default PHP version
-./Build/Scripts/runTests.sh -s unit
-
-# Specific PHP version
-./Build/Scripts/runTests.sh -s unit -p 8.3
-
-# Stop on first error
-./Build/Scripts/runTests.sh -s unit -x
-```
-
-### Run Functional Tests
-
-```bash
-# Default database (mysqli)
-./Build/Scripts/runTests.sh -s functional
-
-# PostgreSQL
-./Build/Scripts/runTests.sh -s functional -d postgres
-
-# SQLite (fastest for local development)
-./Build/Scripts/runTests.sh -s functional -d sqlite
-```
-
-### Run Quality Tools
-
-```bash
-# Lint all PHP files
-./Build/Scripts/runTests.sh -s lint
-
-# PHPStan static analysis
-./Build/Scripts/runTests.sh -s phpstan
-
-# Code style check
-./Build/Scripts/runTests.sh -s cgl
-
-# Rector automated refactoring
-./Build/Scripts/runTests.sh -s rector
-```
-
-### Custom Commands
-
-```bash
-# Run specific test file
-./Build/Scripts/runTests.sh -s unit -e "bin/phpunit Tests/Unit/Domain/Model/ProductTest.php"
-
-# Run with coverage
-./Build/Scripts/runTests.sh -s unit -e "bin/phpunit --coverage-html coverage/"
-```
-
-## Composer Integration
-
-Integrate runTests.sh into composer.json:
-
-```json
-{
-    "scripts": {
-        "ci:test": [
-            "@ci:test:php:lint",
-            "@ci:test:php:phpstan",
-            "@ci:test:php:cgl",
-            "@ci:test:php:rector",
-            "@ci:test:php:unit",
-            "@ci:test:php:functional"
-        ],
-        "ci:test:php:lint": "Build/Scripts/runTests.sh -s lint",
-        "ci:test:php:phpstan": "Build/Scripts/runTests.sh -s phpstan",
-        "ci:test:php:cgl": "Build/Scripts/runTests.sh -s cgl",
-        "ci:test:php:rector": "Build/Scripts/runTests.sh -s rector",
-        "ci:test:php:unit": "Build/Scripts/runTests.sh -s unit",
-        "ci:test:php:functional": "Build/Scripts/runTests.sh -s functional"
-    }
-}
-```
-
-Then run via composer:
-
-```bash
-composer ci:test              # All checks
-composer ci:test:php:unit     # Just unit tests
-composer ci:test:php:phpstan  # Just PHPStan
-```
-
-## Script Structure
-
-### Basic Template
-
-```bash
-#!/usr/bin/env bash
-
-# Script configuration
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-PROJECT_DIR="$(cd "${SCRIPT_DIR}/../.." && pwd)"
-
-# Default values
-TEST_SUITE=""
-DATABASE_DRIVER="mysqli"
-PHP_VERSION="8.4"
-VERBOSE=""
-
-# Parse arguments
-while getopts ":s:d:p:e:nuvx" opt; do
-    case ${opt} in
-        s) TEST_SUITE=${OPTARG} ;;
-        d) DATABASE_DRIVER=${OPTARG} ;;
-        p) PHP_VERSION=${OPTARG} ;;
-        *) showHelp; exit 1 ;;
-    esac
-done
-
-# Validate required arguments
-if [ -z "${TEST_SUITE}" ]; then
-    echo "Error: -s parameter (test suite) is required"
-    showHelp
-    exit 1
+# CI: 4 parallel jobs for predictable resource usage
+# Local: half of available CPUs
+if [ "${CI}" == "true" ]; then
+    PARALLEL_JOBS=4
+else
+    PARALLEL_JOBS="$(($(nproc) + 1) / 2)"
 fi
 
-# Execute test suite
-case ${TEST_SUITE} in
-    unit)
-        runUnitTests
-        ;;
-    functional)
-        runFunctionalTests
-        ;;
-    lint)
-        runLint
-        ;;
-    *)
-        echo "Error: Unknown test suite: ${TEST_SUITE}"
-        showHelp
-        exit 1
-        ;;
-esac
+find Tests/Functional -name '*Test.php' | xargs -P${PARALLEL_JOBS} ...
 ```
 
-### Docker Integration
+**Performance**: 2-3x speedup (24s → 10s for 62 tests)
+
+**Requirement**: SQLite with tmpfs for isolated databases per test file.
+
+### Unit Tests
+
+Unit tests are typically fast enough (<1s) that parallelization overhead would be counterproductive. PHPUnit's native parallelization (ParaTest) doesn't support PHPUnit 12 yet.
+
+## Database Support
+
+### SQLite (Default)
+- **Fastest**: No container startup
+- **CI-friendly**: No external services needed
+- **Parallelizable**: Each test file gets isolated DB
 
 ```bash
-runUnitTests() {
-    CONTAINER_PATH="/app"
-
-    docker run \
-        --rm \
-        -v "${PROJECT_DIR}:${CONTAINER_PATH}" \
-        -w "${CONTAINER_PATH}" \
-        php:${PHP_VERSION}-cli \
-        bin/phpunit -c Build/phpunit/UnitTests.xml
-}
-
-runFunctionalTests() {
-    CONTAINER_PATH="/app"
-
-    docker run \
-        --rm \
-        -v "${PROJECT_DIR}:${CONTAINER_PATH}" \
-        -w "${CONTAINER_PATH}" \
-        -e typo3DatabaseDriver="${DATABASE_DRIVER}" \
-        -e typo3DatabaseHost="localhost" \
-        -e typo3DatabaseName="typo3_test" \
-        php:${PHP_VERSION}-cli \
-        bin/phpunit -c Build/phpunit/FunctionalTests.xml
-}
+./Build/Scripts/runTests.sh -s functional  # Uses SQLite
 ```
 
-### Quality Tool Functions
+### MariaDB/MySQL
+- Required for MySQL-specific syntax
+- Mark incompatible tests with `#[Group('not-sqlite')]`
 
 ```bash
-runLint() {
-    docker run \
-        --rm \
-        -v "${PROJECT_DIR}:/app" \
-        -w /app \
-        php:${PHP_VERSION}-cli \
-        vendor/bin/phplint
-}
-
-runPhpstan() {
-    docker run \
-        --rm \
-        -v "${PROJECT_DIR}:/app" \
-        -w /app \
-        php:${PHP_VERSION}-cli \
-        vendor/bin/phpstan analyze --configuration Build/phpstan.neon
-}
-
-runCgl() {
-    docker run \
-        --rm \
-        -v "${PROJECT_DIR}:/app" \
-        -w /app \
-        php:${PHP_VERSION}-cli \
-        vendor/bin/php-cs-fixer fix --config Build/php-cs-fixer.php --dry-run --diff
-}
+./Build/Scripts/runTests.sh -s functional -d mariadb -i 10.11
+./Build/Scripts/runTests.sh -s functional -d mysql -i 8.0
 ```
 
-## Environment Variables
-
-Configure via environment variables:
+### PostgreSQL
+- For PostgreSQL compatibility testing
 
 ```bash
-# Database configuration
-export typo3DatabaseDriver=pdo_mysql
-export typo3DatabaseHost=db
-export typo3DatabasePort=3306
-export typo3DatabaseName=typo3_test
-export typo3DatabaseUsername=root
-export typo3DatabasePassword=root
+./Build/Scripts/runTests.sh -s functional -d postgres -i 16
+```
 
-# TYPO3 context
-export TYPO3_CONTEXT=Testing
+## E2E Test Integration
 
-# Run tests
-./Build/Scripts/runTests.sh -s functional
+E2E tests require a running TYPO3 instance. The script supports:
+
+1. **ddev integration**: Auto-detects ddev, connects to ddev network
+2. **Custom URL**: Via `TYPO3_BASE_URL` environment variable
+
+```bash
+# Option 1: ddev (recommended)
+ddev start && ./Build/Scripts/runTests.sh -s e2e
+
+# Option 2: Custom URL
+TYPO3_BASE_URL=https://my-typo3.local ./Build/Scripts/runTests.sh -s e2e
+```
+
+### ddev Network Integration
+
+When ddev is running, the script:
+1. Gets the ddev-router IP address
+2. Connects to `ddev_default` network
+3. Adds `--add-host` entries for ddev hostnames
+
+```bash
+ROUTER_IP=$(docker inspect ddev-router --format '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}')
+DDEV_PARAMS="--network ddev_default"
+DDEV_PARAMS="${DDEV_PARAMS} --add-host my-extension.ddev.site:${ROUTER_IP}"
+```
+
+### Playwright Docker Image
+
+Use the official Playwright image with pre-installed browsers:
+
+```bash
+IMAGE_PLAYWRIGHT="mcr.microsoft.com/playwright:v1.57.0-noble"
+```
+
+**Important**: Keep Playwright versions in sync between:
+- `package.json`: `"@playwright/test": "^1.57.0"`
+- `runTests.sh`: `IMAGE_PLAYWRIGHT="mcr.microsoft.com/playwright:v1.57.0-noble"`
+
+## Helper Functions
+
+### waitFor (TCP port)
+
+Wait for a service to be available on a TCP port:
+
+```bash
+waitFor() {
+    local HOST=${1}
+    local PORT=${2}
+    # Uses netcat to check port availability
+    # Retries up to 10 times with 1 second delay
+}
+
+# Usage
+waitFor mariadb-container 3306
+```
+
+### waitForHttp (HTTP endpoint)
+
+Wait for an HTTP endpoint to respond:
+
+```bash
+waitForHttp() {
+    local URL=${1}
+    local MAX_ATTEMPTS=${2:-30}
+    # Uses wget to check HTTP availability
+}
+
+# Usage: Wait for mock OAuth server
+waitForHttp "http://mock-oauth-container:8080/.well-known/openid-configuration"
+```
+
+## Mock Services
+
+### Mock OAuth Server
+
+For testing OAuth integration without real providers:
+
+```bash
+IMAGE_MOCK_OAUTH="ghcr.io/navikt/mock-oauth2-server:3.0.1"
+
+${CONTAINER_BIN} run --rm -d --name mock-oauth-${SUFFIX} --network ${NETWORK} \
+    -e SERVER_PORT=8080 \
+    -e JSON_CONFIG_PATH=/config/config.json \
+    -v "${ROOT_DIR}/.ddev/mock-oauth:/config:ro" \
+    ${IMAGE_MOCK_OAUTH}
+
+waitFor mock-oauth-${SUFFIX} 8080
+
+# Pass URL to tests
+-e MOCK_OAUTH_URL="http://mock-oauth-${SUFFIX}:8080"
+```
+
+## PHP Performance Optimization
+
+Enable opcache and JIT for faster test execution:
+
+```bash
+PHP_OPCACHE_OPTS="-d opcache.enable_cli=1 -d opcache.jit=1255 -d opcache.jit_buffer_size=128M"
+```
+
+**Note**: Disable JIT for coverage (`-d opcache.jit=off`) as it's incompatible with Xdebug.
+
+## Permission Handling
+
+### Linux --user Flag
+
+On Linux, containers run as the host user to prevent root-owned files:
+
+```bash
+if [ $(uname) != "Darwin" ]; then
+    USERSET="--user $(id -u)"
+fi
+```
+
+### Root-owned Files Detection
+
+For E2E tests, detect and warn about root-owned node_modules:
+
+```bash
+if [ "$(find node_modules -maxdepth 1 -user root 2>/dev/null | head -1)" ]; then
+    echo "Error: node_modules contains root-owned files."
+    echo "Please remove: sudo rm -rf node_modules"
+    exit 1
+fi
+```
+
+## Makefile Integration
+
+Create a `Makefile` for convenient shortcuts:
+
+```makefile
+RUNTESTS = Build/Scripts/runTests.sh
+
+.PHONY: test unit functional lint phpstan cs fix ci e2e
+
+test: unit
+unit:
+	$(RUNTESTS) -s unit
+
+functional:
+	$(RUNTESTS) -s functional
+
+functional-fast:
+	$(RUNTESTS) -s functionalParallel
+
+e2e:
+	$(RUNTESTS) -s e2e
+
+lint:
+	$(RUNTESTS) -s lint
+
+phpstan:
+	$(RUNTESTS) -s phpstan
+
+cs:
+	$(RUNTESTS) -s cgl -n
+
+fix:
+	$(RUNTESTS) -s cgl
+
+ci: lint cs phpstan unit functional
 ```
 
 ## CI/CD Integration
 
-### GitHub Actions
-
-```yaml
-name: Tests
-
-on: [push, pull_request]
-
-jobs:
-  tests:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        php: '8.2', '8.2', '8.3']
-        suite: ['unit', 'functional', 'lint', 'phpstan']
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Run ${{ matrix.suite }} tests
-        run: Build/Scripts/runTests.sh -s ${{ matrix.suite }} -p ${{ matrix.php }}
-```
-
-### GitLab CI
-
-```yaml
-.test:
-  image: php:${PHP_VERSION}-cli
-  script:
-    - Build/Scripts/runTests.sh -s ${TEST_SUITE} -p ${PHP_VERSION}
-
-unit:8.2:
-  extends: .test
-  variables:
-    PHP_VERSION: "8.2"
-    TEST_SUITE: "unit"
-
-functional:8.2:
-  extends: .test
-  variables:
-    PHP_VERSION: "8.2"
-    TEST_SUITE: "functional"
-```
-
-## Performance Optimization
-
-### Parallel Execution
-
-```bash
-# Run linting in parallel (fast)
-find . -name '*.php' -print0 | xargs -0 -n1 -P8 php -l
-
-# PHPUnit parallel execution
-vendor/bin/paratest -c Build/phpunit/UnitTests.xml --processes=4
-```
-
-### Caching
-
-```bash
-# Cache Composer dependencies
-if [ ! -d "${PROJECT_DIR}/.cache/composer" ]; then
-    mkdir -p "${PROJECT_DIR}/.cache/composer"
-fi
-
-docker run \
-    --rm \
-    -v "${PROJECT_DIR}:/app" \
-    -v "${PROJECT_DIR}/.cache/composer:/tmp/composer-cache" \
-    php:${PHP_VERSION}-cli \
-    composer install --no-progress --no-suggest
-```
-
-## Best Practices
-
-1. **Single Source of Truth**: Use runTests.sh for all test execution
-2. **CI/CD Alignment**: CI should use same script as local development
-3. **Docker Isolation**: Run tests in containers for consistency
-4. **Fast Feedback**: Run lint and unit tests first (fastest)
-5. **Matrix Testing**: Test multiple PHP versions and databases
-6. **Caching**: Cache dependencies to speed up execution
-7. **Verbose Mode**: Use `-v` flag for debugging test failures
-
-## Troubleshooting
-
-### Docker Permission Issues
-
-```bash
-# Run with current user
-docker run \
-    --rm \
-    --user $(id -u):$(id -g) \
-    -v "${PROJECT_DIR}:/app" \
-    php:${PHP_VERSION}-cli \
-    bin/phpunit
-```
-
-### Database Connection Errors
-
-```bash
-# Verify database is accessible
-docker run --rm --network host mysql:8.0 \
-    mysql -h localhost -u root -p -e "SELECT 1"
-
-# Use SQLite for simple tests
-./Build/Scripts/runTests.sh -s functional -d sqlite
-```
-
-### Missing Dependencies
-
-```bash
-# Update dependencies
-./Build/Scripts/runTests.sh -s unit -u
-```
-
-## Resources
-
-- [TYPO3 Tea Extension runTests.sh](https://github.com/TYPO3BestPractices/tea/blob/main/Build/Scripts/runTests.sh)
-- [TYPO3 Testing Documentation](https://docs.typo3.org/m/typo3/reference-coreapi/main/en-us/Testing/)
-- [PHPUnit Documentation](https://phpunit.de/documentation.html)
-
-## Multi-PHP Version Testing
-
-TYPO3 extensions should support multiple PHP versions to maximize compatibility. This section covers testing strategies for all supported PHP versions.
-
-### Standard Approach: Using Build/Scripts/runTests.sh
-
-The `runTests.sh` script with Docker containers is the recommended TYPO3 testing approach. It provides isolated environments and consistent results.
-
-#### Testing Across PHP Versions with Docker
-
-```bash
-# Test with PHP 8.2
-./Build/Scripts/runTests.sh -s unit -p 8.2
-./Build/Scripts/runTests.sh -s functional -p 8.2 -d sqlite
-
-# Test with PHP 8.3
-./Build/Scripts/runTests.sh -s unit -p 8.3
-./Build/Scripts/runTests.sh -s functional -p 8.3 -d sqlite
-
-# Test with PHP 8.4
-./Build/Scripts/runTests.sh -s unit -p 8.4
-./Build/Scripts/runTests.sh -s functional -p 8.4 -d sqlite
-```
-
-**Advantages:**
-- Isolated Docker containers per PHP version
-- Consistent environment across local and CI/CD
-- No need to install multiple PHP versions locally
-- Handles database setup automatically
-- Based on official TYPO3 best practices
-
-#### Complete Test Matrix Example
-
-```bash
-#!/bin/bash
-# Test all supported PHP versions and databases
-
-PHP_VERSIONS=("8.2" "8.3" "8.4")
-DATABASES=("sqlite" "mysql" "postgres")
-
-for PHP in "${PHP_VERSIONS[@]}"; do
-    echo "Testing PHP ${PHP}..."
-    
-    # Unit tests
-    ./Build/Scripts/runTests.sh -s unit -p "${PHP}"
-    
-    # Functional tests with different databases
-    for DB in "${DATABASES[@]}"; do
-        echo "  Functional tests with ${DB}..."
-        ./Build/Scripts/runTests.sh -s functional -p "${PHP}" -d "${DB}"
-    done
-    
-    # Quality tools (run once per PHP version)
-    ./Build/Scripts/runTests.sh -s lint -p "${PHP}"
-    ./Build/Scripts/runTests.sh -s phpstan -p "${PHP}"
-done
-```
-
-### Alternative Approach: Native PHP Versions (Without Docker)
-
-For CI/CD environments or when Docker is unavailable, use locally installed PHP versions.
-
-#### Testing with Native PHP Installations
-
-```bash
-# Test with PHP 8.2
-php8.2 /usr/local/bin/composer update --no-interaction
-php8.2 .Build/bin/phpunit --configuration=Build/phpunit/UnitTests.xml
-typo3DatabaseDriver=pdo_sqlite php8.2 .Build/bin/phpunit --configuration=Build/phpunit/FunctionalTests.xml
-
-# Test with PHP 8.3
-php8.3 /usr/local/bin/composer update --no-interaction
-php8.3 .Build/bin/phpunit --configuration=Build/phpunit/UnitTests.xml
-typo3DatabaseDriver=pdo_sqlite php8.3 .Build/bin/phpunit --configuration=Build/phpunit/FunctionalTests.xml
-
-# Test with PHP 8.4
-php8.4 /usr/local/bin/composer update --no-interaction
-php8.4 .Build/bin/phpunit --configuration=Build/phpunit/UnitTests.xml
-typo3DatabaseDriver=pdo_sqlite php8.4 .Build/bin/phpunit --configuration=Build/phpunit/FunctionalTests.xml
-```
-
-**CRITICAL**: Always run `composer update` with the target PHP version FIRST. This ensures:
-- Correct PHPUnit version selection (PHPUnit 11 for PHP 8.2, PHPUnit 12 for PHP 8.3+)
-- Proper dependency resolution for the PHP version
-- Compatible autoloader generation
-
-### PHPUnit Version Compatibility
-
-The `typo3/testing-framework` supports both PHPUnit 11 and 12, allowing Composer to automatically select the compatible version:
-
-| PHP Version | PHPUnit Version | Auto-Selected by Composer |
-|-------------|-----------------|---------------------------|
-| 8.2         | 11.x            | ✅ Yes                     |
-| 8.3         | 11.x or 12.x    | ✅ Yes (12.x preferred)    |
-| 8.4         | 11.x or 12.x    | ✅ Yes (12.x preferred)    |
-
-**Example: Automatic PHPUnit Selection**
-
-```bash
-# PHP 8.2 automatically gets PHPUnit 11
-$ php8.2 /usr/local/bin/composer update
-# Installing typo3/testing-framework (v8.0.14)
-# Installing phpunit/phpunit (11.5.42)
-
-# PHP 8.3 automatically gets PHPUnit 12
-$ php8.3 /usr/local/bin/composer update
-# Installing typo3/testing-framework (v8.0.14)
-# Installing phpunit/phpunit (12.4.1)
-```
-
-### GitHub Actions CI/CD Integration
-
-#### Using runTests.sh (Recommended)
+### GitHub Actions (Recommended)
 
 ```yaml
 name: CI
@@ -523,169 +314,81 @@ jobs:
       matrix:
         php: ['8.2', '8.3', '8.4']
         suite: ['unit', 'functional']
-        database: ['sqlite', 'mysql', 'postgres']
-        exclude:
-          # Only test sqlite for unit tests
-          - suite: unit
-            database: mysql
-          - suite: unit
-            database: postgres
+        database: ['sqlite']
+        include:
+          - php: '8.4'
+            suite: 'functional'
+            database: 'mariadb'
 
     steps:
       - uses: actions/checkout@v4
 
-      - name: Run ${{ matrix.suite }} tests on PHP ${{ matrix.php }}
+      - name: Run ${{ matrix.suite }} tests
         run: |
           Build/Scripts/runTests.sh \
             -s ${{ matrix.suite }} \
             -p ${{ matrix.php }} \
             -d ${{ matrix.database }}
-```
 
-#### Using Native PHP (Alternative)
-
-```yaml
-name: CI
-
-on: [push, pull_request]
-
-jobs:
-  tests:
+  quality:
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        php: ['8.2', '8.3', '8.4']
-
     steps:
       - uses: actions/checkout@v4
+      - run: Build/Scripts/runTests.sh -s lint
+      - run: Build/Scripts/runTests.sh -s phpstan
+      - run: Build/Scripts/runTests.sh -s cgl -n
 
-      - name: Set up PHP ${{ matrix.php }}
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: ${{ matrix.php }}
-          extensions: dom, libxml, sqlite3
-          coverage: none
-
-      - name: Install dependencies
-        run: composer update --no-interaction --no-progress
-
-      - name: Run unit tests
-        run: .Build/bin/phpunit -c Build/phpunit/UnitTests.xml
-
-      - name: Run functional tests
-        env:
-          typo3DatabaseDriver: pdo_sqlite
-        run: .Build/bin/phpunit -c Build/phpunit/FunctionalTests.xml
+  e2e:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ddev/github-action-setup-ddev@v1
+      - run: ddev start
+      - run: Build/Scripts/runTests.sh -s e2e
 ```
 
-### Common Pitfalls
+## Troubleshooting
 
-#### ❌ Wrong: Testing Without Updating Dependencies
-
+### TTY Errors
+Script auto-detects non-TTY environments. If issues persist:
 ```bash
-# This will use wrong PHPUnit version
-php8.2 .Build/bin/phpunit -c Build/phpunit/UnitTests.xml
+CI=true ./Build/Scripts/runTests.sh -s unit
 ```
 
-**Problem:** Uses PHPUnit version from previous `composer update`, may be incompatible.
-
-#### ✅ Right: Update Dependencies First
-
+### Database Connection Errors
 ```bash
-# This ensures correct PHPUnit version
-php8.2 /usr/local/bin/composer update --no-interaction
-php8.2 .Build/bin/phpunit -c Build/phpunit/UnitTests.xml
-```
-
-#### ❌ Wrong: Removing PHP Version Support Due to Test Failures
-
-```bash
-# Don't do this!
-# composer.json: "php": "^8.3 || ^8.4"  # Removed 8.2
-```
-
-**Problem:** Unnecessarily reduces compatibility. Fix the testing approach instead.
-
-#### ✅ Right: Fix Testing Process
-
-```bash
-# Run composer update with the problematic PHP version
-php8.2 /usr/local/bin/composer update
-# Composer automatically selects compatible dependencies
-# Now tests work correctly
-```
-
-### Best Practices
-
-1. **Standard Approach First**: Use `Build/Scripts/runTests.sh` with Docker whenever possible
-2. **Update Before Testing**: Always run `composer update` with target PHP version first (native approach)
-3. **Trust Composer**: Let Composer select compatible PHPUnit versions automatically
-4. **Test All Versions**: Run full test suite on all supported PHP versions in CI
-5. **SQLite for Speed**: Use SQLite for local functional testing (fastest)
-6. **Matrix Testing**: Use CI matrix to test all PHP versions in parallel
-7. **Don't Remove Support**: Fix testing process, don't remove PHP version support
-
-### Troubleshooting
-
-#### Docker Issues
-
-```bash
-# Update Docker images
-./Build/Scripts/runTests.sh -u
-
-# Check Docker is running
+# Check container is running
 docker ps
 
-# Clean up old containers
-docker system prune -a
+# Use SQLite to rule out DB issues
+./Build/Scripts/runTests.sh -s functional -d sqlite
 ```
 
-#### Native PHP Issues
-
+### Root-owned Files
 ```bash
-# Verify PHP version
-php8.2 --version
-
-# Check installed extensions
-php8.2 -m | grep -E 'dom|libxml|sqlite'
-
-# Clean and reinstall dependencies
-rm -rf .Build vendor composer.lock
-php8.2 /usr/local/bin/composer install
+# Remove root-owned files (requires sudo)
+sudo rm -rf node_modules .Build
 ```
 
-#### PHPUnit Version Conflicts
-
+### Update Images
 ```bash
-# Clear Composer cache
-php8.2 /usr/local/bin/composer clear-cache
-
-# Show why PHPUnit version was selected
-php8.2 /usr/local/bin/composer why phpunit/phpunit
-
-# Force dependency resolution
-rm composer.lock
-php8.2 /usr/local/bin/composer update --with-all-dependencies
+./Build/Scripts/runTests.sh -u
 ```
 
-### Summary
+## Best Practices
 
-| Aspect | Docker/runTests.sh | Native PHP |
-|--------|-------------------|------------|
-| **Use Case** | Standard TYPO3 development | CI/CD, no Docker available |
-| **Isolation** | ✅ Full container isolation | ⚠️ System-wide PHP |
-| **Setup** | Docker required | Multiple PHP versions required |
-| **Speed** | Slower (container overhead) | Faster (native execution) |
-| **Consistency** | ✅ Guaranteed environment | ⚠️ Depends on system config |
-| **Recommendation** | **Recommended** | Alternative when needed |
+1. **SQLite First**: Use SQLite for most functional tests (fastest)
+2. **Parallel Tests**: Use `functionalParallel` for faster CI
+3. **Matrix Testing**: Test all supported PHP versions in CI
+4. **Group Incompatible Tests**: Use `#[Group('not-sqlite')]` for DB-specific tests
+5. **Single Entry Point**: All tests via `runTests.sh`, not direct PHPUnit
+6. **Makefile Shortcuts**: Provide `make test`, `make ci` for convenience
+7. **Update Images**: Run `-u` periodically to get latest TYPO3 images
+8. **Keep Versions Synced**: Playwright versions in package.json and runTests.sh
 
-**Choose Docker/runTests.sh for:**
-- Local development and testing
-- Consistent environment across team
-- Official TYPO3 best practices
+## Resources
 
-**Choose Native PHP for:**
-- GitHub Actions/GitLab CI environments
-- Systems without Docker
-- Performance-critical testing pipelines
+- [TYPO3 Tea Extension](https://github.com/TYPO3BestPractices/tea) - Reference implementation
+- [TYPO3 Core Testing](https://github.com/typo3/typo3) - Core approach
+- [typo3/core-testing images](https://github.com/typo3/core-testing) - Official images
+- [nr-vault](https://github.com/netresearch/t3x-nr-vault) - Reference with all patterns

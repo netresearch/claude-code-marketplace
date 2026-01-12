@@ -81,13 +81,56 @@ Bug fixes & improvements! See CHANGELOG.md for details...
 
 ---
 
+## CRITICAL: Upload Comment Source
+
+**NEVER use git tag message for upload comments!**
+
+### The Problem
+
+When using `gh release create`, GitHub creates a **lightweight tag** (not annotated). Lightweight tags have no message, so `git tag -n1` returns the **commit message** instead:
+
+```bash
+# BAD: Gets commit message like "chore(release): v1.2.0 (#123)"
+git tag -n1 -l "v${VERSION}" | sed "s/^v[0-9.]*[ ]*//g"
+```
+
+This results in TER showing unprofessional upload comments like:
+- `chore(release): v13.2.0 (#508)`
+- `Merge pull request #123 from feature/xyz`
+
+### The Solution
+
+**Always use `github.event.release.body`** (the GitHub release notes) as the comment source:
+
+```yaml
+env:
+  RELEASE_BODY: ${{ github.event.release.body }}
+run: |
+  if [[ -n "${RELEASE_BODY}" ]]; then
+    COMMENT=$(echo "${RELEASE_BODY}" | head -c 1000)
+    # Strip unsupported characters
+    COMMENT=$(echo "${COMMENT}" | sed 's/[#*+=~^|\\<>]//g')
+  else
+    COMMENT="Released version ${VERSION}"
+  fi
+```
+
+### Conformance Check
+
+When auditing extensions, verify `publish-to-ter.yml` uses:
+- ✅ `github.event.release.body` - Release notes (CORRECT)
+- ✅ `github.event.release.name` - Release title (fallback)
+- ❌ `git tag -n1` - Tag/commit message (WRONG)
+
+---
+
 ## GitHub Actions Workflow
 
 ### Recommended Workflow Template
 
 **File:** `.github/workflows/publish-to-ter.yml`
 
-**Template:** Copy from `templates/.github/workflows/publish-to-ter.yml`
+**Template:** Copy from `assets/.github/workflows/publish-to-ter.yml`
 
 ```yaml
 name: Publish new extension version to TER

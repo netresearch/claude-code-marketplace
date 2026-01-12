@@ -148,6 +148,35 @@ Username: admin
 Password: Joh316!
 ```
 
+### Branded Landing Page
+
+The overview dashboard automatically uses branded templates based on your project:
+
+| Vendor | Template | Branding |
+|--------|----------|----------|
+| `netresearch/*` | Netresearch | Turquoise (#2F99A4), [n] logo |
+| All others | TYPO3 | Orange (#FF8700), TYPO3 swoosh |
+
+**Features:**
+- Three-state theme switcher (Light / System / Dark)
+- Git branch and commit info display
+- Links to TER, Packagist, GitHub, Documentation, Mailpit
+- TYPO3 version cards with Frontend/Backend links
+- Composer package name display
+
+Generate or regenerate the landing page:
+```bash
+ddev generate-index
+```
+
+**Template Variables** (auto-detected from `composer.json`):
+- `{{EXTENSION_NAME}}` - Human-readable extension name
+- `{{COMPOSER_PACKAGE}}` - Composer package name
+- `{{TER_EXTENSION_KEY}}` - TER extension key
+- `{{GITHUB_REPO}}` - GitHub repository URL
+- `{{GIT_BRANCH}}` - Current git branch
+- `{{GIT_COMMIT_SHORT}}` - Short commit hash
+
 ## Custom DDEV Commands
 
 The skill creates these custom commands:

@@ -8,7 +8,49 @@
 Extensions MUST use **typo3/testing-framework** for comprehensive testing:
 
 ```bash
-composer require --dev "typo3/testing-framework":"^8.0.9" "phpunit/phpunit":"^10.5"
+composer require --dev "typo3/testing-framework:^9.0"
+```
+
+## runTests.sh Requirements (REQUIRED)
+
+Extensions **MUST** have a Docker-based `Build/Scripts/runTests.sh` following TYPO3 core conventions:
+
+### Required Capabilities
+- [ ] Uses `ghcr.io/typo3/core-testing-php*` images
+- [ ] Supports `-s unit` for unit tests
+- [ ] Supports `-s functional` for functional tests
+- [ ] Supports `-d sqlite|mariadb|mysql|postgres` for database selection
+- [ ] Supports `-p 8.2|8.3|8.4|8.5` for PHP version selection
+- [ ] Auto-detects CI/non-TTY environments
+- [ ] Handles database container orchestration
+
+### Verification
+```bash
+# Check script exists and is executable
+test -x Build/Scripts/runTests.sh
+
+# Verify help output
+Build/Scripts/runTests.sh -h | grep -q "sqlite"
+
+# Run unit tests
+Build/Scripts/runTests.sh -s unit
+
+# Run functional tests (SQLite default)
+Build/Scripts/runTests.sh -s functional
+```
+
+### Makefile Integration (Recommended)
+```makefile
+RUNTESTS = Build/Scripts/runTests.sh
+
+test: unit
+unit:
+	$(RUNTESTS) -s unit
+
+functional:
+	$(RUNTESTS) -s functional
+
+ci: lint phpstan unit
 ```
 
 ## Unit Test Conformance
@@ -133,11 +175,26 @@ protected function tearDown(): void
 ## CI/CD Requirements
 
 ### Minimum Pipeline
-- [ ] PHP lint check
-- [ ] Unit tests
-- [ ] Functional tests (SQLite acceptable)
-- [ ] PHPStan analysis (level 5+)
-- [ ] Code style check (php-cs-fixer)
+- [ ] Uses `Build/Scripts/runTests.sh` for all test execution
+- [ ] PHP lint check (`-s lint`)
+- [ ] Unit tests (`-s unit`)
+- [ ] Functional tests (`-s functional`, SQLite default)
+- [ ] PHPStan analysis (`-s phpstan`, level 5+)
+- [ ] Code style check (`-s cgl -n`)
+
+### GitHub Actions Example
+```yaml
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php: ['8.2', '8.3', '8.4']
+    steps:
+      - uses: actions/checkout@v4
+      - run: Build/Scripts/runTests.sh -p ${{ matrix.php }} -s unit
+      - run: Build/Scripts/runTests.sh -p ${{ matrix.php }} -s functional
+```
 
 ### E2E Pipeline (when Playwright tests exist)
 - [ ] Node.js 22.x setup
@@ -149,13 +206,23 @@ protected function tearDown(): void
 
 | Criteria | Points |
 |----------|--------|
+| Docker-based `runTests.sh` present | 10 |
 | Unit tests present and passing | 10 |
 | Functional tests present and passing | 10 |
-| E2E tests present and passing | 10 |
+| E2E tests present and passing | 5 |
 | Accessibility tests present | 5 |
-| CI/CD pipeline configured | 10 |
+| CI/CD using runTests.sh | 5 |
 | Test coverage >70% | 5 |
 | **Total** | **50** |
+
+### runTests.sh Scoring Details
+| Capability | Points |
+|------------|--------|
+| Script exists and executable | 2 |
+| Supports `-s unit` and `-s functional` | 2 |
+| Supports database selection (`-d`) | 2 |
+| Supports PHP version (`-p`) | 2 |
+| CI/non-TTY auto-detection | 2 |
 
 ### Rating
 - **Excellent**: 45-50 points

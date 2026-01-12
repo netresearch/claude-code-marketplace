@@ -13,10 +13,10 @@ export default defineConfig({
   expect: {
     timeout: 10000,
   },
-  fullyParallel: false,
+  fullyParallel: false, // Tests within a file run sequentially (safer for state)
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
-  workers: process.env.CI ? 1 : undefined,
+  workers: process.env.CI ? 4 : undefined, // CI: 4 workers, Local: half of CPUs
   reporter: [
     ['list'],
     ['html', { outputFolder: '../typo3temp/var/tests/playwright-reports' }],

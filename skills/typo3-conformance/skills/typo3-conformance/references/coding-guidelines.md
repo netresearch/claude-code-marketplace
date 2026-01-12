@@ -656,7 +656,7 @@ Use the TYPO3 Coding Standards package for the most up-to-date configuration:
 composer require --dev typo3/coding-standards
 ```
 
-See `templates/Build/php-cs-fixer/php-cs-fixer.php` for a complete template.
+See `assets/Build/php-cs-fixer/php-cs-fixer.php` for a complete template.
 
 ## Conformance Checklist
 

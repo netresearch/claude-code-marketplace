@@ -1,6 +1,6 @@
 {
   "name": "typo3-ddev",
-  "version": "1.11.2",
+  "version": "1.12.0",
   "description": "DDEV setup for TYPO3 extension development",
   "repository": "https://github.com/netresearch/typo3-ddev-skill",
   "license": "MIT",

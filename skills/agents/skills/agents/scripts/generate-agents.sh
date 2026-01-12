@@ -4,7 +4,7 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 SKILL_DIR="$(dirname "$SCRIPT_DIR")"
-TEMPLATE_DIR="$SKILL_DIR/templates"
+TEMPLATE_DIR="$SKILL_DIR/assets"
 
 # Source helper library
 source "$SCRIPT_DIR/lib/template.sh"

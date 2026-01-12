@@ -1,0 +1,75 @@
+{
+    // Infection PHP Configuration for TYPO3 Extensions
+    //
+    // Run: Build/Scripts/runTests.sh -s mutation
+    //
+    // CUSTOMIZATION REQUIRED:
+    // - Adjust 'excludes' for your extension structure
+    // - Update 'minMsi' and 'minCoveredMsi' thresholds as needed
+
+    "$schema": "https://raw.githubusercontent.com/infection/infection/0.29.0/resources/schema.json",
+
+    // Source code directories
+    "source": {
+        "directories": [
+            "Classes"
+        ],
+        "excludes": [
+            // Commonly excluded directories
+            "Exception",
+            "DependencyInjection",
+            // Add extension-specific exclusions:
+            // "Controller",  // If controllers are thin wrappers
+            // "ViewHelpers", // If viewhelpers are simple
+        ]
+    },
+
+    // Output logs
+    "logs": {
+        "text": ".Build/infection/infection.log",
+        "html": ".Build/infection/infection.html",
+        "json": ".Build/infection/infection.json",
+        // GitHub Actions annotation format (optional)
+        // "github": true,
+        // Badge generation (optional)
+        // "badge": { "branch": "main" }
+    },
+
+    // Temporary directory for mutation testing
+    "tmpDir": ".Build/infection/tmp",
+
+    // PHPUnit configuration
+    "phpUnit": {
+        "configDir": "Build/phpunit",
+        "customPath": ".Build/bin/phpunit"
+    },
+
+    // Test framework settings
+    "testFramework": "phpunit",
+    "testFrameworkOptions": "--testsuite=Unit",
+
+    // Mutators configuration
+    // @see https://infection.github.io/guide/mutators.html
+    "mutators": {
+        "@default": true,
+
+        // Disable problematic mutators
+        "CastString": false,           // Often produces equivalent mutations
+        "UnwrapArrayMerge": false,     // Can break array operations
+        "UnwrapArrayReplace": false,   // Can break array operations
+
+        // Consider disabling for specific patterns:
+        // "MethodCallRemoval": false, // If you have logging calls
+        // "LogicalAnd": false,        // If complex boolean logic
+    },
+
+    // Mutation Score Indicator thresholds
+    // MSI = Killed / Total mutations
+    // Covered MSI = Killed / Mutations covered by tests
+    "minMsi": 70,
+    "minCoveredMsi": 80,
+
+    // Performance settings
+    "timeout": 10,
+    "threads": 4
+}

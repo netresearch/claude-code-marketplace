@@ -113,7 +113,7 @@ Production-ready configuration templates based on [TYPO3 Best Practices (Tea Ext
 - **Build/playwright/** - Playwright E2E and accessibility testing (Node >=22.18)
 - **.github/workflows/publish-to-ter.yml** - TER publishing workflow
 
-All templates are available in [`templates/`](templates/) and ready for direct use.
+All templates are available in [`assets/`](assets/) and ready for direct use.
 
 ## Advanced Code Quality Tools
 
@@ -199,8 +199,8 @@ composer require --dev spaze/phpstan-disallowed-calls:^3.4
 
 ```bash
 mkdir -p Build/phpstan
-cp ~/.claude/skills/typo3-conformance/templates/Build/phpstan/phpstan.neon Build/phpstan/
-cp ~/.claude/skills/typo3-conformance/templates/Build/phpstan/phpstan-baseline.neon Build/phpstan/
+cp ~/.claude/skills/typo3-conformance/assets/Build/phpstan/phpstan.neon Build/phpstan/
+cp ~/.claude/skills/typo3-conformance/assets/Build/phpstan/phpstan-baseline.neon Build/phpstan/
 ```
 
 3. **Customize for Your Extension**
@@ -420,7 +420,7 @@ composer require --dev ssch/typo3-rector-testing-framework:^2.0
 
 ```bash
 mkdir -p Build/rector
-cp ~/.claude/skills/typo3-conformance/templates/Build/rector/rector.php Build/rector/
+cp ~/.claude/skills/typo3-conformance/assets/Build/rector/rector.php Build/rector/
 ```
 
 3. **Customize Configuration**
@@ -539,7 +539,7 @@ npm install --save-dev eslint
 
 # Copy configuration
 mkdir -p Build/eslint
-cp ~/.claude/skills/typo3-conformance/templates/Build/eslint/.eslintrc.json Build/eslint/
+cp ~/.claude/skills/typo3-conformance/assets/Build/eslint/.eslintrc.json Build/eslint/
 
 # Add script to package.json
 {
@@ -592,7 +592,7 @@ npm install --save-dev stylelint stylelint-config-standard
 
 # Copy configuration
 mkdir -p Build/stylelint
-cp ~/.claude/skills/typo3-conformance/templates/Build/stylelint/.stylelintrc.json Build/stylelint/
+cp ~/.claude/skills/typo3-conformance/assets/Build/stylelint/.stylelintrc.json Build/stylelint/
 
 # Add script to package.json
 {
@@ -686,7 +686,7 @@ sniffs:
 composer require --dev helmich/typo3-typoscript-lint:^3.2
 
 mkdir -p Build/typoscript-lint
-cp ~/.claude/skills/typo3-conformance/templates/Build/typoscript-lint/TypoScriptLint.yml Build/typoscript-lint/
+cp ~/.claude/skills/typo3-conformance/assets/Build/typoscript-lint/TypoScriptLint.yml Build/typoscript-lint/
 
 # Add composer script
 {
@@ -723,7 +723,7 @@ composer require --dev icanhazstring/composer-unused:^0.8
 
 # Copy configuration
 mkdir -p Build/composer-unused
-cp ~/.claude/skills/typo3-conformance/templates/Build/composer-unused/composer-unused.php Build/composer-unused/
+cp ~/.claude/skills/typo3-conformance/assets/Build/composer-unused/composer-unused.php Build/composer-unused/
 
 # Run analysis
 vendor/bin/composer-unused --configuration Build/composer-unused/composer-unused.php
@@ -1301,9 +1301,23 @@ Based on:
 - [TYPO3 Coding Guidelines](https://docs.typo3.org/m/typo3/reference-coreapi/main/en-us/CodingGuidelines/)
 - [TYPO3 Best Practices Tea Extension](https://github.com/TYPO3BestPractices/tea)
 
+## Acknowledgments
+
+This skill is built upon the foundational work of the TYPO3 community. We gratefully acknowledge:
+
+- **[TYPO3 Core Development Team](https://typo3.org/community/teams/typo3-development)** — For establishing and maintaining the extension architecture standards, coding guidelines, dependency injection patterns, and PSR-14 event system that form the basis of this conformance checker.
+
+- **[TYPO3 Best Practices Team](https://typo3.org/community/teams/best-practices)** — For the exemplary [Tea Extension](https://github.com/TYPO3BestPractices/tea) that serves as the reference implementation, demonstrating production-grade quality tooling, testing infrastructure, and CI/CD patterns.
+
+- **[TYPO3 Documentation Team](https://typo3.org/community/teams/documentation)** — For the comprehensive official documentation that defines TYPO3 standards and makes conformance checking possible.
+
+- **[TYPO3 Content Types Team](https://typo3.org/community/teams/content-types)** — For their work on structured content and TCA standards that inform extension architecture best practices.
+
+- **[TYPO3 Security Team](https://typo3.org/community/teams/security)** — For establishing the security guidelines and patterns that inform our security-focused conformance checks.
+
 ---
 
-**Version:** 1.8.0
+**Version:** 1.12.0
 **Maintained By:** Netresearch DTT GmbH
 **Last Updated:** 2025-12-02
 

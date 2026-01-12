@@ -466,6 +466,44 @@ grep -rn "'type'\s*=>\s*'text'" Configuration/TCA/
 
 ## v13 → v14 Upgrade
 
+### TypoScript/TSconfig Callables Require #[AsAllowedCallable] Attribute (Critical)
+
+> **Breaking: #108054** - [Changelog](https://docs.typo3.org/c/typo3/cms-core/main/en-us/Changelog/14.0/Breaking-108054-EnforceExplicitOpt-inForTypoScriptTSconfigCallables.html)
+
+TYPO3 v14 requires explicit opt-in for methods callable through TypoScript/TSconfig. Without the attribute, calls fail with `AllowedCallableException`.
+
+**Search Pattern**
+```bash
+# Find TypoScript userFunc references
+grep -rn "userFunc\|preUserFunc\|postUserFunc" Configuration/TypoScript/
+# Find PHP classes referenced in TypoScript
+grep -rn "->render\|->process" Configuration/TypoScript/ | grep -v "#"
+```
+
+**Affected**
+- `userFunc` in USER/USER_INT content objects
+- `preUserFunc`, `postUserFunc`, `preUserFuncInt`, `postUserFuncInt` in stdWrap
+- TSconfig `renderFunc` in suggest wizard
+
+**Fix**: Add `#[AsAllowedCallable]` attribute to all TypoScript-callable methods:
+
+```php
+use TYPO3\CMS\Core\Attribute\AsAllowedCallable;
+
+class MyProcessor
+{
+    #[AsAllowedCallable]
+    public function process(?string $content, array $conf, ServerRequestInterface $request): string
+    {
+        return $content ?? '';
+    }
+}
+```
+
+**Version Compatibility**: The attribute was backported to TYPO3 13.4.21. Extensions requiring `^13.4 || ^14.0` must update minimum to `^13.4.21 || ^14.0`.
+
+**Note**: No Rector rule exists for this change. Manual review of TypoScript configurations required.
+
 ### ExtensionConfiguration::getAll() Removed (Critical)
 
 **Search Pattern**

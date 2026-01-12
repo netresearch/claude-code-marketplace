@@ -373,6 +373,10 @@ if command -v gh &> /dev/null && [ -n "$REPO_SLUG" ]; then
         ALLOW_MERGE=$(echo "$REPO_SETTINGS" | jq -r '.allow_merge_commit // true')
         ALLOW_SQUASH=$(echo "$REPO_SETTINGS" | jq -r '.allow_squash_merge // true')
         DELETE_ON_MERGE=$(echo "$REPO_SETTINGS" | jq -r '.delete_branch_on_merge // false')
+        ALLOW_AUTO_MERGE=$(echo "$REPO_SETTINGS" | jq -r '.allow_auto_merge // false')
+        ALLOW_UPDATE_BRANCH=$(echo "$REPO_SETTINGS" | jq -r '.allow_update_branch // false')
+        HAS_DISCUSSIONS=$(echo "$REPO_SETTINGS" | jq -r '.has_discussions // false')
+        HAS_WIKI=$(echo "$REPO_SETTINGS" | jq -r '.has_wiki // false')
 
         if [ "$ALLOW_MERGE" = "true" ]; then
             pass "Merge commits enabled"
@@ -397,6 +401,30 @@ if command -v gh &> /dev/null && [ -n "$REPO_SLUG" ]; then
         else
             fail "Delete branch on merge disabled (should be enabled)"
         fi
+
+        if [ "$ALLOW_AUTO_MERGE" = "true" ]; then
+            pass "Auto-merge enabled"
+        else
+            warn "Auto-merge disabled (should be enabled for merge queue)"
+        fi
+
+        if [ "$ALLOW_UPDATE_BRANCH" = "true" ]; then
+            pass "Always suggest updating PR branches enabled"
+        else
+            warn "Always suggest updating PR branches disabled"
+        fi
+
+        if [ "$HAS_DISCUSSIONS" = "true" ]; then
+            pass "Discussions enabled"
+        else
+            warn "Discussions disabled (should be enabled)"
+        fi
+
+        if [ "$HAS_WIKI" = "false" ]; then
+            pass "Wiki disabled (use docs folder instead)"
+        else
+            warn "Wiki enabled (consider disabling - use docs folder)"
+        fi
     else
         warn "Could not fetch GitHub repo settings (check gh auth)"
     fi
@@ -417,8 +445,8 @@ echo "  - Require review from CODEOWNERS"
 echo "  - Require conversation resolution"
 echo "  - Do not allow force pushes"
 echo "  - Do not allow deletions"
-echo "  - Allow merge commits only (disable rebase & squash)"
-echo "  - Delete branch on merge"
+echo "  - Enable merge queue (with MERGE method)"
+echo "  - Do NOT enable 'Require linear history' (conflicts with merge commits)"
 info "Check with: gh api repos/{owner}/{repo}/branches/main/protection"
 
 # Check if local indicators suggest protection is needed

@@ -97,7 +97,7 @@ echo -e "${YELLOW}Running conformance checks...${NC}"
 echo ""
 
 # 1. File Structure Check
-echo -e "${BLUE}[1/5] Checking file structure...${NC}"
+echo -e "${BLUE}[1/7] Checking file structure...${NC}"
 if bash "${SCRIPT_DIR}/check-file-structure.sh" "${PROJECT_DIR}" >> "${REPORT_FILE}"; then
     echo -e "${GREEN}  ✓ File structure check complete${NC}"
     structure_score=18
@@ -107,8 +107,19 @@ else
 fi
 echo ""
 
-# 2. Coding Standards Check
-echo -e "${BLUE}[2/5] Checking coding standards...${NC}"
+# 2. Documentation Structure Check (for full validation, invoke typo3-docs skill)
+echo -e "${BLUE}[2/7] Checking documentation structure...${NC}"
+if bash "${SCRIPT_DIR}/check-documentation.sh" "${PROJECT_DIR}" >> "${REPORT_FILE}"; then
+    echo -e "${GREEN}  ✓ Documentation check complete${NC}"
+    docs_score=10
+else
+    echo -e "${YELLOW}  ⚠ Documentation issues found${NC}"
+    docs_score=5
+fi
+echo ""
+
+# 3. Coding Standards Check
+echo -e "${BLUE}[3/7] Checking coding standards...${NC}"
 if bash "${SCRIPT_DIR}/check-coding-standards.sh" "${PROJECT_DIR}" >> "${REPORT_FILE}"; then
     echo -e "${GREEN}  ✓ Coding standards check complete${NC}"
     coding_score=18
@@ -118,8 +129,8 @@ else
 fi
 echo ""
 
-# 3. Architecture Check
-echo -e "${BLUE}[3/5] Checking PHP architecture...${NC}"
+# 4. Architecture Check
+echo -e "${BLUE}[4/7] Checking PHP architecture...${NC}"
 if bash "${SCRIPT_DIR}/check-architecture.sh" "${PROJECT_DIR}" >> "${REPORT_FILE}"; then
     echo -e "${GREEN}  ✓ Architecture check complete${NC}"
     arch_score=18
@@ -129,8 +140,8 @@ else
 fi
 echo ""
 
-# 4. Testing Check
-echo -e "${BLUE}[4/6] Checking testing infrastructure...${NC}"
+# 5. Testing Check
+echo -e "${BLUE}[5/7] Checking testing infrastructure...${NC}"
 if bash "${SCRIPT_DIR}/check-testing.sh" "${PROJECT_DIR}" >> "${REPORT_FILE}"; then
     echo -e "${GREEN}  ✓ Testing check complete${NC}"
     test_score=16
@@ -140,8 +151,8 @@ else
 fi
 echo ""
 
-# 5. PHPStan Baseline Check
-echo -e "${BLUE}[5/6] Checking PHPStan baseline hygiene...${NC}"
+# 6. PHPStan Baseline Check
+echo -e "${BLUE}[6/7] Checking PHPStan baseline hygiene...${NC}"
 if bash "${SCRIPT_DIR}/check-phpstan-baseline.sh" "${PROJECT_DIR}"; then
     echo -e "${GREEN}  ✓ PHPStan baseline hygiene check passed${NC}"
     baseline_score=10
@@ -151,24 +162,25 @@ else
 fi
 echo ""
 
-# 6. Generate comprehensive report
-echo -e "${BLUE}[6/6] Generating final report...${NC}"
+# 7. Generate comprehensive report
+echo -e "${BLUE}[7/7] Generating final report...${NC}"
 bash "${SCRIPT_DIR}/generate-report.sh" "${PROJECT_DIR}" "${REPORT_FILE}" \
     "${structure_score}" "${coding_score}" "${arch_score}" "${test_score}"
 echo ""
 
-# Calculate total (including baseline hygiene score)
-total_score=$((structure_score + coding_score + arch_score + test_score + baseline_score))
+# Calculate total (including all scores)
+total_score=$((structure_score + docs_score + coding_score + arch_score + test_score + baseline_score))
 
 # Display summary
 echo -e "${BLUE}╔════════════════════════════════════════════════════════════╗${NC}"
 echo -e "${BLUE}║                    Conformance Results                     ║${NC}"
 echo -e "${BLUE}╚════════════════════════════════════════════════════════════╝${NC}"
 echo ""
-echo -e "  File Structure:       ${structure_score}/20"
-echo -e "  Coding Standards:     ${coding_score}/20"
-echo -e "  PHP Architecture:     ${arch_score}/20"
-echo -e "  Testing Standards:    ${test_score}/20"
+echo -e "  File Structure:       ${structure_score}/18"
+echo -e "  Documentation:        ${docs_score}/10"
+echo -e "  Coding Standards:     ${coding_score}/18"
+echo -e "  PHP Architecture:     ${arch_score}/18"
+echo -e "  Testing Standards:    ${test_score}/16"
 echo -e "  Baseline Hygiene:     ${baseline_score}/10"
 echo -e "  Best Practices:       10/10"
 echo ""

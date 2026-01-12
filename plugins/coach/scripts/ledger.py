@@ -72,7 +72,11 @@ class Ledger:
         return []
 
     def add_repo_to_candidate(self, fingerprint: str, repo_id: str = None):
-        """Add current repo to candidate's repo list."""
+        """Add current repo to candidate's repo list.
+
+        Uses UPSERT pattern to handle race conditions where the same
+        fingerprint might be inserted concurrently.
+        """
         if repo_id is None:
             repo_id = self.get_current_repo_id()
 
@@ -96,12 +100,21 @@ class Ledger:
                 WHERE fingerprint = ?
             """, (json.dumps(repo_ids), row['count'] + 1, now, now, fingerprint))
         else:
-            # Create new entry
+            # Create new entry with ON CONFLICT to handle race conditions
             conn.execute("""
                 INSERT INTO candidates
                 (fingerprint, repo_ids, count, first_seen, last_seen, status)
                 VALUES (?, ?, 1, ?, ?, 'pending')
-            """, (fingerprint, json.dumps([repo_id]), now, now))
+                ON CONFLICT(fingerprint) DO UPDATE SET
+                    repo_ids = CASE
+                        WHEN instr(candidates.repo_ids, ?) = 0
+                        THEN json_insert(candidates.repo_ids, '$[#]', ?)
+                        ELSE candidates.repo_ids
+                    END,
+                    count = candidates.count + 1,
+                    last_seen = excluded.last_seen,
+                    updated_at = excluded.last_seen
+            """, (fingerprint, json.dumps([repo_id]), now, now, repo_id, repo_id))
 
         conn.commit()
         conn.close()

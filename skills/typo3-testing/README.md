@@ -1,6 +1,6 @@
 # TYPO3 Testing Skill
 
-[![Version](https://img.shields.io/badge/version-2.0.0-blue.svg)](https://github.com/netresearch/typo3-testing-skill/releases/tag/v2.0.0)
+[![Version](https://img.shields.io/badge/version-3.0.0-blue.svg)](https://github.com/netresearch/typo3-testing-skill/releases/tag/v3.0.0)
 
 A comprehensive Claude Code skill for creating and managing TYPO3 extension tests.
 
@@ -640,7 +640,7 @@ composer ci:tests
 
 - [SKILL.md](SKILL.md) - Main workflow guide with decision trees
 - [references/](references/) - Detailed testing documentation
-- [templates/](templates/) - PHPUnit configs, AGENTS.md, examples
+- [assets/](skills/typo3-testing/assets/) - PHPUnit configs, AGENTS.md, examples
 
 ## Requirements
 
@@ -655,6 +655,16 @@ composer ci:tests
 - [TYPO3 Testing Framework](https://docs.typo3.org/m/typo3/reference-coreapi/main/en-us/Testing/)
 - [TYPO3 Best Practices: tea extension](https://github.com/TYPO3BestPractices/tea)
 - TYPO3 community best practices
+
+## Acknowledgments
+
+This skill stands on the shoulders of the TYPO3 community's exceptional work. We gratefully acknowledge:
+
+- **[TYPO3 Core Development Team](https://typo3.org/community/teams/typo3-development)** — For creating and maintaining the TYPO3 Testing Framework, the `typo3/core-testing-*` Docker images, and establishing the testing patterns that make this skill possible.
+
+- **[TYPO3 Best Practices Team](https://typo3.org/community/teams/best-practices)** — For the exemplary [Tea Extension](https://github.com/TYPO3BestPractices/tea) that serves as the reference implementation for testing infrastructure, demonstrating production-grade PHPUnit configuration, multi-database testing, and runTests.sh orchestration.
+
+- **[TYPO3 Documentation Team](https://typo3.org/community/teams/documentation)** — For the comprehensive testing documentation that guides extension developers toward quality practices.
 
 ## License
 

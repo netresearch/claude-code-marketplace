@@ -115,6 +115,75 @@ $mock->method('foo')
     });
 ```
 
+### PHPUnit 12: Mock Objects Without Expectations
+
+PHPUnit 12 shows notices when mocks have no configured expectations. Suppress with the attribute:
+
+```php
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\Attributes\CoversClass;
+
+#[CoversClass(MyService::class)]
+#[AllowMockObjectsWithoutExpectations]  // Suppress "no expectations" notice
+final class MyServiceTest extends FunctionalTestCase
+{
+    public function testSomething(): void
+    {
+        // Mock created but no expects() configured - that's OK
+        $mock = $this->createMock(DependencyInterface::class);
+        $service = new MyService($mock);
+
+        // Test the service behavior
+        self::assertTrue($service->isValid());
+    }
+}
+```
+
+**When to use:**
+- Mocks used only for satisfying type hints
+- Fuzz tests where mocks aren't the focus
+- Tests where the mock's behavior is irrelevant
+
+**Best practice:** Only use when genuinely appropriate. Most tests should verify mock interactions.
+
+### PHPUnit 12: Attribute-Based Annotations
+
+PHPUnit 12 prefers PHP 8 attributes over docblock annotations:
+
+```php
+// Old (deprecated)
+/**
+ * @covers \MyClass
+ * @group slow
+ */
+class MyTest extends TestCase {}
+
+// New (PHPUnit 10+)
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
+
+#[CoversClass(MyClass::class)]
+#[Group('slow')]
+final class MyTest extends TestCase
+{
+    #[Test]
+    public function itDoesTheThing(): void {}
+}
+```
+
+### Common PHPUnit 12 Attributes
+
+| Attribute | Purpose |
+|-----------|---------|
+| `#[Test]` | Mark method as test |
+| `#[CoversClass(Foo::class)]` | Code coverage target |
+| `#[CoversNothing]` | Exclude from coverage |
+| `#[Group('slow')]` | Test grouping |
+| `#[DataProvider('dataMethod')]` | Data provider |
+| `#[Depends('testFirst')]` | Test dependencies |
+| `#[AllowMockObjectsWithoutExpectations]` | Suppress mock notices |
+
 ## Database Credentials for DDEV
 
 In `Build/phpunit/FunctionalTests.xml`:

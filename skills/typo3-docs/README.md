@@ -108,7 +108,7 @@ Main skill file with comprehensive instructions for:
 - Gap analysis priority calculation
 - Documentation mapping strategies
 
-### templates/
+### assets/
 
 **AGENTS.md** - AI assistant context template:
 - Documentation strategy and audience

@@ -1,0 +1,71 @@
+# Codecov Configuration for TYPO3 Extensions
+#
+# Place this file in repository root as 'codecov.yml'
+# @see https://docs.codecov.com/docs/codecov-yaml
+
+coverage:
+  # Precision of coverage percentage (decimal places)
+  precision: 2
+
+  # Rounding method: down, up, nearest
+  round: down
+
+  # Coverage range for color coding (red...green)
+  range: "60...100"
+
+  status:
+    # Project-level coverage status
+    project:
+      default:
+        # Target coverage (auto = maintain current level)
+        target: auto
+        # Acceptable drop from target
+        threshold: 5%
+        # Only check files changed in the PR
+        # only_pulls: true
+
+    # Patch-level coverage (new/changed code)
+    patch:
+      default:
+        # New code should have higher coverage
+        target: 80%
+        threshold: 5%
+
+# PR comment configuration
+comment:
+  # Layout components: reach, diff, flags, files, footer
+  layout: "reach,diff,flags,files"
+  # Comment behavior: default, once, new, spammed
+  behavior: default
+  # Only comment if coverage changes
+  require_changes: true
+  # Show critical files section
+  # show_critical_paths: true
+
+# Coverage flags for separating test types
+flags:
+  unittests:
+    paths:
+      - Classes/
+    carryforward: true
+  functionaltests:
+    paths:
+      - Classes/
+    carryforward: true
+
+# Files to ignore in coverage reports
+ignore:
+  - "Tests/**/*"
+  - ".Build/**/*"
+  - ".ddev/**/*"
+  - "Build/**/*"
+  - "Documentation/**/*"
+  - "Resources/**/*"
+  - "ext_emconf.php"
+  - "ext_localconf.php"
+  - "ext_tables.php"
+
+# Require CI to pass before posting status
+# ci:
+#   - "Tests / Unit Tests"
+#   - "Tests / Functional Tests"

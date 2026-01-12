@@ -1,0 +1,156 @@
+# GitHub Actions E2E Workflow for TYPO3 Extensions
+#
+# Place this file in .github/workflows/e2e.yml
+#
+# This workflow uses DDEV for full TYPO3 environment testing
+# with Playwright for browser-based E2E tests.
+#
+# PREREQUISITES:
+# - DDEV configuration in .ddev/ directory
+# - Playwright tests in Tests/playwright/ or tests/playwright/
+# - package.json with Playwright dependencies
+
+name: E2E Tests
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+  # Manual trigger for expensive E2E tests
+  workflow_dispatch:
+
+# Prevent concurrent E2E runs on same branch
+concurrency:
+  group: e2e-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  e2e:
+    name: E2E Tests (Playwright)
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup DDEV
+        uses: ddev/github-action-setup-ddev@v1
+        with:
+          # Autostart is handled explicitly below
+          autostart: false
+
+      - name: Start DDEV
+        run: |
+          ddev start
+          ddev composer install --no-progress
+
+      - name: Setup TYPO3
+        run: |
+          # Import database if fixture exists
+          if [ -f ".ddev/db-dumps/initial.sql.gz" ]; then
+            ddev import-db --file=.ddev/db-dumps/initial.sql.gz
+          fi
+
+          # Run TYPO3 setup commands
+          ddev exec vendor/bin/typo3 extension:setup
+          ddev exec vendor/bin/typo3 cache:flush
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: 'Tests/playwright/package-lock.json'
+
+      - name: Install Playwright dependencies
+        working-directory: Tests/playwright
+        run: |
+          npm ci
+          npx playwright install --with-deps chromium
+
+      - name: Run Playwright tests
+        working-directory: Tests/playwright
+        run: npx playwright test
+        env:
+          # DDEV provides the base URL
+          BASE_URL: https://${{ github.event.repository.name }}.ddev.site
+
+      - name: Upload Playwright report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-report
+          path: Tests/playwright/playwright-report/
+          retention-days: 7
+
+      - name: Upload test screenshots
+        uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: playwright-screenshots
+          path: Tests/playwright/test-results/
+          retention-days: 7
+
+      - name: Stop DDEV
+        if: always()
+        run: ddev stop
+
+  # ==========================================================================
+  # Accessibility Tests (Optional, separate job)
+  # ==========================================================================
+
+  # accessibility:
+  #   name: Accessibility Tests (axe-core)
+  #   runs-on: ubuntu-latest
+  #   timeout-minutes: 20
+  #   needs: [e2e]  # Run after E2E to reuse any cached setup
+  #
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #
+  #     - name: Setup DDEV
+  #       uses: ddev/github-action-setup-ddev@v1
+  #       with:
+  #         autostart: false
+  #
+  #     - name: Start DDEV
+  #       run: |
+  #         ddev start
+  #         ddev composer install --no-progress
+  #
+  #     - name: Setup TYPO3
+  #       run: |
+  #         ddev exec vendor/bin/typo3 extension:setup
+  #         ddev exec vendor/bin/typo3 cache:flush
+  #
+  #     - name: Setup Node.js
+  #       uses: actions/setup-node@v4
+  #       with:
+  #         node-version: '22'
+  #         cache: 'npm'
+  #         cache-dependency-path: 'Tests/playwright/package-lock.json'
+  #
+  #     - name: Install dependencies
+  #       working-directory: Tests/playwright
+  #       run: |
+  #         npm ci
+  #         npx playwright install --with-deps chromium
+  #
+  #     - name: Run accessibility tests
+  #       working-directory: Tests/playwright
+  #       run: npx playwright test --project=accessibility
+  #       env:
+  #         BASE_URL: https://${{ github.event.repository.name }}.ddev.site
+  #
+  #     - name: Upload accessibility report
+  #       uses: actions/upload-artifact@v4
+  #       if: always()
+  #       with:
+  #         name: accessibility-report
+  #         path: Tests/playwright/accessibility-report/
+  #         retention-days: 7
+  #
+  #     - name: Stop DDEV
+  #       if: always()
+  #       run: ddev stop

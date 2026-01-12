@@ -48,7 +48,7 @@ fi
 
 # Copy AGENTS.md template
 echo -e "${YELLOW}Creating AGENTS.md from template...${NC}"
-cp "${SKILL_DIR}/templates/AGENTS.md" "${AGENTS_FILE}"
+cp "${SKILL_DIR}/assets/AGENTS.md" "${AGENTS_FILE}"
 
 echo -e "${GREEN}✓ Created ${AGENTS_FILE}${NC}"
 echo

@@ -1267,7 +1267,12 @@ class CandidateAggregator:
         self._update_ledger(new_candidates)
 
     def _update_ledger(self, candidates: List[Dict]):
-        """Update the global ledger with new candidates."""
+        """Update the global ledger with new candidates.
+
+        Uses UPSERT (INSERT ... ON CONFLICT DO UPDATE) to handle duplicate
+        fingerprints atomically, avoiding IntegrityError when the same
+        fingerprint appears multiple times in a batch.
+        """
         if not LEDGER_DB.exists():
             return
 
@@ -1282,17 +1287,28 @@ class CandidateAggregator:
             import hashlib
             repo_id = hashlib.sha256(os.getcwd().encode()).hexdigest()[:16]
 
+        # Deduplicate candidates by fingerprint before processing
+        # This prevents the same fingerprint being processed twice in one batch
+        seen_fps = set()
+        unique_candidates = []
         for c in candidates:
             fp = c.get('fingerprint')
-            if not fp:
-                continue
+            if fp and fp not in seen_fps:
+                seen_fps.add(fp)
+                unique_candidates.append(c)
 
+        now = datetime.now(timezone.utc).isoformat()
+
+        for c in unique_candidates:
+            fp = c.get('fingerprint')
+
+            # Use UPSERT pattern to handle duplicates atomically
+            # First, try to get existing repo_ids to merge them
             cursor = conn.execute("SELECT repo_ids, count FROM candidates WHERE fingerprint = ?", (fp,))
             row = cursor.fetchone()
 
-            now = datetime.now(timezone.utc).isoformat()
-
             if row:
+                # Update existing record
                 repo_ids = json.loads(row[0]) if row[0] else []
                 if repo_id not in repo_ids:
                     repo_ids.append(repo_id)
@@ -1303,11 +1319,21 @@ class CandidateAggregator:
                     WHERE fingerprint = ?
                 """, (json.dumps(repo_ids), row[1] + 1, now, now, fp))
             else:
+                # Insert new record with ON CONFLICT to handle race conditions
                 conn.execute("""
                     INSERT INTO candidates
                     (fingerprint, normalized_text, title, candidate_type, trigger_condition,
                      action, repo_ids, evidence, confidence, first_seen, last_seen)
                     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    ON CONFLICT(fingerprint) DO UPDATE SET
+                        repo_ids = CASE
+                            WHEN instr(candidates.repo_ids, ?) = 0
+                            THEN json_insert(candidates.repo_ids, '$[#]', ?)
+                            ELSE candidates.repo_ids
+                        END,
+                        count = candidates.count + 1,
+                        last_seen = excluded.last_seen,
+                        updated_at = excluded.last_seen
                 """, (
                     fp,
                     f"{c.get('trigger', '')} {c.get('action', '')}",
@@ -1318,7 +1344,8 @@ class CandidateAggregator:
                     json.dumps([repo_id]),
                     json.dumps(c.get('evidence', [])),
                     c.get('confidence', 0.5),
-                    now, now
+                    now, now,
+                    repo_id, repo_id  # For the ON CONFLICT clause
                 ))
 
         conn.commit()

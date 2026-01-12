@@ -1,0 +1,4 @@
+"uid","pid","CType","header","bodytext","colPos","sorting","hidden","deleted","tstamp","crdate"
+1,2,"text","Test Header","<p>Test content paragraph</p>",0,256,0,0,1700000000,1700000000
+2,2,"textmedia","Media Header","<p>Content with media</p>",0,512,0,0,1700000000,1700000000
+3,2,"list","Plugin Header","",0,768,0,0,1700000000,1700000000

@@ -42,7 +42,7 @@ my_extension/
 │           └── config.yaml
 ├── Documentation/                  # RST documentation
 │   ├── Index.rst
-│   ├── Settings.cfg
+│   ├── guides.xml                  # Modern (replaces Settings.cfg)
 │   ├── Introduction/
 │   ├── Installation/
 │   ├── Configuration/

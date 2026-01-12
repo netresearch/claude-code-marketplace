@@ -77,21 +77,21 @@ echo -e "${GREEN}✓ Directories created${NC}"
 # 3. Copy PHPUnit configurations
 echo -e "${YELLOW}[3/6] Installing PHPUnit configurations...${NC}"
 if [ ! -f "${PROJECT_DIR}/Build/phpunit/UnitTests.xml" ]; then
-    cp "${SKILL_DIR}/templates/UnitTests.xml" "${PROJECT_DIR}/Build/phpunit/"
+    cp "${SKILL_DIR}/assets/UnitTests.xml" "${PROJECT_DIR}/Build/phpunit/"
     echo -e "${GREEN}✓ Created UnitTests.xml${NC}"
 else
     echo -e "${YELLOW}⚠ UnitTests.xml already exists (skipped)${NC}"
 fi
 
 if [ ! -f "${PROJECT_DIR}/Build/phpunit/FunctionalTests.xml" ]; then
-    cp "${SKILL_DIR}/templates/FunctionalTests.xml" "${PROJECT_DIR}/Build/phpunit/"
+    cp "${SKILL_DIR}/assets/FunctionalTests.xml" "${PROJECT_DIR}/Build/phpunit/"
     echo -e "${GREEN}✓ Created FunctionalTests.xml${NC}"
 else
     echo -e "${YELLOW}⚠ FunctionalTests.xml already exists (skipped)${NC}"
 fi
 
 if [ ! -f "${PROJECT_DIR}/Build/phpunit/FunctionalTestsBootstrap.php" ]; then
-    cp "${SKILL_DIR}/templates/FunctionalTestsBootstrap.php" "${PROJECT_DIR}/Build/phpunit/"
+    cp "${SKILL_DIR}/assets/FunctionalTestsBootstrap.php" "${PROJECT_DIR}/Build/phpunit/"
     echo -e "${GREEN}✓ Created FunctionalTestsBootstrap.php${NC}"
 else
     echo -e "${YELLOW}⚠ FunctionalTestsBootstrap.php already exists (skipped)${NC}"
@@ -101,7 +101,7 @@ fi
 echo -e "${YELLOW}[4/6] Creating AGENTS.md templates...${NC}"
 for dir in "${PROJECT_DIR}/Tests/Unit" "${PROJECT_DIR}/Tests/Functional"; do
     if [ ! -f "${dir}/AGENTS.md" ]; then
-        cp "${SKILL_DIR}/templates/AGENTS.md" "${dir}/"
+        cp "${SKILL_DIR}/assets/AGENTS.md" "${dir}/"
         echo -e "${GREEN}✓ Created ${dir}/AGENTS.md${NC}"
     else
         echo -e "${YELLOW}⚠ ${dir}/AGENTS.md already exists (skipped)${NC}"
@@ -147,12 +147,12 @@ if [ "${WITH_ACCEPTANCE}" = true ]; then
 
     # Copy Docker Compose and Codeception config
     if [ ! -f "${PROJECT_DIR}/Build/docker-compose.yml" ]; then
-        cp "${SKILL_DIR}/templates/docker/docker-compose.yml" "${PROJECT_DIR}/Build/"
+        cp "${SKILL_DIR}/assets/docker/docker-compose.yml" "${PROJECT_DIR}/Build/"
         echo -e "${GREEN}✓ Created docker-compose.yml${NC}"
     fi
 
     if [ ! -f "${PROJECT_DIR}/codeception.yml" ]; then
-        cp "${SKILL_DIR}/templates/docker/codeception.yml" "${PROJECT_DIR}/"
+        cp "${SKILL_DIR}/assets/docker/codeception.yml" "${PROJECT_DIR}/"
         echo -e "${GREEN}✓ Created codeception.yml${NC}"
     fi
 
@@ -177,4 +177,4 @@ echo "   composer ci:test:php:unit"
 echo "   composer ci:test:php:functional"
 echo
 echo "3. Add CI/CD workflow (optional):"
-echo "   cp ${SKILL_DIR}/templates/github-actions-tests.yml .github/workflows/tests.yml"
+echo "   cp ${SKILL_DIR}/assets/github-actions-tests.yml .github/workflows/tests.yml"

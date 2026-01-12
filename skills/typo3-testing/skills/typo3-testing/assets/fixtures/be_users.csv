@@ -1,0 +1,3 @@
+"uid","pid","username","password","admin","tstamp","crdate","deleted","disable"
+1,0,"admin","$argon2i$v=19$m=65536,t=16,p=1$WE5KdXN3Vmw4U0lMSGVMWA$Y8+SBi+43VzKMFVVdoH5lyoNIOk05q8j9Q1NxnpBFVU",1,1700000000,1700000000,0,0
+2,0,"editor","$argon2i$v=19$m=65536,t=16,p=1$WE5KdXN3Vmw4U0lMSGVMWA$Y8+SBi+43VzKMFVVdoH5lyoNIOk05q8j9Q1NxnpBFVU",0,1700000000,1700000000,0,0

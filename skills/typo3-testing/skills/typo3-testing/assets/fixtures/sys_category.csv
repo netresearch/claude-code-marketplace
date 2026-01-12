@@ -1,0 +1,4 @@
+"uid","pid","title","parent","sorting","hidden","deleted","tstamp","crdate"
+1,0,"Category 1",0,256,0,0,1700000000,1700000000
+2,0,"Category 2",0,512,0,0,1700000000,1700000000
+3,0,"Subcategory 1.1",1,256,0,0,1700000000,1700000000

@@ -1,0 +1,203 @@
+# GitHub Actions Workflow for TYPO3 Extension Testing
+#
+# Place this file in .github/workflows/tests.yml
+#
+# CUSTOMIZATION REQUIRED:
+# - Update PHP version matrix based on your minimum requirements
+# - Update TYPO3 version matrix based on supported versions
+# - Adjust codecov token secret name if needed
+
+name: Tests
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+jobs:
+  # ==========================================================================
+  # Code Quality Jobs
+  # ==========================================================================
+
+  lint:
+    name: PHP Lint
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        php: ['8.2', '8.3', '8.4']
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP ${{ matrix.php }}
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          tools: composer:v2
+
+      - name: Run PHP linting
+        run: Build/Scripts/runTests.sh -p ${{ matrix.php }} -s lint
+
+  code-style:
+    name: Code Style (PHP-CS-Fixer)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          tools: composer:v2
+
+      - name: Check code style
+        run: Build/Scripts/runTests.sh -s cgl -n
+
+  phpstan:
+    name: PHPStan
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          tools: composer:v2
+
+      - name: Run PHPStan
+        run: Build/Scripts/runTests.sh -s phpstan
+
+  rector:
+    name: Rector (dry-run)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          tools: composer:v2
+
+      - name: Run Rector dry-run
+        run: Build/Scripts/runTests.sh -s rector -n
+
+  # ==========================================================================
+  # Unit Tests
+  # ==========================================================================
+
+  unit-tests:
+    name: Unit Tests (PHP ${{ matrix.php }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        php: ['8.2', '8.3', '8.4']
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP ${{ matrix.php }}
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          coverage: pcov
+          tools: composer:v2
+
+      - name: Run unit tests with coverage
+        run: Build/Scripts/runTests.sh -p ${{ matrix.php }} -s unit -x
+
+      - name: Upload coverage to Codecov
+        if: matrix.php == '8.3'
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: .Build/coverage/clover.xml
+          flags: unittests
+          fail_ci_if_error: false
+          verbose: true
+
+  # ==========================================================================
+  # Functional Tests
+  # ==========================================================================
+
+  functional-tests:
+    name: Functional (PHP ${{ matrix.php }}, TYPO3 ${{ matrix.typo3 }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # TYPO3 v12 LTS
+          - php: '8.2'
+            typo3: '12'
+          - php: '8.3'
+            typo3: '12'
+          # TYPO3 v13 LTS
+          - php: '8.3'
+            typo3: '13'
+          - php: '8.4'
+            typo3: '13'
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP ${{ matrix.php }}
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: pdo_sqlite
+          tools: composer:v2
+
+      - name: Run functional tests (SQLite)
+        run: Build/Scripts/runTests.sh -p ${{ matrix.php }} -s functional -d sqlite
+
+  # ==========================================================================
+  # Architecture Tests (Optional)
+  # ==========================================================================
+
+  # architecture-tests:
+  #   name: Architecture Tests (PHPat)
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #
+  #     - name: Setup PHP
+  #       uses: shivammathur/setup-php@v2
+  #       with:
+  #         php-version: '8.3'
+  #         tools: composer:v2
+  #
+  #     - name: Run architecture tests
+  #       run: Build/Scripts/runTests.sh -s architecture
+
+  # ==========================================================================
+  # Mutation Testing (Optional - runs on schedule or manual trigger)
+  # ==========================================================================
+
+  # mutation-tests:
+  #   name: Mutation Testing
+  #   runs-on: ubuntu-latest
+  #   # Only run on main branch or manual trigger
+  #   if: github.ref == 'refs/heads/main' || github.event_name == 'workflow_dispatch'
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #
+  #     - name: Setup PHP
+  #       uses: shivammathur/setup-php@v2
+  #       with:
+  #         php-version: '8.3'
+  #         coverage: pcov
+  #         tools: composer:v2
+  #
+  #     - name: Run mutation tests
+  #       run: Build/Scripts/runTests.sh -s mutation
+  #
+  #     - name: Upload mutation report
+  #       uses: actions/upload-artifact@v4
+  #       with:
+  #         name: mutation-report
+  #         path: .Build/infection/
+  #         retention-days: 7

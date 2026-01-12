@@ -53,19 +53,24 @@ $EM_CONF[$_EXTKEY] = [
 - Main documentation entry point
 - Must follow reStructuredText format
 
-**Documentation/Settings.cfg**
-- REQUIRED for docs.typo3.org publication
+**Documentation/guides.xml**
+- REQUIRED for docs.typo3.org publication (modern PHP-based rendering)
 - Contains documentation project settings
 - Example:
-```ini
-[general]
-project = Extension Name
-release = 1.0.0
-copyright = 2024
-
-[html_theme_options]
-project_home = https://github.com/vendor/extension
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<guides xmlns="https://www.phpdoc.org/guides"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="https://www.phpdoc.org/guides vendor/phpdocumentor/guides-cli/resources/schema/guides.xsd"
+    theme="typo3docs">
+    <project title="Extension Name" version="1.0" release="1.0.0" copyright="since 2024"/>
+    <extension class="\T3Docs\Typo3DocsTheme\DependencyInjection\Typo3DocsThemeExtension"
+        project-home="https://github.com/vendor/extension"
+        project-repository="https://github.com/vendor/extension"/>
+</guides>
 ```
+
+> **Note:** `Settings.cfg` is legacy (Sphinx-based) and should be migrated to `guides.xml`.
 
 ## Directory Structure
 
@@ -128,7 +133,7 @@ project_home = https://github.com/vendor/extension
 
 **Documentation/**
 - Contains RST documentation
-- MUST include `Index.rst` and `Settings.cfg`
+- MUST include `Index.rst` and `guides.xml`
 - Common structure:
   - `Documentation/Introduction/`
   - `Documentation/Installation/`
@@ -270,7 +275,7 @@ Classes/
 
 - [ ] composer.json present with correct structure
 - [ ] ext_emconf.php present with complete metadata
-- [ ] Documentation/Index.rst and Documentation/Settings.cfg present
+- [ ] Documentation/Index.rst and Documentation/guides.xml present
 - [ ] Classes/ directory follows PSR-4 structure
 - [ ] Configuration/ subdirectories properly organized
 - [ ] Resources/ separated into Private/ and Public/

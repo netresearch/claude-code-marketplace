@@ -43,11 +43,15 @@ ddev install-v13                     # Single version
 
 ## Generated Files
 
+Copy templates from `assets/templates/` to project's `.ddev/`:
+
 ```
 .ddev/
 ├── config.yaml
 ├── docker-compose.web.yaml
 ├── apache/apache-site.conf
+├── index.html.netresearch.template  (for netresearch/* packages)
+├── index.html.typo3.template        (for all other packages)
 └── commands/web/install-v{11,12,13,14}
 ```
 
@@ -73,6 +77,7 @@ ddev docs                 # Render Documentation/*.rst
 | Prerequisites | `references/prerequisites-validation.md` |
 | Quick start | `references/quickstart.md` |
 | Advanced options | `references/advanced-options.md` |
+| Landing page templates | `references/index-page-generation.md` |
 | Windows fixes | `references/windows-fixes.md` |
 | Troubleshooting | `references/troubleshooting.md` |
 | PHP version management | `references/0003-php-version-management.md` |

@@ -151,6 +151,48 @@ gh repo edit --enable-merge-commit --disable-rebase-merge --disable-squash-merge
 
 **Note:** If you prefer rebase merging for linear history, use `--enable-rebase-merge --disable-merge-commit` instead. Ensure consistency with any GitHub Rulesets (see [Rulesets Configuration](#github-rulesets-configuration)).
 
+### Repository Settings
+
+**Complete repository settings:**
+
+| Setting | Value | Rationale |
+|---------|-------|-----------|
+| Allow merge commits | ✅ | With PR title and description |
+| Allow squash merging | ❌ | Preserve commit granularity |
+| Allow rebase merging | ❌ | Use merge queue instead |
+| Automatically delete head branches | ✅ | Keep repo clean |
+| Allow auto-merge | ✅ | Enable merge queue integration |
+| Always suggest updating PR branches | ✅ | Keep PRs up-to-date with base |
+| Discussions | ✅ | Community Q&A |
+| Wikis | ❌ | Use docs folder instead |
+
+**Configure via CLI:**
+
+```bash
+# Configure all repository settings
+gh repo edit \
+  --enable-merge-commit \
+  --disable-squash-merge \
+  --disable-rebase-merge \
+  --delete-branch-on-merge \
+  --enable-auto-merge \
+  --enable-discussions \
+  --disable-wiki
+
+# Set merge commit message format (PR title and description)
+gh api repos/{owner}/{repo} \
+  --method PATCH \
+  -f merge_commit_title=PR_TITLE \
+  -f merge_commit_message=PR_BODY
+
+# Enable "always suggest updating PR branches"
+gh api repos/{owner}/{repo} \
+  --method PATCH \
+  -F allow_update_branch=true
+```
+
+**Important:** Do NOT enable `required_linear_history` when using merge commits. Linear history requires fast-forward merges only (no merge commits). If you see "not authorized to push" errors, check if `required_linear_history` is enabled and disable it.
+
 ### Renaming "master" to "main"
 
 For complete migration steps from `master` to `main` as default branch, see `references/branch-migration.md`.
@@ -634,9 +676,9 @@ gh project create --title "Project Name"
 | `references/dependency-management.md` | Dependabot/Renovate and auto-merge patterns |
 | `references/sub-issues.md` | GitHub sub-issues GraphQL API |
 | `references/branch-migration.md` | Master to main migration guide |
-| `templates/auto-merge.yml.template` | Auto-merge with branch protection (--auto flag) |
-| `templates/auto-merge-queue.yml.template` | Auto-merge with merge queue (GraphQL mutation) |
-| `templates/auto-merge-direct.yml.template` | Auto-merge without branch protection |
+| `assets/auto-merge.yml.template` | Auto-merge with branch protection (--auto flag) |
+| `assets/auto-merge-queue.yml.template` | Auto-merge with merge queue (GraphQL mutation) |
+| `assets/auto-merge-direct.yml.template` | Auto-merge without branch protection |
 | `scripts/verify-github-project.sh` | Verification script for project setup |
 
 ## Related Skills

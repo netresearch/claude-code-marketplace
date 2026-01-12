@@ -1,0 +1,11 @@
+# PHPat Architecture Rules Configuration
+#
+# Links the ArchitectureTest class to PHPStan.
+# The actual rules are defined in Tests/Architecture/ArchitectureTest.php
+#
+# CUSTOMIZATION REQUIRED:
+# - Update the namespace to match your extension
+
+services:
+    -
+        class: Vendor\ExtensionName\Tests\Architecture\ArchitectureTest

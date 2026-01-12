@@ -1,6 +1,6 @@
 {
   "name": "agents",
-  "version": "1.3.2",
+  "version": "2.0.2",
   "description": "Generate and maintain AGENTS.md files following public convention",
   "repository": "https://github.com/netresearch/agents-skill",
   "license": "MIT",

@@ -5,43 +5,116 @@ description: "GitHub repository setup and configuration. This skill should be us
 
 # GitHub Project Skill
 
-## Triggers
+GitHub repository setup, configuration, and best practices for collaboration workflows.
 
-- Creating a new GitHub repository
-- Configuring branch protection rules or rulesets
-- Setting up CODEOWNERS
-- Troubleshooting "merge is blocked" or "not allowed merge method" errors
-- Configuring auto-merge for Dependabot/Renovate
+## Core Workflow
 
-## Usage
+To set up or configure a GitHub repository, follow these steps:
 
-For workflows, CLI commands, templates, and troubleshooting guides, see `README.md`.
+1. Consult the appropriate reference for your task
+2. Copy and customize the relevant asset templates
+3. Run `scripts/verify-github-project.sh` to validate configuration
+4. Apply settings via GitHub UI or `gh` CLI
 
-Key references:
-- `references/repository-structure.md` - Standard repo layout
-- `references/sub-issues.md` - Sub-issues GraphQL API
-- `references/dependency-management.md` - Dependabot/Renovate configuration
-- `templates/` - Auto-merge workflow templates
+## Using Reference Documentation
+
+### Repository Setup
+
+When setting up repository structure, consult `references/repository-structure.md` for standard file layout, required documentation files, and directory conventions.
+
+When migrating from master to main branch, consult `references/branch-migration.md` for step-by-step migration commands and branch protection updates.
+
+### Dependency Management
+
+When configuring automated dependency updates, consult `references/dependency-management.md` for Dependabot and Renovate configuration patterns, auto-merge workflows, and update strategies.
+
+### GitHub Features
+
+When working with sub-issues, consult `references/sub-issues.md` for GraphQL API usage, parent-child relationships, and issue hierarchy patterns.
+
+When setting up automatic release labeling, consult `references/release-labeling.md` for PR labeling workflows, release categorization, and changelog automation.
+
+## Running Scripts
+
+### Repository Verification
+
+To verify GitHub project configuration against best practices:
+
+```bash
+scripts/verify-github-project.sh /path/to/repository
+```
+
+This script checks:
+- Repository documentation (README, LICENSE, SECURITY.md)
+- Collaboration setup (CODEOWNERS, issue/PR templates)
+- Dependency automation (Dependabot/Renovate, auto-merge)
+- Release configuration
+
+## Using Asset Templates
+
+### Repository Documentation
+
+To set up CODEOWNERS for code review assignments, copy `assets/CODEOWNERS.template` to `.github/CODEOWNERS`.
+
+To add contribution guidelines, copy `assets/CONTRIBUTING.md.template` to `CONTRIBUTING.md`.
+
+To configure security vulnerability reporting, copy `assets/SECURITY.md.template` to `SECURITY.md`.
+
+### Issue and PR Templates
+
+To add a bug report template, copy `assets/bug_report.md.template` to `.github/ISSUE_TEMPLATE/bug_report.md`.
+
+To add a feature request template, copy `assets/feature_request.md.template` to `.github/ISSUE_TEMPLATE/feature_request.md`.
+
+To standardize PR descriptions, copy `assets/PULL_REQUEST_TEMPLATE.md.template` to `.github/PULL_REQUEST_TEMPLATE.md`.
+
+### Dependency Automation
+
+To configure Dependabot, copy `assets/dependabot.yml.template` to `.github/dependabot.yml`.
+
+To configure Renovate, copy `assets/renovate.json.template` to `renovate.json`.
+
+### Auto-Merge Workflows
+
+To enable basic auto-merge for dependency updates, copy `assets/auto-merge.yml.template` to `.github/workflows/auto-merge.yml`.
+
+To enable auto-merge with direct commits (no merge queue), copy `assets/auto-merge-direct.yml.template` to `.github/workflows/auto-merge.yml`.
+
+To enable auto-merge with merge queue support, copy `assets/auto-merge-queue.yml.template` to `.github/workflows/auto-merge.yml`.
+
+### Release Automation
+
+To set up automatic release labeling for PRs, copy `assets/release-labeler.yml.template` to `.github/workflows/release-labeler.yml`.
 
 ## Go Project CI Checklist
 
-For Go projects, ensure these GitHub configurations:
+When setting up CI for Go projects, ensure these GitHub configurations:
 
 | Setting | Purpose | How |
 |---------|---------|-----|
 | Branch protection | Require tests pass before merge | Branch settings or Rulesets |
 | Dependabot/Renovate | Automated dependency updates | `.github/dependabot.yml` or `renovate.json` |
-| Auto-merge workflow | Merge minor/patch updates automatically | `templates/auto-merge*.yml` |
+| Auto-merge workflow | Merge minor/patch updates automatically | `assets/auto-merge*.yml` templates |
 | Required checks | CI workflow names in branch protection | Match exact workflow job names |
-
-For CI/CD workflow content (test, lint, build), see `go-development` skill.
-For security workflows (Scorecard, CodeQL, SLSA), see `enterprise-readiness` skill.
 
 ## Related Skills
 
-| Skill | Purpose |
-|-------|---------|
-| `go-development` | Go code patterns, Makefile interface, testing, linting |
-| `enterprise-readiness` | OpenSSF Scorecard, SLSA provenance, signed releases |
-| `git-workflow` | Git branching strategies, conventional commits |
-| `security-audit` | Deep security audits (OWASP, CVE analysis) |
+When implementing Go code patterns and CI/CD workflows, use the `go-development` skill.
+
+When implementing OpenSSF Scorecard, SLSA provenance, or signed releases, use the `enterprise-readiness` skill.
+
+When establishing Git branching strategies or conventional commits, use the `git-workflow` skill.
+
+When conducting deep security audits (OWASP, CVE analysis), use the `security-audit` skill.
+
+## External Resources
+
+When understanding GitHub Actions syntax, consult the [GitHub Actions Documentation](https://docs.github.com/en/actions).
+
+When configuring branch protection, consult the [GitHub Branch Protection Guide](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches).
+
+When setting up Dependabot, consult the [Dependabot Documentation](https://docs.github.com/en/code-security/dependabot).
+
+---
+
+> **Contributing:** https://github.com/netresearch/github-project-skill

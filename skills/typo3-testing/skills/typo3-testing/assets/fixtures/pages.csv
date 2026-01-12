@@ -1,0 +1,4 @@
+"uid","pid","title","slug","doktype","hidden","deleted","sorting","tstamp","crdate"
+1,0,"Root Page","/",1,0,0,256,1700000000,1700000000
+2,1,"Test Page","/test-page",1,0,0,256,1700000000,1700000000
+3,1,"Hidden Page","/hidden",1,1,0,512,1700000000,1700000000

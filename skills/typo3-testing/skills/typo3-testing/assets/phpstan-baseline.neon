@@ -1,0 +1,13 @@
+# PHPStan Baseline
+#
+# Contains temporarily ignored errors during migration to higher levels.
+# Goal: Keep this file empty (no ignored errors).
+#
+# To regenerate baseline after fixing errors:
+#   vendor/bin/phpstan analyze --generate-baseline
+#
+# Or via runTests.sh:
+#   Build/Scripts/runTests.sh -s phpstan -- --generate-baseline
+
+parameters:
+    ignoreErrors: []

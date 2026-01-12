@@ -1,0 +1,43 @@
+# PHPStan Configuration for TYPO3 Extensions
+#
+# Run with: Build/Scripts/runTests.sh -s phpstan
+#
+# CUSTOMIZATION REQUIRED:
+# - Adjust paths if your directory structure differs
+# - Update phpVersion to match your minimum PHP requirement
+# - Add type aliases for your domain-specific types
+
+includes:
+    - .Build/vendor/phpstan/phpstan/conf/bleedingEdge.neon
+    # Architecture testing (requires carlosas/phpat)
+    - .Build/vendor/phpat/phpat/extension.neon
+    - phpstan-baseline.neon
+    - phpat.neon
+
+parameters:
+    level: 10
+    paths:
+        - Classes
+        - Tests/Architecture
+    excludePaths:
+        analyseAndScan:
+            # Add files to exclude from analysis
+            # - Classes/Legacy/OldClass.php
+    reportUnmatchedIgnoredErrors: false
+
+    # PHP version targeting (80200 = PHP 8.2, 80300 = PHP 8.3, etc.)
+    phpVersion: 80200
+
+    # Strict rules for maximum type safety
+    checkTooWideReturnTypesInProtectedAndPublicMethods: true
+    checkUninitializedProperties: true
+
+    # TYPO3-specific settings
+    # PHPDoc types can be unreliable in TYPO3 extensions
+    treatPhpDocTypesAsCertain: false
+
+    # Type aliases for domain-specific types
+    # Uncomment and customize for your extension
+    # typeAliases:
+    #     MyOptions: 'array{enabled?: bool, limit?: int, items?: list<string>}'
+    #     MyResult: 'array{success: bool, data: mixed, errors: list<string>}'
