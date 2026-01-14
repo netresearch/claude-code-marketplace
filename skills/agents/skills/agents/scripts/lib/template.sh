@@ -2,25 +2,24 @@
 # Template rendering helper functions
 
 # Render template with placeholder replacement
+# Supports multi-line values using bash string replacement
 render_template() {
     local template_file="$1"
     local output_file="$2"
-    shift 2
-    local -n vars=$1
+    local -n template_vars=$3
 
     local content
     content=$(cat "$template_file")
 
-    # Replace all placeholders
-    for key in "${!vars[@]}"; do
-        local value="${vars[$key]}"
-        # Escape special characters for sed
-        value=$(echo "$value" | sed 's/[&/\]/\\&/g')
-        content=$(echo "$content" | sed "s/{{$key}}/$value/g")
+    # Replace all placeholders using bash parameter expansion
+    # This handles multi-line values correctly
+    for key in "${!template_vars[@]}"; do
+        local value="${template_vars[$key]}"
+        content="${content//"{{$key}}"/$value}"
     done
 
     # Write output
-    echo "$content" > "$output_file"
+    printf '%s\n' "$content" > "$output_file"
 }
 
 # Generate timestamp

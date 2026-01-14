@@ -1,8 +1,51 @@
 #!/usr/bin/env bash
-# Validate AGENTS.md structure compliance
+# Validate AGENTS.md structure compliance and optionally check freshness
 set -euo pipefail
 
-PROJECT_DIR="${1:-.}"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+# Default options
+PROJECT_DIR=""
+CHECK_FRESHNESS=false
+VERBOSE=false
+
+# Parse flags
+while [[ $# -gt 0 ]]; do
+    case $1 in
+        --check-freshness|-f)
+            CHECK_FRESHNESS=true
+            shift
+            ;;
+        --verbose|-v)
+            VERBOSE=true
+            shift
+            ;;
+        --help|-h)
+            cat <<EOF
+Usage: validate-structure.sh [PROJECT_DIR] [OPTIONS]
+
+Validate AGENTS.md structure compliance and optionally check freshness.
+
+Options:
+  --check-freshness, -f  Also check if files are up to date with git commits
+  --verbose, -v          Show detailed output
+  --help, -h             Show this help message
+
+Examples:
+  validate-structure.sh .                      # Structure check only
+  validate-structure.sh . --check-freshness    # Structure + freshness check
+  validate-structure.sh . -f -v                # Full check with details
+EOF
+            exit 0
+            ;;
+        *)
+            PROJECT_DIR="$1"
+            shift
+            ;;
+    esac
+done
+
+PROJECT_DIR="${PROJECT_DIR:-.}"
 cd "$PROJECT_DIR"
 
 ERRORS=0
@@ -10,12 +53,12 @@ WARNINGS=0
 
 error() {
     echo "❌ ERROR: $*"
-    ((ERRORS++))
+    ((ERRORS++)) || true
 }
 
 warning() {
     echo "⚠️  WARNING: $*"
-    ((WARNINGS++))
+    ((WARNINGS++)) || true
 }
 
 success() {
@@ -165,14 +208,39 @@ if [ -n "$SCOPED_FILES" ]; then
 fi
 
 # Summary
-echo "=== Validation Summary ==="
+echo "=== Structure Validation Summary ==="
+if [ $ERRORS -eq 0 ] && [ $WARNINGS -eq 0 ]; then
+    echo "✅ All structure checks passed!"
+elif [ $ERRORS -eq 0 ]; then
+    echo "⚠️  Structure validation passed with $WARNINGS warning(s)"
+else
+    echo "❌ Structure validation failed with $ERRORS error(s) and $WARNINGS warning(s)"
+fi
+
+# Run freshness check if requested
+if [ "$CHECK_FRESHNESS" = true ]; then
+    echo ""
+    echo "=== Freshness Check ==="
+    FRESHNESS_ARGS=""
+    [ "$VERBOSE" = true ] && FRESHNESS_ARGS="--verbose"
+
+    if "$SCRIPT_DIR/check-freshness.sh" "$PROJECT_DIR" $FRESHNESS_ARGS; then
+        echo "✅ All files are up to date!"
+    else
+        # Freshness issues are warnings, not errors
+        ((WARNINGS++)) || true
+    fi
+fi
+
+echo ""
+echo "=== Final Summary ==="
 if [ $ERRORS -eq 0 ] && [ $WARNINGS -eq 0 ]; then
     echo "✅ All checks passed!"
     exit 0
 elif [ $ERRORS -eq 0 ]; then
-    echo "⚠️  Validation passed with $WARNINGS warning(s)"
+    echo "⚠️  Passed with $WARNINGS warning(s)"
     exit 0
 else
-    echo "❌ Validation failed with $ERRORS error(s) and $WARNINGS warning(s)"
+    echo "❌ Failed with $ERRORS error(s) and $WARNINGS warning(s)"
     exit 1
 fi

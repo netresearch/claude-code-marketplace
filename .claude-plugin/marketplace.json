@@ -109,7 +109,7 @@
     {
       "name": "agents",
       "description": "Generate and maintain AGENTS.md files following the public agents.md convention. Creates thin root files with precedence rules, scoped files for subsystems, auto-extracts commands from build tools, and supports Go, PHP, TypeScript, and Python projects with language-specific templates.",
-      "version": "2.0.2-20260111",
+      "version": "2.1.1-20260114",
       "author": {
         "name": "Netresearch DTT GmbH",
         "email": "info@netresearch.de"
@@ -267,7 +267,7 @@
     {
       "name": "coach",
       "description": "Self-improving learning system that detects friction signals (corrections, tool failures, repetition) and proposes rule updates. Includes /coach slash commands for reviewing, approving, and managing learning candidates. Auto-configures hooks for signal detection.",
-      "version": "2.2.3-20260108",
+      "version": "2.2.4-20260112",
       "author": {
         "name": "Netresearch DTT GmbH",
         "email": "info@netresearch.de"

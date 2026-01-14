@@ -1,6 +1,8 @@
 # AGENTS.md Generator Skill
 
-Netresearch AI skill for generating and maintaining AGENTS.md files following the public agents.md convention.
+Netresearch AI skill for generating and maintaining AGENTS.md files following the [agents.md specification](https://agents.md/).
+
+> **What is AGENTS.md?** A simple, open format for guiding coding agents — adopted by 60,000+ open-source projects. Think of it as a README for AI agents. See the [official specification](https://agents.md/) and [best practices from 2,500+ repositories](https://github.blog/ai-and-ml/github-copilot/how-to-write-a-great-agents-md-lessons-from-over-2500-repositories/).
 
 ## 🔌 Compatibility
 

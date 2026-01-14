@@ -13,9 +13,34 @@
 ## Global Rules
 - Keep PRs small (~≤300 net LOC)
 - Conventional Commits: `type(scope): subject`
-- Ask before: heavy deps, full e2e, repo rewrites
-- Never commit secrets or PII
 {{LANGUAGE_CONVENTIONS}}
+
+## Boundaries
+
+### Always Do
+- Run pre-commit checks before committing
+- Add tests for new code paths
+- Use conventional commit format: `type(scope): subject`
+- Keep dependencies updated
+- Validate all user inputs
+
+### Ask First
+- Adding new dependencies
+- Modifying CI/CD configuration
+- Changing public API signatures
+- Running full e2e test suites
+- Repo-wide refactoring or rewrites
+- Modifying security-sensitive code
+- Changing database schemas
+
+### Never Do
+- Commit secrets, credentials, API keys, or PII
+- Modify vendor/, node_modules/, or generated files
+- Push directly to main/master branch
+- Delete migration files or schema changes
+- Disable security features or linting rules
+- Hardcode environment-specific values
+{{LANGUAGE_SPECIFIC_NEVER}}
 
 ## Development Workflow
 1. Create feature branch: `git checkout -b feature/description`
@@ -56,6 +81,14 @@
 ## When Instructions Conflict
 Nearest AGENTS.md wins. User prompts override files.
 {{LANGUAGE_SPECIFIC_CONFLICT_RESOLUTION}}
+
+## Code Examples
+
+### Good Pattern
+{{GOOD_EXAMPLE}}
+
+### Avoid
+{{BAD_EXAMPLE}}
 
 ## Documentation
 - Architecture: {{ARCHITECTURE_DOC}}

@@ -6,8 +6,9 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 SKILL_DIR="$(dirname "$SCRIPT_DIR")"
 TEMPLATE_DIR="$SKILL_DIR/assets"
 
-# Source helper library
+# Source helper libraries
 source "$SCRIPT_DIR/lib/template.sh"
+source "$SCRIPT_DIR/lib/summary.sh"
 
 # Default options
 PROJECT_DIR="${1:-.}"
@@ -71,8 +72,13 @@ done
 
 cd "$PROJECT_DIR"
 
+# Initialize summary tracking
+init_summary
+
 log() {
-    [ "$VERBOSE" = true ] && echo "[INFO] $*" >&2
+    if [ "$VERBOSE" = true ]; then
+        echo "[INFO] $*" >&2
+    fi
 }
 
 error() {
@@ -100,6 +106,26 @@ SCOPES_INFO=$("$SCRIPT_DIR/detect-scopes.sh" "$PROJECT_DIR")
 log "Extracting build commands..."
 COMMANDS=$("$SCRIPT_DIR/extract-commands.sh" "$PROJECT_DIR")
 [ "$VERBOSE" = true ] && echo "$COMMANDS" | jq . >&2
+
+# Extract documentation (README, CONTRIBUTING, SECURITY, etc.)
+log "Extracting documentation..."
+DOCS_INFO=$("$SCRIPT_DIR/extract-documentation.sh" "$PROJECT_DIR")
+[ "$VERBOSE" = true ] && echo "$DOCS_INFO" | jq . >&2
+
+# Extract platform files (.github/, .gitlab/, etc.)
+log "Extracting platform files..."
+PLATFORM_INFO=$("$SCRIPT_DIR/extract-platform-files.sh" "$PROJECT_DIR")
+[ "$VERBOSE" = true ] && echo "$PLATFORM_INFO" | jq . >&2
+
+# Extract IDE settings (.editorconfig, .vscode/, etc.)
+log "Extracting IDE settings..."
+IDE_INFO=$("$SCRIPT_DIR/extract-ide-settings.sh" "$PROJECT_DIR")
+[ "$VERBOSE" = true ] && echo "$IDE_INFO" | jq . >&2
+
+# Extract AI agent configs (.cursor/, .claude/, etc.)
+log "Extracting AI agent configs..."
+AGENT_INFO=$("$SCRIPT_DIR/extract-agent-configs.sh" "$PROJECT_DIR")
+[ "$VERBOSE" = true ] && echo "$AGENT_INFO" | jq . >&2
 
 # Generate root AGENTS.md
 ROOT_FILE="$PROJECT_DIR/AGENTS.md"
@@ -130,29 +156,179 @@ else
 
     # Verbose template additional vars
     if [ "$STYLE" = "verbose" ]; then
-        vars[PROJECT_DESCRIPTION]="TODO: Add project description"
+        # Use extracted documentation data where available
+        readme_desc=$(echo "$DOCS_INFO" | jq -r '.readme.description // empty')
+        if [ -n "$readme_desc" ]; then
+            vars[PROJECT_DESCRIPTION]="$readme_desc"
+        else
+            vars[PROJECT_DESCRIPTION]="TODO: Add project description"
+        fi
+
+        vars[LANGUAGE]="$LANGUAGE"
         vars[VERSION]="$VERSION"
         vars[BUILD_TOOL]=$(echo "$PROJECT_INFO" | jq -r '.build_tool')
         vars[FRAMEWORK]=$(echo "$PROJECT_INFO" | jq -r '.framework')
         vars[PROJECT_TYPE]="$PROJECT_TYPE"
         vars[BUILD_CMD]=$(echo "$COMMANDS" | jq -r '.build')
-        vars[QUALITY_STANDARDS]="TODO: Add quality standards"
-        vars[SECURITY_SPECIFIC]="TODO: Add security-specific guidelines"
+
+        # Extract quality standards from contributing guidelines
+        contributing_rules=$(echo "$DOCS_INFO" | jq -r '.contributing.code_style // empty')
+        if [ -n "$contributing_rules" ] && [ "$contributing_rules" != "null" ]; then
+            vars[QUALITY_STANDARDS]="$contributing_rules"
+        else
+            vars[QUALITY_STANDARDS]="- Follow project linting and formatting rules
+- Write tests for new functionality
+- Keep functions focused and well-documented"
+        fi
+
+        # Extract security guidelines
+        security_policy=$(echo "$DOCS_INFO" | jq -r '.security.policy // empty')
+        if [ -n "$security_policy" ] && [ "$security_policy" != "null" ]; then
+            vars[SECURITY_SPECIFIC]="$security_policy"
+        else
+            vars[SECURITY_SPECIFIC]="- Report vulnerabilities via security@project or SECURITY.md
+- Never commit secrets or credentials"
+        fi
+
         vars[TEST_COVERAGE]="40"
         vars[TEST_FAST_CMD]=$(echo "$COMMANDS" | jq -r '.test')
         vars[TEST_FULL_CMD]=$(echo "$COMMANDS" | jq -r '.test')
-        vars[ARCHITECTURE_DOC]="./docs/architecture.md"
-        vars[API_DOC]="./docs/api.md"
-        vars[CONTRIBUTING_DOC]="./CONTRIBUTING.md"
+
+        # Check if docs exist
+        [ -d "./docs" ] && vars[ARCHITECTURE_DOC]="./docs/architecture.md" || vars[ARCHITECTURE_DOC]="(not available)"
+        [ -d "./docs" ] && vars[API_DOC]="./docs/api.md" || vars[API_DOC]="(not available)"
+
+        # Use extracted contributing file path or default
+        contrib_file=$(echo "$DOCS_INFO" | jq -r '.contributing.file // empty')
+        if [ -n "$contrib_file" ] && [ "$contrib_file" != "null" ]; then
+            vars[CONTRIBUTING_DOC]="./$contrib_file"
+        else
+            vars[CONTRIBUTING_DOC]="./CONTRIBUTING.md"
+        fi
     fi
 
-    # Language-specific conflict resolution
+    # Language-specific conflict resolution, never-do rules, and code examples
     case "$LANGUAGE" in
         "go")
             vars[LANGUAGE_SPECIFIC_CONFLICT_RESOLUTION]="- For Go-specific patterns, defer to language idioms and standard library conventions"
+            vars[LANGUAGE_SPECIFIC_NEVER]="- Commit go.sum without go.mod changes"
+            vars[CODE_EXAMPLES]="**Good:** \`if err != nil { return fmt.Errorf(\"op failed: %w\", err) }\`
+**Avoid:** \`if err != nil { panic(err) }\` or ignoring errors"
+            vars[GOOD_EXAMPLE]="\`\`\`go
+// Wrap errors with context
+if err != nil {
+    return fmt.Errorf(\"failed to process %s: %w\", item, err)
+}
+
+// Use structured logging
+slog.Info(\"operation completed\", \"item\", item, \"duration\", elapsed)
+\`\`\`"
+            vars[BAD_EXAMPLE]="\`\`\`go
+// Don't panic on recoverable errors
+if err != nil {
+    panic(err)  // Use return instead
+}
+
+// Don't use fmt.Println for logging
+fmt.Println(\"something happened\")  // Use slog/log package
+\`\`\`"
+            ;;
+        "php")
+            vars[LANGUAGE_SPECIFIC_CONFLICT_RESOLUTION]="- For PHP-specific patterns, follow PSR standards"
+            vars[LANGUAGE_SPECIFIC_NEVER]="- Commit composer.lock without composer.json changes
+- Modify core framework files"
+            vars[CODE_EXAMPLES]="**Good:** Constructor injection, typed properties, return types
+**Avoid:** Service locator, untyped parameters, \`@var\` without types"
+            vars[GOOD_EXAMPLE]="\`\`\`php
+// Use constructor injection with typed properties
+public function __construct(
+    private readonly UserRepository \$userRepository,
+    private readonly LoggerInterface \$logger,
+) {}
+
+// Always use return types and parameter types
+public function findById(int \$id): ?User
+{
+    return \$this->userRepository->find(\$id);
+}
+\`\`\`"
+            vars[BAD_EXAMPLE]="\`\`\`php
+// Don't use service locator or globals
+\$user = Container::get('user.repository')->find(\$id);
+
+// Don't omit types
+public function process(\$data)  // Missing types
+{
+    return \$data;  // Missing return type
+}
+\`\`\`"
+            ;;
+        "typescript")
+            vars[LANGUAGE_SPECIFIC_CONFLICT_RESOLUTION]="- For TypeScript/JavaScript patterns, follow project eslint/prettier config"
+            vars[LANGUAGE_SPECIFIC_NEVER]="- Commit package-lock.json without package.json changes
+- Use any type without justification"
+            vars[CODE_EXAMPLES]="**Good:** Strict types, async/await, destructuring
+**Avoid:** \`any\` type, callback hell, mutable state in components"
+            vars[GOOD_EXAMPLE]="\`\`\`typescript
+// Use explicit types and async/await
+async function fetchUser(id: string): Promise<User | null> {
+  const response = await api.get<User>(\\\`/users/\\\${id}\\\`);
+  return response.data;
+}
+
+// Use destructuring and const
+const { name, email } = user;
+\`\`\`"
+            vars[BAD_EXAMPLE]="\`\`\`typescript
+// Don't use 'any' without justification
+function process(data: any): any {  // Type properly
+  return data;
+}
+
+// Don't use var or nested callbacks
+var result;  // Use const/let
+fetchData(function(data) {  // Use async/await
+  processData(data, function(result) { ... });
+});
+\`\`\`"
+            ;;
+        "python")
+            vars[LANGUAGE_SPECIFIC_CONFLICT_RESOLUTION]="- For Python-specific patterns, follow PEP 8 and project tooling (ruff/black)"
+            vars[LANGUAGE_SPECIFIC_NEVER]="- Commit requirements.txt without pyproject.toml changes
+- Use print() for logging in production code"
+            vars[CODE_EXAMPLES]="**Good:** Type hints, dataclasses, context managers
+**Avoid:** Bare \`except:\`, mutable default args, \`print()\` for logging"
+            vars[GOOD_EXAMPLE]="\`\`\`python
+# Use type hints and dataclasses
+from dataclasses import dataclass
+
+@dataclass
+class User:
+    name: str
+    email: str
+
+def find_user(user_id: int) -> User | None:
+    \"\"\"Find user by ID.\"\"\"
+    return db.query(User).filter_by(id=user_id).first()
+\`\`\`"
+            vars[BAD_EXAMPLE]="\`\`\`python
+# Don't use bare except or mutable defaults
+def process(items=[]):  # Mutable default arg!
+    try:
+        return do_something(items)
+    except:  # Too broad, catches KeyboardInterrupt
+        pass
+
+# Don't use print() for logging
+print(f\"Processing {item}\")  # Use logging module
+\`\`\`"
             ;;
         *)
             vars[LANGUAGE_SPECIFIC_CONFLICT_RESOLUTION]=""
+            vars[LANGUAGE_SPECIFIC_NEVER]=""
+            vars[CODE_EXAMPLES]=""
+            vars[GOOD_EXAMPLE]="TODO: Add language-specific good patterns"
+            vars[BAD_EXAMPLE]="TODO: Add language-specific anti-patterns"
             ;;
     esac
 
@@ -166,7 +342,7 @@ fi
 SCOPE_COUNT=$(echo "$SCOPES_INFO" | jq '.scopes | length')
 
 if [ "$SCOPE_COUNT" -eq 0 ]; then
-    log "No scopes detected (directories with <$MIN_FILES source files)"
+    log "No scopes detected (no directories with sufficient source files)"
 else
     log "Generating $SCOPE_COUNT scoped AGENTS.md files..."
 
@@ -241,15 +417,18 @@ else
 
                 case "$FRAMEWORK" in
                     "react")
-                        scope_vars[FRAMEWORK_CONVENTIONS]="- Use functional components with hooks\n- Avoid class components"
+                        scope_vars[FRAMEWORK_CONVENTIONS]="- Use functional components with hooks
+- Avoid class components"
                         scope_vars[FRAMEWORK_DOCS]="https://react.dev"
                         ;;
                     "next.js")
-                        scope_vars[FRAMEWORK_CONVENTIONS]="- Use App Router (app/)\n- Server Components by default"
+                        scope_vars[FRAMEWORK_CONVENTIONS]="- Use App Router (app/)
+- Server Components by default"
                         scope_vars[FRAMEWORK_DOCS]="https://nextjs.org/docs"
                         ;;
                     "vue")
-                        scope_vars[FRAMEWORK_CONVENTIONS]="- Use Composition API\n- Avoid Options API for new code"
+                        scope_vars[FRAMEWORK_CONVENTIONS]="- Use Composition API
+- Avoid Options API for new code"
                         scope_vars[FRAMEWORK_DOCS]="https://vuejs.org/guide"
                         ;;
                     *)
@@ -272,6 +451,22 @@ else
                 scope_vars[TEST_CMD]=$(echo "$COMMANDS" | jq -r '.test')
                 scope_vars[LINT_CMD]=$(echo "$COMMANDS" | jq -r '.lint')
                 ;;
+
+            "testing")
+                scope_vars[TEST_CMD]=$(echo "$COMMANDS" | jq -r '.test')
+                ;;
+
+            "documentation")
+                # Documentation scopes use minimal variables
+                ;;
+
+            "examples")
+                # Examples scopes use minimal variables
+                ;;
+
+            "resources")
+                # Resources scopes use minimal variables
+                ;;
         esac
 
         # Render template
@@ -287,6 +482,14 @@ if [ "$DRY_RUN" = true ]; then
     echo "[DRY-RUN] No files were modified. Remove --dry-run to apply changes."
 fi
 
+# Print extraction summary
+if [ "$VERBOSE" = true ]; then
+    print_summary "$PROJECT_INFO" "$SCOPES_INFO" "$COMMANDS" "$DOCS_INFO" "$PLATFORM_INFO" "$IDE_INFO" "$AGENT_INFO"
+else
+    echo ""
+    print_compact_summary "$PROJECT_INFO" "$SCOPES_INFO"
+fi
+
 echo ""
 echo "✅ AGENTS.md generation complete!"
-[ "$SCOPE_COUNT" -gt 0 ] && echo "   Generated: 1 root + $SCOPE_COUNT scoped files"
+[ "$SCOPE_COUNT" -gt 0 ] && echo "   Generated: 1 root + $SCOPE_COUNT scoped files" || true

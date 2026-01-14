@@ -20,7 +20,7 @@ DEV_CMD=""
 
 # Extract from Makefile
 extract_from_makefile() {
-    [ ! -f "Makefile" ] && return
+    [ ! -f "Makefile" ] && return 0
 
     # Extract targets with ## comments
     while IFS= read -r line; do
@@ -42,51 +42,81 @@ extract_from_makefile() {
 
 # Extract from package.json
 extract_from_package_json() {
-    [ ! -f "package.json" ] && return
+    [ ! -f "package.json" ] && return 0
 
-    TYPECHECK_CMD=$(jq -r '.scripts.typecheck // .scripts["type-check"] // empty' package.json 2>/dev/null)
-    [ -n "$TYPECHECK_CMD" ] && TYPECHECK_CMD="npm run typecheck" || TYPECHECK_CMD="npx tsc --noEmit"
+    local has_typecheck has_lint has_format has_test has_build has_dev
+    has_typecheck=$(jq -r '.scripts.typecheck // .scripts["type-check"] // empty' package.json 2>/dev/null)
+    has_lint=$(jq -r '.scripts.lint // empty' package.json 2>/dev/null)
+    has_format=$(jq -r '.scripts.format // empty' package.json 2>/dev/null)
+    has_test=$(jq -r '.scripts.test // empty' package.json 2>/dev/null)
+    has_build=$(jq -r '.scripts.build // empty' package.json 2>/dev/null)
+    has_dev=$(jq -r '.scripts.dev // .scripts.start // empty' package.json 2>/dev/null)
 
-    LINT_CMD=$(jq -r '.scripts.lint // empty' package.json 2>/dev/null)
-    [ -n "$LINT_CMD" ] && LINT_CMD="npm run lint" || LINT_CMD="npx eslint ."
+    if [ -n "$has_typecheck" ]; then
+        TYPECHECK_CMD="npm run typecheck"
+    else
+        TYPECHECK_CMD="npx tsc --noEmit"
+    fi
 
-    FORMAT_CMD=$(jq -r '.scripts.format // empty' package.json 2>/dev/null)
-    [ -n "$FORMAT_CMD" ] && FORMAT_CMD="npm run format" || FORMAT_CMD="npx prettier --write ."
+    if [ -n "$has_lint" ]; then
+        LINT_CMD="npm run lint"
+    else
+        LINT_CMD="npx eslint ."
+    fi
 
-    TEST_CMD=$(jq -r '.scripts.test // empty' package.json 2>/dev/null)
-    [ -n "$TEST_CMD" ] && TEST_CMD="npm test"
+    if [ -n "$has_format" ]; then
+        FORMAT_CMD="npm run format"
+    else
+        FORMAT_CMD="npx prettier --write ."
+    fi
 
-    BUILD_CMD=$(jq -r '.scripts.build // empty' package.json 2>/dev/null)
-    [ -n "$BUILD_CMD" ] && BUILD_CMD="npm run build"
+    if [ -n "$has_test" ]; then
+        TEST_CMD="npm test"
+    fi
 
-    DEV_CMD=$(jq -r '.scripts.dev // .scripts.start // empty' package.json 2>/dev/null)
-    [ -n "$DEV_CMD" ] && DEV_CMD="npm run dev"
+    if [ -n "$has_build" ]; then
+        BUILD_CMD="npm run build"
+    fi
+
+    if [ -n "$has_dev" ]; then
+        DEV_CMD="npm run dev"
+    fi
 }
 
 # Extract from composer.json
 extract_from_composer_json() {
-    [ ! -f "composer.json" ] && return
+    [ ! -f "composer.json" ] && return 0
 
-    LINT_CMD=$(jq -r '.scripts.lint // .scripts["cs:check"] // empty' composer.json 2>/dev/null)
-    [ -n "$LINT_CMD" ] && LINT_CMD="composer run lint"
+    local has_lint has_format has_test has_phpstan
+    has_lint=$(jq -r '.scripts.lint // .scripts["cs:check"] // empty' composer.json 2>/dev/null)
+    has_format=$(jq -r '.scripts.format // .scripts["cs:fix"] // empty' composer.json 2>/dev/null)
+    has_test=$(jq -r '.scripts.test // empty' composer.json 2>/dev/null)
+    has_phpstan=$(jq -r '.scripts.phpstan // .scripts["stan"] // empty' composer.json 2>/dev/null)
 
-    FORMAT_CMD=$(jq -r '.scripts.format // .scripts["cs:fix"] // empty' composer.json 2>/dev/null)
-    [ -n "$FORMAT_CMD" ] && FORMAT_CMD="composer run format"
+    if [ -n "$has_lint" ]; then
+        LINT_CMD="composer run lint"
+    fi
 
-    TEST_CMD=$(jq -r '.scripts.test // empty' composer.json 2>/dev/null)
-    [ -n "$TEST_CMD" ] && TEST_CMD="composer run test" || TEST_CMD="vendor/bin/phpunit"
+    if [ -n "$has_format" ]; then
+        FORMAT_CMD="composer run format"
+    fi
 
-    TYPECHECK_CMD=$(jq -r '.scripts.phpstan // .scripts["stan"] // empty' composer.json 2>/dev/null)
-    [ -n "$TYPECHECK_CMD" ] && TYPECHECK_CMD="composer run phpstan" || {
-        if [ -f "phpstan.neon" ] || [ -f "Build/phpstan.neon" ]; then
-            TYPECHECK_CMD="vendor/bin/phpstan analyze"
-        fi
-    }
+    if [ -n "$has_test" ]; then
+        TEST_CMD="composer run test"
+    else
+        TEST_CMD="vendor/bin/phpunit"
+    fi
+
+    if [ -n "$has_phpstan" ]; then
+        TYPECHECK_CMD="composer run phpstan"
+    elif [ -f "phpstan.neon" ] || [ -f "Build/phpstan.neon" ]; then
+        TYPECHECK_CMD="vendor/bin/phpstan analyze"
+    fi
 }
 
 # Extract from pyproject.toml
 extract_from_pyproject() {
-    [ ! -f "pyproject.toml" ] && return
+    [ ! -f "pyproject.toml" ] && return 0
 
     # Check for ruff
     if grep -q '\[tool.ruff\]' pyproject.toml; then
@@ -114,46 +144,46 @@ extract_from_pyproject() {
 set_language_defaults() {
     case "$LANGUAGE" in
         "go")
-            [ -z "$TYPECHECK_CMD" ] && TYPECHECK_CMD="go build -v ./..."
-            [ -z "$LINT_CMD" ] && {
+            : "${TYPECHECK_CMD:=go build -v ./...}"
+            if [ -z "$LINT_CMD" ]; then
                 if [ -f ".golangci.yml" ] || [ -f ".golangci.yaml" ]; then
                     LINT_CMD="golangci-lint run ./..."
                 fi
-            }
-            [ -z "$FORMAT_CMD" ] && FORMAT_CMD="gofmt -w ."
-            [ -z "$TEST_CMD" ] && TEST_CMD="go test -v -race -short ./..."
-            [ -z "$BUILD_CMD" ] && BUILD_CMD="go build -v ./..."
+            fi
+            : "${FORMAT_CMD:=gofmt -w .}"
+            : "${TEST_CMD:=go test -v -race -short ./...}"
+            : "${BUILD_CMD:=go build -v ./...}"
             ;;
 
         "php")
-            [ -z "$TYPECHECK_CMD" ] && {
+            if [ -z "$TYPECHECK_CMD" ]; then
                 if [ -f "phpstan.neon" ] || [ -f "Build/phpstan.neon" ]; then
                     TYPECHECK_CMD="vendor/bin/phpstan analyze"
                 fi
-            }
-            [ -z "$LINT_CMD" ] && LINT_CMD="vendor/bin/php-cs-fixer fix --dry-run"
-            [ -z "$FORMAT_CMD" ] && FORMAT_CMD="vendor/bin/php-cs-fixer fix"
-            [ -z "$TEST_CMD" ] && TEST_CMD="vendor/bin/phpunit"
+            fi
+            : "${LINT_CMD:=vendor/bin/php-cs-fixer fix --dry-run}"
+            : "${FORMAT_CMD:=vendor/bin/php-cs-fixer fix}"
+            : "${TEST_CMD:=vendor/bin/phpunit}"
             ;;
 
         "typescript")
-            [ -z "$TYPECHECK_CMD" ] && TYPECHECK_CMD="npx tsc --noEmit"
-            [ -z "$LINT_CMD" ] && LINT_CMD="npx eslint ."
-            [ -z "$FORMAT_CMD" ] && FORMAT_CMD="npx prettier --write ."
-            [ -z "$TEST_CMD" ] && {
+            : "${TYPECHECK_CMD:=npx tsc --noEmit}"
+            : "${LINT_CMD:=npx eslint .}"
+            : "${FORMAT_CMD:=npx prettier --write .}"
+            if [ -z "$TEST_CMD" ]; then
                 if [ -f "jest.config.js" ] || [ -f "jest.config.ts" ]; then
                     TEST_CMD="npm test"
                 elif grep -q 'vitest' package.json 2>/dev/null; then
                     TEST_CMD="npx vitest"
                 fi
-            }
+            fi
             ;;
 
         "python")
-            [ -z "$LINT_CMD" ] && LINT_CMD="ruff check ."
-            [ -z "$FORMAT_CMD" ] && FORMAT_CMD="ruff format ."
-            [ -z "$TYPECHECK_CMD" ] && TYPECHECK_CMD="mypy ."
-            [ -z "$TEST_CMD" ] && TEST_CMD="pytest"
+            : "${LINT_CMD:=ruff check .}"
+            : "${FORMAT_CMD:=ruff format .}"
+            : "${TYPECHECK_CMD:=mypy .}"
+            : "${TEST_CMD:=pytest}"
             ;;
     esac
 }

@@ -15,6 +15,8 @@ QUALITY_TOOLS=()
 TEST_FRAMEWORK="unknown"
 HAS_DOCKER=false
 CI="none"
+IDE_CONFIGS=()
+AGENT_CONFIGS=()
 
 # Detect language and version
 detect_language() {
@@ -41,8 +43,8 @@ detect_language() {
         fi
 
         # Detect Go quality tools
-        [ -f ".golangci.yml" ] || [ -f ".golangci.yaml" ] && QUALITY_TOOLS+=("golangci-lint")
-        command -v gofmt &>/dev/null && QUALITY_TOOLS+=("gofmt")
+        { [ -f ".golangci.yml" ] || [ -f ".golangci.yaml" ]; } && QUALITY_TOOLS+=("golangci-lint") || true
+        command -v gofmt &>/dev/null && QUALITY_TOOLS+=("gofmt") || true
 
     elif [ -f "composer.json" ]; then
         LANGUAGE="php"
@@ -65,9 +67,9 @@ detect_language() {
         fi
 
         # Detect PHP quality tools
-        jq -e '.require."phpstan/phpstan"' composer.json &>/dev/null && QUALITY_TOOLS+=("phpstan")
-        jq -e '.require."friendsofphp/php-cs-fixer"' composer.json &>/dev/null && QUALITY_TOOLS+=("php-cs-fixer")
-        [ -f "phpunit.xml" ] || [ -f "phpunit.xml.dist" ] && TEST_FRAMEWORK="phpunit"
+        jq -e '.require."phpstan/phpstan" // .["require-dev"]."phpstan/phpstan"' composer.json &>/dev/null && QUALITY_TOOLS+=("phpstan") || true
+        jq -e '.require."friendsofphp/php-cs-fixer" // .["require-dev"]."friendsofphp/php-cs-fixer"' composer.json &>/dev/null && QUALITY_TOOLS+=("php-cs-fixer") || true
+        { [ -f "phpunit.xml" ] || [ -f "phpunit.xml.dist" ]; } && TEST_FRAMEWORK="phpunit" || true
 
     elif [ -f "package.json" ]; then
         LANGUAGE="typescript"
@@ -96,20 +98,20 @@ detect_language() {
         fi
 
         # Check for yarn/pnpm
-        [ -f "yarn.lock" ] && BUILD_TOOL="yarn"
-        [ -f "pnpm-lock.yaml" ] && BUILD_TOOL="pnpm"
+        [ -f "yarn.lock" ] && BUILD_TOOL="yarn" || true
+        [ -f "pnpm-lock.yaml" ] && BUILD_TOOL="pnpm" || true
 
         # Detect quality tools
-        jq -e '.devDependencies."eslint"' package.json &>/dev/null && QUALITY_TOOLS+=("eslint")
-        jq -e '.devDependencies."prettier"' package.json &>/dev/null && QUALITY_TOOLS+=("prettier")
-        jq -e '.devDependencies."typescript"' package.json &>/dev/null && QUALITY_TOOLS+=("tsc")
+        jq -e '.devDependencies."eslint"' package.json &>/dev/null && QUALITY_TOOLS+=("eslint") || true
+        jq -e '.devDependencies."prettier"' package.json &>/dev/null && QUALITY_TOOLS+=("prettier") || true
+        jq -e '.devDependencies."typescript"' package.json &>/dev/null && QUALITY_TOOLS+=("tsc") || true
 
         # Detect test framework
         if jq -e '.devDependencies."jest"' package.json &>/dev/null; then
             TEST_FRAMEWORK="jest"
         elif jq -e '.devDependencies."vitest"' package.json &>/dev/null; then
             TEST_FRAMEWORK="vitest"
-        fi
+        fi || true
 
     elif [ -f "pyproject.toml" ]; then
         LANGUAGE="python"
@@ -153,8 +155,8 @@ if [ -f "Makefile" ]; then
     BUILD_TOOL="make"
 fi
 
-# Detect Docker
-[ -f "Dockerfile" ] || [ -f "docker-compose.yml" ] && HAS_DOCKER=true
+# Detect Docker (check both old and new compose naming)
+[ -f "Dockerfile" ] || [ -f "docker-compose.yml" ] || [ -f "compose.yml" ] || [ -f "compose.yaml" ] && HAS_DOCKER=true
 
 # Detect CI
 if [ -d ".github/workflows" ]; then
@@ -165,15 +167,48 @@ elif [ -f ".circleci/config.yml" ]; then
     CI="circleci"
 fi
 
+# Detect IDE configurations
+[ -f ".editorconfig" ] && IDE_CONFIGS+=("editorconfig") || true
+[ -d ".vscode" ] && IDE_CONFIGS+=("vscode") || true
+[ -d ".idea" ] && IDE_CONFIGS+=("idea") || true
+[ -d ".phpstorm" ] && IDE_CONFIGS+=("phpstorm") || true
+[ -d ".fleet" ] && IDE_CONFIGS+=("fleet") || true
+[ -f ".sublime-project" ] && IDE_CONFIGS+=("sublime") || true
+{ [ -d ".vim" ] || [ -f ".vimrc" ]; } && IDE_CONFIGS+=("vim") || true
+{ [ -d ".nvim" ] || [ -f ".nvimrc" ]; } && IDE_CONFIGS+=("neovim") || true
+
+# Detect AI coding agent configurations
+[ -d ".cursor" ] && AGENT_CONFIGS+=("cursor") || true
+{ [ -d ".claude" ] || [ -f "CLAUDE.md" ] || [ -f ".claude/CLAUDE.md" ]; } && AGENT_CONFIGS+=("claude") || true
+[ -d ".windsurf" ] && AGENT_CONFIGS+=("windsurf") || true
+{ [ -d ".aider" ] || [ -f ".aider.conf.yml" ]; } && AGENT_CONFIGS+=("aider") || true
+[ -d ".continue" ] && AGENT_CONFIGS+=("continue") || true
+{ [ -f "copilot-instructions.md" ] || [ -f ".github/copilot-instructions.md" ]; } && AGENT_CONFIGS+=("copilot") || true
+[ -d ".codeium" ] && AGENT_CONFIGS+=("codeium") || true
+[ -d ".tabnine" ] && AGENT_CONFIGS+=("tabnine") || true
+{ [ -d ".sourcegraph" ] || [ -f ".sourcegraph/cody.json" ]; } && AGENT_CONFIGS+=("cody") || true
+
 # Run detection
 detect_language
 
 # Output JSON
-# Handle empty quality_tools array
+# Handle empty arrays
 if [ ${#QUALITY_TOOLS[@]} -eq 0 ]; then
     TOOLS_JSON="[]"
 else
     TOOLS_JSON="$(printf '%s\n' "${QUALITY_TOOLS[@]}" | jq -R . | jq -s .)"
+fi
+
+if [ ${#IDE_CONFIGS[@]} -eq 0 ]; then
+    IDE_JSON="[]"
+else
+    IDE_JSON="$(printf '%s\n' "${IDE_CONFIGS[@]}" | jq -R . | jq -s .)"
+fi
+
+if [ ${#AGENT_CONFIGS[@]} -eq 0 ]; then
+    AGENT_JSON="[]"
+else
+    AGENT_JSON="$(printf '%s\n' "${AGENT_CONFIGS[@]}" | jq -R . | jq -s .)"
 fi
 
 jq -n \
@@ -186,6 +221,8 @@ jq -n \
     --argjson tools "$TOOLS_JSON" \
     --arg test "$TEST_FRAMEWORK" \
     --arg ci "$CI" \
+    --argjson ide_configs "$IDE_JSON" \
+    --argjson agent_configs "$AGENT_JSON" \
     '{
         type: $type,
         language: $lang,
@@ -195,5 +232,7 @@ jq -n \
         has_docker: $docker,
         quality_tools: $tools,
         test_framework: $test,
-        ci: $ci
+        ci: $ci,
+        ide_configs: $ide_configs,
+        agent_configs: $agent_configs
     }'
