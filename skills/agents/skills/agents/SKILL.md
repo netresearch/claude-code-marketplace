@@ -17,6 +17,70 @@ When ensuring multi-repo consistency, use this skill to apply the same standards
 
 When checking if AGENTS.md files are up to date, use the freshness checking scripts to compare file timestamps with git commits.
 
+## CRITICAL: Full Verification Required
+
+**NEVER trust existing AGENTS.md content as accurate.** Always verify documented information against the actual codebase:
+
+### Mandatory Verification Steps
+
+1. **Extract actual state from source files:**
+   - List all modules/files with their actual docstrings
+   - List all scripts and their actual purposes
+   - Extract actual Makefile/package.json commands
+   - List actual test files and structure
+
+2. **Compare extracted state against documented state:**
+   - Check if documented files actually exist
+   - Check if documented commands actually work
+   - Check if module descriptions match actual docstrings
+   - Check if counts (modules, scripts, tests) are accurate
+
+3. **Identify and fix discrepancies:**
+   - Remove documentation for non-existent files
+   - Add documentation for undocumented files
+   - Correct inaccurate descriptions
+   - Update outdated counts and references
+
+4. **Preserve unverifiable content:**
+   - Keep manually-written context that can't be extracted
+   - Keep subjective guidance and best practices
+   - Mark preserved content appropriately
+
+### What to Verify
+
+| Category | Verification Method |
+|----------|---------------------|
+| Module list | `ls <dir>/*.py` + read docstrings |
+| Script list | `ls scripts/*.sh` + read headers |
+| Commands | `grep` Makefile targets |
+| Test files | `ls tests/*.py` |
+| Data files | `ls *.json` in project root |
+| Config files | Check actual existence |
+
+### Example Verification Commands
+
+```bash
+# Extract actual module docstrings
+for f in cli_audit/*.py; do head -20 "$f" | grep -A5 '"""'; done
+
+# List actual scripts
+ls scripts/*.sh
+
+# Extract Makefile targets
+grep -E '^[a-z_-]+:' Makefile*
+
+# List actual test files
+ls tests/*.py tests/**/*.py
+```
+
+### Anti-Patterns to Avoid
+
+- **WRONG:** Updating only dates and counts based on git commits
+- **WRONG:** Trusting that existing AGENTS.md was created correctly
+- **WRONG:** Copying file lists without verifying they exist
+- **WRONG:** Using extracted command output without running it
+- **RIGHT:** Extract → Compare → Fix discrepancies → Validate
+
 ## Capabilities
 
 - **Thin root files** (~30 lines) with precedence rules and global defaults
@@ -137,6 +201,29 @@ To extract information from .cursor/, .claude/, copilot-instructions.md, etc.:
 ```bash
 scripts/extract-agent-configs.sh /path/to/project
 ```
+
+### Verifying Content Accuracy
+
+**CRITICAL: Always run this before considering AGENTS.md files complete.**
+
+To verify that AGENTS.md content matches actual codebase state:
+
+```bash
+scripts/verify-content.sh /path/to/project
+```
+
+This script:
+- Checks if documented files actually exist
+- Verifies Makefile targets are real
+- Compares module/script counts against actual files
+- Reports undocumented files that should be added
+- Reports documented files that don't exist
+
+Options:
+- `--verbose, -v` - Show detailed verification output
+- `--fix` - Suggest fixes for common issues
+
+**This verification step is MANDATORY when updating existing AGENTS.md files.**
 
 ## Using Reference Documentation
 
