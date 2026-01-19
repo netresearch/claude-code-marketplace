@@ -39,7 +39,7 @@
     {
       "name": "typo3-testing",
       "description": "Create and manage TYPO3 extension tests with comprehensive testing infrastructure. Includes unit, functional, and acceptance testing support, PHPUnit configurations, Docker setup, CI/CD templates, and automated test generation following TYPO3 best practices.",
-      "version": "3.0.0-20260111",
+      "version": "4.0.0-20260118",
       "author": {
         "name": "Netresearch DTT GmbH",
         "email": "info@netresearch.de"
@@ -267,7 +267,7 @@
     {
       "name": "coach",
       "description": "Self-improving learning system that detects friction signals (corrections, tool failures, repetition) and proposes rule updates. Includes /coach slash commands for reviewing, approving, and managing learning candidates. Auto-configures hooks for signal detection.",
-      "version": "2.2.4-20260112",
+      "version": "2.4.0-20260116",
       "author": {
         "name": "Netresearch DTT GmbH",
         "email": "info@netresearch.de"

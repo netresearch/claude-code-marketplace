@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+#
+# setup-hooks - Install stable hook launchers for coach plugin
+#
+# This script installs the coach-run launcher to ~/.claude-coach/bin/
+# providing version-independent paths for hook commands.
+#
+# Run this after installing or updating the coach plugin.
+#
+
+set -euo pipefail
+
+COACH_BIN_DIR="$HOME/.claude-coach/bin"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+main() {
+    echo "Setting up coach hook launchers..."
+
+    # Create bin directory
+    mkdir -p "$COACH_BIN_DIR"
+
+    # Copy launcher script
+    cp "$SCRIPT_DIR/coach-run" "$COACH_BIN_DIR/coach-run"
+    chmod +x "$COACH_BIN_DIR/coach-run"
+
+    echo "Installed: $COACH_BIN_DIR/coach-run"
+    echo ""
+    echo "Done! Hook launchers are now available at a stable path."
+    echo ""
+    echo "To use stable paths, update your ~/.claude/settings.json hooks to use:"
+    echo "  ~/.claude-coach/bin/coach-run detect_signals.py --phase=pre ..."
+    echo ""
+    echo "Or run: coach-run detect_signals.py --help"
+}
+
+main "$@"

@@ -2,12 +2,38 @@
 
 DDEV provides a consistent, containerized environment for testing TYPO3 extensions across different PHP and TYPO3 versions.
 
-## When to Use DDEV Testing
+> **IMPORTANT: DDEV is for LOCAL DEVELOPMENT only!**
+>
+> Do NOT use DDEV in CI/CD pipelines (GitHub Actions, GitLab CI, etc.).
+> For CI, use GitHub Services + PHP built-in server instead.
+> See `ci-cd.md` and the `github-actions-e2e.yml` template.
 
-- **E2E Tests**: Full browser testing with Playwright
-- **Multi-Version Testing**: Test against TYPO3 12/13/14 and PHP 8.2/8.3/8.4
-- **Real Environment**: Test with actual TYPO3 instance, database, web server
-- **CI/CD Integration**: Reproducible testing in GitHub Actions
+## When to Use DDEV
+
+**USE DDEV for:**
+- Local development environment
+- Interactive debugging and testing
+- Multi-version testing on your machine
+- Full-stack testing with services (Redis, Elasticsearch, etc.)
+- Team environment consistency
+
+**DO NOT USE DDEV for:**
+- CI/CD pipelines (GitHub Actions, GitLab CI)
+- Automated testing in cloud environments
+- Production deployments
+
+## Why NOT DDEV in CI?
+
+| Issue | Impact |
+|-------|--------|
+| **Slow startup** | 2-3+ minutes for Docker orchestration |
+| **Complexity** | Docker-in-Docker, networking, volumes |
+| **Resource heavy** | Multiple containers exceed runner limits |
+| **Fragile** | Port conflicts, DNS issues, cert problems |
+| **Non-standard** | TYPO3 Core uses direct PHP, not DDEV |
+
+**For CI, use:** GitHub Services (MariaDB) + PHP built-in server.
+See `assets/github-actions-e2e.yml` for the correct pattern.
 
 ## Basic DDEV Setup
 
@@ -54,11 +80,11 @@ my-extension/
 ├── Tests/
 │   ├── Unit/
 │   ├── Functional/
-│   └── playwright/                  # E2E tests
+│   └── E2E/Playwright/              # E2E tests
 └── composer.json
 ```
 
-## Multi-Version Testing
+## Multi-Version Testing (Local)
 
 ### Matrix Testing Script
 
@@ -123,7 +149,7 @@ web_environment:
   - APP_ENV=test
 ```
 
-## E2E Testing with Playwright
+## E2E Testing with Playwright (Local)
 
 ### Playwright Setup in DDEV
 
@@ -133,30 +159,31 @@ ddev start
 ddev composer install
 
 # Setup Playwright (if not using Build/playwright)
-mkdir -p Tests/playwright
-cd Tests/playwright
+mkdir -p Tests/E2E/Playwright
+cd Tests/E2E/Playwright
 npm init -y
 npm install -D @playwright/test
 npx playwright install chromium
 ```
 
-### Playwright Configuration for DDEV
+### Playwright Configuration for Dual-Mode (Local + CI)
 
-Create `Tests/playwright/playwright.config.ts`:
+Create `playwright.config.ts`:
 
 ```typescript
 import { defineConfig, devices } from '@playwright/test';
 
-const baseURL = process.env.BASE_URL || 'https://my-extension.ddev.site';
+// IMPORTANT: Support both DDEV (local) and localhost (CI)
+const baseURL = process.env.TYPO3_BASE_URL || 'https://my-extension.ddev.site';
 
 export default defineConfig({
-  testDir: './e2e',
+  testDir: './tests',
   fullyParallel: false, // TYPO3 tests often need sequence
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
   workers: 1,
   reporter: [
-    ['html', { outputFolder: 'playwright-report' }],
+    ['html', { outputFolder: 'reports' }],
     ['list'],
   ],
   use: {
@@ -164,45 +191,31 @@ export default defineConfig({
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
     video: 'retain-on-failure',
+    // DDEV uses self-signed certs
+    ignoreHTTPSErrors: true,
   },
   projects: [
-    // Auth setup
-    {
-      name: 'setup',
-      testMatch: /.*\.setup\.ts/,
-    },
-    // Main tests
     {
       name: 'chromium',
-      use: {
-        ...devices['Desktop Chrome'],
-        storageState: 'playwright/.auth/admin.json',
-      },
-      dependencies: ['setup'],
-    },
-    // Accessibility tests
-    {
-      name: 'accessibility',
-      testMatch: /.*\.a11y\.ts/,
-      use: {
-        ...devices['Desktop Chrome'],
-        storageState: 'playwright/.auth/admin.json',
-      },
-      dependencies: ['setup'],
+      use: { ...devices['Desktop Chrome'] },
     },
   ],
 });
 ```
 
+**Key point:** The `TYPO3_BASE_URL` environment variable allows the same tests to run:
+- **Locally with DDEV:** Uses `https://my-extension.ddev.site` (default)
+- **In CI:** Uses `http://localhost:8080` (set by workflow)
+
 ### TYPO3 Backend Login Setup
 
-Create `Tests/playwright/e2e/auth.setup.ts`:
+Create `Tests/E2E/Playwright/tests/auth.setup.ts`:
 
 ```typescript
 import { test as setup, expect } from '@playwright/test';
 import path from 'path';
 
-const authFile = path.join(__dirname, '../playwright/.auth/admin.json');
+const authFile = path.join(__dirname, '../.auth/admin.json');
 
 setup('authenticate as admin', async ({ page }) => {
   // Navigate to TYPO3 backend login
@@ -231,7 +244,7 @@ setup('authenticate as admin', async ({ page }) => {
 
 ### Example E2E Test
 
-Create `Tests/playwright/e2e/backend-module.spec.ts`:
+Create `Tests/E2E/Playwright/tests/backend-module.spec.ts`:
 
 ```typescript
 import { test, expect } from '@playwright/test';
@@ -263,7 +276,7 @@ test.describe('Backend Module', () => {
 });
 ```
 
-## Running Tests in DDEV
+## Running Tests in DDEV (Local)
 
 ### Via DDEV Exec
 
@@ -314,79 +327,20 @@ esac
 
 Make executable: `chmod +x .ddev/commands/host/test`
 
-### Via Playwright in DDEV
+### Via Playwright in DDEV (Local)
 
 ```bash
 # Install Playwright browsers (first time)
-cd Tests/playwright && npm ci && npx playwright install chromium
+cd Tests/E2E/Playwright && npm ci && npx playwright install chromium
 
-# Run E2E tests
-cd Tests/playwright && npx playwright test
+# Run E2E tests against DDEV
+cd Tests/E2E/Playwright && npx playwright test
 
 # Run with UI mode (local development)
-cd Tests/playwright && npx playwright test --ui
+cd Tests/E2E/Playwright && npx playwright test --ui
 
 # Run specific test file
-cd Tests/playwright && npx playwright test backend-module.spec.ts
-```
-
-## GitHub Actions Integration
-
-### E2E Workflow with DDEV
-
-```yaml
-name: E2E Tests
-
-on:
-  push:
-    branches: [main]
-  pull_request:
-    branches: [main]
-
-jobs:
-  e2e:
-    runs-on: ubuntu-latest
-    timeout-minutes: 30
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Setup DDEV
-        uses: ddev/github-action-setup-ddev@v1
-
-      - name: Start DDEV
-        run: |
-          ddev start
-          ddev composer install --no-progress
-
-      - name: Setup TYPO3
-        run: |
-          ddev exec vendor/bin/typo3 extension:setup
-          ddev exec vendor/bin/typo3 cache:flush
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '22'
-
-      - name: Install Playwright
-        working-directory: Tests/playwright
-        run: |
-          npm ci
-          npx playwright install --with-deps chromium
-
-      - name: Run E2E tests
-        working-directory: Tests/playwright
-        run: npx playwright test
-        env:
-          BASE_URL: https://my-extension.ddev.site
-
-      - name: Upload report
-        uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: playwright-report
-          path: Tests/playwright/playwright-report/
+cd Tests/E2E/Playwright && npx playwright test backend-module.spec.ts
 ```
 
 ## Database Snapshots
@@ -401,18 +355,45 @@ ddev export-db --gzip --file=.ddev/db-dumps/test-fixtures.sql.gz
 ### Restoring for Tests
 
 ```bash
-# In test setup or CI
+# In local test setup
 ddev import-db --file=.ddev/db-dumps/test-fixtures.sql.gz
 ```
 
-### In CI Workflow
+## runTests.sh Integration
 
-```yaml
-- name: Import test database
-  run: |
-    if [ -f ".ddev/db-dumps/test-fixtures.sql.gz" ]; then
-      ddev import-db --file=.ddev/db-dumps/test-fixtures.sql.gz
+For running E2E tests via `runTests.sh`, use the `TYPO3_BASE_URL` environment variable:
+
+```bash
+# Local development (DDEV)
+./Build/Scripts/runTests.sh playwright
+
+# Or explicitly set the URL
+TYPO3_BASE_URL=https://my-extension.ddev.site ./Build/Scripts/runTests.sh playwright
+```
+
+The script should check if TYPO3 is accessible and fail if not (unless `PLAYWRIGHT_FORCE=1` is set):
+
+```bash
+run_playwright_tests() {
+    local typo3_base_url="${TYPO3_BASE_URL:-https://my-extension.ddev.site}"
+
+    # Check if TYPO3 is accessible
+    local curl_opts="-s"
+    if [[ "${typo3_base_url}" == https://* ]]; then
+        curl_opts="-sk"  # Allow self-signed certs for DDEV
     fi
+
+    if ! curl ${curl_opts} "${typo3_base_url}/typo3/" > /dev/null 2>&1; then
+        warning "TYPO3 not responding at ${typo3_base_url}"
+        if [[ "${PLAYWRIGHT_FORCE:-0}" != "1" ]]; then
+            error "Aborting. Set PLAYWRIGHT_FORCE=1 to override."
+            exit 1
+        fi
+    fi
+
+    export TYPO3_BASE_URL="${typo3_base_url}"
+    npm run test:e2e
+}
 ```
 
 ## Troubleshooting
@@ -451,6 +432,9 @@ ddev exec vendor/bin/typo3 cache:flush
 ## Resources
 
 - [DDEV Documentation](https://ddev.readthedocs.io/)
-- [DDEV GitHub Action](https://github.com/ddev/github-action-setup-ddev)
 - [TYPO3 DDEV Addon](https://github.com/ddev/ddev-contrib/tree/master/docker-compose-services/typo3)
 - [Playwright Documentation](https://playwright.dev/)
+
+---
+
+> **Remember:** DDEV is for LOCAL development. For CI, see `ci-cd.md`.

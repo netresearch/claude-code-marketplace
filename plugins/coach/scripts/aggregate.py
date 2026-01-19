@@ -1353,6 +1353,13 @@ class CandidateAggregator:
 
 
 def main():
+    # Auto-heal hook paths on first run
+    try:
+        from hook_healer import ensure_stable_hooks
+        ensure_stable_hooks()
+    except Exception:
+        pass  # Don't fail if healing fails
+
     import argparse
     parser = argparse.ArgumentParser(description="Aggregate signals into candidates")
     parser.add_argument("--verbose", "-v", action="store_true", help="Verbose output")

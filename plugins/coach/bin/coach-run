@@ -1,0 +1,108 @@
+#!/usr/bin/env bash
+#
+# coach-run - Stable launcher for coach plugin scripts
+#
+# This launcher resolves the current coach plugin install path dynamically,
+# avoiding issues when plugin versions are updated and old paths become stale.
+#
+# Usage: coach-run [--async] <script-name> [args...]
+# Example: coach-run detect_signals.py --phase=pre --content="$(cat)"
+# Example: coach-run --async detect_signals.py --phase=tool --from-stdin
+#
+# Options:
+#   --async    Run script in background (non-blocking), returns immediately
+#
+
+set -euo pipefail
+
+INSTALLED_PLUGINS="$HOME/.claude/plugins/installed_plugins.json"
+PLUGIN_KEY="coach@netresearch-claude-code-marketplace"
+
+# Resolve the current install path from installed_plugins.json
+resolve_install_path() {
+    if [[ ! -f "$INSTALLED_PLUGINS" ]]; then
+        echo "Error: Plugin manifest not found: $INSTALLED_PLUGINS" >&2
+        exit 1
+    fi
+
+    local install_path
+
+    # Try jq first (faster), fall back to Python
+    if command -v jq &>/dev/null; then
+        install_path=$(jq -r --arg key "$PLUGIN_KEY" '.plugins[$key][0].installPath // empty' "$INSTALLED_PLUGINS" 2>/dev/null)
+    else
+        install_path=$(python3 -c "
+import json, sys
+with open('$INSTALLED_PLUGINS') as f:
+    data = json.load(f)
+plugins = data.get('plugins', {})
+entry = plugins.get('$PLUGIN_KEY', [{}])[0]
+print(entry.get('installPath', ''))
+" 2>/dev/null)
+    fi
+
+    if [[ -z "$install_path" || ! -d "$install_path" ]]; then
+        echo "Error: Coach plugin not installed or path not found" >&2
+        exit 1
+    fi
+
+    echo "$install_path"
+}
+
+run_async() {
+    local script_path="$1"
+    shift
+
+    # Capture stdin if available (for hooks that pass data via stdin)
+    local stdin_data=""
+    if [[ ! -t 0 ]]; then
+        stdin_data=$(cat)
+    fi
+
+    # Spawn in background with nohup, redirect output to /dev/null
+    if [[ -n "$stdin_data" ]]; then
+        echo "$stdin_data" | nohup python3 "$script_path" "$@" > /dev/null 2>&1 &
+    else
+        nohup python3 "$script_path" "$@" > /dev/null 2>&1 &
+    fi
+
+    # Return immediately with success
+    exit 0
+}
+
+main() {
+    local async_mode=false
+
+    # Check for --async flag
+    if [[ "${1:-}" == "--async" ]]; then
+        async_mode=true
+        shift
+    fi
+
+    if [[ $# -lt 1 ]]; then
+        echo "Usage: coach-run [--async] <script-name> [args...]" >&2
+        exit 1
+    fi
+
+    local script_name="$1"
+    shift
+
+    local install_path
+    install_path=$(resolve_install_path)
+
+    local script_path="$install_path/scripts/$script_name"
+
+    if [[ ! -f "$script_path" ]]; then
+        echo "Error: Script not found: $script_path" >&2
+        exit 1
+    fi
+
+    if [[ "$async_mode" == true ]]; then
+        run_async "$script_path" "$@"
+    else
+        # Execute the script synchronously, forwarding all arguments and stdin
+        exec python3 "$script_path" "$@"
+    fi
+}
+
+main "$@"

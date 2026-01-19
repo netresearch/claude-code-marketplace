@@ -236,6 +236,164 @@ php -d xdebug.mode=coverage \
 > if both are present. The TYPO3 core-testing Docker images
 > (`ghcr.io/typo3/core-testing-php*`) include both PCOV and Xdebug.
 
+## E2E Testing in CI
+
+> **IMPORTANT: Do NOT use DDEV in CI!**
+>
+> DDEV is for local development only. Use GitHub Services + PHP built-in server for E2E tests in CI.
+
+### Why NOT DDEV in CI?
+
+| Issue | Impact |
+|-------|--------|
+| **Slow startup** | 2-3+ minutes for Docker orchestration |
+| **Complexity** | Docker-in-Docker, networking, volumes |
+| **Resource heavy** | Multiple containers exceed runner limits |
+| **Fragile** | Port conflicts, DNS issues, cert problems |
+| **Non-standard** | TYPO3 Core uses direct PHP, not DDEV |
+
+### Correct E2E CI Pattern: GitHub Services
+
+```yaml
+# .github/workflows/e2e.yml
+name: E2E Tests
+
+on: [push, pull_request]
+
+jobs:
+  e2e:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    # GitHub Services - database container
+    services:
+      db:
+        image: mariadb:11.4
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: typo3
+          MYSQL_CHARSET: utf8mb4
+          MYSQL_COLLATION: utf8mb4_unicode_ci
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="healthcheck.sh --connect --innodb_initialized"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          extensions: mysqli, pdo_mysql, gd, intl
+
+      - name: Install Composer dependencies
+        run: composer install --prefer-dist --no-progress
+
+      - name: Setup TYPO3
+        run: |
+          mkdir -p .Build/Web/typo3conf
+          cat > .Build/Web/typo3conf/LocalConfiguration.php << 'EOF'
+          <?php
+          return [
+              'DB' => ['Connections' => ['Default' => [
+                  'driver' => 'mysqli',
+                  'host' => '127.0.0.1',
+                  'dbname' => 'typo3',
+                  'user' => 'root',
+                  'password' => 'root',
+              ]]],
+              'SYS' => [
+                  'encryptionKey' => '0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef',
+                  'trustedHostsPattern' => 'localhost|127\\.0\\.0\\.1',
+              ],
+          ];
+          EOF
+
+          # Wait for database
+          for i in {1..30}; do
+            mysqladmin ping -h127.0.0.1 -uroot -proot --silent 2>/dev/null && break
+            sleep 2
+          done
+
+          .Build/bin/typo3 extension:setup --no-interaction
+          .Build/bin/typo3 backend:user:create --username=admin --password='Joh316!!' --admin --no-interaction
+          .Build/bin/typo3 cache:flush
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'  # Use LTS
+
+      - name: Install Playwright
+        run: |
+          npm ci
+          npx playwright install --with-deps chromium
+
+      # PHP built-in server (NOT DDEV)
+      - name: Start PHP server
+        run: |
+          php -S 0.0.0.0:8080 -t .Build/Web > /tmp/php-server.log 2>&1 &
+          for i in $(seq 1 30); do
+            curl -sf http://localhost:8080/typo3/ > /dev/null 2>&1 && break
+            sleep 1
+          done
+
+      - name: Run Playwright tests
+        env:
+          TYPO3_BASE_URL: http://localhost:8080
+        run: npm run test:e2e
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-report
+          path: Tests/E2E/Playwright/reports/
+```
+
+### Dual-Mode Playwright Configuration
+
+Support both local (DDEV) and CI (localhost) environments:
+
+```typescript
+// playwright.config.ts
+export default defineConfig({
+  use: {
+    // DDEV for local, CI sets TYPO3_BASE_URL=http://localhost:8080
+    baseURL: process.env.TYPO3_BASE_URL || 'https://my-extension.ddev.site',
+    ignoreHTTPSErrors: true, // For DDEV self-signed certs
+  },
+});
+```
+
+### runTests.sh Integration
+
+The `runTests.sh` script should support both modes:
+
+```bash
+run_playwright_tests() {
+    local typo3_base_url="${TYPO3_BASE_URL:-https://my-extension.ddev.site}"
+
+    # Check if TYPO3 is accessible (use -k for https/DDEV)
+    local curl_opts="-s"
+    [[ "${typo3_base_url}" == https://* ]] && curl_opts="-sk"
+
+    if ! curl ${curl_opts} "${typo3_base_url}/typo3/" > /dev/null 2>&1; then
+        if [[ "${PLAYWRIGHT_FORCE:-0}" != "1" ]]; then
+            echo "Error: TYPO3 not responding at ${typo3_base_url}"
+            echo "Set PLAYWRIGHT_FORCE=1 to override."
+            exit 1
+        fi
+    fi
+
+    export TYPO3_BASE_URL="${typo3_base_url}"
+    npm run test:e2e
+}
+```
+
 ## GitLab CI
 
 ### Basic Pipeline

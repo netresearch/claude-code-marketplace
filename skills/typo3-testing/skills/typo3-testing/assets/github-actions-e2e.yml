@@ -2,13 +2,16 @@
 #
 # Place this file in .github/workflows/e2e.yml
 #
-# This workflow uses DDEV for full TYPO3 environment testing
-# with Playwright for browser-based E2E tests.
+# This workflow uses GitHub Services (MariaDB) + PHP built-in server
+# for fast, reliable E2E testing with Playwright.
+#
+# IMPORTANT: Do NOT use DDEV in CI - it's too slow and complex.
+# DDEV is for LOCAL development only.
 #
 # PREREQUISITES:
-# - DDEV configuration in .ddev/ directory
-# - Playwright tests in Tests/playwright/ or tests/playwright/
+# - Playwright tests in Tests/E2E/Playwright/ or Build/tests/playwright/
 # - package.json with Playwright dependencies
+# - composer.json with TYPO3 dependencies
 
 name: E2E Tests
 
@@ -19,138 +22,241 @@ on:
     branches: [main]
   # Manual trigger for expensive E2E tests
   workflow_dispatch:
+  # Weekly scheduled run (optional)
+  schedule:
+    - cron: '0 2 * * 0'
 
 # Prevent concurrent E2E runs on same branch
 concurrency:
   group: e2e-${{ github.ref }}
   cancel-in-progress: true
 
+permissions:
+  contents: read
+
 jobs:
   e2e:
     name: E2E Tests (Playwright)
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 20
+
+    # ==========================================================================
+    # GitHub Services: Use MariaDB instead of DDEV
+    # This is faster, simpler, and more reliable than DDEV in CI
+    # ==========================================================================
+    services:
+      db:
+        image: mariadb:11.4
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: typo3
+          MYSQL_CHARSET: utf8mb4
+          MYSQL_COLLATION: utf8mb4_unicode_ci
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="healthcheck.sh --connect --innodb_initialized"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
-      - name: Setup DDEV
-        uses: ddev/github-action-setup-ddev@v1
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
         with:
-          # Autostart is handled explicitly below
-          autostart: false
+          # Match your composer.json PHP requirement
+          php-version: '8.4'
+          extensions: mysqli, pdo_mysql, gd, intl, curl, zip
+          coverage: none
 
-      - name: Start DDEV
-        run: |
-          ddev start
-          ddev composer install --no-progress
+      - name: Get Composer cache directory
+        id: composer-cache
+        run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
 
+      - name: Cache Composer dependencies
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
+          restore-keys: ${{ runner.os }}-composer-
+
+      - name: Install Composer dependencies
+        run: composer install --prefer-dist --no-progress
+
+      # ========================================================================
+      # TYPO3 Setup: Create config and bootstrap database
+      # ========================================================================
       - name: Setup TYPO3
         run: |
-          # Import database if fixture exists
-          if [ -f ".ddev/db-dumps/initial.sql.gz" ]; then
-            ddev import-db --file=.ddev/db-dumps/initial.sql.gz
-          fi
+          # Create necessary directories
+          mkdir -p .Build/Web/typo3conf
+          mkdir -p .Build/Web/typo3temp/var/cache
+          mkdir -p .Build/Web/typo3temp/var/log
+          mkdir -p .Build/Web/fileadmin
 
-          # Run TYPO3 setup commands
-          ddev exec vendor/bin/typo3 extension:setup
-          ddev exec vendor/bin/typo3 cache:flush
+          # Create LocalConfiguration.php with MySQL connection
+          cat > .Build/Web/typo3conf/LocalConfiguration.php << 'EOF'
+          <?php
+          return [
+              'BE' => [
+                  'debug' => true,
+                  // Password: 'password' (test-only, for CI debugging)
+                  'installToolPassword' => '$argon2i$v=19$m=65536,t=16,p=1$M3QuMy5OdGlXTkxmTy56Zg$3A4Exo3BxTgTjLSaR4xaoIgd3gfWBPjXfYu7NdnVmzU',
+                  'passwordHashing' => [
+                      'className' => \TYPO3\CMS\Core\Crypto\PasswordHashing\Argon2iPasswordHash::class,
+                      'options' => [],
+                  ],
+              ],
+              'DB' => [
+                  'Connections' => [
+                      'Default' => [
+                          'charset' => 'utf8mb4',
+                          'driver' => 'mysqli',
+                          'host' => '127.0.0.1',
+                          'port' => 3306,
+                          'dbname' => 'typo3',
+                          'user' => 'root',
+                          'password' => 'root',
+                      ],
+                  ],
+              ],
+              'FE' => [
+                  'debug' => true,
+              ],
+              'SYS' => [
+                  'devIPmask' => '*',
+                  'displayErrors' => 1,
+                  // Test encryption key (64 hex chars, not a real secret)
+                  'encryptionKey' => '0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef',
+                  'exceptionalErrors' => 4096,
+                  'sitename' => 'E2E Tests',
+                  'trustedHostsPattern' => 'localhost|127\\.0\\.0\\.1',
+              ],
+          ];
+          EOF
+
+          # Wait for database to be ready (extra safety beyond health check)
+          for i in {1..30}; do
+            if mysqladmin ping -h127.0.0.1 -uroot -proot --silent 2>/dev/null; then
+              echo "Database is ready."
+              break
+            fi
+            echo "Waiting for database... (attempt $i/30)"
+            sleep 2
+          done
+
+          # Setup database schema
+          .Build/bin/typo3 extension:setup --no-interaction
+
+          # Create admin user (password: 'Joh316!!' - test-only)
+          .Build/bin/typo3 backend:user:create --username=admin --password='Joh316!!' --admin --no-interaction
+
+          # Flush caches
+          .Build/bin/typo3 cache:flush
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '22'
+          node-version: '20'  # Use LTS version
           cache: 'npm'
-          cache-dependency-path: 'Tests/playwright/package-lock.json'
 
-      - name: Install Playwright dependencies
-        working-directory: Tests/playwright
+      - name: Install npm dependencies
+        run: npm ci
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+
+      # ========================================================================
+      # Start PHP built-in server (NOT DDEV)
+      # ========================================================================
+      - name: Start PHP server
         run: |
-          npm ci
-          npx playwright install --with-deps chromium
+          php -S 0.0.0.0:8080 -t .Build/Web > /tmp/php-server.log 2>&1 &
+          echo $! > /tmp/php-server.pid
+
+          # Wait for server to become ready (up to 30 seconds)
+          for i in $(seq 1 30); do
+            if curl -sf http://localhost:8080/typo3/ > /dev/null 2>&1; then
+              echo "PHP server is up (after ${i}s)."
+              break
+            fi
+            sleep 1
+          done
+
+          # Verify server is running
+          if ! curl -sf http://localhost:8080/typo3/ > /dev/null 2>&1; then
+            echo "PHP server failed to start. Log:"
+            cat /tmp/php-server.log
+            exit 1
+          fi
 
       - name: Run Playwright tests
-        working-directory: Tests/playwright
-        run: npx playwright test
         env:
-          # DDEV provides the base URL
-          BASE_URL: https://${{ github.event.repository.name }}.ddev.site
+          # CI uses localhost, NOT DDEV URL
+          TYPO3_BASE_URL: http://localhost:8080
+        run: npm run test:e2e
 
-      - name: Upload Playwright report
+      - name: Upload test results
         uses: actions/upload-artifact@v4
         if: always()
         with:
           name: playwright-report
-          path: Tests/playwright/playwright-report/
+          path: |
+            Tests/E2E/Playwright/reports/
+            Tests/E2E/Playwright/test-results/
           retention-days: 7
 
-      - name: Upload test screenshots
+      - name: Upload PHP server logs
         uses: actions/upload-artifact@v4
         if: failure()
         with:
-          name: playwright-screenshots
-          path: Tests/playwright/test-results/
-          retention-days: 7
+          name: php-server-logs
+          path: /tmp/php-server.log
+          retention-days: 3
 
-      - name: Stop DDEV
+      - name: Stop PHP server
         if: always()
-        run: ddev stop
+        run: |
+          if [ -f /tmp/php-server.pid ]; then
+            kill $(cat /tmp/php-server.pid) 2>/dev/null || true
+          fi
 
-  # ==========================================================================
-  # Accessibility Tests (Optional, separate job)
-  # ==========================================================================
-
-  # accessibility:
-  #   name: Accessibility Tests (axe-core)
-  #   runs-on: ubuntu-latest
-  #   timeout-minutes: 20
-  #   needs: [e2e]  # Run after E2E to reuse any cached setup
-  #
-  #   steps:
-  #     - uses: actions/checkout@v4
-  #
-  #     - name: Setup DDEV
-  #       uses: ddev/github-action-setup-ddev@v1
-  #       with:
-  #         autostart: false
-  #
-  #     - name: Start DDEV
-  #       run: |
-  #         ddev start
-  #         ddev composer install --no-progress
-  #
-  #     - name: Setup TYPO3
-  #       run: |
-  #         ddev exec vendor/bin/typo3 extension:setup
-  #         ddev exec vendor/bin/typo3 cache:flush
-  #
-  #     - name: Setup Node.js
-  #       uses: actions/setup-node@v4
-  #       with:
-  #         node-version: '22'
-  #         cache: 'npm'
-  #         cache-dependency-path: 'Tests/playwright/package-lock.json'
-  #
-  #     - name: Install dependencies
-  #       working-directory: Tests/playwright
-  #       run: |
-  #         npm ci
-  #         npx playwright install --with-deps chromium
-  #
-  #     - name: Run accessibility tests
-  #       working-directory: Tests/playwright
-  #       run: npx playwright test --project=accessibility
-  #       env:
-  #         BASE_URL: https://${{ github.event.repository.name }}.ddev.site
-  #
-  #     - name: Upload accessibility report
-  #       uses: actions/upload-artifact@v4
-  #       if: always()
-  #       with:
-  #         name: accessibility-report
-  #         path: Tests/playwright/accessibility-report/
-  #         retention-days: 7
-  #
-  #     - name: Stop DDEV
-  #       if: always()
-  #       run: ddev stop
+# =============================================================================
+# WHY NOT DDEV IN CI?
+# =============================================================================
+#
+# DDEV should NOT be used in CI for these reasons:
+#
+# 1. SLOW STARTUP (2-3+ minutes)
+#    - Docker image pulls
+#    - Container orchestration
+#    - Network setup
+#    - Service health checks
+#
+# 2. COMPLEXITY
+#    - Docker-in-Docker or privileged mode required
+#    - Networking between host and containers
+#    - Volume mounting overhead
+#
+# 3. RESOURCE HEAVY
+#    - Multiple containers (web, db, router)
+#    - Not suited for GitHub Actions runners
+#
+# 4. FRAGILE
+#    - Many moving parts that can fail
+#    - Port conflicts, DNS issues, certificate problems
+#
+# 5. NON-STANDARD
+#    - TYPO3 Core and community use direct PHP or testing containers
+#    - Not how the TYPO3 community does CI
+#
+# DDEV is excellent for LOCAL DEVELOPMENT:
+# - Consistent environment across team
+# - Easy multi-version testing
+# - Full-stack with services (Redis, Elasticsearch, etc.)
+#
+# But for CI, use GitHub Services + PHP built-in server.
+# =============================================================================

@@ -552,6 +552,13 @@ def store_signal(signal: Dict, event_type: str) -> str:
 
 
 def main():
+    # Auto-heal hook paths on first run
+    try:
+        from hook_healer import ensure_stable_hooks
+        ensure_stable_hooks()
+    except Exception:
+        pass  # Don't fail if healing fails
+
     parser = argparse.ArgumentParser(description="Detect friction signals")
     parser.add_argument("--phase", choices=["pre", "post", "tool"], required=True,
                        help="Processing phase")

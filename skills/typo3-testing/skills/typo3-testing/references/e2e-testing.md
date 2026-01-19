@@ -412,48 +412,130 @@ ddev exec -s playwright npx playwright test
 
 ## CI/CD Integration
 
+> **IMPORTANT: Do NOT use DDEV in CI!**
+>
+> DDEV is for local development only. For CI, use GitHub Services + PHP built-in server.
+> See `assets/github-actions-e2e.yml` for the full template.
+
+### Why NOT DDEV in CI?
+
+| Issue | Impact |
+|-------|--------|
+| Slow startup | 2-3+ minutes for Docker orchestration |
+| Complexity | Docker-in-Docker, networking, volumes |
+| Resource heavy | Multiple containers exceed runner limits |
+| Fragile | Port conflicts, DNS issues, cert problems |
+| Non-standard | TYPO3 Core uses direct PHP, not DDEV |
+
+### Correct CI Pattern: GitHub Services
+
 ```yaml
-# .github/workflows/playwright.yml
-name: Playwright Tests
+# .github/workflows/e2e.yml
+name: E2E Tests
 
 on: [push, pull_request]
 
 jobs:
-  playwright:
+  e2e:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    # Use GitHub Services for database (NOT DDEV)
+    services:
+      db:
+        image: mariadb:11.4
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: typo3
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="healthcheck.sh --connect --innodb_initialized"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
     steps:
       - uses: actions/checkout@v4
 
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          extensions: mysqli, pdo_mysql, gd, intl
+
+      - name: Install Composer dependencies
+        run: composer install --prefer-dist --no-progress
+
+      - name: Setup TYPO3
+        run: |
+          # Create LocalConfiguration.php with MySQL connection
+          mkdir -p .Build/Web/typo3conf
+          cat > .Build/Web/typo3conf/LocalConfiguration.php << 'EOF'
+          <?php
+          return [
+              'DB' => ['Connections' => ['Default' => [
+                  'driver' => 'mysqli',
+                  'host' => '127.0.0.1',
+                  'dbname' => 'typo3',
+                  'user' => 'root',
+                  'password' => 'root',
+              ]]],
+              'SYS' => [
+                  'encryptionKey' => '0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef',
+                  'trustedHostsPattern' => 'localhost|127\\.0\\.0\\.1',
+              ],
+          ];
+          EOF
+
+          .Build/bin/typo3 extension:setup --no-interaction
+          .Build/bin/typo3 backend:user:create --username=admin --password='Joh316!!' --admin --no-interaction
+          .Build/bin/typo3 cache:flush
+
       - uses: actions/setup-node@v4
         with:
-          node-version: '22'
+          node-version: '20'
 
-      - name: Install dependencies
-        working-directory: ./Build
-        run: npm ci
-
-      - name: Install Playwright browsers
-        working-directory: ./Build
-        run: npx playwright install --with-deps chromium
-
-      - name: Start TYPO3
+      - name: Install Playwright
         run: |
-          ddev start
-          ddev import-db --file=.ddev/db.sql.gz
+          npm ci
+          npx playwright install --with-deps chromium
+
+      # Start PHP built-in server (NOT DDEV)
+      - name: Start PHP server
+        run: |
+          php -S 0.0.0.0:8080 -t .Build/Web > /tmp/php-server.log 2>&1 &
+          sleep 3
 
       - name: Run Playwright tests
-        working-directory: ./Build
-        run: npx playwright test
         env:
-          PLAYWRIGHT_BASE_URL: https://myproject.ddev.site/typo3/
+          TYPO3_BASE_URL: http://localhost:8080
+        run: npm run test:e2e
 
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: playwright-report
-          path: typo3temp/var/tests/playwright-reports/
-          retention-days: 30
+          path: Tests/E2E/Playwright/reports/
 ```
+
+### Dual-Mode Playwright Configuration
+
+Configure Playwright to work in both environments:
+
+```typescript
+// playwright.config.ts
+export default defineConfig({
+  use: {
+    // DDEV for local, localhost for CI
+    baseURL: process.env.TYPO3_BASE_URL || 'https://my-extension.ddev.site',
+    ignoreHTTPSErrors: true, // For DDEV self-signed certs
+  },
+});
+```
+
+**Local development:** `npx playwright test` (uses DDEV default)
+**CI:** Sets `TYPO3_BASE_URL=http://localhost:8080`
 
 ## Best Practices
 

@@ -2,20 +2,25 @@
 """
 Initialize the Coach self-learning system.
 Creates necessary directories and SQLite databases.
+Installs stable hook launchers to avoid version path issues.
 """
 
 import os
 import sys
 import sqlite3
 import json
+import shutil
 from pathlib import Path
 from datetime import datetime, UTC
 
 COACH_DIR = Path.home() / ".claude-coach"
+COACH_BIN_DIR = COACH_DIR / "bin"
 EVENTS_DB = COACH_DIR / "events.sqlite"
 LEDGER_DB = COACH_DIR / "ledger.sqlite"
 CANDIDATES_FILE = COACH_DIR / "candidates.json"
 CONFIG_FILE = COACH_DIR / "config.json"
+CLAUDE_SETTINGS = Path.home() / ".claude" / "settings.json"
+INSTALLED_PLUGINS = Path.home() / ".claude" / "plugins" / "installed_plugins.json"
 
 EVENTS_SCHEMA = """
 CREATE TABLE IF NOT EXISTS events (
@@ -149,6 +154,113 @@ def init_database(db_path: Path, schema: str) -> bool:
         return False
 
 
+def get_plugin_root() -> Path | None:
+    """Get the current coach plugin install path from installed_plugins.json."""
+    if not INSTALLED_PLUGINS.exists():
+        return None
+    try:
+        data = json.loads(INSTALLED_PLUGINS.read_text())
+        plugins = data.get("plugins", {})
+        coach_entry = plugins.get("coach@netresearch-claude-code-marketplace", [{}])[0]
+        install_path = coach_entry.get("installPath")
+        if install_path:
+            return Path(install_path)
+    except Exception:
+        pass
+    return None
+
+
+def install_launcher() -> bool:
+    """Install the coach-run launcher to a stable path."""
+    plugin_root = get_plugin_root()
+    if not plugin_root:
+        # Fallback: use script's location to find plugin root
+        plugin_root = Path(__file__).parent.parent
+
+    source_launcher = plugin_root / "bin" / "coach-run"
+    if not source_launcher.exists():
+        print(f"  Warning: Launcher not found at {source_launcher}", file=sys.stderr)
+        return False
+
+    COACH_BIN_DIR.mkdir(parents=True, exist_ok=True)
+    dest_launcher = COACH_BIN_DIR / "coach-run"
+
+    try:
+        shutil.copy2(source_launcher, dest_launcher)
+        dest_launcher.chmod(0o755)
+        print(f"  Installed launcher: {dest_launcher}")
+        return True
+    except Exception as e:
+        print(f"  Error installing launcher: {e}", file=sys.stderr)
+        return False
+
+
+def update_settings_hooks() -> bool:
+    """Update ~/.claude/settings.json hooks to use stable paths."""
+    if not CLAUDE_SETTINGS.exists():
+        print("  Settings file not found, skipping hook update")
+        return True
+
+    try:
+        settings = json.loads(CLAUDE_SETTINGS.read_text())
+    except Exception as e:
+        print(f"  Error reading settings: {e}", file=sys.stderr)
+        return False
+
+    hooks = settings.get("hooks", {})
+    if not hooks:
+        print("  No hooks configured, skipping")
+        return True
+
+    stable_launcher = str(COACH_BIN_DIR / "coach-run")
+    updated = False
+
+    # Pattern to match versioned coach plugin paths
+    import re
+    version_pattern = re.compile(
+        r"python3\s+[^\s]*plugins/cache/[^/]+/coach/[^/]+/scripts/(\w+\.py)"
+    )
+
+    def update_command(cmd: str) -> str:
+        """Replace versioned path with stable launcher using async mode."""
+        match = version_pattern.search(cmd)
+        if match:
+            script_name = match.group(1)
+            # Extract args after the script path
+            script_pos = cmd.find(script_name)
+            args_part = cmd[script_pos + len(script_name):]
+            # Use --async for non-blocking hook execution
+            return f"{stable_launcher} --async {script_name}{args_part}"
+        return cmd
+
+    for hook_type, hook_list in hooks.items():
+        if not isinstance(hook_list, list):
+            continue
+        for entry in hook_list:
+            if not isinstance(entry, dict):
+                continue
+            inner_hooks = entry.get("hooks", [])
+            for hook in inner_hooks:
+                if hook.get("type") == "command" and "coach" in hook.get("command", ""):
+                    old_cmd = hook["command"]
+                    new_cmd = update_command(old_cmd)
+                    if new_cmd != old_cmd:
+                        hook["command"] = new_cmd
+                        updated = True
+
+    if updated:
+        try:
+            CLAUDE_SETTINGS.write_text(json.dumps(settings, indent=2))
+            print("  Updated hooks in settings.json to use stable paths")
+        except Exception as e:
+            print(f"  Error writing settings: {e}", file=sys.stderr)
+            return False
+    else:
+        print("  Hooks already use stable paths or no coach hooks found")
+
+    return True
+
+
 def init_coach(force: bool = False) -> int:
     """Initialize the Coach system."""
     print("Initializing Coach self-learning system...")
@@ -199,11 +311,18 @@ def init_coach(force: bool = False) -> int:
         d.mkdir(parents=True, exist_ok=True)
     print(f"  Ensured global directories exist")
 
+    # Install stable hook launcher
+    print("\nSetting up stable hook paths...")
+    if install_launcher():
+        update_settings_hooks()
+    else:
+        print("  Warning: Could not install launcher, hooks may break on version updates")
+
     print("\nCoach system initialized successfully!")
     print("\nNext steps:")
-    print("  1. Configure hooks in .claude/settings.json")
-    print("  2. Use /coach status to check system health")
-    print("  3. Coach will automatically detect learning opportunities")
+    print("  1. Use /coach status to check system health")
+    print("  2. Coach will automatically detect learning opportunities")
+    print("\nNote: Hooks now use stable paths that survive plugin version updates.")
 
     return 0
 

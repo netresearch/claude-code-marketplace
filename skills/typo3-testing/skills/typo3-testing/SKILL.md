@@ -78,6 +78,46 @@ To achieve full conformance scores, ensure:
 
 > **Note:** Full conformance requires phpat architecture tests enforcing layer boundaries.
 
+## Enforcement Rules
+
+This skill enforces the following patterns. Violations should be flagged and corrected:
+
+### E2E Testing in CI (MANDATORY)
+
+| Rule | Enforcement |
+|------|-------------|
+| **NEVER use DDEV in CI/CD** | Flag any `.github/workflows/*.yml` or `.gitlab-ci.yml` using `ddev` commands |
+| **Use GitHub Services** | E2E workflows MUST use MariaDB service container |
+| **Use PHP built-in server** | E2E workflows MUST use `php -S` for HTTP, not DDEV |
+| **Dual-mode Playwright config** | `playwright.config.ts` MUST use `TYPO3_BASE_URL` env var |
+
+**Why:** DDEV in CI is slow (2-3+ min startup), complex (Docker-in-Docker), resource-heavy, and fragile. The TYPO3 community standard is direct PHP or testing containers.
+
+**Correct pattern:**
+```yaml
+# GitHub Actions E2E
+services:
+  db:
+    image: mariadb:11.4
+    # ...
+
+steps:
+  - name: Start PHP server
+    run: php -S 0.0.0.0:8080 -t .Build/Web &
+
+  - name: Run Playwright
+    env:
+      TYPO3_BASE_URL: http://localhost:8080
+    run: npm run test:e2e
+```
+
+**Incorrect pattern (flag this):**
+```yaml
+# WRONG - Never do this in CI
+- run: ddev start
+- run: ddev exec vendor/bin/phpunit
+```
+
 ## Using Reference Documentation
 
 ### Core Testing References
@@ -92,7 +132,7 @@ When testing HTTP clients or external APIs, consult `references/integration-test
 
 When writing browser-based E2E tests, consult `references/e2e-testing.md` for Playwright setup, Page Object Model patterns, and PHP-based E2E alternatives.
 
-When setting up DDEV for testing, consult `references/ddev-testing.md` for multi-version matrix testing, Playwright integration, and CI/CD with DDEV.
+When setting up DDEV for **local** testing, consult `references/ddev-testing.md` for multi-version matrix testing and Playwright integration. **Note: DDEV is for LOCAL development only - never use DDEV in CI/CD.**
 
 When configuring test runners, consult `references/test-runners.md` for runTests.sh customization and Docker orchestration.
 
@@ -161,7 +201,7 @@ To configure coverage reporting, copy `assets/codecov.yml` for Codecov integrati
 
 To set up GitHub Actions, use:
 - `assets/github-actions-tests.yml` - Main CI workflow (lint, phpstan, unit, functional tests)
-- `assets/github-actions-e2e.yml` - E2E workflow with DDEV and Playwright
+- `assets/github-actions-e2e.yml` - E2E workflow with **GitHub Services + PHP built-in server** (NOT DDEV)
 
 ### E2E Testing Setup
 
