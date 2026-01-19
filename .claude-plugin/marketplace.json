@@ -149,7 +149,7 @@
         "source": "github",
         "repo": "netresearch/github-project-skill"
       },
-      "category": null
+      "category": "development"
     },
     {
       "name": "skill-repo",
@@ -167,7 +167,7 @@
         "source": "github",
         "repo": "netresearch/jira-skill"
       },
-      "category": null
+      "category": "workflow"
     },
     {
       "name": "context7",

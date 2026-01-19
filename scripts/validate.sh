@@ -20,7 +20,7 @@ if ! jq -e '
     has("name") and has("owner") and has("plugins") and
     (.owner | has("name") and has("email")) and
     (.plugins | type == "array") and
-    (.plugins | all(has("name") and has("source"))) and
+    (.plugins | all(has("name") and has("source") and has("category"))) and
     (.plugins | all(
         .source.source == "github" and .source.repo != null or
         .source.source == "url" and .source.url != null
