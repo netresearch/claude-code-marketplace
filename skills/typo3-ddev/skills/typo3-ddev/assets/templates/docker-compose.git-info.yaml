@@ -1,9 +1,0 @@
-# Docker Compose override to pass git information to web container build
-# This allows the landing page to display current branch, commit, and PR info
-services:
-  web:
-    build:
-      args:
-        GIT_BRANCH: "{{GIT_BRANCH}}"
-        GIT_COMMIT: "{{GIT_COMMIT}}"
-        GIT_PR: "{{GIT_PR}}"
