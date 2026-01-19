@@ -1,0 +1,58 @@
+name: Validate Marketplace
+
+on:
+  push:
+    paths:
+      - '.claude-plugin/marketplace.json'
+  pull_request:
+    paths:
+      - '.claude-plugin/marketplace.json'
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate JSON syntax
+        run: jq empty .claude-plugin/marketplace.json
+
+      - name: Validate marketplace structure
+        run: |
+          jq -e '
+            # Required top-level fields
+            has("name") and has("owner") and has("plugins") and
+
+            # Owner must have name and email
+            (.owner | has("name") and has("email")) and
+
+            # Plugins must be an array
+            (.plugins | type == "array") and
+
+            # Each plugin must have name and source
+            (.plugins | all(has("name") and has("source"))) and
+
+            # Each source must have source type and repo/url
+            (.plugins | all(
+              .source.source == "github" and .source.repo != null or
+              .source.source == "url" and .source.url != null
+            ))
+          ' .claude-plugin/marketplace.json > /dev/null
+
+          echo "✓ Marketplace structure is valid"
+
+      - name: Check for duplicate plugin names
+        run: |
+          DUPES=$(jq -r '.plugins[].name' .claude-plugin/marketplace.json | sort | uniq -d)
+          if [ -n "$DUPES" ]; then
+            echo "::error::Duplicate plugin names found: $DUPES"
+            exit 1
+          fi
+          echo "✓ No duplicate plugin names"
+
+      - name: List plugins
+        run: |
+          echo "## Plugins in marketplace" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          jq -r '.plugins[] | "- **\(.name)** (\(.category // "uncategorized")): \(.description[0:80])..."' \
+            .claude-plugin/marketplace.json >> $GITHUB_STEP_SUMMARY
