@@ -4,7 +4,7 @@
   "description": "Curated Agentic Skills for AI coding agents - TYPO3 development, PHP modernization, and technical documentation workflows. Platform-agnostic skills following the open Agentic Skills specification.",
   "owner": {
     "name": "Netresearch DTT GmbH",
-    "email": "info@netresearch.de"
+    "url": "https://www.netresearch.de"
   },
   "plugins": [
     {

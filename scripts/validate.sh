@@ -18,7 +18,7 @@ echo "✓ Valid JSON syntax"
 # Check required structure
 if ! jq -e '
     has("name") and has("owner") and has("plugins") and
-    (.owner | has("name") and has("email")) and
+    (.owner | has("name")) and
     (.plugins | type == "array") and
     (.plugins | all(has("name") and has("source") and has("category"))) and
     (.plugins | all(
