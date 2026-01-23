@@ -186,6 +186,15 @@
         "repo": "netresearch/claude-coach-plugin"
       },
       "category": "productivity"
+    },
+    {
+      "name": "concourse-ci",
+      "description": "Expert guidance for Concourse CI pipeline development, optimization, and troubleshooting. Covers pipeline creation, git-resource and registry-image configuration, job lifecycle hooks, YAML anchors for DRY patterns, multi-branch pipelines with set_pipeline, container builds with oci-build-task, and critical gotchas like tag detection after force-push. Includes complete YAML schema reference, working example pipelines, and validation scripts. Targets Concourse v8.0+.",
+      "source": {
+        "source": "github",
+        "repo": "netresearch/concourse-ci-skill"
+      },
+      "category": "devops"
     }
   ]
 }
