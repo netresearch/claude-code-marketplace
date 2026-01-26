@@ -195,6 +195,15 @@
         "repo": "netresearch/concourse-ci-skill"
       },
       "category": "devops"
+    },
+    {
+      "name": "pagerangers-seo",
+      "description": "PageRangers SEO API integration for AI assistants. Query keyword rankings, SERP analysis, project KPIs, and keyword opportunities via the PageRangers Monitoring API. Includes credential detection hook for guided setup.",
+      "source": {
+        "source": "github",
+        "repo": "netresearch/pagerangers-skill"
+      },
+      "category": "workflow"
     }
   ]
 }
