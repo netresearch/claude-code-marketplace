@@ -204,6 +204,15 @@
         "repo": "netresearch/pagerangers-skill"
       },
       "category": "workflow"
+    },
+    {
+      "name": "docker-development",
+      "description": "Docker image development patterns for Dockerfile, docker-compose.yml, compose.yml, docker-bake.hcl, and .dockerignore. Covers multi-stage builds, layer optimization, CI testing patterns (entrypoint bypass, DNS mocking, compose validation), Docker Bake for multi-platform builds, security scanning with Trivy, and network isolation. Based on production learnings. By Netresearch.",
+      "source": {
+        "source": "github",
+        "repo": "netresearch/docker-development-skill"
+      },
+      "category": "devops"
     }
   ]
 }

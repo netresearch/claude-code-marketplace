@@ -43,6 +43,7 @@ Then use `/plugin` to browse and install individual plugins.
 | [agents](https://github.com/netresearch/agents-skill) | Skill | Generate AGENTS.md documentation |
 | [cli-tools](https://github.com/netresearch/cli-tools-skill) | Skill | Auto-install missing CLI tools |
 | [concourse-ci](https://github.com/netresearch/concourse-ci-skill) | Skill | Concourse CI pipeline development and optimization |
+| [docker-development](https://github.com/netresearch/docker-development-skill) | Skill | Docker image development, CI testing patterns |
 | [context7](https://github.com/netresearch/context7-skill) | Skill | Library documentation lookup via Context7 REST API |
 | [skill-repo](https://github.com/netresearch/skill-repo-skill) | Skill | Guide for structuring skill repositories |
 | [coach](https://github.com/netresearch/claude-coach-plugin) | Feature | Self-improving learning system with hooks and commands |
