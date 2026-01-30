@@ -213,6 +213,15 @@
         "repo": "netresearch/docker-development-skill"
       },
       "category": "devops"
+    },
+    {
+      "name": "extension-assessment",
+      "description": "Systematic TYPO3 extension assessment against all Netresearch skills. Uses checkpoint-based verification with mechanical scripted checks and domain-batched LLM reviews. Ensures 100% coverage across GitHub project setup, enterprise readiness, TYPO3 conformance, testing infrastructure, PHP modernization, security, documentation, and branding. Convention-with-override pattern for skill checkpoint discovery. By Netresearch.",
+      "source": {
+        "source": "github",
+        "repo": "netresearch/extension-assessment-skill"
+      },
+      "category": "development"
     }
   ]
 }
