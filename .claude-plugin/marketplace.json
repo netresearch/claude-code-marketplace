@@ -222,6 +222,15 @@
         "repo": "netresearch/extension-assessment-skill"
       },
       "category": "development"
+    },
+    {
+      "name": "matrix-communication",
+      "description": "Matrix chat communication for matrix.netresearch.de. Send messages to Matrix rooms on behalf of users via access token authentication. Includes room listing, message reading (unencrypted), and markdown-formatted message sending. By Netresearch.",
+      "source": {
+        "source": "github",
+        "repo": "netresearch/netresearch-matrix-skill"
+      },
+      "category": "workflow"
     }
   ]
 }
