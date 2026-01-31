@@ -225,7 +225,7 @@
     },
     {
       "name": "matrix-communication",
-      "description": "Matrix chat communication. Send messages to Matrix rooms on behalf of users via access token authentication. Works with any Matrix homeserver. Includes room listing, message reading (unencrypted), and markdown-formatted message sending. By Netresearch.",
+      "description": "Agentic Skill for Matrix chat communication. Send messages to Matrix rooms on behalf of users via access token authentication. Works with any Matrix homeserver. Includes room listing, message reading (unencrypted), and markdown-formatted message sending.",
       "source": {
         "source": "github",
         "repo": "netresearch/matrix-skill"
