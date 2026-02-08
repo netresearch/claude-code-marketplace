@@ -231,6 +231,24 @@
         "repo": "netresearch/matrix-skill"
       },
       "category": "workflow"
+    },
+    {
+      "name": "ditto-product-research",
+      "description": "Run synthetic customer research via Ditto API with 300K+ AI personas. Pain discovery, concept validation, pricing tests, competitive analysis, and startup diligence. Includes 7-question framework, API reference, question playbook, and worked examples.",
+      "source": {
+        "source": "github",
+        "repo": "Ask-Ditto/ditto-product-research-skill"
+      },
+      "category": "workflow"
+    },
+    {
+      "name": "ditto-product-marketing",
+      "description": "PMM research skill using Ditto API with 300K+ synthetic personas. 8 study types with proven 7-question frameworks: positioning validation, messaging testing, competitive intelligence, pricing & packaging, GTM validation, product launches, buyer personas, and brand tracking. Generates battlecards, messaging hierarchies, and positioning scorecards.",
+      "source": {
+        "source": "github",
+        "repo": "Ask-Ditto/ditto-product-marketing"
+      },
+      "category": "workflow"
     }
   ]
 }
