@@ -179,6 +179,15 @@
       "category": "development"
     },
     {
+      "name": "data-tools",
+      "description": "Structured data manipulation with jq, yq, dasel, and qsv. Teaches agents to use proper tools instead of grep/sed/awk on JSON, YAML, TOML, XML, and CSV files. Includes cookbook patterns for API responses, CI configs, and data pipelines.",
+      "source": {
+        "source": "github",
+        "repo": "netresearch/data-tools-skill"
+      },
+      "category": "development"
+    },
+    {
       "name": "coach",
       "description": "Self-improving learning system that detects friction signals (corrections, tool failures, repetition) and proposes rule updates. Includes /coach slash commands for reviewing, approving, and managing learning candidates. Auto-configures hooks for signal detection.",
       "source": {
@@ -220,6 +229,15 @@
       "source": {
         "source": "github",
         "repo": "netresearch/extension-assessment-skill"
+      },
+      "category": "development"
+    },
+    {
+      "name": "file-search",
+      "description": "Efficient code and file search using ripgrep, ast-grep, fd, rga, tokei, and scc. Provides tool selection guidance, targeting strategies, and progressive search refinement patterns to minimize token usage and maximize search accuracy.",
+      "source": {
+        "source": "github",
+        "repo": "netresearch/file-search-skill"
       },
       "category": "development"
     },
