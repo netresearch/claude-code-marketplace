@@ -33,6 +33,7 @@ Then use `/plugin` to browse and install individual plugins.
 | [typo3-conformance](https://github.com/netresearch/typo3-conformance-skill) | Skill | Evaluate TYPO3 standards compliance |
 | [typo3-ckeditor5](https://github.com/netresearch/typo3-ckeditor5-skill) | Skill | CKEditor 5 development for TYPO3 v12+ |
 | [typo3-extension-upgrade](https://github.com/netresearch/typo3-extension-upgrade-skill) | Skill | Systematic extension upgrades to newer LTS versions |
+| [typo3-typoscript-ref](https://github.com/netresearch/typo3-typoscript-ref-skill) | Skill | Version-aware TypoScript, TSconfig and Fluid reference lookup |
 | [jira-integration](https://github.com/netresearch/jira-skill) | Skill | Jira API operations and wiki markup |
 | [git-workflow](https://github.com/netresearch/git-workflow-skill) | Skill | Git branching strategies and Conventional Commits |
 | [github-project](https://github.com/netresearch/github-project-skill) | Skill | GitHub repository setup and platform features |

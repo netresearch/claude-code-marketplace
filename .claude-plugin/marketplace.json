@@ -249,6 +249,15 @@
         "repo": "netresearch/matrix-skill"
       },
       "category": "workflow"
+    },
+    {
+      "name": "typo3-typoscript-ref",
+      "description": "Version-aware TypoScript, TSconfig and Fluid reference lookup with always-on best practices. Covers keyword search across cached documentation, 14 ready-to-use recipes, code review checklists, deprecation checks, migration guides, debugging reference, and project-specific lint rule detection. Supports TYPO3 v12, v13, and v14.",
+      "source": {
+        "source": "github",
+        "repo": "netresearch/typo3-typoscript-ref-skill"
+      },
+      "category": "development"
     }
   ]
 }
