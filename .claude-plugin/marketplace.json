@@ -225,7 +225,7 @@
     },
     {
       "name": "automated-assessment",
-      "description": "Systematic project assessment against all Netresearch skills. Uses precondition-gated checkpoints with mechanical scripted checks and domain-batched LLM reviews. Supports any project type (TYPO3 extensions, skill repos, Go, Docker, etc.) via skill-level preconditions. CLI: /assess [skill-names] [--force] [--mechanical-only]. By Netresearch.",
+      "description": "Systematic project assessment against checkpoint-enabled skills with scripted verification + LLM review. Supports any project type via skill-level preconditions. CLI: /assess [--autofix] [--review] [--autoimprove]. Includes /assess:add-checkpoints to onboard new skills. By Netresearch.",
       "source": {
         "source": "github",
         "repo": "netresearch/automated-assessment-skill"
