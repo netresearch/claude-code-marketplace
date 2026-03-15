@@ -224,11 +224,11 @@
       "category": "devops"
     },
     {
-      "name": "extension-assessment",
-      "description": "Systematic TYPO3 extension assessment against all Netresearch skills. Uses checkpoint-based verification with mechanical scripted checks and domain-batched LLM reviews. Ensures 100% coverage across GitHub project setup, enterprise readiness, TYPO3 conformance, testing infrastructure, PHP modernization, security, documentation, and branding. Convention-with-override pattern for skill checkpoint discovery. By Netresearch.",
+      "name": "automated-assessment",
+      "description": "Systematic project assessment against all Netresearch skills. Uses precondition-gated checkpoints with mechanical scripted checks and domain-batched LLM reviews. Supports any project type (TYPO3 extensions, skill repos, Go, Docker, etc.) via skill-level preconditions. CLI: /assess [skill-names] [--force] [--mechanical-only]. By Netresearch.",
       "source": {
         "source": "github",
-        "repo": "netresearch/extension-assessment-skill"
+        "repo": "netresearch/automated-assessment-skill"
       },
       "category": "development"
     },
