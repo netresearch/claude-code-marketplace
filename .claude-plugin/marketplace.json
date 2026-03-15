@@ -258,6 +258,15 @@
         "repo": "netresearch/typo3-typoscript-ref-skill"
       },
       "category": "development"
+    },
+    {
+      "name": "typo3-project-upgrade",
+      "description": "Systematic TYPO3 project instance upgrades across major LTS versions. Covers sys_template to Site Sets migration, SCSS variable injection via Bootstrap Package ScssParser, Bootstrap 4 to 5 migration patterns (color-contrast, link-decoration, frame custom properties), Bootstrap Package v12-v16 breaking changes (navigation, position:sticky, dropdown-hover), Docker infrastructure (ImageMagick, GFX config), database cleanup, and visual review methodology. Includes assessment checkpoints for the extension-assessment framework.",
+      "source": {
+        "source": "github",
+        "repo": "netresearch/typo3-project-upgrade-skill"
+      },
+      "category": "development"
     }
   ]
 }
