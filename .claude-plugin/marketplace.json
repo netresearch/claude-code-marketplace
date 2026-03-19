@@ -71,6 +71,15 @@
       "category": "design"
     },
     {
+      "name": "stitchflow",
+      "description": "Turn product briefs, mockups, and product context into Stitch UI screens, design variants, Tailwind-friendly HTML, and screenshots. Supports Codex, Claude Code, OpenClaw, GitHub Copilot, and Gemini CLI.",
+      "source": {
+        "source": "github",
+        "repo": "yshishenya/stitchflow"
+      },
+      "category": "design"
+    },
+    {
       "name": "agents",
       "description": "Generate and maintain AGENTS.md files following the public agents.md convention. Creates thin root files with precedence rules, scoped files for subsystems, auto-extracts commands from build tools, and supports Go, PHP, TypeScript, and Python projects with language-specific templates.",
       "source": {
