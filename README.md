@@ -1,6 +1,6 @@
 # Netresearch Agentic Skills Marketplace
 
-Curated collection of **Agentic Skills** for TYPO3 development, PHP modernization, and technical documentation workflows.
+Curated collection of **Agentic Skills** for AI coding agents — TYPO3, PHP, Go, Docker, Jira, security, documentation, and more.
 
 ## What are Agentic Skills?
 
@@ -10,76 +10,99 @@ Curated collection of **Agentic Skills** for TYPO3 development, PHP modernizatio
 - Claude Code (Anthropic)
 - Cursor
 - GitHub Copilot
-- Windsurf
-- Any agent supporting the Agentic Skills specification
+- OpenAI Codex
+- Gemini CLI
+- Amp, Goose, Roo Code, OpenCode, and [30+ more](https://agentskills.io)
 
 ## Installation
+
+### Claude Code (Marketplace)
 
 ```bash
 /plugin marketplace add netresearch/claude-code-marketplace
 ```
 
-Then use `/plugin` to browse and install individual plugins.
+Then use `/plugin` to browse and install individual skills.
 
-## Available Plugins
+### npx (Any Agent)
 
-| Plugin | Type | Description |
-|--------|------|-------------|
-| [enterprise-readiness](https://github.com/netresearch/enterprise-readiness-skill) | Skill | OpenSSF security assessment and compliance |
-| [typo3-docs](https://github.com/netresearch/typo3-docs-skill) | Skill | Create TYPO3 extension documentation |
-| [typo3-testing](https://github.com/netresearch/typo3-testing-skill) | Skill | Manage TYPO3 extension tests |
-| [typo3-ddev](https://github.com/netresearch/typo3-ddev-skill) | Skill | Automate DDEV environment setup |
-| [typo3-core-contributions](https://github.com/netresearch/typo3-core-contributions-skill) | Skill | Guide TYPO3 core contributions |
-| [typo3-conformance](https://github.com/netresearch/typo3-conformance-skill) | Skill | Evaluate TYPO3 standards compliance |
-| [typo3-ckeditor5](https://github.com/netresearch/typo3-ckeditor5-skill) | Skill | CKEditor 5 development for TYPO3 v12+ |
-| [typo3-extension-upgrade](https://github.com/netresearch/typo3-extension-upgrade-skill) | Skill | Systematic extension upgrades to newer LTS versions |
-| [typo3-typoscript-ref](https://github.com/netresearch/typo3-typoscript-ref-skill) | Skill | Version-aware TypoScript, TSconfig and Fluid reference lookup |
-| [jira-integration](https://github.com/netresearch/jira-skill) | Skill | Jira API operations and wiki markup |
-| [git-workflow](https://github.com/netresearch/git-workflow-skill) | Skill | Git branching strategies and Conventional Commits |
-| [github-project](https://github.com/netresearch/github-project-skill) | Skill | GitHub repository setup and platform features |
-| [security-audit](https://github.com/netresearch/security-audit-skill) | Skill | OWASP security audit patterns for PHP |
-| [php-modernization](https://github.com/netresearch/php-modernization-skill) | Skill | PHP 8.x modernization and type safety |
-| [go-development](https://github.com/netresearch/go-development-skill) | Skill | Production-grade Go development patterns |
-| [netresearch-branding](https://github.com/netresearch/netresearch-branding-skill) | Skill | Apply Netresearch brand guidelines |
-| [agents](https://github.com/netresearch/agents-skill) | Skill | Generate AGENTS.md documentation |
-| [cli-tools](https://github.com/netresearch/cli-tools-skill) | Skill | Auto-install missing CLI tools |
-| [concourse-ci](https://github.com/netresearch/concourse-ci-skill) | Skill | Concourse CI pipeline development and optimization |
-| [docker-development](https://github.com/netresearch/docker-development-skill) | Skill | Docker image development, CI testing patterns |
-| [context7](https://github.com/netresearch/context7-skill) | Skill | Library documentation lookup via Context7 REST API |
-| [skill-repo](https://github.com/netresearch/skill-repo-skill) | Skill | Guide for structuring skill repositories |
-| [coach](https://github.com/netresearch/claude-coach-plugin) | Feature | Self-improving learning system with hooks and commands |
+```bash
+npx skills add https://github.com/netresearch/{repo-name} --skill {skill-name}
+```
+
+Browse all skills at [skills.sh/netresearch](https://skills.sh/netresearch).
+
+## Available Skills
+
+### TYPO3 Development
+
+| Skill | Repository | Description |
+|-------|-----------|-------------|
+| typo3-conformance | [typo3-conformance-skill](https://github.com/netresearch/typo3-conformance-skill) | Evaluate TYPO3 extension quality and standards compliance |
+| typo3-testing | [typo3-testing-skill](https://github.com/netresearch/typo3-testing-skill) | Test infrastructure: unit, functional, E2E, architecture, mutation |
+| typo3-docs | [typo3-docs-skill](https://github.com/netresearch/typo3-docs-skill) | Create and maintain TYPO3 extension documentation for docs.typo3.org |
+| typo3-ddev | [typo3-ddev-skill](https://github.com/netresearch/typo3-ddev-skill) | DDEV environment setup for TYPO3 extension development |
+| typo3-extension-upgrade | [typo3-extension-upgrade-skill](https://github.com/netresearch/typo3-extension-upgrade-skill) | Systematic extension upgrades to newer LTS versions |
+| typo3-project-upgrade | [typo3-project-upgrade-skill](https://github.com/netresearch/typo3-project-upgrade-skill) | TYPO3 project instance upgrades across major LTS versions |
+| typo3-ckeditor5 | [typo3-ckeditor5-skill](https://github.com/netresearch/typo3-ckeditor5-skill) | CKEditor 5 plugin development for TYPO3 v12+ |
+| typo3-core-contributions | [typo3-core-contributions-skill](https://github.com/netresearch/typo3-core-contributions-skill) | Guide TYPO3 core contributions via Gerrit |
+| typo3-typoscript-ref | [typo3-typoscript-ref-skill](https://github.com/netresearch/typo3-typoscript-ref-skill) | Version-aware TypoScript, TSconfig, and Fluid reference lookup |
+
+### Code Quality & Security
+
+| Skill | Repository | Description |
+|-------|-----------|-------------|
+| php-modernization | [php-modernization-skill](https://github.com/netresearch/php-modernization-skill) | PHP 8.x modernization: type safety, enums, DTOs, PHPStan, Rector |
+| security-audit | [security-audit-skill](https://github.com/netresearch/security-audit-skill) | OWASP security audit patterns for PHP applications |
+| enterprise-readiness | [enterprise-readiness-skill](https://github.com/netresearch/enterprise-readiness-skill) | Supply chain security, SLSA, OpenSSF, SBOMs, quality gates |
+| automated-assessment | [automated-assessment-skill](https://github.com/netresearch/automated-assessment-skill) | Systematic project assessment with scripted + LLM verification |
+
+### DevOps & Infrastructure
+
+| Skill | Repository | Description |
+|-------|-----------|-------------|
+| docker-development | [docker-development-skill](https://github.com/netresearch/docker-development-skill) | Dockerfile, docker-compose, multi-stage builds, CI patterns |
+| concourse-ci | [concourse-ci-skill](https://github.com/netresearch/concourse-ci-skill) | Concourse CI pipeline development and optimization |
+| go-development | [go-development-skill](https://github.com/netresearch/go-development-skill) | Production-grade Go patterns: testing, Docker, LDAP, resilience |
+| git-workflow | [git-workflow-skill](https://github.com/netresearch/git-workflow-skill) | Branching strategies, Conventional Commits, PR workflows |
+| github-project | [github-project-skill](https://github.com/netresearch/github-project-skill) | GitHub repo setup: branch protection, CODEOWNERS, auto-merge |
+
+### Productivity & Integration
+
+| Skill | Repository | Description |
+|-------|-----------|-------------|
+| agent-rules | [agent-rules-skill](https://github.com/netresearch/agent-rules-skill) | Generate AGENTS.md with CI rules, architecture, ADRs extraction |
+| jira-integration | [jira-skill](https://github.com/netresearch/jira-skill) | Jira API operations and wiki markup (two sub-skills) |
+| matrix-communication | [matrix-skill](https://github.com/netresearch/matrix-skill) | Send messages to Matrix rooms |
+| cli-tools | [cli-tools-skill](https://github.com/netresearch/cli-tools-skill) | Auto-install missing CLI tools (74+ tool catalog) |
+| context7 | [context7-skill](https://github.com/netresearch/context7-skill) | Library documentation lookup via Context7 REST API |
+| data-tools | [data-tools-skill](https://github.com/netresearch/data-tools-skill) | Structured data manipulation with jq, yq, dasel, qsv |
+| file-search | [file-search-skill](https://github.com/netresearch/file-search-skill) | Efficient code search with ripgrep, ast-grep, fd |
+| pagerangers-seo | [pagerangers-skill](https://github.com/netresearch/pagerangers-skill) | PageRangers SEO API: keyword rankings, SERP analysis |
+| coach | [claude-coach-plugin](https://github.com/netresearch/claude-coach-plugin) | Self-improving learning system with hooks and commands |
+
+### Meta
+
+| Skill | Repository | Description |
+|-------|-----------|-------------|
+| skill-repo | [skill-repo-skill](https://github.com/netresearch/skill-repo-skill) | Skill repository structure, validation, and distribution |
+| netresearch-branding | [netresearch-branding-skill](https://github.com/netresearch/netresearch-branding-skill) | Netresearch brand guidelines: colors, typography, components |
 
 ## Architecture
 
-This marketplace uses **source references** - it contains only a `marketplace.json` catalog that points to individual plugin repositories. Claude Code fetches plugins directly from their source repositories when installed.
+This marketplace uses **source references** — it contains only a `marketplace.json` catalog that points to individual skill repositories. Claude Code fetches skills directly from their source repos when installed.
 
-```
-marketplace.json (this repo)
-    ↓
-Claude Code reads catalog
-    ↓
-User installs plugin
-    ↓
-Claude Code fetches from source repo (e.g., netresearch/typo3-docs-skill)
-```
+## Adding a Skill
 
-**Benefits:**
-- Single source of truth - each plugin in its own repository
-- No sync workflows needed
-- Always fetches latest from source
-- Simple maintenance
-
-## Adding a Plugin
-
-To add a new plugin to this marketplace, add an entry to `.claude-plugin/marketplace.json`:
+Add an entry to `.claude-plugin/marketplace.json`:
 
 ```json
 {
-  "name": "my-plugin",
-  "description": "Plugin description",
+  "name": "my-skill",
+  "description": "What it does and when to use it",
   "source": {
     "source": "github",
-    "repo": "netresearch/my-plugin-repo"
+    "repo": "netresearch/my-skill-repo"
   },
   "category": "development"
 }
