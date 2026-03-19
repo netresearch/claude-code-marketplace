@@ -31,7 +31,6 @@ Then use `/plugin` to browse and install individual plugins.
 | [typo3-ddev](https://github.com/netresearch/typo3-ddev-skill) | Skill | Automate DDEV environment setup |
 | [typo3-core-contributions](https://github.com/netresearch/typo3-core-contributions-skill) | Skill | Guide TYPO3 core contributions |
 | [typo3-conformance](https://github.com/netresearch/typo3-conformance-skill) | Skill | Evaluate TYPO3 standards compliance |
-| [stitchflow](https://github.com/yshishenya/stitchflow) | Skill | Turn briefs and mockups into Stitch UI screens, design variants, Tailwind-friendly HTML, and screenshots |
 | [typo3-ckeditor5](https://github.com/netresearch/typo3-ckeditor5-skill) | Skill | CKEditor 5 development for TYPO3 v12+ |
 | [typo3-extension-upgrade](https://github.com/netresearch/typo3-extension-upgrade-skill) | Skill | Systematic extension upgrades to newer LTS versions |
 | [typo3-typoscript-ref](https://github.com/netresearch/typo3-typoscript-ref-skill) | Skill | Version-aware TypoScript, TSconfig and Fluid reference lookup |
@@ -42,6 +41,7 @@ Then use `/plugin` to browse and install individual plugins.
 | [php-modernization](https://github.com/netresearch/php-modernization-skill) | Skill | PHP 8.x modernization and type safety |
 | [go-development](https://github.com/netresearch/go-development-skill) | Skill | Production-grade Go development patterns |
 | [netresearch-branding](https://github.com/netresearch/netresearch-branding-skill) | Skill | Apply Netresearch brand guidelines |
+| [stitchflow](https://github.com/yshishenya/stitchflow) | Skill | Turn briefs and mockups into Stitch UI screens, design variants, Tailwind-friendly HTML, and screenshots |
 | [agents](https://github.com/netresearch/agents-skill) | Skill | Generate AGENTS.md documentation |
 | [cli-tools](https://github.com/netresearch/cli-tools-skill) | Skill | Auto-install missing CLI tools |
 | [concourse-ci](https://github.com/netresearch/concourse-ci-skill) | Skill | Concourse CI pipeline development and optimization |
