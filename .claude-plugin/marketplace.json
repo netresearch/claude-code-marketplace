@@ -80,6 +80,15 @@
       "category": "development"
     },
     {
+      "name": "agent-harness",
+      "description": "Agent Skill for bootstrapping, verifying, and enforcing agent-harness infrastructure in repositories",
+      "source": {
+        "source": "github",
+        "repo": "netresearch/agent-harness-skill"
+      },
+      "category": "development"
+    },
+    {
       "name": "cli-tools",
       "description": "Automatic CLI tool management for coding agents. Detects missing tools from 'command not found' errors and installs them via optimal package managers. Includes 74+ tool catalog (ripgrep, fd, jq, docker, terraform, etc.), project environment auditing, and batch update capabilities. Supports Python, Node.js, Rust, Go, PHP, Ruby, and infrastructure projects.",
       "source": {

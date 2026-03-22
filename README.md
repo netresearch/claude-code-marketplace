@@ -72,6 +72,7 @@ Browse all skills at [skills.sh/netresearch](https://skills.sh/netresearch).
 | Skill | Repository | Description |
 |-------|-----------|-------------|
 | agent-rules | [agent-rules-skill](https://github.com/netresearch/agent-rules-skill) | Generate AGENTS.md with CI rules, architecture, ADRs extraction |
+| agent-harness | [agent-harness-skill](https://github.com/netresearch/agent-harness-skill) | Agent Skill for bootstrapping, verifying, and enforcing agent-harness infrastructure in repositories |
 | jira-integration | [jira-skill](https://github.com/netresearch/jira-skill) | Jira API operations and wiki markup (two sub-skills) |
 | matrix-communication | [matrix-skill](https://github.com/netresearch/matrix-skill) | Send messages to Matrix rooms |
 | cli-tools | [cli-tools-skill](https://github.com/netresearch/cli-tools-skill) | Auto-install missing CLI tools (74+ tool catalog) |
