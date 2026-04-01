@@ -1,0 +1,21 @@
+name: Security
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  gitleaks:
+    uses: netresearch/.github/.github/workflows/gitleaks.yml@main
+    secrets:
+      GITLEAKS_LICENSE: ${{ secrets.GITLEAKS_LICENSE }}
+
+  dependency-review:
+    if: github.event_name == 'pull_request'
+    uses: netresearch/.github/.github/workflows/dependency-review.yml@main
+    permissions:
+      contents: read
+      pull-requests: write
+
