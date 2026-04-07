@@ -278,7 +278,7 @@
       "category": "development"
     },
     {
-      "name": "orocommerce-skill",
+      "name": "orocommerce",
       "description": "OroCommerce development guidance covering entities, datagrids, REST API, workflows, frontend, security, integration, and bundle scaffolding. By Netresearch.",
       "source": {
         "source": "github",
