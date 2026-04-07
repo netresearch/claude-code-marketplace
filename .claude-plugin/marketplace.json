@@ -276,6 +276,15 @@
         "repo": "netresearch/typo3-project-upgrade-skill"
       },
       "category": "development"
+    },
+    {
+      "name": "orocommerce",
+      "description": "OroCommerce development guidance covering entities, datagrids, REST API, workflows, frontend, security, integration, and bundle scaffolding. By Netresearch.",
+      "source": {
+        "source": "github",
+        "repo": "netresearch/orocommerce-skill"
+      },
+      "category": "development"
     }
   ]
 }
