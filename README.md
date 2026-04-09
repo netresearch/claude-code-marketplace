@@ -47,6 +47,9 @@ Browse all skills at [skills.sh/netresearch](https://skills.sh/netresearch).
 | typo3-ckeditor5 | [typo3-ckeditor5-skill](https://github.com/netresearch/typo3-ckeditor5-skill) | CKEditor 5 plugin development for TYPO3 v12+ |
 | typo3-core-contributions | [typo3-core-contributions-skill](https://github.com/netresearch/typo3-core-contributions-skill) | Guide TYPO3 core contributions via Gerrit |
 | typo3-typoscript-ref | [typo3-typoscript-ref-skill](https://github.com/netresearch/typo3-typoscript-ref-skill) | Version-aware TypoScript, TSconfig, and Fluid reference lookup |
+| typo3-a11y | [typo3-a11y-skill](https://github.com/netresearch/typo3-a11y-skill) | WCAG 2.1 AA accessibility patterns for TYPO3 projects |
+| typo3-frontend-patterns | [typo3-frontend-patterns-skill](https://github.com/netresearch/typo3-frontend-patterns-skill) | Reusable frontend patterns (sticky header, breadcrumb, lazy loading) |
+| typo3-vite | [typo3-vite-skill](https://github.com/netresearch/typo3-vite-skill) | Vite build setup, SCSS architecture, Bootstrap 5 theming |
 
 ### Code Quality & Security
 

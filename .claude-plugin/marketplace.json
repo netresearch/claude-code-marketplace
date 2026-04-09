@@ -285,6 +285,33 @@
         "repo": "netresearch/orocommerce-skill"
       },
       "category": "development"
+    },
+    {
+      "name": "typo3-a11y",
+      "description": "WCAG 2.1 AA accessibility patterns for TYPO3 projects. Covers document structure, landmarks, links, buttons, color contrast, focus management, ARIA, and automated testing. Includes 7 implementation patterns: skip links, accessible navigation, forms, filters, disclosure widgets, clickable cards, responsive tables.",
+      "source": {
+        "source": "github",
+        "repo": "netresearch/typo3-a11y-skill"
+      },
+      "category": "development"
+    },
+    {
+      "name": "typo3-frontend-patterns",
+      "description": "Reusable frontend patterns for TYPO3 v13+ sitepackages with Fluid, TypeScript, and SCSS. Includes sticky header, lazy loading, breadcrumb with JSON-LD, language switcher, scroll animations, scroll-to-anchor, skeleton loading, toast notifications, and back-to-top.",
+      "source": {
+        "source": "github",
+        "repo": "netresearch/typo3-frontend-patterns-skill"
+      },
+      "category": "development"
+    },
+    {
+      "name": "typo3-vite",
+      "description": "Vite 7 build setup for TYPO3 v13+ with vite-asset-collector, SCSS architecture with selective Bootstrap 5 imports, custom SVG optimization plugin, entrypoint-per-CE code splitting, and CSP compliance.",
+      "source": {
+        "source": "github",
+        "repo": "netresearch/typo3-vite-skill"
+      },
+      "category": "development"
     }
   ]
 }
