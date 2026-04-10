@@ -312,6 +312,15 @@
         "repo": "netresearch/typo3-vite-skill"
       },
       "category": "development"
+    },
+    {
+      "name": "github-release",
+      "description": "Safe, automated GitHub releases with supply chain security. Prevents dangerous gh release commands, orchestrates version bumps, signed tags, and CI-driven releases across ecosystems.",
+      "source": {
+        "source": "github",
+        "repo": "netresearch/github-release-skill"
+      },
+      "category": "devops"
     }
   ]
 }
