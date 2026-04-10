@@ -69,7 +69,7 @@ Browse all skills at [skills.sh/netresearch](https://skills.sh/netresearch).
 | go-development | [go-development-skill](https://github.com/netresearch/go-development-skill) | Production-grade Go patterns: testing, Docker, LDAP, resilience |
 | git-workflow | [git-workflow-skill](https://github.com/netresearch/git-workflow-skill) | Branching strategies, Conventional Commits, PR workflows |
 | github-project | [github-project-skill](https://github.com/netresearch/github-project-skill) | GitHub repo setup: branch protection, CODEOWNERS, auto-merge |
-| github-release | [github-release-skill](https://github.com/netresearch/github-release-skill) | Safe, automated GitHub releases with supply chain security |
+| github-release | [github-release-skill](https://github.com/netresearch/github-release-skill) | Safe, automated GitHub releases with supply chain security. Prevents dangerous gh release commands, orchestrates version bumps, signed tags, and CI-driven releases across ecosystems. |
 
 ### Productivity & Integration
 
