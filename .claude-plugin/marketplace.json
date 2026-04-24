@@ -321,6 +321,15 @@
         "repo": "netresearch/github-release-skill"
       },
       "category": "devops"
+    },
+    {
+      "name": "german-technical-writing",
+      "description": "Enforce natural German technical register in Jira comments and descriptions, internal German-language documentation, and team-chat messages to German-speaking colleagues. Catches literal English→German anglicisms (brechen, gefangen, returnen, triggern, failen) and substitutes canonical technical verbs (werfen, abfangen, zurückgeben, auslösen, fehlschlagen) while accepting ecosystem-standard Denglisch loanwords (der Commit, die Pipeline, die Exception). Does not apply to commit messages, MR/PR descriptions, or release notes — those are English by team convention at Netresearch and most agencies delivering customer projects.",
+      "source": {
+        "source": "github",
+        "repo": "netresearch/german-technical-writing-skill"
+      },
+      "category": "workflow"
     }
   ]
 }
