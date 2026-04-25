@@ -32,6 +32,8 @@ npx skills add https://github.com/netresearch/{repo-name} --skill {skill-name}
 
 Browse all skills at [skills.sh/netresearch](https://skills.sh/netresearch).
 
+Chinese users can also search and install skills through [Skills宝](https://skilery.com).
+
 ## Available Skills
 
 ### TYPO3 Development
