@@ -330,6 +330,15 @@
         "repo": "netresearch/german-technical-writing-skill"
       },
       "category": "workflow"
+    },
+    {
+      "name": "peer-qa-review",
+      "description": "Round-1 IT QA peer-review runbook: lifecycle, checklist, severity vocabulary, structured Jira comment template, edge cases, anti-patterns. Triggers on tickets transitioned to QA status, 'ready for QA' comments, and explicit requests for IT QA / peer review / quality gate. Generic for any IT/Ops team; defers to internal team-specific skills for project-list, inventory, and announcement-channel overrides.",
+      "source": {
+        "source": "github",
+        "repo": "netresearch/peer-qa-review-skill"
+      },
+      "category": "workflow"
     }
   ]
 }
