@@ -339,6 +339,24 @@
         "repo": "netresearch/peer-qa-review-skill"
       },
       "category": "workflow"
+    },
+    {
+      "name": "markdown-to-pdf",
+      "description": "Convert Markdown files to styled PDFs using WeasyPrint. Generic, brand-neutral default styling with --css override for branded output (e.g., apply the markdown-pdf.css asset shipped by netresearch-branding-skill for Netresearch-branded PDFs).",
+      "source": {
+        "source": "github",
+        "repo": "netresearch/markdown-to-pdf-skill"
+      },
+      "category": "document"
+    },
+    {
+      "name": "typo3-upgrade-effort-model",
+      "description": "Generic effort model for TYPO3 LTS major version upgrades: per-version risk multipliers (v14: Fluid 5 strict VHs, HashService removal, TSFE removal, asset-pipeline removal), breaking-change baselines, version-compatibility matrix, Rector coverage adjustments, and a 7-phase assessment workflow. Calibration-free — pair with your team's historical project data for tuned estimates.",
+      "source": {
+        "source": "github",
+        "repo": "netresearch/typo3-upgrade-effort-model-skill"
+      },
+      "category": "development"
     }
   ]
 }
