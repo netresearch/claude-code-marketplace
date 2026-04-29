@@ -86,6 +86,7 @@ Browse all skills at [skills.sh/netresearch](https://skills.sh/netresearch).
 | pagerangers-seo | [pagerangers-skill](https://github.com/netresearch/pagerangers-skill) | PageRangers SEO API: keyword rankings, SERP analysis |
 | coach | [claude-coach-plugin](https://github.com/netresearch/claude-coach-plugin) | Self-improving learning system with hooks and commands |
 | german-technical-writing | [german-technical-writing-skill](https://github.com/netresearch/german-technical-writing-skill) | Natural German technical register for Jira, internal docs, team chat — catches anglicisms, enforces lexicon |
+| peer-qa-review | [peer-qa-review-skill](https://github.com/netresearch/peer-qa-review-skill) | Round-1 IT QA peer-review runbook: lifecycle, severity vocabulary, structured Jira comment template, edge cases, anti-patterns |
 
 ### Meta
 
