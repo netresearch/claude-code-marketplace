@@ -342,7 +342,7 @@
     },
     {
       "name": "markdown-to-pdf",
-      "description": "Convert Markdown files to styled PDFs using WeasyPrint. Generic, brand-neutral default styling with --css override for branded output (e.g., apply netresearch-branding-skill/assets/markdown-pdf.css for Netresearch-branded PDFs).",
+      "description": "Convert Markdown files to styled PDFs using WeasyPrint. Generic, brand-neutral default styling with --css override for branded output (e.g., apply the markdown-pdf.css asset shipped by netresearch-branding-skill for Netresearch-branded PDFs).",
       "source": {
         "source": "github",
         "repo": "netresearch/markdown-to-pdf-skill"

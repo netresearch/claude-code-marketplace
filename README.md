@@ -87,6 +87,8 @@ Browse all skills at [skills.sh/netresearch](https://skills.sh/netresearch).
 | coach | [claude-coach-plugin](https://github.com/netresearch/claude-coach-plugin) | Self-improving learning system with hooks and commands |
 | german-technical-writing | [german-technical-writing-skill](https://github.com/netresearch/german-technical-writing-skill) | Natural German technical register for Jira, internal docs, team chat — catches anglicisms, enforces lexicon |
 | peer-qa-review | [peer-qa-review-skill](https://github.com/netresearch/peer-qa-review-skill) | Round-1 IT QA peer-review runbook: lifecycle, severity vocabulary, structured Jira comment template, edge cases, anti-patterns |
+| markdown-to-pdf | [markdown-to-pdf-skill](https://github.com/netresearch/markdown-to-pdf-skill) | Convert Markdown files to styled PDFs via WeasyPrint; CSS-overridable for branded output |
+| typo3-upgrade-effort-model | [typo3-upgrade-effort-model-skill](https://github.com/netresearch/typo3-upgrade-effort-model-skill) | TYPO3 LTS upgrade effort model: risk multipliers, baselines, version compatibility, Rector coverage, 7-phase workflow |
 
 ### Meta
 
