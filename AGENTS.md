@@ -86,11 +86,12 @@ A skill **must not** appear isolated in the marketplace. Every listed skill **mu
 Before completing a marketplace PR:
 
 1. Confirm every new or updated skill entry has **all required fields** above (or documented equivalent).
-2. Confirm **no orphan** listing (category, use case, repo, install path, canonical URL).
-3. Confirm **SEO first sentence** matches a real problem statement.
-4. Confirm **Related Skills** are real or explicitly absent with justification.
-5. Confirm **links** resolve (repo, installation, canonical landing).
-6. If sync/config changed (e.g. `.sync-config.json`), verify **CI/sync documentation** still accurate.
+2. If the skill falls under **DACH / TYPO3 / Oro / German-speaking operators**, confirm **short description (German)** is present or explicitly **N/A** where the listing schema forces a value.
+3. Confirm **no orphan** listing (category, use case, repo, install path, canonical URL).
+4. Confirm **SEO first sentence** matches a real problem statement.
+5. Confirm **Related Skills** are real or explicitly absent with justification.
+6. Confirm **links** resolve (repo, installation, canonical landing).
+7. If `.claude-plugin/marketplace.json`, `scripts/validate.sh`, or `.github/workflows/` validation changed, run `./scripts/validate.sh` locally when available and ensure CI still matches the repo’s actual validation steps.
 
 ---
 
