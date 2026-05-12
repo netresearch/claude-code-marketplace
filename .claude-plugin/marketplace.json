@@ -357,6 +357,15 @@
         "repo": "netresearch/typo3-upgrade-effort-model-skill"
       },
       "category": "development"
+    },
+    {
+      "name": "retro",
+      "description": "LLM-driven session retrospection. Detects friction in agent sessions (mechanical pre-pass + LLM inference + cross-session) and materializes approved learnings into the correct destination (user memory, project rules, skill PRs, checkpoints, or harness artefacts). Provides /retro (sweep + spotlight), /retro outcome (post-hoc review of past session output), /retro audit (cross-session architectural review). Optional SessionEnd hook.",
+      "source": {
+        "source": "github",
+        "repo": "netresearch/retro-skill"
+      },
+      "category": "productivity"
     }
   ]
 }
