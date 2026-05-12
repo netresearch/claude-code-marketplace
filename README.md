@@ -85,7 +85,7 @@ Browse all skills at [skills.sh/netresearch](https://skills.sh/netresearch).
 | file-search | [file-search-skill](https://github.com/netresearch/file-search-skill) | Efficient code search with ripgrep, ast-grep, fd |
 | pagerangers-seo | [pagerangers-skill](https://github.com/netresearch/pagerangers-skill) | PageRangers SEO API: keyword rankings, SERP analysis |
 | coach | [claude-coach-plugin](https://github.com/netresearch/claude-coach-plugin) | Self-improving learning system with hooks and commands |
-| retro | [retro-skill](https://github.com/netresearch/retro-skill) | LLM-driven session retrospection: detects friction, materializes learnings into user memory / project rules / skill PRs / checkpoints. Includes `/retro outcome` and `/retro audit` modes |
+| retro | [retro-skill](https://github.com/netresearch/retro-skill) | LLM-driven session retrospection: detects friction and materializes learnings into user memory, project rules, skill PRs, checkpoints, or harness artifacts. Includes `/retro outcome` and `/retro audit` modes |
 | german-technical-writing | [german-technical-writing-skill](https://github.com/netresearch/german-technical-writing-skill) | Natural German technical register for Jira, internal docs, team chat — catches anglicisms, enforces lexicon |
 | peer-qa-review | [peer-qa-review-skill](https://github.com/netresearch/peer-qa-review-skill) | Round-1 IT QA peer-review runbook: lifecycle, severity vocabulary, structured Jira comment template, edge cases, anti-patterns |
 | markdown-to-pdf | [markdown-to-pdf-skill](https://github.com/netresearch/markdown-to-pdf-skill) | Convert Markdown files to styled PDFs via WeasyPrint; CSS-overridable for branded output |
