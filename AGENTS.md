@@ -46,6 +46,16 @@ Each skill entry in the marketplace (whether represented as JSON, YAML, tables i
 
 ---
 
+## Canonical categories
+
+Use **exactly one** of these values in `plugins[].category` — do not invent new categories without updating this file, the README catalog grouping, and any future landingpage/sitemap generator:
+
+`development` · `devops` · `security` · `design` · `workflow` · `productivity` · `document`
+
+`scripts/validate.sh` enforces this enum. Skill repositories should keep their `discovery.yaml` `category` field in sync. When a new category is genuinely required, propose it in a PR that updates this list, the validator's allowed set, and the README catalog grouping.
+
+---
+
 ## SEO and discovery rules (marketplace copy)
 
 Marketplace-facing text **must**:
@@ -56,6 +66,7 @@ Marketplace-facing text **must**:
 - **Name technologies explicitly** where applicable, e.g. TYPO3, PHP, OroCommerce, Jira, GitHub, Docker, Concourse, SEO, Security, Accessibility, Vite.
 - **Expose one indexable detail surface per skill** (unique heading + stable path; no duplicate canonical URLs for the same skill).
 - **Support internal linking** via Related Skills and use-case hubs (markdown links or generated link graph — implementation-specific).
+- **Stay snippet-friendly:** `plugins[].description` targets ≤ **300 characters** and is **hard-capped at 500**. `scripts/validate.sh` warns on the target and fails on the hard cap. Long-form content belongs on the dedicated landing or the source README — never copied into the marketplace description.
 
 ---
 
@@ -78,6 +89,25 @@ A skill **must not** appear isolated in the marketplace. Every listed skill **mu
 - The marketplace **aggregates, normalizes, and displays** that information for discovery and installation.
 - **Avoid duplicate truths**: do not restate long procedural docs from `SKILL.md` in the marketplace; summarize and link.
 - **On conflict** between marketplace copy and the skill repo: **fix the skill repo** OR **document an intentional marketplace override** (where, why, effective date). Silent divergence is not allowed.
+
+---
+
+## GitHub Pages policy
+
+The **marketplace repository SHOULD publish a GitHub Pages site** as the canonical public discovery and storytelling layer for Netresearch Agent Skills — hub pages, per-slug landings, related-skills crosslinks, sitemaps, OpenGraph metadata.
+
+Individual **skill repositories MUST NOT enable GitHub Pages by default**. A skill repo may enable Pages only when the criteria in [`skill-repo-skill`/`references/repository-quality-rules.md`](https://github.com/netresearch/skill-repo-skill/blob/main/skills/skill-repo/references/repository-quality-rules.md) are satisfied (multi-page docs, gallery, generated reference, versioned docs, public reference implementation, methodology/assessment model, or a distinct SEO target the marketplace landing cannot cover).
+
+Mirroring rule: skill-specific metadata originates in the skill repository (`discovery.yaml` or README sections). The marketplace consumes it. Do not duplicate the same metadata across README, a skill-repo Pages site and the marketplace landing — pick one canonical surface per fact and link from the others.
+
+---
+
+## Known marketplace overrides
+
+Record intentional deviations from a source skill repo. Empty by default.
+
+| Slug | Field | Marketplace value | Reason | Decided |
+|---|---|---|---|---|
 
 ---
 

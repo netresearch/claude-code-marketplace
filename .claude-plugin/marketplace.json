@@ -270,7 +270,7 @@
     },
     {
       "name": "typo3-project-upgrade",
-      "description": "Systematic TYPO3 project instance upgrades across major LTS versions. Covers sys_template to Site Sets migration, SCSS variable injection via Bootstrap Package ScssParser, Bootstrap 4 to 5 migration patterns (color-contrast, link-decoration, frame custom properties), Bootstrap Package v12-v16 breaking changes (navigation, position:sticky, dropdown-hover), Docker infrastructure (ImageMagick, GFX config), database cleanup, and visual review methodology. Includes assessment checkpoints for the extension-assessment framework.",
+      "description": "Systematic TYPO3 project instance upgrades across major LTS versions. Covers sys_template to Site Sets migration, Bootstrap 4 to 5 patterns, Bootstrap Package v12–v16 breaking changes, SCSS variable injection, Docker infrastructure, database cleanup, and visual review methodology. Includes assessment checkpoints.",
       "source": {
         "source": "github",
         "repo": "netresearch/typo3-project-upgrade-skill"
@@ -324,7 +324,7 @@
     },
     {
       "name": "german-technical-writing",
-      "description": "Enforce natural German technical register in Jira comments and descriptions, internal German-language documentation, and team-chat messages to German-speaking colleagues. Catches literal English→German anglicisms (brechen, gefangen, returnen, triggern, failen) and substitutes canonical technical verbs (werfen, abfangen, zurückgeben, auslösen, fehlschlagen) while accepting ecosystem-standard Denglisch loanwords (der Commit, die Pipeline, die Exception). Does not apply to commit messages, MR/PR descriptions, or release notes — those are English by team convention at Netresearch and most agencies delivering customer projects.",
+      "description": "Enforce natural German technical register in Jira tickets, internal German docs and team-chat to German-speaking colleagues. Catches English→German anglicisms (brechen, gefangen, returnen, triggern, failen) and substitutes canonical verbs (werfen, abfangen, zurückgeben, auslösen, fehlschlagen) while accepting Denglisch loanwords (der Commit, die Pipeline, die Exception). Does not apply to commit messages or release notes.",
       "source": {
         "source": "github",
         "repo": "netresearch/german-technical-writing-skill"
