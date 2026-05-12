@@ -51,6 +51,12 @@ Browse all skills at [skills.sh/netresearch](https://skills.sh/netresearch).
 | typo3-frontend-patterns | [typo3-frontend-patterns-skill](https://github.com/netresearch/typo3-frontend-patterns-skill) | Reusable frontend patterns (sticky header, breadcrumb, lazy loading) |
 | typo3-vite | [typo3-vite-skill](https://github.com/netresearch/typo3-vite-skill) | Vite build setup, SCSS architecture, Bootstrap 5 theming |
 
+### OroCommerce
+
+| Skill | Repository | Description |
+|-------|-----------|-------------|
+| orocommerce | [orocommerce-skill](https://github.com/netresearch/orocommerce-skill) | OroCommerce development: entities, datagrids, REST API, workflows, frontend, security, integration, bundle scaffolding |
+
 ### Code Quality & Security
 
 | Skill | Repository | Description |
