@@ -48,7 +48,7 @@ Each skill entry in the marketplace (whether represented as JSON, YAML, tables i
 
 ## Canonical categories
 
-Use **exactly one** of these values in `plugins[].category` — do not invent new categories without updating this file, the README catalog grouping, and any future landingpage/sitemap generator:
+Use **exactly one** of these values in `plugins[].category` — do not invent new categories without updating this file, the README catalog grouping, and any future landing-page/sitemap generator:
 
 `development` · `devops` · `security` · `design` · `workflow` · `productivity` · `document`
 

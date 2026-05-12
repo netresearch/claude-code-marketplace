@@ -102,21 +102,23 @@ if [ -n "$DUPE_DESC" ]; then
     printf '%s\n' "$DUPE_DESC" | sed 's/^/    /'
     exit 1
 fi
-echo "✓ Descriptions present, unique, within hard cap"
+echo "✓ Descriptions: present, ≤ 500 hard cap, unique (warnings printed for entries over the 300-char snippet target)"
 
-# README catalog row must exist for every plugin (anchor reachability).
+# README catalog row must exist for every plugin. The README uses Markdown
+# tables, so we require the slug to appear as a table cell ('| <slug> |')
+# to avoid false positives from substring matches elsewhere in prose or URLs.
 if [ -f README.md ]; then
     MISSING_README=$(jq -r '.plugins[].name' "$MARKETPLACE" | while read -r slug; do
-        if ! grep -q "$slug" README.md; then
+        if ! grep -qE "^\| *${slug} *\|" README.md; then
             echo "$slug"
         fi
     done)
     if [ -n "$MISSING_README" ]; then
-        echo "✗ Plugins missing from README catalog:"
+        echo "✗ Plugins missing a catalog row in README (expected '| <slug> |' table cell):"
         printf '%s\n' "$MISSING_README" | sed 's/^/    /'
         exit 1
     fi
-    echo "✓ Every plugin referenced in README"
+    echo "✓ Every plugin has a README catalog row"
 fi
 
 # Summary
