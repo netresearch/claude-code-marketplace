@@ -1,5 +1,6 @@
 _site/
 node_modules/
 cache/
+src/assets/og/
 .DS_Store
 *.log

@@ -6,6 +6,7 @@
   "type": "module",
   "scripts": {
     "fetch:readmes": "node scripts/fetch-readmes.js",
+    "og:generate": "node scripts/generate-og-images.js",
     "check:orphans": "node scripts/check-orphans.js",
     "check:categories": "node scripts/check-categories.js",
     "check:seo": "node scripts/check-seo-copy.js",
@@ -23,6 +24,7 @@
     "node": ">=20"
   },
   "dependencies": {
-    "@octokit/rest": "^22.0.1"
+    "@octokit/rest": "^22.0.1",
+    "sharp": "^0.34.5"
   }
 }

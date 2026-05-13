@@ -1,0 +1,18 @@
+---
+layout: layouts/skill.njk
+pagination:
+  data: skills
+  size: 1
+  alias: skill
+permalink: "/en/skills/{{ skill.slug }}/"
+eleventyComputed:
+  title: "{{ skill.displayName }} · Netresearch Skills Marketplace"
+  description: "{{ skill.description }}"
+  categoryLabel: "{{ skill.categoryLabelEn }}"
+  ogImage: "/assets/og/{{ skill.slug }}.png"
+  hreflangAlternate:
+    lang: "de"
+    url: "/de/skills/{{ skill.slug }}/"
+    ogLocale: "de_DE"
+  xDefaultUrl: "/en/skills/{{ skill.slug }}/"
+---

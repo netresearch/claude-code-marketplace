@@ -1,0 +1,139 @@
+---
+layout: layouts/base.njk
+---
+
+{% from "partials/install-block.njk" import installBlock %}
+
+<nav class="breadcrumbs" aria-label="Breadcrumb">
+  <ol>
+    <li><a href="/{{ lang }}/">{{ t.nav.home }}</a></li>
+    <li><a href="/{{ lang }}/#group-{{ skill.group or 'meta' }}">{{ t.nav.skills }}</a></li>
+    <li aria-current="page">{{ skill.displayName }}</li>
+  </ol>
+</nav>
+
+<article class="skill-detail">
+  <header class="skill-detail__header">
+    <span class="skill-detail__category">{{ categoryLabel }}</span>
+    <h1>{{ skill.displayName }}</h1>
+    <p class="lead">{{ skill.description }}</p>
+  </header>
+
+  <section class="skill-detail__install" aria-labelledby="install-h">
+    <h2 id="install-h">{{ t.skill.install }}</h2>
+    {{ installBlock("skill-install", skill.installCommand, t.skill.copyInstall) }}
+    {% if skill.npxCommand %}
+      <p class="skill-detail__alt-install">{{ t.skill.altInstall }}</p>
+      {{ installBlock("skill-npx", skill.npxCommand, t.skill.copyInstall) }}
+    {% endif %}
+  </section>
+
+  {% if skill.useCases | length > 0 %}
+    <section class="skill-detail__block" aria-labelledby="use-cases-h">
+      <h2 id="use-cases-h">{{ t.skill.useCases }}</h2>
+      <ul class="bullet-list">
+        {% for item in skill.useCases %}
+          <li>{{ item }}</li>
+        {% endfor %}
+      </ul>
+    </section>
+  {% endif %}
+
+  {% if skill.expectedOutputs | length > 0 %}
+    <section class="skill-detail__block" aria-labelledby="outputs-h">
+      <h2 id="outputs-h">{{ t.skill.expectedOutputs }}</h2>
+      <ul class="bullet-list">
+        {% for item in skill.expectedOutputs %}
+          <li>{{ item }}</li>
+        {% endfor %}
+      </ul>
+    </section>
+  {% endif %}
+
+  {% if skill.contextRequirements | length > 0 %}
+    <section class="skill-detail__block" aria-labelledby="context-h">
+      <h2 id="context-h">{{ t.skill.contextRequirements }}</h2>
+      <ul class="bullet-list">
+        {% for item in skill.contextRequirements %}
+          <li>{{ item }}</li>
+        {% endfor %}
+      </ul>
+    </section>
+  {% endif %}
+
+  <section class="skill-detail__block" aria-labelledby="related-h">
+    <h2 id="related-h">{{ t.skill.relatedSkills }}</h2>
+    {% if skill.relatedSkills | length > 0 %}
+      <ul class="related-list">
+        {% for rel in skill.relatedSkills %}
+          {% if rel.slug %}
+            {% set related = skillsBySlug[rel.slug] %}
+            {% if related %}
+              <li>
+                <a href="/{{ lang }}/skills/{{ related.slug }}/">{{ related.displayName }}</a>
+                <span class="related-list__cat">{{ related.categoryLabel }}</span>
+              </li>
+            {% else %}
+              <li><a href="{{ rel.href }}" rel="noopener">{{ rel.label }}</a></li>
+            {% endif %}
+          {% else %}
+            <li><a href="{{ rel.href }}" rel="noopener">{{ rel.label }}</a></li>
+          {% endif %}
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p class="related-list__empty">{{ t.skill.noRelated }}</p>
+    {% endif %}
+  </section>
+
+  {% if skill.tags | length > 0 %}
+    <section class="skill-detail__block" aria-labelledby="tags-h">
+      <h2 id="tags-h">{{ t.skill.tags }}</h2>
+      <ul class="tags-list">
+        {% for tag in skill.tags %}
+          <li class="tag">{{ tag }}</li>
+        {% endfor %}
+      </ul>
+    </section>
+  {% endif %}
+
+  <footer class="skill-detail__footer">
+    <p>
+      <a href="{{ skill.repoUrl }}" rel="noopener">{{ t.skill.viewSource }} →</a>
+      ·
+      <a href="{{ skill.readmeUrl }}" rel="noopener">{{ t.skill.viewReadme }} →</a>
+    </p>
+  </footer>
+</article>
+
+<script type="application/ld+json">
+{{ {
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": skill.displayName,
+  "description": skill.description,
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "Cross-platform",
+  "url": site.url + page.url,
+  "sameAs": skill.repoUrl,
+  "softwareHelp": skill.readmeUrl,
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+  "author": {
+    "@type": "Organization",
+    "name": "Netresearch DTT GmbH",
+    "url": site.ownerUrl
+  }
+} | dump(2) | safe }}
+</script>
+
+<script type="application/ld+json">
+{{ {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": t.nav.home, "item": site.url + "/" + lang + "/" },
+    { "@type": "ListItem", "position": 2, "name": skill.categoryLabel, "item": site.url + "/" + lang + "/#group-" + (skill.group or "meta") },
+    { "@type": "ListItem", "position": 3, "name": skill.displayName }
+  ]
+} | dump(2) | safe }}
+</script>

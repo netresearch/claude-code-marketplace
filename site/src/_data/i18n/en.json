@@ -70,5 +70,18 @@
   "footer": {
     "maintained": "Maintained by Netresearch DTT GmbH, Leipzig.",
     "license": "Marketplace catalog: MIT. Skill content: CC-BY-SA-4.0."
+  },
+  "skill": {
+    "install": "Install",
+    "copyInstall": "Copy install command",
+    "altInstall": "Or install for any Agent Skills-compatible CLI:",
+    "useCases": "What you can do with it",
+    "expectedOutputs": "What you get back",
+    "contextRequirements": "What it expects in your project",
+    "relatedSkills": "Related skills",
+    "noRelated": "No closely related skills in this marketplace yet — browse the full catalog for more.",
+    "tags": "Tags",
+    "viewSource": "View source repository",
+    "viewReadme": "Open full README"
   }
 }
