@@ -144,10 +144,34 @@ function leadParagraph(block) {
   return null;
 }
 
+function stripH1(text) {
+  if (!text.startsWith("# ")) return text;
+  const newline = text.indexOf("\n");
+  return newline === -1 ? "" : text.slice(newline + 1);
+}
+
 function extractLinks(block) {
   if (!block) return [];
-  const matches = [...block.matchAll(/\[([^\]]+)\]\(([^)]+)\)/g)];
-  return matches.map((m) => ({ label: m[1].trim(), href: m[2].trim() }));
+  const out = [];
+  let i = 0;
+  while (i < block.length) {
+    const open = block.indexOf("[", i);
+    if (open === -1) break;
+    const close = block.indexOf("]", open + 1);
+    if (close === -1) break;
+    if (block[close + 1] !== "(") {
+      i = close + 1;
+      continue;
+    }
+    const hrefEnd = block.indexOf(")", close + 2);
+    if (hrefEnd === -1) break;
+    out.push({
+      label: block.slice(open + 1, close).trim(),
+      href: block.slice(close + 2, hrefEnd).trim(),
+    });
+    i = hrefEnd + 1;
+  }
+  return out;
 }
 
 export function parseReadme(markdown) {
@@ -168,10 +192,7 @@ export function parseReadme(markdown) {
   const relatedBlock = findSection(markdown, SECTION_ALIASES.relatedSkills);
   const tagsBlock = findSection(markdown, SECTION_ALIASES.tags);
 
-  const intro = markdown
-    .split(/^##\s+/m)[0]
-    .replace(/^#\s+.+?\r?\n/, "")
-    .trim();
+  const intro = stripH1(markdown.split(/^##\s+/m)[0]).trim();
 
   return {
     useCases: bulletsFromBlock(useCasesBlock),
