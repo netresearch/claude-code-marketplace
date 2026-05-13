@@ -29,21 +29,29 @@ function escapeXml(s) {
 }
 
 function wrapText(text, maxCharsPerLine, maxLines) {
-  const words = text.split(/\s+/);
+  const words = text.split(/\s+/).filter(Boolean);
   const lines = [];
   let line = "";
-  for (const word of words) {
-    if ((line + " " + word).trim().length <= maxCharsPerLine) {
-      line = (line + " " + word).trim();
-    } else {
-      lines.push(line);
-      line = word;
-      if (lines.length === maxLines - 1) {
-        lines.push(line + " " + words.slice(words.indexOf(word) + 1).join(" "));
-        return lines.slice(0, maxLines);
-      }
+
+  for (let i = 0; i < words.length; i++) {
+    const word = words[i];
+    const candidate = line ? `${line} ${word}` : word;
+
+    if (candidate.length <= maxCharsPerLine) {
+      line = candidate;
+      continue;
     }
+
+    if (line) lines.push(line);
+
+    if (lines.length === maxLines - 1) {
+      lines.push(words.slice(i).join(" "));
+      return lines;
+    }
+
+    line = word;
   }
+
   if (line) lines.push(line);
   return lines.slice(0, maxLines);
 }

@@ -15,14 +15,14 @@
             │
             ▼
    ┌─────────────────────┐         ┌──────────────────────────────────┐
-   │ fetch-readmes.js    │ ──────► │ cache/skills-readme/{slug}.md    │
+   │ fetch-readmes.js    │ ──────► │ cache/skills-readme/{slug}.json    │
    │ (Octokit, 40 calls) │         │ (CI cache, invalidated by ETag)  │
    └─────────────────────┘         └──────────────────────────────────┘
             │                                       │
             └───────────────┬───────────────────────┘
                             ▼
                   ┌──────────────────────────┐
-                  │ parse-readmes.js         │ ── Markdown→JSON extraction
+                  │ parse-readme.js          │ ── Markdown→JSON extraction
                   │   - Use cases            │    (## sections, fallback rules)
                   │   - Expected outputs     │
                   │   - Context requirements │
@@ -38,7 +38,7 @@
                             │
                             ▼
             ┌────────────────────────────────────────┐
-            │ build-skills-data.js                   │
+            │ src/_data/skills.js                    │
             │   Merge marketplace.json + parsed +    │
             │   derived → canonical skills[] objects │
             │   (one per slug, with EN/DE fields)    │
@@ -99,8 +99,8 @@
 | **C5** | i18n-Setup + UI-Strings | C2 | `_data/i18n/en.json`, `_data/i18n/de.json`, Permalink-Konvention `/<lang>/...` |
 | **C6** | Landing-Page-Layout EN | C3, C4, C5 | `/en/` rendert, alle 40 Skill-Cards |
 | **C7** | Landing-Page-Layout DE (Text eigenständig) | C6, [`german-technical-writing-skill`](https://github.com/netresearch/german-technical-writing-skill) | `/de/` rendert |
-| **C8** | README-Fetch (`fetch-readmes.js`) + Caching | C2 | `cache/skills-readme/{slug}.md` × 40 |
-| **C9** | README-Parser (`parse-readmes.js`) | C8 | Strukturierte Felder pro Skill |
+| **C8** | README-Fetch (`scripts/fetch-readmes.js`) + ETag-Caching | C2 | `cache/skills-readme/{slug}.json` × 40 |
+| **C9** | README-Parser (`parse-readme.js`) | C8 | Strukturierte Felder pro Skill |
 | **C10** | Related-Derivation (`derive-related.js`) | C9 | Related-Skills pro Skill (real oder „none (justified)") |
 | **C11** | Datenquelle Tier 2 (`_data/skills.js` merge) | C4, C9, C10 | Kanonisches Skills-Array mit allen 13 Pflichtfeldern |
 | **C12** | No-Orphan-Linter (`check-orphans.js`) | C11 | Build bricht bei Verletzung |
@@ -139,7 +139,7 @@
 
 ### Phase 2c: README-Fetch + Parser (1 PR, ~4h)
 7. **C8** `fetch-readmes.js` mit Octokit, GITHUB_TOKEN, ETag-Cache, Rate-Limit-Handling.
-8. **C9** `parse-readmes.js` extrahiert Sektionen, robust gegen Variationen.
+8. **C9** `parse-readme.js` extrahiert Sektionen, robust gegen Variationen.
 9. **C10** `derive-related.js` mit Category + Themen-Gruppen-Heuristik.
 10. **C11** `_data/skills.js` merged → kanonische Skills mit allen 13 Pflichtfeldern.
 11. **C12, C13, C14** Linter-Scripts.

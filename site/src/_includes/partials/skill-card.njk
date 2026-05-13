@@ -6,6 +6,6 @@
   <p class="skill-card__description">{{ skill.description }}</p>
   <footer class="skill-card__footer">
     <code class="skill-card__install" id="install-{{ skill.slug }}">{{ skill.installCommand }}</code>
-    <button type="button" class="copy-btn" data-copy-target="install-{{ skill.slug }}" aria-label="Copy install command for {{ skill.slug }}">Copy</button>
+    <button type="button" class="copy-btn" data-copy-target="install-{{ skill.slug }}" data-copied-label="{{ t.ui.copyCopied }}" aria-label="{{ t.skill.copyInstall }} {{ skill.slug }}">{{ t.ui.copyShort }}</button>
   </footer>
 </article>

@@ -11,7 +11,7 @@ description: "Curated Agent Skills for TYPO3, PHP, Go, Docker, security, and doc
 
   {% from "partials/install-block.njk" import installBlock %}
   <div class="hero__ctas">
-    {{ installBlock("hero-install", marketplace.addCommand, t.hero.primaryCta) }}
+    {{ installBlock("hero-install", marketplace.addCommand, t.hero.primaryCta, t.ui.copyCopied) }}
     <a class="btn btn--secondary" href="#skills">{{ t.hero.secondaryCta }}</a>
   </div>
 </section>

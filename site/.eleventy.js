@@ -1,8 +1,11 @@
 /**
  * Eleventy config for the Netresearch Marketplace Pages site.
  *
- * Scope of Phase 2a (Foundation): smoke-test rendering only.
- * i18n permalinks, README fetching, detail pages, sitemaps land in later sub-phases (see PLAN.md).
+ * Drives: EN + DE landings under /en/ and /de/, paginated skill detail pages
+ * at /<lang>/skills/<slug>/, sitemap.xml + robots.txt + root redirect,
+ * passthrough of /assets/ (css, js, og images). Pre-build data comes from
+ * scripts/fetch-readmes.js (cached in cache/skills-readme/) + the static
+ * marketplace.json catalog.
  */
 export default function (eleventyConfig) {
   eleventyConfig.addPassthroughCopy({ "src/assets": "assets" });

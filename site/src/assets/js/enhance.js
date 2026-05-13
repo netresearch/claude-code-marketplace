@@ -28,7 +28,8 @@
   function flashCopied(btn) {
     var label = btn.querySelector(".copy-btn__label") || btn;
     var original = label.textContent;
-    label.textContent = "Copied";
+    var copiedText = btn.getAttribute("data-copied-label") || "Copied";
+    label.textContent = copiedText;
     btn.setAttribute("data-state", "copied");
     setTimeout(function () {
       label.textContent = original;

@@ -136,7 +136,7 @@ Netresearch also maintains an internal marketplace for proprietary skills:
 
 Browse the full catalog with per-skill detail pages on the marketplace website:
 
-**[netresearch.github.io/claude-code-marketplace](https://netresearch.github.io/claude-code-marketplace/)** — DE + EN, canonical landing per skill, search by category.
+**[netresearch.github.io/claude-code-marketplace](https://netresearch.github.io/claude-code-marketplace/)** — DE + EN, canonical landing per skill, grouped by stack and category.
 
 ---
 

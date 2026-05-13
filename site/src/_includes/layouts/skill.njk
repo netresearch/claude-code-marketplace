@@ -16,15 +16,15 @@ layout: layouts/base.njk
   <header class="skill-detail__header">
     <span class="skill-detail__category">{{ categoryLabel }}</span>
     <h1>{{ skill.displayName }}</h1>
-    <p class="lead">{{ skill.description }}</p>
+    <p class="lead">{{ description }}</p>
   </header>
 
   <section class="skill-detail__install" aria-labelledby="install-h">
     <h2 id="install-h">{{ t.skill.install }}</h2>
-    {{ installBlock("skill-install", skill.installCommand, t.skill.copyInstall) }}
+    {{ installBlock("skill-install", skill.installCommand, t.skill.copyInstall, t.ui.copyCopied) }}
     {% if skill.npxCommand %}
       <p class="skill-detail__alt-install">{{ t.skill.altInstall }}</p>
-      {{ installBlock("skill-npx", skill.npxCommand, t.skill.copyInstall) }}
+      {{ installBlock("skill-npx", skill.npxCommand, t.skill.copyInstall, t.ui.copyCopied) }}
     {% endif %}
   </section>
 
@@ -69,9 +69,10 @@ layout: layouts/base.njk
           {% if rel.slug %}
             {% set related = skillsBySlug[rel.slug] %}
             {% if related %}
+              {% set relatedCatLabel = related.categoryLabelDe if lang == 'de' else related.categoryLabelEn %}
               <li>
                 <a href="/{{ lang }}/skills/{{ related.slug }}/">{{ related.displayName }}</a>
-                <span class="related-list__cat">{{ related.categoryLabel }}</span>
+                <span class="related-list__cat">{{ relatedCatLabel }}</span>
               </li>
             {% else %}
               <li><a href="{{ rel.href }}" rel="noopener">{{ rel.label }}</a></li>
@@ -111,13 +112,14 @@ layout: layouts/base.njk
   "@context": "https://schema.org",
   "@type": "SoftwareApplication",
   "name": skill.displayName,
-  "description": skill.description,
+  "description": description,
   "applicationCategory": "DeveloperApplication",
   "operatingSystem": "Cross-platform",
   "url": site.url + page.url,
   "sameAs": skill.repoUrl,
   "softwareHelp": skill.readmeUrl,
   "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+  "inLanguage": lang,
   "author": {
     "@type": "Organization",
     "name": "Netresearch DTT GmbH",

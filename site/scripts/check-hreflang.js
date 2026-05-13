@@ -1,15 +1,18 @@
 #!/usr/bin/env node
 /**
- * Verifies that every EN page has a matching DE counterpart (and vice versa),
- * and that hreflang links inside each page point at URLs that actually exist
- * on disk. Run after `npm run build` against _site/.
+ * Verifies, against _site/ after `npm run build`:
+ *   1. every EN indexable page has a matching DE counterpart (and vice versa)
+ *   2. every indexable page declares the full hreflang set (en + de + x-default)
+ *   3. each hreflang href resolves to an index.html that actually exists on disk
  *
- * Exit 0 = all paired, 1 = mismatch.
+ * Exit 0 = all paired and resolved, 1 = mismatch.
  */
 import { readdir, readFile } from "node:fs/promises";
-import { resolve, join } from "node:path";
+import { dirname, resolve, join } from "node:path";
+import { fileURLToPath } from "node:url";
 
-const SITE = resolve(import.meta.dirname, "../_site");
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const SITE = resolve(__dirname, "../_site");
 
 async function walk(dir) {
   const entries = await readdir(dir, { withFileTypes: true });
@@ -51,6 +54,22 @@ for (const dePath of dePages) {
 }
 
 const linkMismatches = [];
+const SITE_BASE = "https://netresearch.github.io/claude-code-marketplace";
+
+function hrefToDiskPath(href) {
+  let path = href.startsWith(SITE_BASE) ? href.slice(SITE_BASE.length) : href;
+  if (!path.endsWith("/")) path += "/";
+  return join(SITE, path.slice(1), "index.html");
+}
+
+async function exists(p) {
+  try {
+    await readFile(p, "utf8");
+    return true;
+  } catch {
+    return false;
+  }
+}
 
 for (const file of pages) {
   const lang = langOf(file);
@@ -58,15 +77,27 @@ for (const file of pages) {
   const html = await readFile(file, "utf8");
 
   const hreflangMatches = [...html.matchAll(/hreflang="([^"]+)"\s+href="([^"]+)"/g)];
-  const seenHreflangs = new Set();
-  for (const [, hl] of hreflangMatches) {
-    seenHreflangs.add(hl);
+  const seenHreflangs = new Map();
+  for (const [, hl, href] of hreflangMatches) {
+    if (!seenHreflangs.has(hl)) seenHreflangs.set(hl, href);
   }
-  if (!seenHreflangs.has("x-default") || !seenHreflangs.has("en") || !seenHreflangs.has("de")) {
+  const required = ["en", "de", "x-default"];
+  const missingTags = required.filter((x) => !seenHreflangs.has(x));
+  if (missingTags.length > 0) {
     linkMismatches.push({
       file: rel(file),
-      reason: `missing hreflang(s): ${["en", "de", "x-default"].filter((x) => !seenHreflangs.has(x)).join(", ")}`,
+      reason: `missing hreflang(s): ${missingTags.join(", ")}`,
     });
+  }
+
+  for (const [hl, href] of seenHreflangs) {
+    const disk = hrefToDiskPath(href);
+    if (!(await exists(disk))) {
+      linkMismatches.push({
+        file: rel(file),
+        reason: `hreflang="${hl}" href="${href}" does not resolve to a built page (${disk.replace(SITE, "_site")})`,
+      });
+    }
   }
 }
 

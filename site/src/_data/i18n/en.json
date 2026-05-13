@@ -71,6 +71,10 @@
     "maintained": "Maintained by Netresearch DTT GmbH, Leipzig.",
     "license": "Marketplace catalog: MIT. Skill content: CC-BY-SA-4.0."
   },
+  "ui": {
+    "copyShort": "Copy",
+    "copyCopied": "Copied"
+  },
   "skill": {
     "install": "Install",
     "copyInstall": "Copy install command",

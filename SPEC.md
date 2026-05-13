@@ -55,10 +55,10 @@ Eine **statische, narrative Landing-Page** auf GitHub Pages, die den Netresearch
 
 | Dimension | Zielwert | Messung |
 | :-- | :-- | :-- |
-| **Lighthouse Performance** (Mobile, Slow-4G-Drossel) | ≥ 95 | Lighthouse CI in PR-Checks |
-| **Lighthouse Accessibility** | 100 | Lighthouse CI |
-| **Lighthouse Best Practices** | ≥ 95 | Lighthouse CI |
-| **Lighthouse SEO** | 100 | Lighthouse CI |
+| **Lighthouse Performance** (Desktop preset, simulated 4G) | ≥ 0.9 (Phase 1 gate); ≥ 0.95 (Phase 2 target) | Lighthouse CI in PR-Checks |
+| **Lighthouse Accessibility** | ≥ 0.9 (Phase 1 gate); 1.0 (Phase 2 target after brand contrast review) | Lighthouse CI |
+| **Lighthouse Best Practices** | ≥ 0.9 (Phase 1 gate); ≥ 0.95 (Phase 2 target) | Lighthouse CI |
+| **Lighthouse SEO** | ≥ 0.9 (Phase 1 gate); ≥ 0.95 (Phase 2 target) | Lighthouse CI |
 | **LCP** (Largest Contentful Paint) | < 2.0 s auf 4G | Web Vitals |
 | **CLS** (Cumulative Layout Shift) | < 0.05 | Web Vitals |
 | **TBT** (Total Blocking Time) | < 100 ms | Lighthouse |
@@ -82,7 +82,7 @@ Eine **statische, narrative Landing-Page** auf GitHub Pages, die den Netresearch
 | **JavaScript** | Vanilla, optional, ≤ 5 KB | Copy-to-Clipboard, Filter, Lang-Switcher-Memo (`<a>`-basiert, JS nur als Enhancement). Page funktioniert ohne JS vollständig. |
 | **Fonts** | Raleway + Open Sans, **self-hosted** (subsetted WOFF2) | Kein Google-Fonts-Fetch → besser Lighthouse + DSGVO. Subset auf Latin Extended. |
 | **README-Fetch** | Build-Time, Node-Skript via `@octokit/rest` mit `GITHUB_TOKEN` | Holt READMEs aller 40 Skill-Repos einmal pro Build; Markdown-Parser (`marked`) extrahiert `## Use cases`, `## Related Skills`, `## Expected outputs`, `## Context requirements`. Toleranter Parser mit klar definierten Fallbacks für jede Skill, in der die Section fehlt. |
-| **Caching** | `cache/skills-readme/{slug}.md` in CI-Cache | Spart API-Quota + Build-Zeit; Invalidate via `marketplace.json`-mtime und Skill-Repo `pushed_at`. |
+| **Caching** | `cache/skills-readme/{slug}.json` in CI-Cache | Spart API-Quota + Build-Zeit; ETag-basiert via Octokit `If-None-Match`. |
 | **Build-Output** | `_site/` (Eleventy-Default), deploy via Pages-Action | Standard-Pfad. |
 | **CI/CD** | GitHub Actions: `actions/configure-pages@v5` + `actions/deploy-pages@v4` | Native GitHub-Pages-Deployment via Actions (nicht via `gh-pages`-Branch). |
 | **Lighthouse-Gate** | `treosh/lighthouse-ci-action@v12` | Blockierender Check pro PR. Audit auf Landing + repräsentativer Detail-Page. |
@@ -144,7 +144,7 @@ npm run check:data
 │   │
 │   ├── scripts/
 │   │   ├── fetch-readmes.js       Octokit-basierter Fetch aller 40 Skill-Repo-READMEs
-│   │   ├── parse-readmes.js       Markdown→JSON, extrahiert Use cases / Related Skills / Expected outputs / Context requirements
+│   │   ├── parse-readme.js       Markdown→JSON, extrahiert Use cases / Related Skills / Expected outputs / Context requirements
 │   │   ├── derive-related.js      Falls Related Skills aus README fehlen, ableiten aus Category + Tags + Themen-Gruppe
 │   │   └── check-orphans.js       Validator: jede Skill hat alle 6 Pflicht-Verbindungen (siehe AGENTS.md §No orphan skills)
 │   │
@@ -203,7 +203,7 @@ npm run check:data
 │   └── tests/
 │       ├── lighthouse/            lighthouserc.json (Budget + Assertions, Landing + 3 Detail-Pages)
 │       ├── a11y/                  pa11y-config.json
-│       └── parser/                Unit-Tests für parse-readmes.js
+│       └── parser/                Unit-Tests für parse-readme.js
 │
 └── .github/
     └── workflows/
@@ -449,8 +449,8 @@ Die Page **erzählt** statt zu **listen** — getrennt für **EN** und **DE**, m
 | :-- | :-- | :-- |
 | Custom-Domain? | Nein | User-Entscheidung 2026-05-13 |
 | Analytics? | Nein (nur GitHub-Repo-Insights) | User-Entscheidung — keine Extra-Tools, kein Tracking |
-| Sprache? | EN only | User-Entscheidung |
-| Plugin-Detail-Pages? | Phase 2 | User-Entscheidung |
+| Sprache? | **DE + EN bilingual** (überholt: ursprünglich „EN only" — Decision revidiert 2026-05-13 nach AGENTS.md-Reconciliation, siehe §1.3 und §1.4 Bullet 6) | AGENTS.md §Required fields per skill entry (DE-Description Pflicht für DACH-Skills) |
+| Plugin-Detail-Pages? | **Phase 1** (überholt: ursprünglich „Phase 2" — Decision revidiert 2026-05-13 nach AGENTS.md-Reconciliation, siehe §1.8) | AGENTS.md §Marketplace as canonical discovery hub („indexable detail pages") |
 | Story-Visual? | Reines Typografie-Layout | Default akzeptiert |
 | Team-Foto? | Kein Foto, abstraktes SVG-Hero | Default akzeptiert (DSGVO-frei) |
 | Badges? | Ja (Scorecard, License, Updated) | User-Entscheidung |
@@ -499,7 +499,7 @@ Diese Tabelle dokumentiert **intentionale Abweichungen** vom „one canonical so
 |---|---|---|---|---|
 | _(empty at Phase 1 start; populated when build encounters missing source data)_ | | | | |
 
-**Pflicht-Workflow bei Override-Erstellung:** Wenn build-time-Fetch eine README-Section nicht findet und kein automatisches Fallback greift, generiert `site/scripts/parse-readmes.js` einen Override-Eintrag mit Reason „README section absent on YYYY-MM-DD" und committet ihn als Artifact für Review.
+**Pflicht-Workflow bei Override-Erstellung:** Wenn build-time-Fetch eine README-Section nicht findet und kein automatisches Fallback greift, generiert `site/scripts/parse-readme.js` einen Override-Eintrag mit Reason „README section absent on YYYY-MM-DD" und committet ihn als Artifact für Review.
 
 ---
 
@@ -516,4 +516,4 @@ Diese Tabelle dokumentiert **intentionale Abweichungen** vom „one canonical so
 
 ---
 
-**Nach Freigabe dieser Spec startet Phase 2 (Plan):** technischer Implementierungsplan mit Reihenfolge, Risiken, Verifikations-Checkpoints und parallelisierbaren Tasks. Tracking via `bd` (per AGENTS.md §Workflow).
+**Nach Freigabe dieser Spec startet Phase 2 (Plan):** technischer Implementierungsplan mit Reihenfolge, Risiken, Verifikations-Checkpoints und parallelisierbaren Tasks. Tracking via Claude Code Task feature (`TaskCreate`/`TaskUpdate`); siehe §1.4 — `bd` ist in `ca6a379` nicht mehr Mandat.

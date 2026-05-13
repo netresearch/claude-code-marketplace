@@ -3,9 +3,12 @@
  * Skill-Repo READMEs (Tier 2) and category/group metadata.
  *
  * AGENTS.md §Required fields per skill entry: every skill needs 13 fields.
- * Where source data is missing, this module fills with an explicit
- * { value: null, source: "fallback", reason: "..." } shape so the linter
- * can detect and report orphans (see scripts/check-orphans.js).
+ * Where source data is missing, this module returns plain empty values
+ * (empty arrays for lists, null for scalars) — check-orphans.js then
+ * decides whether the gap is fatal, advisory, or absorbed by a
+ * documented entry in _data/overrides.json (AGENTS.md §Known marketplace
+ * overrides). The structured-error shape is intentionally NOT used here;
+ * it would complicate every template that consumes the data.
  */
 import { readFileSync, existsSync } from "node:fs";
 import { dirname, resolve } from "node:path";
@@ -17,6 +20,7 @@ const CACHE_DIR = resolve(__dirname, "../../cache/skills-readme");
 
 import categories from "./categories.js";
 import groups from "./groups.js";
+import descriptionsDe from "./descriptions_de.json" with { type: "json" };
 
 function loadCache(slug) {
   const p = resolve(CACHE_DIR, `${slug}.json`);
@@ -68,6 +72,8 @@ export default function () {
         .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
         .join(" "),
       description: plugin.description,
+      descriptionEn: plugin.description,
+      descriptionDe: descriptionsDe[plugin.name] || plugin.description,
       readmeLead: parsed?.readmeLead || null,
       category: plugin.category,
       categoryLabelEn: categories.labels.en[plugin.category],
