@@ -90,7 +90,10 @@ function findSection(markdown, aliases) {
         if (level <= captureLevel) {
           break;
         }
-        captured.push(line);
+        // Don't carry sub-section headings into the captured content — the
+        // page renders extracted content as plain bullets/paragraphs, and a
+        // raw `### Marketplace (Recommended)` line would surface as literal
+        // "###" prose.
         continue;
       }
 

@@ -1,6 +1,7 @@
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, resolve } from "node:path";
+import { displayName } from "./_helpers/display-name.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const MARKETPLACE_JSON = resolve(__dirname, "../../../.claude-plugin/marketplace.json");
@@ -11,6 +12,7 @@ export default function () {
 
   const skills = data.plugins.map((plugin) => ({
     slug: plugin.name,
+    displayName: displayName(plugin.name),
     description: plugin.description,
     category: plugin.category,
     repo: plugin.source?.repo ?? null,
