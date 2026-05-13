@@ -1,0 +1,11 @@
+<article class="skill-card">
+  <span class="skill-card__category" aria-label="Category">{{ categoryLabels[skill.category] or skill.category }}</span>
+  <h3 class="skill-card__title">
+    <a href="/{{ lang }}/skills/{{ skill.slug }}/">{{ skill.slug | titleCase }}</a>
+  </h3>
+  <p class="skill-card__description">{{ skill.description }}</p>
+  <footer class="skill-card__footer">
+    <code class="skill-card__install" id="install-{{ skill.slug }}">{{ skill.installCommand }}</code>
+    <button type="button" class="copy-btn" data-copy-target="install-{{ skill.slug }}" aria-label="Copy install command for {{ skill.slug }}">Copy</button>
+  </footer>
+</article>

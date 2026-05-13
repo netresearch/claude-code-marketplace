@@ -14,6 +14,20 @@ export default function (eleventyConfig) {
       .join(" ")
   );
 
+  eleventyConfig.addFilter("skillsInGroup", (skills, slugs) => {
+    const order = new Map(slugs.map((slug, i) => [slug, i]));
+    return skills
+      .filter((skill) => order.has(skill.slug))
+      .sort((a, b) => order.get(a.slug) - order.get(b.slug));
+  });
+
+  eleventyConfig.addFilter("skillsNotInAnyGroup", (skills, groups) => {
+    const known = new Set(
+      Object.values(groups.groups).flatMap((g) => g.slugs)
+    );
+    return skills.filter((skill) => !known.has(skill.slug));
+  });
+
   return {
     dir: {
       input: "src",

@@ -1,16 +1,77 @@
 <!doctype html>
-<html lang="en">
+<html lang="{{ lang or 'en' }}">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{{ title or site.title }}</title>
     <meta name="description" content="{{ description or site.tagline }}" />
+    <meta name="theme-color" content="#2F99A4" />
+
     <link rel="canonical" href="{{ site.url }}{{ page.url }}" />
+    {% if hreflangAlternate %}
+      <link rel="alternate" hreflang="{{ hreflangAlternate.lang }}" href="{{ site.url }}{{ hreflangAlternate.url }}" />
+      <link rel="alternate" hreflang="{{ lang }}" href="{{ site.url }}{{ page.url }}" />
+      <link rel="alternate" hreflang="x-default" href="{{ site.url }}{{ xDefaultUrl or '/en/' }}" />
+    {% endif %}
+
+    <meta property="og:type" content="{{ ogType or 'website' }}" />
+    <meta property="og:title" content="{{ title or site.title }}" />
+    <meta property="og:description" content="{{ description or site.tagline }}" />
+    <meta property="og:url" content="{{ site.url }}{{ page.url }}" />
+    <meta property="og:locale" content="{{ ogLocale or 'en_US' }}" />
+    {% if hreflangAlternate %}
+      <meta property="og:locale:alternate" content="{{ hreflangAlternate.ogLocale }}" />
+    {% endif %}
+    <meta name="twitter:card" content="summary_large_image" />
+
     <link rel="stylesheet" href="/assets/css/main.css" />
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "Netresearch DTT GmbH",
+        "url": "{{ site.ownerUrl }}",
+        "sameAs": [
+          "https://github.com/netresearch",
+          "{{ site.repoUrl }}"
+        ]
+      }
+    </script>
   </head>
   <body>
-    <main>
+    <header class="site-header">
+      <a class="site-header__brand" href="/{{ lang or 'en' }}/">
+        <strong>Netresearch</strong> Skills Marketplace
+      </a>
+      <nav class="site-header__nav" aria-label="Primary">
+        <a href="/{{ lang or 'en' }}/">{{ t.nav.home }}</a>
+        {% if hreflangAlternate %}
+          <a href="{{ hreflangAlternate.url }}" hreflang="{{ hreflangAlternate.lang }}" rel="alternate">{{ t.nav.switchLang }}</a>
+        {% endif %}
+      </nav>
+    </header>
+
+    <main id="main">
       {{ content | safe }}
     </main>
+
+    <footer class="site-footer">
+      <p>{{ t.footer.maintained }}</p>
+      <p class="site-footer__meta">{{ t.footer.license }}</p>
+      <p class="site-footer__badges">
+        <a href="https://scorecard.dev/viewer/?uri=github.com/netresearch/claude-code-marketplace" rel="noopener">
+          <img src="https://api.scorecard.dev/projects/github.com/netresearch/claude-code-marketplace/badge" alt="OpenSSF Scorecard" width="120" height="20" loading="lazy" />
+        </a>
+        <a href="{{ site.repoUrl }}/blob/main/LICENSE" rel="noopener">
+          <img src="https://img.shields.io/github/license/netresearch/claude-code-marketplace" alt="License" width="110" height="20" loading="lazy" />
+        </a>
+        <a href="{{ site.repoUrl }}/commits/main" rel="noopener">
+          <img src="https://img.shields.io/github/last-commit/netresearch/claude-code-marketplace" alt="Last updated" width="140" height="20" loading="lazy" />
+        </a>
+      </p>
+    </footer>
+
+    <script src="/assets/js/enhance.js" defer></script>
   </body>
 </html>

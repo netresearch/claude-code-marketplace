@@ -1,0 +1,120 @@
+---
+layout: layouts/base.njk
+permalink: /en/
+title: "Netresearch Skills Marketplace — 40 curated Agent Skills for AI-assisted development"
+description: "Curated Agent Skills for TYPO3, PHP, Go, Docker, security, and documentation. One install. Forty skills. Portable across Claude Code, Cursor, Copilot, Codex, Gemini CLI, and 30+ more agents."
+---
+
+<section class="hero">
+  <h1>{{ t.hero.h1 }}</h1>
+  <p class="lead">{{ t.hero.lead }}</p>
+
+  {% from "partials/install-block.njk" import installBlock %}
+  <div class="hero__ctas">
+    {{ installBlock("hero-install", marketplace.addCommand, t.hero.primaryCta) }}
+    <a class="btn btn--secondary" href="#skills">{{ t.hero.secondaryCta }}</a>
+  </div>
+</section>
+
+<section class="section">
+  <h2>{{ t.problem.h2 }}</h2>
+  <div class="problem-grid">
+    {% for item in t.problem.items %}
+      <article class="problem-item">
+        <h3>{{ item.title }}</h3>
+        <p>{{ item.body }}</p>
+      </article>
+    {% endfor %}
+  </div>
+</section>
+
+<section class="section section--accent">
+  <h2>{{ t.marketplace.h2 }}</h2>
+  <div class="stats">
+    <div class="stats__item">
+      <span class="stats__number">{{ marketplace.count }}</span>
+      <span class="stats__label">{{ t.marketplace.stats.skillsLabel }}</span>
+    </div>
+    <div class="stats__item">
+      <span class="stats__number">{{ categories.enum | length }}</span>
+      <span class="stats__label">{{ t.marketplace.stats.categoriesLabel }}</span>
+    </div>
+    <div class="stats__item">
+      <span class="stats__number">{{ t.marketplace.stats.platformsValue }}</span>
+      <span class="stats__label">{{ t.marketplace.stats.platformsLabel }}</span>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="skills">
+  <h2>{{ t.categoriesSection.h2 }}</h2>
+  <p class="lead">{{ t.categoriesSection.lead }}</p>
+
+  {% set vars = { skills: marketplace.skills, lang: 'en', categoryLabels: categories.labels.en } %}
+
+  {% for groupKey in groups.order %}
+    {% set group = groups.groups[groupKey] %}
+    {% set members = marketplace.skills | skillsInGroup(group.slugs) %}
+    {% if members | length > 0 %}
+      <section class="group group--{{ groupKey }}" id="group-{{ groupKey }}">
+        <header class="group__header">
+          <h3>{{ group.en.title }}</h3>
+          <p class="group__lead">{{ group.en.lead }}</p>
+        </header>
+        <div class="skill-grid">
+          {% for skill in members %}
+            {% include "partials/skill-card.njk" %}
+          {% endfor %}
+        </div>
+      </section>
+    {% endif %}
+  {% endfor %}
+
+  {% set extras = marketplace.skills | skillsNotInAnyGroup(groups) %}
+  {% if extras | length > 0 %}
+    <section class="group group--uncategorized">
+      <header class="group__header">
+        <h3>More skills</h3>
+        <p class="group__lead">Recently added — group assignment pending.</p>
+      </header>
+      <div class="skill-grid">
+        {% for skill in extras %}
+          {% include "partials/skill-card.njk" %}
+        {% endfor %}
+      </div>
+    </section>
+  {% endif %}
+</section>
+
+<section class="section">
+  <h2>{{ t.story.h2 }}</h2>
+  <p>{{ t.story.body1 }}</p>
+  <p>{{ t.story.body2 }}</p>
+</section>
+
+<section class="section section--accent">
+  <h2>{{ t.howItWorks.h2 }}</h2>
+  <ol class="how-list">
+    {% for step in t.howItWorks.steps %}
+      <li>
+        <h3>{{ step.title }}</h3>
+        <pre><code>{{ step.code }}</code></pre>
+      </li>
+    {% endfor %}
+  </ol>
+</section>
+
+<section class="section">
+  <h2>{{ t.openStandard.h2 }}</h2>
+  <p>{{ t.openStandard.body }}</p>
+  <p><a href="https://agentskills.io" rel="noopener">{{ t.openStandard.link }} →</a></p>
+</section>
+
+<section class="section section--cta">
+  <h2>{{ t.cta.h2 }}</h2>
+  <ul class="cta-links">
+    <li><a href="{{ site.repoUrl }}" rel="noopener">{{ t.cta.links.star }}</a></li>
+    <li><a href="{{ site.repoUrl }}/issues/new" rel="noopener">{{ t.cta.links.issue }}</a></li>
+    <li><a href="{{ site.repoUrl }}/blob/main/AGENTS.md" rel="noopener">{{ t.cta.links.contribute }}</a></li>
+  </ul>
+</section>
