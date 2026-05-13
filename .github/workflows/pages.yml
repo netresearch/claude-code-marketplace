@@ -10,9 +10,6 @@ on:
     # Weekly rebuild so skill-repo README updates land on the site without a marketplace change.
     - cron: "0 3 * * 0"
 
-permissions:
-  contents: read
-
 concurrency:
   group: pages-${{ github.ref }}
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
@@ -72,6 +69,8 @@ jobs:
   lighthouse:
     needs: build
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     defaults:
       run:
         working-directory: site
