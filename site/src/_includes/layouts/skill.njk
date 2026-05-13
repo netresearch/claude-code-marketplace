@@ -33,7 +33,7 @@ layout: layouts/base.njk
       <h2 id="use-cases-h">{{ t.skill.useCases }}</h2>
       <ul class="bullet-list">
         {% for item in skill.useCases %}
-          <li>{{ item }}</li>
+          <li>{{ item | inlineMarkdown | safe }}</li>
         {% endfor %}
       </ul>
     </section>
@@ -44,7 +44,7 @@ layout: layouts/base.njk
       <h2 id="outputs-h">{{ t.skill.expectedOutputs }}</h2>
       <ul class="bullet-list">
         {% for item in skill.expectedOutputs %}
-          <li>{{ item }}</li>
+          <li>{{ item | inlineMarkdown | safe }}</li>
         {% endfor %}
       </ul>
     </section>
@@ -55,7 +55,7 @@ layout: layouts/base.njk
       <h2 id="context-h">{{ t.skill.contextRequirements }}</h2>
       <ul class="bullet-list">
         {% for item in skill.contextRequirements %}
-          <li>{{ item }}</li>
+          <li>{{ item | inlineMarkdown | safe }}</li>
         {% endfor %}
       </ul>
     </section>

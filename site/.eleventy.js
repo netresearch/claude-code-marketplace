@@ -31,6 +31,42 @@ export default function (eleventyConfig) {
     return skills.filter((skill) => !known.has(skill.slug));
   });
 
+  /**
+   * Inline-markdown filter: converts a string with markdown inline syntax
+   * (links, bold, italic, code) into safe HTML. Block syntax is intentionally
+   * not handled — these are short bullet items, not full documents. Input is
+   * always HTML-escaped first so untrusted README content can't inject tags.
+   */
+  eleventyConfig.addFilter("inlineMarkdown", (input) => {
+    if (!input || typeof input !== "string") return "";
+    let s = input
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#39;");
+
+    // Inline code first so the runes inside aren't interpreted further.
+    s = s.replace(/`([^`]+)`/g, (_, code) => `<code>${code}</code>`);
+
+    // [text](href) — href can be any non-paren run; we already escaped <>"'&.
+    s = s.replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, (_, text, href) => {
+      const safeHref = href.replace(/javascript:/gi, "");
+      return `<a href="${safeHref}" rel="noopener">${text}</a>`;
+    });
+
+    // **bold** then __bold__ — the lazy quantifier prevents runaway matches.
+    s = s.replace(/\*\*([^*]+?)\*\*/g, "<strong>$1</strong>");
+    s = s.replace(/__([^_]+?)__/g, "<strong>$1</strong>");
+
+    // *italic* / _italic_ — only when not adjacent to word characters
+    // (so file_names_like_this stay intact).
+    s = s.replace(/(^|[^*\w])\*([^*\n]+?)\*(?!\w)/g, "$1<em>$2</em>");
+    s = s.replace(/(^|[^_\w])_([^_\n]+?)_(?!\w)/g, "$1<em>$2</em>");
+
+    return s;
+  });
+
   return {
     dir: {
       input: "src",
