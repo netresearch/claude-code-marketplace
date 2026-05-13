@@ -41,5 +41,10 @@ export default function (eleventyConfig) {
     templateFormats: ["njk", "md", "html"],
     markdownTemplateEngine: "njk",
     htmlTemplateEngine: "njk",
+    // Project Pages deploy lives at https://netresearch.github.io/claude-code-marketplace/
+    // pathPrefix tells the `| url` filter to prepend this to every root-relative path.
+    // Override at build time with PATH_PREFIX env var when serving from a different mount
+    // (e.g. for local preview at root).
+    pathPrefix: process.env.PATH_PREFIX ?? "/claude-code-marketplace/",
   };
 }

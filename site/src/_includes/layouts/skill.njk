@@ -6,8 +6,8 @@ layout: layouts/base.njk
 
 <nav class="breadcrumbs" aria-label="Breadcrumb">
   <ol>
-    <li><a href="/{{ lang }}/">{{ t.nav.home }}</a></li>
-    <li><a href="/{{ lang }}/#group-{{ skill.group or 'meta' }}">{{ t.nav.skills }}</a></li>
+    <li><a href="{{ ('/' ~ lang ~ '/') | url }}">{{ t.nav.home }}</a></li>
+    <li><a href="{{ ('/' ~ lang ~ '/#group-' ~ (skill.group or 'meta')) | url }}">{{ t.nav.skills }}</a></li>
     <li aria-current="page">{{ skill.displayName }}</li>
   </ol>
 </nav>
@@ -71,7 +71,7 @@ layout: layouts/base.njk
             {% if related %}
               {% set relatedCatLabel = related.categoryLabelDe if lang == 'de' else related.categoryLabelEn %}
               <li>
-                <a href="/{{ lang }}/skills/{{ related.slug }}/">{{ related.displayName }}</a>
+                <a href="{{ ('/' ~ lang ~ '/skills/' ~ related.slug ~ '/') | url }}">{{ related.displayName }}</a>
                 <span class="related-list__cat">{{ relatedCatLabel }}</span>
               </li>
             {% else %}
@@ -115,7 +115,7 @@ layout: layouts/base.njk
   "description": description,
   "applicationCategory": "DeveloperApplication",
   "operatingSystem": "Cross-platform",
-  "url": site.url + page.url,
+  "url": site.url ~ (page.url | url),
   "sameAs": skill.repoUrl,
   "softwareHelp": skill.readmeUrl,
   "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
@@ -133,8 +133,8 @@ layout: layouts/base.njk
   "@context": "https://schema.org",
   "@type": "BreadcrumbList",
   "itemListElement": [
-    { "@type": "ListItem", "position": 1, "name": t.nav.home, "item": site.url + "/" + lang + "/" },
-    { "@type": "ListItem", "position": 2, "name": skill.categoryLabel, "item": site.url + "/" + lang + "/#group-" + (skill.group or "meta") },
+    { "@type": "ListItem", "position": 1, "name": t.nav.home, "item": site.url ~ (("/" ~ lang ~ "/") | url) },
+    { "@type": "ListItem", "position": 2, "name": categoryLabel, "item": site.url ~ (("/" ~ lang ~ "/#group-" ~ (skill.group or "meta")) | url) },
     { "@type": "ListItem", "position": 3, "name": skill.displayName }
   ]
 } | dump(2) | safe }}

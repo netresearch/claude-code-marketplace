@@ -2,38 +2,42 @@
 permalink: /sitemap.xml
 eleventyExcludeFromCollections: true
 ---
+{%- set enLanding = '/en/' | url -%}
+{%- set deLanding = '/de/' | url -%}
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>{{ site.url }}/en/</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="{{ site.url }}/en/" />
-    <xhtml:link rel="alternate" hreflang="de" href="{{ site.url }}/de/" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="{{ site.url }}/en/" />
+    <loc>{{ site.url }}{{ enLanding }}</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="{{ site.url }}{{ enLanding }}" />
+    <xhtml:link rel="alternate" hreflang="de" href="{{ site.url }}{{ deLanding }}" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="{{ site.url }}{{ enLanding }}" />
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>{{ site.url }}/de/</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="{{ site.url }}/en/" />
-    <xhtml:link rel="alternate" hreflang="de" href="{{ site.url }}/de/" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="{{ site.url }}/en/" />
+    <loc>{{ site.url }}{{ deLanding }}</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="{{ site.url }}{{ enLanding }}" />
+    <xhtml:link rel="alternate" hreflang="de" href="{{ site.url }}{{ deLanding }}" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="{{ site.url }}{{ enLanding }}" />
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   {% for skill in skills %}
+  {%- set enSkill = ('/en/skills/' + skill.slug + '/') | url -%}
+  {%- set deSkill = ('/de/skills/' + skill.slug + '/') | url -%}
   <url>
-    <loc>{{ site.url }}/en/skills/{{ skill.slug }}/</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="{{ site.url }}/en/skills/{{ skill.slug }}/" />
-    <xhtml:link rel="alternate" hreflang="de" href="{{ site.url }}/de/skills/{{ skill.slug }}/" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="{{ site.url }}/en/skills/{{ skill.slug }}/" />
+    <loc>{{ site.url }}{{ enSkill }}</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="{{ site.url }}{{ enSkill }}" />
+    <xhtml:link rel="alternate" hreflang="de" href="{{ site.url }}{{ deSkill }}" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="{{ site.url }}{{ enSkill }}" />
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>{{ site.url }}/de/skills/{{ skill.slug }}/</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="{{ site.url }}/en/skills/{{ skill.slug }}/" />
-    <xhtml:link rel="alternate" hreflang="de" href="{{ site.url }}/de/skills/{{ skill.slug }}/" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="{{ site.url }}/en/skills/{{ skill.slug }}/" />
+    <loc>{{ site.url }}{{ deSkill }}</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="{{ site.url }}{{ enSkill }}" />
+    <xhtml:link rel="alternate" hreflang="de" href="{{ site.url }}{{ deSkill }}" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="{{ site.url }}{{ enSkill }}" />
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>

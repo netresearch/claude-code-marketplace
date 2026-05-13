@@ -1,7 +1,7 @@
 <article class="skill-card">
   <span class="skill-card__category" aria-label="Category">{{ categoryLabels[skill.category] or skill.category }}</span>
   <h3 class="skill-card__title">
-    <a href="/{{ lang }}/skills/{{ skill.slug }}/">{{ skill.slug | titleCase }}</a>
+    <a href="{{ ('/' ~ lang ~ '/skills/' ~ skill.slug ~ '/') | url }}">{{ skill.slug | titleCase }}</a>
   </h3>
   <p class="skill-card__description">{{ skill.description }}</p>
   <footer class="skill-card__footer">
