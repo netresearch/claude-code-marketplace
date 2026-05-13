@@ -1,7 +1,7 @@
 {
   "ci": {
     "collect": {
-      "staticDistDir": "./_site",
+      "staticDistDir": "./.lhci-site",
       "url": [
         "http://localhost/en/index.html",
         "http://localhost/de/index.html",
