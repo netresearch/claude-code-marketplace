@@ -1,6 +1,6 @@
 # PLAN: GitHub Page für `netresearch/claude-code-marketplace`
 
-> **Status:** Phase 2 (Plan). Folgt aus [`SPEC.md`](./SPEC.md) v2 (final, abgestimmt 2026-05-13 gegen [AGENTS.md `ca6a379`](https://github.com/netresearch/claude-code-marketplace/commit/ca6a379)). Phase 3 (Tasks) und Phase 4 (Implement) folgen nach Freigabe dieses Plans.
+> **Status: Shipped 2026-05-13** über drei PRs ([#44](https://github.com/netresearch/claude-code-marketplace/pull/44) initial SPEC+PLAN+impl, [#45](https://github.com/netresearch/claude-code-marketplace/pull/45) pathPrefix-Hotfix, [#46](https://github.com/netresearch/claude-code-marketplace/pull/46) displayNames-Map + inlineMarkdown-Filter + Parser-Hygiene). Folgt aus [`SPEC.md`](./SPEC.md) gegen [AGENTS.md `ca6a379`](https://github.com/netresearch/claude-code-marketplace/commit/ca6a379). Dokumentation gepflegt synchron zum deployed Code.
 
 ---
 
@@ -133,7 +133,7 @@
 
 ### Phase 2b: Landing EN (1 PR, ~3h)
 5. **C5** i18n-Setup, Permalinks, UI-Strings EN.
-6. **C6** Landing-Page-Layout EN narrative-konform aus SPEC §7, mit allen 40 Skill-Cards, Themen-Gruppen-Überschriften aus README, 7-Category-Filter.
+6. **C6** Landing-Page-Layout EN narrative-konform aus SPEC §7, mit allen 40 Skill-Cards, Themen-Gruppen-Überschriften aus README, Category-Badges (kein clientseitiges Filter-UI in Phase 1 — Suche ist Phase-2-Kandidat).
 
 **Verifikation 2b:** `/en/` rendert sauber, Lighthouse-Test isoliert auf EN-Landing ≥ 95/100/95/100. Visual-Inspektion in Browser. PR auf main, merge.
 
@@ -228,7 +228,7 @@ Nach jeder Sub-Phase MUSS folgender Mini-Audit grün sein, **bevor** die nächst
 
 ## 7. Locked Decisions (2026-05-13, User-Mandat „mach wie du denkst")
 
-Folgende Punkte sind nach User-Freigabe fixiert und gehen so in Phase 3 (Tasks):
+Folgende Punkte wurden vor Phase 3 fixiert und sind im ausgelieferten Stand umgesetzt:
 
 | # | Entscheidung | Begründung |
 | :-- | :-- | :-- |
@@ -243,30 +243,29 @@ Folgende Punkte sind nach User-Freigabe fixiert und gehen so in Phase 3 (Tasks):
 
 ---
 
-## 8. Vor-Phase-3-Setup-Checkliste
+## 8. Vor-Phase-3-Setup-Checkliste (historisch, abgehakt 2026-05-13)
 
-Bevor Phase 3 (Tasks-Erstellung) startet:
-
-- [ ] User hat diesen Plan freigegeben oder konkret korrigiert.
-- [ ] Frühe Entscheidungs-Punkte (§7) aufgelöst.
-- [ ] `gh` CLI authentifiziert (`gh auth status`).
-- [ ] Branch erstellt: `feat/github-pages-storytelling` (oder vom User vorgegeben).
-- [ ] SPEC.md + PLAN.md committet im PR-Branch + DCO-Sign-off + signiert.
-- [ ] PR gegen `main` eröffnet als Tracking-PR für die ganze Initiative (oder pro Sub-Phase ein eigenes PR — auch eine §7-Entscheidung).
+- [x] User hat den Plan freigegeben (Antwort „mach wie du denkst").
+- [x] Frühe Entscheidungs-Punkte (§7) aufgelöst.
+- [x] `gh` CLI authentifiziert.
+- [x] Branch erstellt: `feat/github-pages-storytelling`.
+- [x] SPEC.md + PLAN.md committet, DCO-Sign-off + ED25519-signiert.
+- [x] PR #44 als Tracking-PR für die ganze Initiative — sub-phase-Commits sind dort als atomare Commits gelandet (nicht eigene Sub-PRs, gemäß User-Mandat zur Vereinfachung).
 
 ---
 
-## 9. Out-of-Plan (= Phase-3-Detail)
+## 9. Post-Ship-Follow-Ups
 
-Diese Items kommen **erst in Phase 3** als konkrete Tasks:
+Nach erfolgreicher Auslieferung dokumentierte offene Punkte (siehe SPEC §14 für die kuratierte Liste):
 
-- Per-Sub-Phase Tasks mit Acceptance Criteria (Komponenten als Checklist im Body).
-- Pro-Task-File-Liste (welche Dateien geändert/erstellt werden).
-- Eleventy-Config-Details (collections, computed data, filters).
-- Konkrete CSS-Token-Werte (Spacing-Scale, Type-Scale — kommen aus netresearch-branding-skill).
-- DE-Storytelling-Copy pro Section (Inhalte, nicht Struktur — Struktur ist in SPEC §7 schon definiert).
-- Per-Skill-Fallback-Texte für leere README-Sections.
+- **Volltext-Suche** über alle Skill-Daten (Slug, displayName, Description, Use cases, Tags). Heute existiert keine Filter-UI; Suche ist Phase-2-Kandidat zusammen mit dem dazu passenden `WebSite + SearchAction`-JSON-LD.
+- **`SKILL.md`-Frontmatter-Discovery** statt README-Parsing — sobald `useCases:` / `relatedSkills:` / `expectedOutputs:` / `contextRequirements:` als optionale Felder in den Skill-Repos eingeführt sind, ersetzt `parse-readme.js` durch einen YAML-Frontmatter-Reader. Keine separate `discovery.yaml` — siehe SPEC §1.4 Bullet zur Mirroring rule.
+- **Lighthouse Phase-2-Targets** anziehen (Performance/BP ≥ 0.95, A11y 1.0) nach Brand-Contrast-Review (Turquoise `#2F99A4` ist 3.8:1, A11y-AA-grenzwertig).
+- **Skill-Versionen sichtbar machen**, sobald `marketplace.json` `version:` pro Plugin-Entry trägt.
+- **15 zu lange Descriptions** (>300 Zeichen) in `marketplace.json` — wird vom advisory SEO-Linter angemahnt.
+
+**Bewusst nicht vorgesehen** (zur Dokumentation): Login/Submission-Form, Newsletter, RSS, serverseitige APIs. Skill-Einreichung läuft über PR gegen `marketplace.json`.
 
 ---
 
-**Nach Freigabe dieses Plans:** Phase 3 erstellt 7 Sub-Phase-Tasks via Claude Code Task feature (`TaskCreate`), jeweils mit Acceptance Criteria, Verifikations-Schritt und betroffenen Files.
+**Implementierungs-Pfad (historisch):** Phase 3 erstellte 7 Sub-Phase-Tasks (2a–2g) via Claude Code Task feature und führte sie in [PR #44](https://github.com/netresearch/claude-code-marketplace/pull/44) zusammen aus; [PR #45](https://github.com/netresearch/claude-code-marketplace/pull/45) (pathPrefix) und [PR #46](https://github.com/netresearch/claude-code-marketplace/pull/46) (Rendering + i18n descriptions + Filter-Hardening) sind die Post-Ship-Korrekturen.

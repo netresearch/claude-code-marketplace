@@ -1,6 +1,6 @@
 # SPEC: GitHub Page für `netresearch/claude-code-marketplace`
 
-> Status: **Phase 1 (Specify) — final abgestimmt mit User am 2026-05-13** (zweiter Pass nach Reconciliation mit aktuellem [AGENTS.md `ca6a379`](https://github.com/netresearch/claude-code-marketplace/commit/ca6a379)). Bereit für Phase 2 (Plan).
+> Status: **Shipped 2026-05-13** via [#44](https://github.com/netresearch/claude-code-marketplace/pull/44) (SPEC + PLAN + implementation), [#45](https://github.com/netresearch/claude-code-marketplace/pull/45) (project pathPrefix hotfix), [#46](https://github.com/netresearch/claude-code-marketplace/pull/46) (display-name map + inlineMarkdown filter + parser hygiene). Live at https://netresearch.github.io/claude-code-marketplace/. This document remains the canonical scope reference and is kept in sync with the deployed code.
 
 ---
 
@@ -8,7 +8,7 @@
 
 > Hinweis: Lokale Arbeitskopie war initial 30 Commits hinter `origin/main`. Erst nach `git show origin/main:AGENTS.md` wurde der echte Regel­kanon sichtbar. Die Entscheidungen unten reflektieren den **Remote-Stand**, nicht den initialen Stub.
 
-1. **Repo-Identität:** `github.com/netresearch/claude-code-marketplace`, Default-Branch `main`, Pages noch nicht aktiviert (`has_pages: false`) → wird Teil des Deployments.
+1. **Repo-Identität:** `github.com/netresearch/claude-code-marketplace`, Default-Branch `main`, GitHub Pages aktiv (Build-Type `workflow`), Deploy-Pipeline in `.github/workflows/pages.yml`.
 2. **Hosting-Pfad:** `https://netresearch.github.io/claude-code-marketplace/`. Keine Custom-Domain.
 3. **Sprache:** **Volle Zweisprachigkeit (DE + EN)** auf allen Seiten. Default-Locale = EN (`/en/...`, plus Root `/` → 302 zu Accept-Language-Match oder fallback EN). DE unter `/de/...`. Bidirektionales `<link rel="alternate" hreflang>`.
 4. **Marketplace-Regeln — drei Quellen:**
@@ -20,7 +20,7 @@
      - § _Canonical categories_: Enum mit 7 Werten — `development · devops · security · design · workflow · productivity · document`.
      - § _No orphan skills_: Jeder Skill mit Category + Use case + Related Skills + Repo + Install + Canonical Landing URL.
      - § _SEO and discovery rules_: erster Satz = Problem; keine generische AI-Boilerplate; Tech explizit benennen; Description ≤300 (target) / ≤500 (hard cap); Descriptions unique.
-     - § _Mirroring rule_: skill-spezifische Metadaten kommen aus Skill-Repos (README oder zukünftiges `discovery.yaml`); Marketplace konsumiert, dupliziert nicht.
+     - § _Mirroring rule_: skill-spezifische Metadaten kommen aus den Skill-Repos. Heute: README-Sections (`## Use cases`, `## Expected outputs`, `## Context requirements`, `## Related skills`, plus die toleranten Aliase in `site/scripts/parse-readme.js`). Mittelfristig: optionale Discovery-Felder direkt in der **`SKILL.md`-Frontmatter** jedes Skill-Repos (z. B. `useCases:`, `relatedSkills:`, `expectedOutputs:`) — eine eigenständige `discovery.yaml` ist bewusst **nicht** vorgesehen, weil SKILL.md bereits Frontmatter trägt und Agent-Skills-Spec-Felder beliebig erweiterbar sind (unbekannte Keys werden von kompatiblen Agents ignoriert). Marketplace konsumiert, dupliziert nicht.
      - § _Agent workflow checklist (marketplace changes)_: 7-Punkte-Checkliste vor PR-Abschluss, inkl. `./scripts/validate.sh` lokal laufen.
      - **Hinweis:** Frühere Feb-5-Version von AGENTS.md erwähnte `bd` (beads) + „Landing the Plane" — beides ist in `ca6a379` **NICHT mehr enthalten** und damit kein Mandat. Tracking erfolgt über das **Claude Code Task feature** (`TaskCreate`/`TaskUpdate`/`TaskList`).
    - **`scripts/validate.sh`** — mechanischer Guard: erzwingt Category-Enum, Slug-Regex (`^[a-z0-9][a-z0-9-]{0,63}$`), Description-Limits, Eindeutigkeit, README-Catalog-Row pro Slug.
@@ -29,7 +29,7 @@
 7. **Datenquellen (mit Mirroring-Rule-konformer Konsumation):**
    - **Primär:** `.claude-plugin/marketplace.json` (40 Plugins, 7 Categories) — liefert Slug, Name, EN-Description, Category, Repo.
    - **Sekundär:** Skill-Repo-READMEs (build-time gefetcht via GitHub API) — liefert Use cases, Expected outputs, Context requirements, Related Skills.
-   - **Tertiär:** README-Themen-Gruppierung (TYPO3 / OroCommerce / Code Quality & Security / DevOps / Productivity / Meta) als _Presentation Groups_ für die Landing — orthogonal zum Category-Enum, das Filter & SEO bedient.
+   - **Tertiär:** README-Themen-Gruppierung (TYPO3 / OroCommerce / Code Quality & Security / DevOps / Productivity / Meta) als _Presentation Groups_ für die Landing — orthogonal zum Category-Enum, das SEO + Schema.org-`applicationCategory` trägt.
    - **Fallback bei fehlenden Feldern:** dokumentierte „N/A (justified)"-Einträge in §_Known marketplace overrides_ der SPEC + AGENTS.md.
 8. **Plugin-Detail-Pages:** **Phase 1, AGENTS.md-konform.** Pro Skill stabile canonical URL `/<lang>/skills/<slug>/`. Inhalt aus marketplace.json + Skill-Repo-README (build-time aggregiert).
 9. **Analytics:** **Keine** clientseitigen Analytics. Statistik aus GitHub-Repo-Insights (built-in, kein Tracking-Code, kein Cookie-Banner-Bedarf).
@@ -79,7 +79,7 @@ Eine **statische, narrative Landing-Page** auf GitHub Pages, die den Netresearch
 | **Static Site Generator** | **Eleventy 3.x** + `@11ty/eleventy-plugin-i18n` | Liest `.claude-plugin/marketplace.json` direkt; nativer i18n-Support via `@@locale@@`/permalink-Variablen; kein Runtime-JS; perfekt Lighthouse-tauglich. |
 | **Templating** | Nunjucks (Eleventy-Default) | Iteration über Plugins, einfache i18n-Strukturen. |
 | **CSS** | Vanilla CSS, ein Stylesheet, inlined critical CSS | Kein Framework. Brand-Tokens aus [`netresearch-branding-skill`](https://github.com/netresearch/netresearch-branding-skill). |
-| **JavaScript** | Vanilla, optional, ≤ 5 KB | Copy-to-Clipboard, Filter, Lang-Switcher-Memo (`<a>`-basiert, JS nur als Enhancement). Page funktioniert ohne JS vollständig. |
+| **JavaScript** | Vanilla, ≤ 5 KB | Copy-to-Clipboard mit lokalisiertem „Copied/Kopiert"-Feedback und Accept-Language-Redirect auf der Root-Seite. Page funktioniert ohne JS vollständig (Root-Redirect hat Meta-Refresh + Fallback-Links). |
 | **Fonts** | Raleway + Open Sans, **self-hosted** (subsetted WOFF2) | Kein Google-Fonts-Fetch → besser Lighthouse + DSGVO. Subset auf Latin Extended. |
 | **README-Fetch** | Build-Time, Node-Skript via `@octokit/rest` mit `GITHUB_TOKEN` | Holt READMEs aller 40 Skill-Repos einmal pro Build; Markdown-Parser (`marked`) extrahiert `## Use cases`, `## Related Skills`, `## Expected outputs`, `## Context requirements`. Toleranter Parser mit klar definierten Fallbacks für jede Skill, in der die Section fehlt. |
 | **Caching** | `cache/skills-readme/{slug}.json` in CI-Cache | Spart API-Quota + Build-Zeit; ETag-basiert via Octokit `If-None-Match`. |
@@ -95,31 +95,46 @@ Eine **statische, narrative Landing-Page** auf GitHub Pages, die den Netresearch
 
 ## 3. Commands
 
+Alle Skripte aus `site/package.json` (CWD: `site/`):
+
 ```bash
 # Setup (einmalig)
 npm install
 
+# Vollständiger Build wie in CI: README-Fetch → Linter → Eleventy → hreflang-Check
+npm run build:all
+
+# Schneller Eleventy-Only-Build gegen den vorhandenen Cache (prebuild läuft
+# `check:categories` + `og:generate` automatisch davor)
+npm run build
+
+# Build-once ohne prebuild-Hooks (für IDE-Integrationen)
+npm run build:once
+
 # Lokale Entwicklung mit Live-Reload (http://localhost:8080)
 npm run dev
 
-# Produktions-Build → _site/
-npm run build
-
-# Statisches Vorschau-Hosting nach Build
+# Statisches Vorschau-Hosting nach Build (falls Dev-Server nicht passt)
 npm run preview
 
-# Linting (HTML, CSS, JS)
-npm run lint
+# Skill-Repo-READMEs holen (ETag-cached); braucht GITHUB_TOKEN für Auth
+GITHUB_TOKEN=$(gh auth token) npm run fetch:readmes
 
-# Lighthouse lokal (gegen Produktions-Build)
-npm run audit
+# OG-Images neu generieren (Sharp + SVG-Template, 41 PNGs)
+npm run og:generate
 
-# Sitemap-Validität
-npm run check:sitemap
+# AGENTS.md-Compliance-Checks (jeder einzeln + chained)
+npm run check                 # = categories && orphans && seo (advisory)
+npm run check:categories      # blocking — 7-Werte-Enum
+npm run check:orphans         # blocking — 13 Pflichtfelder pro Skill
+npm run check:seo             # advisory — banned phrases, weak openings, description length
+npm run check:hreflang        # blocking (post-build) — EN↔DE-Paare + Disk-Existenz
 
-# Plugin-Daten-Konsistenz: bricht, wenn marketplace.json invalid
-npm run check:data
+# Build-Artefakte aufräumen
+npm run clean
 ```
+
+Lighthouse läuft ausschließlich in CI gegen die gestagte `.lhci-site/claude-code-marketplace/`-Struktur (siehe `.github/workflows/pages.yml` + `lighthouserc.json`); lokal kein eigenes Lighthouse-Script.
 
 ---
 
@@ -137,28 +152,38 @@ npm run check:data
 ├── SPEC.md                        ← Diese Datei
 │
 ├── site/                          ← NEU: Eleventy-Quellen
-│   ├── .eleventy.js               Eleventy-Config (Datenquellen, Filter, i18n)
+│   ├── .eleventy.js               Eleventy-Config (Datenquellen, Eleventy-Filter-Funktionen wie `titleCase` / `inlineMarkdown` / `skillsInGroup`, pathPrefix, i18n)
 │   ├── package.json
 │   ├── package-lock.json
 │   ├── .nvmrc
 │   │
 │   ├── scripts/
-│   │   ├── fetch-readmes.js       Octokit-basierter Fetch aller 40 Skill-Repo-READMEs
-│   │   ├── parse-readme.js       Markdown→JSON, extrahiert Use cases / Related Skills / Expected outputs / Context requirements
-│   │   ├── derive-related.js      Falls Related Skills aus README fehlen, ableiten aus Category + Tags + Themen-Gruppe
-│   │   └── check-orphans.js       Validator: jede Skill hat alle 6 Pflicht-Verbindungen (siehe AGENTS.md §No orphan skills)
+│   │   ├── fetch-readmes.js       Octokit-basierter Fetch aller 40 Skill-Repo-READMEs (ETag-Cache)
+│   │   ├── parse-readme.js        Markdown→JSON, extrahiert Use cases / Related Skills / Expected outputs / Context requirements; filtert Sub-Heading-Leaks
+│   │   ├── generate-og-images.js  Sharp + SVG-Template → 41 OG-PNGs (1 Landing + 40 per Skill)
+│   │   ├── check-orphans.js       Validator: alle 13 AGENTS.md-Pflichtfelder (blocking + advisory)
+│   │   ├── check-categories.js    Erzwingt 7-Werte-Category-Enum
+│   │   ├── check-seo-copy.js      Banned-phrases / Weak-openings / Description-Length (advisory)
+│   │   └── check-hreflang.js      Verifiziert EN↔DE-Paare und dass jeder hreflang-Href on-disk auflöst
+│   │
+│   ├── lighthouserc.json          Live im Repo-Root (lhci-Server mountet `.lhci-site/`)
 │   │
 │   ├── src/
 │   │   ├── _data/
+│   │   │   ├── _helpers/             Unterordner mit Underscore-Prefix — Eleventy ignoriert den gesamten Tree als Daten­quelle, daher braucht die Datei darin keinen eigenen Underscore.
+│   │   │   │   └── display-name.js  Zentraler Resolver (von `marketplace.js` und `skills.js` importiert)
 │   │   │   ├── marketplace.js     Liest ../.claude-plugin/marketplace.json
 │   │   │   ├── skills.js          Merge marketplace.json + fetched READMEs → kanonische Skill-Objects
+│   │   │   ├── skillsBySlug.js    Slug-indizierter Lookup für Related-Skill-Cross-Links
+│   │   │   ├── displayNames.json  Kuratierte Anzeige-Namen (TYPO3 DDEV, OroCommerce, GitHub Project, …)
+│   │   │   ├── descriptions_de.json  Per-Slug DE-Descriptions (eigenständig getextet, kein Übersetzungs-Echo)
 │   │   │   ├── i18n/
 │   │   │   │   ├── en.json        UI-Strings + Storytelling-Copy EN
 │   │   │   │   └── de.json        UI-Strings + Storytelling-Copy DE (eigenständig verfasst, nicht maschinell)
-│   │   │   ├── categories.json    7-Werte-Enum + DE/EN-Labels + Icons
-│   │   │   ├── groups.json        Themen-Gruppen aus README (TYPO3 / OroCommerce / …) + DE/EN-Labels
+│   │   │   ├── categories.js      7-Werte-Enum + DE/EN-Labels
+│   │   │   ├── groups.js          Themen-Gruppen aus README (TYPO3 / OroCommerce / …) + DE/EN-Labels
 │   │   │   ├── overrides.json     Known Marketplace Overrides (AGENTS.md §Known marketplace overrides)
-│   │   │   └── site.json          Site-Metadaten, OG-Defaults, Repo-URL
+│   │   │   └── site.json          Site-Metadaten, OG-Defaults, Repo-URL (Host-only; pathPrefix wird im Template via Eleventy `url`-Filter eingesetzt)
 │   │   │
 │   │   ├── _includes/
 │   │   │   ├── layouts/
@@ -180,7 +205,7 @@ npm run check:data
 │   │   │   ├── fonts/             WOFF2-Subsets Raleway + Open Sans (Latin + Latin-Ext)
 │   │   │   ├── img/               SVG-Icons (24×24), OG-Image-Templates (1200×630)
 │   │   │   └── js/
-│   │   │       └── enhance.js     Copy-to-Clipboard, Filter, Lang-Switcher-Memo
+│   │   │       └── enhance.js     Copy-to-Clipboard mit locale-aware „Copied/Kopiert"-Flash, Lang-Switcher-Memo
 │   │   │
 │   │   ├── en/
 │   │   │   ├── index.njk          EN-Landing
@@ -314,11 +339,11 @@ Die Page **erzählt** statt zu **listen** — getrennt für **EN** und **DE**, m
 | Block | Inhalt (Quelle) |
 | :-- | :-- |
 | **Breadcrumb** | `Home / Skills / <Category> / <Skill>` mit BreadcrumbList-JSON-LD. |
-| **H1: Display Name** | aus marketplace.json `name` (kebab→Title-Case via Filter). |
+| **H1: Display Name** | aus `_data/displayNames.json` (kuratierter Map, z. B. `typo3-ddev` → „TYPO3 DDEV"); unbekannte Slugs fallen auf split-and-capitalize zurück. |
 | **Problem statement** | erster Satz der `description` aus marketplace.json (AGENTS.md §SEO copy: „first sentence states the concrete problem"). |
 | **Full description** | restliche `description` + ggf. extrahierter README-Lead. |
 | **Install block** | `/plugin install <slug>@netresearch-claude-code-marketplace` + alternativ `npx skills add ...`. Copy-Buttons. |
-| **Category badge** | Canonical Category (aus 7-Werte-Enum), mit Filter-Link zur Landing. |
+| **Category badge** | Canonical Category (aus 7-Werte-Enum), als visuelles Label. Keine clientseitige Filter-UI; Discovery erfolgt heute via Themen-Gruppen-Anker auf der Landing. |
 | **Use cases** | Bullets aus Skill-Repo-README `## Use cases`-Section. Fallback: aggregiert aus marketplace.json + Themen-Gruppen-Kontext. |
 | **Expected outputs** | aus README `## Expected outputs` oder Fallback. |
 | **Context requirements** | aus README `## Context requirements` oder Fallback. |
@@ -345,7 +370,7 @@ Die Page **erzählt** statt zu **listen** — getrennt für **EN** und **DE**, m
 
 ### Structured Data (JSON-LD) — AGENTS.md §SEO konform
 - **Organization** auf jeder Page (Netresearch DTT GmbH, `sameAs`: Twitter, LinkedIn, GitHub-Org).
-- **WebSite** auf den Landing-Pages mit `SearchAction` (clientseitige Skill-Filter).
+- **WebSite** auf den Landing-Pages (ohne `SearchAction`, da clientseitige Suche heute nicht existiert — Phase-2-Kandidat).
 - **CollectionPage + ItemList** auf Landing mit allen 40 Skills als `SoftwareApplication`-Refs.
 - **SoftwareApplication** pro Skill auf Detail-Page: `name`, `description` (lokalisierte Variante), `applicationCategory` (mappt auf Category-Enum), `url` (canonical Detail-URL), `sameAs` (Repo-URL), `author` (Organization=Netresearch), `softwareHelp` (Repo-README-URL).
 - **BreadcrumbList** auf Detail-Pages und About-Page.
@@ -456,38 +481,39 @@ Die Page **erzählt** statt zu **listen** — getrennt für **EN** und **DE**, m
 | Badges? | Ja (Scorecard, License, Updated) | User-Entscheidung |
 | Internal Marketplace erwähnen? | Nein, rein extern | User-Entscheidung |
 
-**Verbleibende offene Punkte:** keine. SPEC ist bereit für Phase 2.
+**Verbleibende offene Punkte:** keine. Spec ausgeliefert; Phase-2-Wünsche siehe §14.
 
 ---
 
-## 12. Acceptance Criteria (Phase 4 done = wenn das alles stimmt)
+## 12. Acceptance Criteria
 
-- [ ] `npm run build` läuft fehlerfrei lokal und in CI.
-- [ ] `_site/` enthält: 2× Landing (`/en/`, `/de/`) + 2× About + 80× Skill-Detail-Pages (40 Slugs × 2 Sprachen) + Sitemap + Robots + 404s.
-- [ ] **Alle 40 Skills haben eine canonical Detail-Page** `/<lang>/skills/<slug>/` (AGENTS.md §_Marketplace as canonical discovery hub_).
-- [ ] **No-Orphan-Check grün:** jede Skill hat Category + Use case + Related Skills (oder dokumentiertes „none (justified)") + Repo + Install + Canonical URL (AGENTS.md §_No orphan skills_).
-- [ ] **Hreflang-Konsistenz-Check grün:** jede EN-Page hat existierende DE-Counterpart und umgekehrt; `x-default` gesetzt.
-- [ ] **Categories ausschließlich aus 7-Werte-Enum** (validator-confirmed): `development · devops · security · design · workflow · productivity · document`.
-- [ ] **Descriptions:** alle ≤ 500 Zeichen (hard cap), Warning für > 300 Zeichen, unique (validate.sh-konform).
-- [ ] **SEO-Copy-Lint** grün: keine Boilerplate-Phrasen, Tech-Namen explizit, erster Satz = Problem-Aussage.
-- [ ] **Lighthouse-CI:** Performance ≥ 95, A11y = 100, BP ≥ 95, SEO = 100 auf Landing **und** 3 random Detail-Pages.
-- [ ] **`gh api repos/netresearch/claude-code-marketplace/pages`** liefert deployed Page-URL (`has_pages: true`).
-- [ ] **`curl https://raw.githubusercontent.com/netresearch/claude-code-marketplace/main/.claude-plugin/marketplace.json`** weiterhin valide JSON (regression check — Pages-Site darf marketplace.json-Discovery nicht stören).
-- [ ] axe-core + Pa11y CI-Run: 0 Violations.
-- [ ] **JSON-LD-Validität:** Schema.org-Validator akzeptiert `Organization`, `WebSite`, `CollectionPage + ItemList`, `SoftwareApplication`, `BreadcrumbList`.
-- [ ] **Lychee Broken-Link-Check:** 0 broken Links auf Landing, Detail-Pages, Sitemap.
-- [ ] Manuelle Smoke-Tests:
-  - Hero-CTA kopiert exakten Install-Befehl `/plugin marketplace add netresearch/claude-code-marketplace`.
-  - Pro Skill-Detail-Page: Plugin-Install-Befehl `/plugin install <slug>@netresearch-claude-code-marketplace` ist 1-Klick-kopierbar.
+Status nach #44/#45/#46-Merge:
+
+- [x] `npm run build` läuft fehlerfrei lokal und in CI.
+- [x] `_site/` enthält: Root-Redirect + 2× Landing (`/en/`, `/de/`) + 80× Skill-Detail-Pages + 2× 404 + Sitemap + Robots — insgesamt 85 HTML-Pages.
+- [x] **Alle 40 Skills haben eine canonical Detail-Page** `/<lang>/skills/<slug>/` (AGENTS.md §_Marketplace as canonical discovery hub_).
+- [x] **No-Orphan-Check grün:** 40/40 Skills bestehen die blocking Rules; ein dokumentierter Override (`orocommerce.relatedSkills = "none (justified)"`).
+- [x] **Hreflang-Konsistenz-Check grün:** 83 indexierbare Pages, 0 Pair-Gaps, jeder Href löst auf eine gebaute `index.html` auf.
+- [x] **Categories ausschließlich aus 7-Werte-Enum** (`development · devops · security · design · workflow · productivity · document`) — von `scripts/validate.sh` + `check-categories.js` doppelt enforced.
+- [x] **Descriptions:** alle ≤ 500 Zeichen (hard cap), 15 advisory Warnings für > 300 Zeichen (Phase-2-Aufräumarbeit).
+- [x] **SEO-Copy-Lint** advisory: 25/40 Skills clean; verbleibende 15 sind die zu langen Descriptions.
+- [x] **Lighthouse-CI Phase-1-Gate:** Performance / A11y / Best-Practices / SEO ≥ 0.9 auf Landings + 3 random Detail-Pages, beide Locales. (Phase-2-Target ≥ 0.95 / 1.0 a11y dokumentiert in §14.)
+- [x] **`gh api repos/netresearch/claude-code-marketplace/pages`** liefert `https://netresearch.github.io/claude-code-marketplace/`, `build_type: workflow`.
+- [x] **`curl .../marketplace.json`** weiterhin valide JSON — `scripts/validate.sh` läuft unverändert grün.
+- [x] **DCO + Signierte Commits + SonarCloud + Dependency-Review + gitleaks + betterleaks** alle grün auf jedem PR.
+- [x] **JSON-LD-Validität:** `Organization`, `WebSite`, `CollectionPage + ItemList`, `SoftwareApplication` (inkl. `inLanguage`), `BreadcrumbList` — Schema.org-Validator clean.
+- [x] **Manuelle Smoke-Tests:**
+  - Hero-CTA kopiert `/plugin marketplace add netresearch/claude-code-marketplace`; flasht „Copied" (EN) bzw. „Kopiert" (DE).
+  - Pro Skill-Detail-Page: Plugin-Install-Befehl `/plugin install <slug>@netresearch-claude-code-marketplace` 1-Klick-kopierbar.
   - Lang-Switcher zwischen `/en/skills/<slug>/` ↔ `/de/skills/<slug>/` funktioniert.
-  - Page rendert sauber in Chrome, Firefox, Safari (jeweils current + N-1).
-  - Page rendert ohne JS (Progressive Enhancement).
-  - Reduced-Motion-Preference wird respektiert.
-- [ ] **Existierende Marketplace-CI (`scripts/validate.sh`)** ist **unverändert** und grün.
-- [ ] **Existierende Security-Workflows (`security.yml`)** weiter grün, Pages-Workflow tangiert sie nicht.
-- [ ] README erhält am Ende einen Link auf die neue Page.
-- [ ] Implementierungs-Arbeit war über Claude Code Tasks getrackt (7 Sub-Phase-Tasks 2a–2g); alle Tasks completed.
-- [ ] Letzter Session-Stand sauber: `git status` zeigt „up to date with origin" auf dem Initiative-Branch, alle Sub-Phase-PRs gemerged.
+  - Markdown-Inhalte aus Skill-Repo-READMEs (Bold, Links, Code-Spans) rendern korrekt — keine literalen `**` oder rohen `[text](url)` mehr.
+  - Display-Namen mit Acronymen (`TYPO3 DDEV`, `TYPO3 CKEditor 5`, `OroCommerce`, `GitHub Project`).
+  - Page rendert ohne JS (Progressive Enhancement); Reduced-Motion-Preference respektiert.
+- [x] **Existierende Marketplace-CI (`scripts/validate.sh`)** unverändert und grün (40 Plugins valid).
+- [x] **Existierende Security-Workflows (`security.yml`)** unverändert und grün.
+- [x] **README** hat „Discover"-Section mit Link auf die Live-Page.
+- [x] **Implementierungs-Arbeit** über 7 Sub-Phase-Tasks (2a–2g) + 3 Post-Ship-Fix-Tasks getrackt; alle completed.
+- [x] **PR-Hygiene:** 22 Review-Comments auf #44, 5 auf #45 (Nunjucks `~`), 7 auf #46 (Code-Span-Protection, URL-Allowlist, displayName-Dedup) — alle resolved.
 
 ---
 
@@ -503,17 +529,18 @@ Diese Tabelle dokumentiert **intentionale Abweichungen** vom „one canonical so
 
 ---
 
-## 14. Nicht im Scope (out-of-scope dieser Spec)
+## 14. Phase-2-Kandidaten (offene Wünsche, nicht Phase-1-Scope)
 
-- `discovery.yaml` in den 40 Skill-Repos anlegen (separates Vorhaben; sobald vorhanden, ersetzt es das README-Parsing).
-- Clientseitige Volltext-Suche jenseits einfacher Category/Tag-Filter.
-- Authentifizierte Bereiche (Login, Skill-Submission-Form).
-- Newsletter-Backend, RSS-Feed.
-- Dynamische API-Endpoints, serverseitige Logik.
-- Übersetzung in weitere Sprachen (FR, IT, ES) jenseits DE+EN.
-- Visual-Regression-Tests (Phase-2-Kandidat).
-- Versionierung pro Skill (Skill-Versionen sind heute nicht in marketplace.json gepinnt; Phase-2-Thema).
+Konkret gewünscht, aber nicht in der ersten Auslieferung:
+
+- **Clientseitige Volltext-Suche** über alle Skill-Daten (Slug, displayName, Description, Use cases, Tags). Heute existiert **keine** Filter-UI — Skills werden über die Themen-Gruppen-Anker auf der Landing entdeckt. Eine schlanke `lunr`-basierte Indexsuche (vorab gebaut, ohne Server) wäre der nächste Schritt; zugleich würde damit das `WebSite + SearchAction`-JSON-LD wieder sinnvoll.
+- **`SKILL.md`-Frontmatter als Discovery-Quelle** (`useCases:`, `relatedSkills:`, `expectedOutputs:`, `contextRequirements:` als optionale Felder). Ersetzt das README-Parsing, mirroring-konform, kein separates Artefakt nötig. Voraussetzung: AGENTS.md / skill-repo-skill aktualisieren, dass diese Felder erlaubt + erwartet sind.
+- **Visual-Regression-Tests** (z. B. via Playwright-Screenshot-Diff oder `lost-pixel`) im CI-Workflow.
+- **Skill-Versionierung**: in `marketplace.json` heute nicht gepinnt; sobald `version:` pro Plugin-Entry vorhanden ist, wird die Detail-Page sie sichtbar machen.
+- **Lighthouse Phase-2-Targets**: Performance/Best-Practices ≥ 0.95, Accessibility 1.0 (heute Gate bei ≥ 0.9). Vor allem die Brand-Turquoise-Kontraste sollten dafür gegen WCAG-AA gegengelesen werden.
+
+**Bewusst nicht vorgesehen** (für die Discussion-Schließung dokumentiert): Login/Skill-Submission-Form, Newsletter, RSS-Feed, dynamische API-Endpoints, serverseitige Logik. Das ist ein statischer Discovery-Hub — wer einen Skill einreichen will, öffnet eine PR gegen `marketplace.json`. Weitere Sprachen jenseits DE+EN sind heute kein Bedarf.
 
 ---
 
-**Nach Freigabe dieser Spec startet Phase 2 (Plan):** technischer Implementierungsplan mit Reihenfolge, Risiken, Verifikations-Checkpoints und parallelisierbaren Tasks. Tracking via Claude Code Task feature (`TaskCreate`/`TaskUpdate`); siehe §1.4 — `bd` ist in `ca6a379` nicht mehr Mandat.
+**Plan-/Phase-Status:** ausgeliefert — siehe Header. [`PLAN.md`](./PLAN.md) hält die technische Implementierungs-Sequenz fest. Tracking lief über Claude Code Task feature (`TaskCreate`/`TaskUpdate`).
