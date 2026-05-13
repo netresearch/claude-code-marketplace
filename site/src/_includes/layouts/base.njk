@@ -6,6 +6,7 @@
     <title>{{ title or site.title }}</title>
     <meta name="description" content="{{ description or site.tagline }}" />
     <meta name="theme-color" content="#2F99A4" />
+    {% if robots %}<meta name="robots" content="{{ robots }}" />{% endif %}
 
     <link rel="canonical" href="{{ site.url }}{{ page.url }}" />
     {% if hreflangAlternate %}

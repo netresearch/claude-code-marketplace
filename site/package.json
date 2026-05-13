@@ -10,6 +10,7 @@
     "check:orphans": "node scripts/check-orphans.js",
     "check:categories": "node scripts/check-categories.js",
     "check:seo": "node scripts/check-seo-copy.js",
+    "check:hreflang": "node scripts/check-hreflang.js",
     "check": "npm run check:categories && npm run check:orphans && npm run check:seo",
     "prebuild": "npm run check:categories",
     "build": "eleventy",
