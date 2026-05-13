@@ -95,31 +95,46 @@ Eine **statische, narrative Landing-Page** auf GitHub Pages, die den Netresearch
 
 ## 3. Commands
 
+Alle Skripte aus `site/package.json` (CWD: `site/`):
+
 ```bash
 # Setup (einmalig)
 npm install
 
+# Vollständiger Build wie in CI: README-Fetch → Linter → Eleventy → hreflang-Check
+npm run build:all
+
+# Schneller Eleventy-Only-Build gegen den vorhandenen Cache (prebuild läuft
+# `check:categories` + `og:generate` automatisch davor)
+npm run build
+
+# Build-once ohne prebuild-Hooks (für IDE-Integrationen)
+npm run build:once
+
 # Lokale Entwicklung mit Live-Reload (http://localhost:8080)
 npm run dev
 
-# Produktions-Build → _site/
-npm run build
-
-# Statisches Vorschau-Hosting nach Build
+# Statisches Vorschau-Hosting nach Build (falls Dev-Server nicht passt)
 npm run preview
 
-# Linting (HTML, CSS, JS)
-npm run lint
+# Skill-Repo-READMEs holen (ETag-cached); braucht GITHUB_TOKEN für Auth
+GITHUB_TOKEN=$(gh auth token) npm run fetch:readmes
 
-# Lighthouse lokal (gegen Produktions-Build)
-npm run audit
+# OG-Images neu generieren (Sharp + SVG-Template, 41 PNGs)
+npm run og:generate
 
-# Sitemap-Validität
-npm run check:sitemap
+# AGENTS.md-Compliance-Checks (jeder einzeln + chained)
+npm run check                 # = categories && orphans && seo (advisory)
+npm run check:categories      # blocking — 7-Werte-Enum
+npm run check:orphans         # blocking — 13 Pflichtfelder pro Skill
+npm run check:seo             # advisory — banned phrases, weak openings, description length
+npm run check:hreflang        # blocking (post-build) — EN↔DE-Paare + Disk-Existenz
 
-# Plugin-Daten-Konsistenz: bricht, wenn marketplace.json invalid
-npm run check:data
+# Build-Artefakte aufräumen
+npm run clean
 ```
+
+Lighthouse läuft ausschließlich in CI gegen die gestagte `.lhci-site/claude-code-marketplace/`-Struktur (siehe `.github/workflows/pages.yml` + `lighthouserc.json`); lokal kein eigenes Lighthouse-Script.
 
 ---
 
@@ -155,7 +170,7 @@ npm run check:data
 │   │
 │   ├── src/
 │   │   ├── _data/
-│   │   │   ├── _helpers/
+│   │   │   ├── _helpers/             Unterordner mit Underscore-Prefix — Eleventy ignoriert den gesamten Tree als Daten­quelle, daher braucht die Datei darin keinen eigenen Underscore.
 │   │   │   │   └── display-name.js  Zentraler Resolver (von `marketplace.js` und `skills.js` importiert)
 │   │   │   ├── marketplace.js     Liest ../.claude-plugin/marketplace.json
 │   │   │   ├── skills.js          Merge marketplace.json + fetched READMEs → kanonische Skill-Objects
@@ -168,7 +183,7 @@ npm run check:data
 │   │   │   ├── categories.js      7-Werte-Enum + DE/EN-Labels
 │   │   │   ├── groups.js          Themen-Gruppen aus README (TYPO3 / OroCommerce / …) + DE/EN-Labels
 │   │   │   ├── overrides.json     Known Marketplace Overrides (AGENTS.md §Known marketplace overrides)
-│   │   │   └── site.json          Site-Metadaten, OG-Defaults, Repo-URL (Host-only, pathPrefix flows via `\| url`)
+│   │   │   └── site.json          Site-Metadaten, OG-Defaults, Repo-URL (Host-only; pathPrefix wird im Template via Eleventy `url`-Filter eingesetzt)
 │   │   │
 │   │   ├── _includes/
 │   │   │   ├── layouts/

@@ -228,7 +228,7 @@ Nach jeder Sub-Phase MUSS folgender Mini-Audit grün sein, **bevor** die nächst
 
 ## 7. Locked Decisions (2026-05-13, User-Mandat „mach wie du denkst")
 
-Folgende Punkte sind nach User-Freigabe fixiert und gehen so in Phase 3 (Tasks):
+Folgende Punkte wurden vor Phase 3 fixiert und sind im ausgelieferten Stand umgesetzt:
 
 | # | Entscheidung | Begründung |
 | :-- | :-- | :-- |
@@ -243,16 +243,14 @@ Folgende Punkte sind nach User-Freigabe fixiert und gehen so in Phase 3 (Tasks):
 
 ---
 
-## 8. Vor-Phase-3-Setup-Checkliste
+## 8. Vor-Phase-3-Setup-Checkliste (historisch, abgehakt 2026-05-13)
 
-Bevor Phase 3 (Tasks-Erstellung) startet:
-
-- [ ] User hat diesen Plan freigegeben oder konkret korrigiert.
-- [ ] Frühe Entscheidungs-Punkte (§7) aufgelöst.
-- [ ] `gh` CLI authentifiziert (`gh auth status`).
-- [ ] Branch erstellt: `feat/github-pages-storytelling` (oder vom User vorgegeben).
-- [ ] SPEC.md + PLAN.md committet im PR-Branch + DCO-Sign-off + signiert.
-- [ ] PR gegen `main` eröffnet als Tracking-PR für die ganze Initiative (oder pro Sub-Phase ein eigenes PR — auch eine §7-Entscheidung).
+- [x] User hat den Plan freigegeben (Antwort „mach wie du denkst").
+- [x] Frühe Entscheidungs-Punkte (§7) aufgelöst.
+- [x] `gh` CLI authentifiziert.
+- [x] Branch erstellt: `feat/github-pages-storytelling`.
+- [x] SPEC.md + PLAN.md committet, DCO-Sign-off + ED25519-signiert.
+- [x] PR #44 als Tracking-PR für die ganze Initiative — sub-phase-Commits sind dort als atomare Commits gelandet (nicht eigene Sub-PRs, gemäß User-Mandat zur Vereinfachung).
 
 ---
 
@@ -270,4 +268,4 @@ Nach erfolgreicher Auslieferung dokumentierte offene Punkte (siehe SPEC §14 fü
 
 ---
 
-**Nach Freigabe dieses Plans:** Phase 3 erstellt 7 Sub-Phase-Tasks via Claude Code Task feature (`TaskCreate`), jeweils mit Acceptance Criteria, Verifikations-Schritt und betroffenen Files.
+**Implementierungs-Pfad (historisch):** Phase 3 erstellte 7 Sub-Phase-Tasks (2a–2g) via Claude Code Task feature und führte sie in [PR #44](https://github.com/netresearch/claude-code-marketplace/pull/44) zusammen aus; [PR #45](https://github.com/netresearch/claude-code-marketplace/pull/45) (pathPrefix) und [PR #46](https://github.com/netresearch/claude-code-marketplace/pull/46) (Rendering + i18n descriptions + Filter-Hardening) sind die Post-Ship-Korrekturen.
