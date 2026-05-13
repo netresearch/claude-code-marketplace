@@ -47,13 +47,29 @@ const SECTION_ALIASES = {
   tags: ["tags", "topics", "keywords"],
 };
 
+const HEADING_TRIM_CHARS = new Set([" ", "\t", "#", "*", "_", ">", "•", "➜", "→", "-"]);
+
+function parseHeading(line) {
+  let i = 0;
+  while (i < line.length && line[i] === "#") i++;
+  if (i < 2 || i > 4) return null;
+  if (i >= line.length || line[i] !== " " && line[i] !== "\t") return null;
+  let j = i;
+  while (j < line.length && (line[j] === " " || line[j] === "\t")) j++;
+  if (j >= line.length) return null;
+  let end = line.length;
+  while (end > j && (line[end - 1] === " " || line[end - 1] === "\t")) end--;
+  return { level: i, text: line.slice(j, end) };
+}
+
 function normalizeHeading(raw) {
-  return raw
-    .toLowerCase()
-    .replace(/^[\s#*_>•➜→\-]+/, "")
-    .replace(/[\s#*_>•➜→\-]+$/, "")
-    .replace(/[^\w\s/]/g, "")
-    .trim();
+  let s = raw.toLowerCase();
+  let start = 0;
+  let end = s.length;
+  while (start < end && HEADING_TRIM_CHARS.has(s[start])) start++;
+  while (end > start && HEADING_TRIM_CHARS.has(s[end - 1])) end--;
+  s = s.slice(start, end);
+  return s.replace(/[^\w\s/]/g, "").trim();
 }
 
 function findSection(markdown, aliases) {
@@ -65,10 +81,10 @@ function findSection(markdown, aliases) {
 
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i];
-    const headingMatch = line.match(/^(#{2,4})\s+(.+?)\s*$/);
+    const headingMatch = parseHeading(line);
     if (headingMatch) {
-      const level = headingMatch[1].length;
-      const heading = normalizeHeading(headingMatch[2]);
+      const level = headingMatch.level;
+      const heading = normalizeHeading(headingMatch.text);
 
       if (captureLevel !== null) {
         if (level <= captureLevel) {
@@ -91,13 +107,26 @@ function findSection(markdown, aliases) {
   return captured.join("\n").trim() || null;
 }
 
+function parseBullet(line) {
+  let i = 0;
+  while (i < line.length && (line[i] === " " || line[i] === "\t")) i++;
+  if (i >= line.length) return null;
+  if (line[i] !== "-" && line[i] !== "*" && line[i] !== "+") return null;
+  if (i + 1 >= line.length || (line[i + 1] !== " " && line[i + 1] !== "\t")) return null;
+  let j = i + 1;
+  while (j < line.length && (line[j] === " " || line[j] === "\t")) j++;
+  let end = line.length;
+  while (end > j && (line[end - 1] === " " || line[end - 1] === "\t")) end--;
+  return line.slice(j, end);
+}
+
 function bulletsFromBlock(block) {
   if (!block) return [];
   return block
     .split(/\r?\n/)
-    .map((line) => line.match(/^\s*[-*+]\s+(.+?)\s*$/))
-    .filter(Boolean)
-    .map((match) => match[1].replace(/`/g, "").trim())
+    .map(parseBullet)
+    .filter((text) => text !== null)
+    .map((text) => text.replace(/`/g, "").trim())
     .filter((text) => text.length > 0);
 }
 
