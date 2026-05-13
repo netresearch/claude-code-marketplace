@@ -132,6 +132,12 @@ Netresearch also maintains an internal marketplace for proprietary skills:
 /plugin marketplace add git@git.netresearch.de:coding-ai/marketplace.git
 ```
 
+## Discover
+
+Browse the full catalog with per-skill detail pages on the marketplace website:
+
+**[netresearch.github.io/claude-code-marketplace](https://netresearch.github.io/claude-code-marketplace/)** — DE + EN, canonical landing per skill, search by category.
+
 ---
 
 **Maintained by:** [Netresearch DTT GmbH](https://www.netresearch.de), Leipzig
