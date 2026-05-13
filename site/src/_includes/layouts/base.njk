@@ -46,11 +46,11 @@
   </head>
   <body>
     <header class="site-header">
-      <a class="site-header__brand" href="{{ ('/' + (lang or 'en') + '/') | url }}">
+      <a class="site-header__brand" href="{{ ('/' ~ (lang or 'en') ~ '/') | url }}">
         <strong>Netresearch</strong> Skills Marketplace
       </a>
       <nav class="site-header__nav" aria-label="Primary">
-        <a href="{{ ('/' + (lang or 'en') + '/') | url }}">{{ t.nav.home }}</a>
+        <a href="{{ ('/' ~ (lang or 'en') ~ '/') | url }}">{{ t.nav.home }}</a>
         {% if hreflangAlternate %}
           <a href="{{ hreflangAlternate.url | url }}" hreflang="{{ hreflangAlternate.lang }}" rel="alternate">{{ t.nav.switchLang }}</a>
         {% endif %}
