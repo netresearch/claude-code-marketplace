@@ -1,0 +1,8 @@
+{% macro installBlock(id, command, copyLabel, copiedLabel) %}
+<div class="install-block">
+  <pre class="install-block__code" id="{{ id }}"><code>{{ command }}</code></pre>
+  <button type="button" class="copy-btn copy-btn--lg" data-copy-target="{{ id }}" data-copied-label="{{ copiedLabel }}" aria-label="{{ copyLabel }}">
+    <span class="copy-btn__label">{{ copyLabel }}</span>
+  </button>
+</div>
+{% endmacro %}

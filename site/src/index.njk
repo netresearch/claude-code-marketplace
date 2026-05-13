@@ -1,0 +1,32 @@
+---
+permalink: /index.html
+eleventyExcludeFromCollections: true
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="refresh" content="0; url=/en/" />
+    <link rel="canonical" href="https://netresearch.github.io/claude-code-marketplace/en/" />
+    <link rel="alternate" hreflang="en" href="https://netresearch.github.io/claude-code-marketplace/en/" />
+    <link rel="alternate" hreflang="de" href="https://netresearch.github.io/claude-code-marketplace/de/" />
+    <link rel="alternate" hreflang="x-default" href="https://netresearch.github.io/claude-code-marketplace/en/" />
+    <title>Netresearch Skills Marketplace</title>
+    <meta name="robots" content="noindex" />
+    <script>
+      // Progressive enhancement: respect user's browser language when available.
+      // Falls back gracefully to the EN meta-refresh above when JS is off.
+      (function () {
+        var lang = (navigator.language || "en").toLowerCase();
+        if (lang.indexOf("de") === 0) {
+          window.location.replace("/de/");
+        } else {
+          window.location.replace("/en/");
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <p>Redirecting to <a href="/en/">English</a> or <a href="/de/">Deutsch</a>…</p>
+  </body>
+</html>

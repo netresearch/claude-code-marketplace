@@ -1,0 +1,91 @@
+{
+  "nav": {
+    "home": "Home",
+    "skills": "Skills",
+    "about": "About",
+    "switchLang": "Deutsch"
+  },
+  "hero": {
+    "h1": "You ship code. Your agent should know your stack.",
+    "lead": "40 curated Agent Skills for TYPO3, PHP, Go, Docker, Jira, security, and documentation — portable across Claude Code, Cursor, Copilot, Codex, Gemini CLI, and 30+ other agents.",
+    "primaryCta": "Copy install command",
+    "secondaryCta": "Browse skills"
+  },
+  "problem": {
+    "h2": "Generic AI misses the conventions you ship against every day",
+    "items": [
+      {
+        "title": "TYPO3 conventions",
+        "body": "Generic agents don't know PSR-12 quirks, TCA, FlexForms, or how DDEV expects extensions to be wired."
+      },
+      {
+        "title": "Hardening expectations",
+        "body": "Supply-chain security, SBOMs, OpenSSF Scorecard, signed releases — not the defaults out of the box."
+      },
+      {
+        "title": "Operational shape",
+        "body": "Concourse pipelines, Matrix notifications, Jira workflows, Netresearch CI — generic suggestions need rework."
+      }
+    ]
+  },
+  "marketplace": {
+    "h2": "One install. Forty skills. Every supported agent.",
+    "stats": {
+      "skillsLabel": "curated skills",
+      "categoriesLabel": "categories",
+      "platformsLabel": "supported agents",
+      "platformsValue": "8+"
+    }
+  },
+  "categoriesSection": {
+    "h2": "Pick by what you ship",
+    "lead": "Skills grouped by the surfaces they touch. Categories are the AGENTS.md canonical enum; thematic groupings are surface for discovery."
+  },
+  "story": {
+    "h2": "Built by Netresearch",
+    "body1": "Netresearch DTT GmbH is a TYPO3 agency in Leipzig that ships production LMS, e-commerce, and enterprise CMS workloads daily. These skills aren't experiments — they are the patterns our engineers reach for on real client work.",
+    "body2": "We open-source the patterns we trust ourselves with. Every skill in this marketplace runs on at least one Netresearch project."
+  },
+  "howItWorks": {
+    "h2": "How to use it",
+    "steps": [
+      { "title": "1. Add the marketplace", "code": "/plugin marketplace add netresearch/claude-code-marketplace" },
+      { "title": "2. Install a skill", "code": "/plugin install typo3-conformance@netresearch-claude-code-marketplace" },
+      { "title": "3. Or use it from any agent", "code": "npx skills add https://github.com/netresearch/typo3-conformance-skill --skill typo3-conformance" }
+    ]
+  },
+  "openStandard": {
+    "h2": "Open standard",
+    "body": "Built on the Agent Skills spec — portable across Claude Code, Cursor, GitHub Copilot, OpenAI Codex, Gemini CLI, Amp, Goose, Roo Code, OpenCode, and 30+ more agents.",
+    "link": "Read the spec at agentskills.io"
+  },
+  "cta": {
+    "h2": "Use it. Improve it. Submit your own.",
+    "links": {
+      "star": "Star the repo",
+      "issue": "Open an issue",
+      "contribute": "Submit a skill"
+    }
+  },
+  "footer": {
+    "maintained": "Maintained by Netresearch DTT GmbH, Leipzig.",
+    "license": "Marketplace catalog: MIT. Skill content: CC-BY-SA-4.0."
+  },
+  "ui": {
+    "copyShort": "Copy",
+    "copyCopied": "Copied"
+  },
+  "skill": {
+    "install": "Install",
+    "copyInstall": "Copy install command",
+    "altInstall": "Or install for any Agent Skills-compatible CLI:",
+    "useCases": "What you can do with it",
+    "expectedOutputs": "What you get back",
+    "contextRequirements": "What it expects in your project",
+    "relatedSkills": "Related skills",
+    "noRelated": "No closely related skills in this marketplace yet — browse the full catalog for more.",
+    "tags": "Tags",
+    "viewSource": "View source repository",
+    "viewReadme": "Open full README"
+  }
+}

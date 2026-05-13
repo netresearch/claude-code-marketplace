@@ -1,0 +1,12 @@
+{
+  "_doc": "Known marketplace overrides per AGENTS.md §Known marketplace overrides. Add an entry whenever a required field cannot be sourced from marketplace.json or the skill repo README. Each entry must justify the deviation.",
+  "entries": [
+    {
+      "slug": "orocommerce",
+      "field": "relatedSkills",
+      "value": "none (justified)",
+      "reason": "Sole representative of the OroCommerce group; no closely related skills currently in this marketplace. Do not invent relationships for SEO (AGENTS.md §No orphan skills).",
+      "decided": "2026-05-13"
+    }
+  ]
+}
