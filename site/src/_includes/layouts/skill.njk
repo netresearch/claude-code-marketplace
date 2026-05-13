@@ -17,6 +17,17 @@ layout: layouts/base.njk
     <span class="skill-detail__category">{{ categoryLabel }}</span>
     <h1>{{ skill.displayName }}</h1>
     <p class="lead">{{ description }}</p>
+    {% if skill.version %}
+      <p class="skill-detail__version">
+        <a href="{{ skill.versionUrl }}" rel="noopener">
+          <span class="skill-detail__version-label">{{ t.skill.latestVersion }}</span>
+          <span class="skill-detail__version-tag">{{ skill.version }}</span>
+          {% if skill.versionPublishedAt %}
+            <time datetime="{{ skill.versionPublishedAt }}">{{ skill.versionPublishedAt | isoDate }}</time>
+          {% endif %}
+        </a>
+      </p>
+    {% endif %}
   </header>
 
   <section class="skill-detail__install" aria-labelledby="install-h">

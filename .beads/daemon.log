@@ -1,0 +1,247 @@
+time=2026-02-05T14:59:24.090+01:00 level=INFO msg="Daemon started (interval: %v, auto-commit: %v, auto-push: %v)" !BADKEY=5s !BADKEY=false !BADKEY=false
+time=2026-02-05T14:59:24.090+01:00 level=INFO msg="using database" path=/home/cybot/projects/netresearch-marketplace/.beads/beads.db
+time=2026-02-05T14:59:24.098+01:00 level=INFO msg="database opened" path=/home/cybot/projects/netresearch-marketplace/.beads/beads.db backend=sqlite freshness_checking=true
+time=2026-02-05T14:59:24.098+01:00 level=INFO msg="upgrading .beads/.gitignore"
+time=2026-02-05T14:59:24.098+01:00 level=WARN msg="failed to upgrade .gitignore" error="open .beads/.gitignore: no such file or directory"
+time=2026-02-05T14:59:24.100+01:00 level=INFO msg="Repository fingerprint validated: %s" !BADKEY=cd1f71c4
+time=2026-02-05T14:59:24.100+01:00 level=INFO msg="starting RPC server" socket=/home/cybot/projects/netresearch-marketplace/.beads/bd.sock
+time=2026-02-05T14:59:24.100+01:00 level=INFO msg="RPC server ready (socket listening)"
+time=2026-02-05T14:59:24.103+01:00 level=INFO msg="registered in global registry"
+time=2026-02-05T14:59:24.103+01:00 level=INFO msg="Starting %s..." !BADKEY="sync cycle"
+time=2026-02-05T14:59:24.104+01:00 level=INFO msg="Exported to JSONL"
+time=2026-02-05T14:59:26.649+01:00 level=INFO msg="Pulled from remote"
+time=2026-02-05T14:59:26.655+01:00 level=INFO msg="Imported from JSONL"
+time=2026-02-05T14:59:26.660+01:00 level=INFO msg="Sync cycle complete"
+time=2026-02-05T14:59:26.660+01:00 level=INFO msg="monitoring parent process" pid=0
+time=2026-02-05T14:59:26.660+01:00 level=INFO msg="using event-driven mode"
+time=2026-02-05T14:59:26.660+01:00 level=INFO msg="Auto-pull disabled: use 'git pull' manually to sync remote changes"
+time=2026-02-05T14:59:34.883+01:00 level=INFO msg="Mutation detected: %s %s" create=netresearch-marketplace-98b
+time=2026-02-05T14:59:35.384+01:00 level=INFO msg="Export triggered by mutation events"
+time=2026-02-05T14:59:35.384+01:00 level=INFO msg="Starting %s..." !BADKEY=export
+time=2026-02-05T14:59:35.385+01:00 level=INFO msg="Exported to JSONL"
+time=2026-02-05T14:59:35.385+01:00 level=INFO msg="Export complete"
+time=2026-02-05T14:59:35.385+01:00 level=INFO msg="JSONL file created: %s" !BADKEY=/home/cybot/projects/netresearch-marketplace/.beads/issues.jsonl
+time=2026-02-05T14:59:35.385+01:00 level=INFO msg="File change detected: %s" !BADKEY=/home/cybot/projects/netresearch-marketplace/.beads/issues.jsonl
+time=2026-02-05T14:59:36.386+01:00 level=INFO msg="Import triggered by file change"
+time=2026-02-05T14:59:36.387+01:00 level=INFO msg="Starting %s..." !BADKEY=auto-import
+time=2026-02-05T14:59:36.387+01:00 level=INFO msg="JSONL content changed, proceeding with %s..." !BADKEY=auto-import
+time=2026-02-05T14:59:36.388+01:00 level=INFO msg="⚠️  WARNING: Uncommitted local changes detected in %s" !BADKEY=/home/cybot/projects/netresearch-marketplace/.beads/issues.jsonl
+time=2026-02-05T14:59:36.388+01:00 level=INFO msg="   Pulling from remote may overwrite local unpushed changes."
+time=2026-02-05T14:59:36.388+01:00 level=INFO msg="   Consider running 'bd sync' to commit and push your changes first."
+time=2026-02-05T14:59:37.808+01:00 level=INFO msg="Pulled from remote"
+time=2026-02-05T14:59:37.816+01:00 level=INFO msg="Imported from JSONL"
+time=2026-02-05T14:59:37.817+01:00 level=INFO msg="Auto-import complete"
+time=2026-02-05T14:59:43.953+01:00 level=INFO msg="Mutation detected: %s %s" create=netresearch-marketplace-6lo
+time=2026-02-05T14:59:44.454+01:00 level=INFO msg="Export triggered by mutation events"
+time=2026-02-05T14:59:44.454+01:00 level=INFO msg="Starting %s..." !BADKEY=export
+time=2026-02-05T14:59:44.456+01:00 level=INFO msg="JSONL file created: %s" !BADKEY=/home/cybot/projects/netresearch-marketplace/.beads/issues.jsonl
+time=2026-02-05T14:59:44.456+01:00 level=INFO msg="Exported to JSONL"
+time=2026-02-05T14:59:44.456+01:00 level=INFO msg="Export complete"
+time=2026-02-05T14:59:45.457+01:00 level=INFO msg="Import triggered by file change"
+time=2026-02-05T14:59:45.457+01:00 level=INFO msg="Starting %s..." !BADKEY=auto-import
+time=2026-02-05T14:59:45.457+01:00 level=INFO msg="JSONL content changed, proceeding with %s..." !BADKEY=auto-import
+time=2026-02-05T14:59:45.459+01:00 level=INFO msg="⚠️  WARNING: Uncommitted local changes detected in %s" !BADKEY=/home/cybot/projects/netresearch-marketplace/.beads/issues.jsonl
+time=2026-02-05T14:59:45.459+01:00 level=INFO msg="   Pulling from remote may overwrite local unpushed changes."
+time=2026-02-05T14:59:45.459+01:00 level=INFO msg="   Consider running 'bd sync' to commit and push your changes first."
+time=2026-02-05T14:59:48.246+01:00 level=INFO msg="Pulled from remote"
+time=2026-02-05T14:59:48.252+01:00 level=INFO msg="Imported from JSONL"
+time=2026-02-05T14:59:48.253+01:00 level=INFO msg="Auto-import complete"
+time=2026-02-05T14:59:53.170+01:00 level=INFO msg="Mutation detected: %s %s" create=netresearch-marketplace-av5
+time=2026-02-05T14:59:53.670+01:00 level=INFO msg="Export triggered by mutation events"
+time=2026-02-05T14:59:53.670+01:00 level=INFO msg="Starting %s..." !BADKEY=export
+time=2026-02-05T14:59:53.672+01:00 level=INFO msg="JSONL file created: %s" !BADKEY=/home/cybot/projects/netresearch-marketplace/.beads/issues.jsonl
+time=2026-02-05T14:59:53.672+01:00 level=INFO msg="Exported to JSONL"
+time=2026-02-05T14:59:53.672+01:00 level=INFO msg="Export complete"
+time=2026-02-05T14:59:54.673+01:00 level=INFO msg="Import triggered by file change"
+time=2026-02-05T14:59:54.673+01:00 level=INFO msg="Starting %s..." !BADKEY=auto-import
+time=2026-02-05T14:59:54.674+01:00 level=INFO msg="JSONL content changed, proceeding with %s..." !BADKEY=auto-import
+time=2026-02-05T14:59:54.675+01:00 level=INFO msg="⚠️  WARNING: Uncommitted local changes detected in %s" !BADKEY=/home/cybot/projects/netresearch-marketplace/.beads/issues.jsonl
+time=2026-02-05T14:59:54.675+01:00 level=INFO msg="   Pulling from remote may overwrite local unpushed changes."
+time=2026-02-05T14:59:54.675+01:00 level=INFO msg="   Consider running 'bd sync' to commit and push your changes first."
+time=2026-02-05T14:59:56.123+01:00 level=INFO msg="Pulled from remote"
+time=2026-02-05T14:59:56.132+01:00 level=INFO msg="Imported from JSONL"
+time=2026-02-05T14:59:56.134+01:00 level=INFO msg="Auto-import complete"
+time=2026-02-05T14:59:59.842+01:00 level=INFO msg="Mutation detected: %s %s" create=netresearch-marketplace-74z
+time=2026-02-05T15:00:00.343+01:00 level=INFO msg="Export triggered by mutation events"
+time=2026-02-05T15:00:00.343+01:00 level=INFO msg="Starting %s..." !BADKEY=export
+time=2026-02-05T15:00:00.344+01:00 level=INFO msg="JSONL file created: %s" !BADKEY=/home/cybot/projects/netresearch-marketplace/.beads/issues.jsonl
+time=2026-02-05T15:00:00.344+01:00 level=INFO msg="Exported to JSONL"
+time=2026-02-05T15:00:00.344+01:00 level=INFO msg="Export complete"
+time=2026-02-05T15:00:01.346+01:00 level=INFO msg="Import triggered by file change"
+time=2026-02-05T15:00:01.346+01:00 level=INFO msg="Starting %s..." !BADKEY=auto-import
+time=2026-02-05T15:00:01.346+01:00 level=INFO msg="JSONL content changed, proceeding with %s..." !BADKEY=auto-import
+time=2026-02-05T15:00:01.347+01:00 level=INFO msg="⚠️  WARNING: Uncommitted local changes detected in %s" !BADKEY=/home/cybot/projects/netresearch-marketplace/.beads/issues.jsonl
+time=2026-02-05T15:00:01.347+01:00 level=INFO msg="   Pulling from remote may overwrite local unpushed changes."
+time=2026-02-05T15:00:01.347+01:00 level=INFO msg="   Consider running 'bd sync' to commit and push your changes first."
+time=2026-02-05T15:00:02.794+01:00 level=INFO msg="Pulled from remote"
+time=2026-02-05T15:00:02.815+01:00 level=INFO msg="Imported from JSONL"
+time=2026-02-05T15:00:02.816+01:00 level=INFO msg="Auto-import complete"
+time=2026-02-05T15:00:08.186+01:00 level=INFO msg="Mutation detected: %s %s" create=netresearch-marketplace-oym
+time=2026-02-05T15:00:08.687+01:00 level=INFO msg="Export triggered by mutation events"
+time=2026-02-05T15:00:08.687+01:00 level=INFO msg="Starting %s..." !BADKEY=export
+time=2026-02-05T15:00:08.689+01:00 level=INFO msg="JSONL file created: %s" !BADKEY=/home/cybot/projects/netresearch-marketplace/.beads/issues.jsonl
+time=2026-02-05T15:00:08.689+01:00 level=INFO msg="File change detected: %s" !BADKEY=/home/cybot/projects/netresearch-marketplace/.beads/issues.jsonl
+time=2026-02-05T15:00:08.689+01:00 level=INFO msg="Exported to JSONL"
+time=2026-02-05T15:00:08.689+01:00 level=INFO msg="Export complete"
+time=2026-02-05T15:00:09.690+01:00 level=INFO msg="Import triggered by file change"
+time=2026-02-05T15:00:09.690+01:00 level=INFO msg="Starting %s..." !BADKEY=auto-import
+time=2026-02-05T15:00:09.690+01:00 level=INFO msg="JSONL content changed, proceeding with %s..." !BADKEY=auto-import
+time=2026-02-05T15:00:09.691+01:00 level=INFO msg="⚠️  WARNING: Uncommitted local changes detected in %s" !BADKEY=/home/cybot/projects/netresearch-marketplace/.beads/issues.jsonl
+time=2026-02-05T15:00:09.691+01:00 level=INFO msg="   Pulling from remote may overwrite local unpushed changes."
+time=2026-02-05T15:00:09.691+01:00 level=INFO msg="   Consider running 'bd sync' to commit and push your changes first."
+time=2026-02-05T15:00:10.980+01:00 level=INFO msg="Pulled from remote"
+time=2026-02-05T15:00:10.988+01:00 level=INFO msg="Imported from JSONL"
+time=2026-02-05T15:00:10.989+01:00 level=INFO msg="Auto-import complete"
+time=2026-02-05T15:00:16.291+01:00 level=INFO msg="Mutation detected: %s %s" create=netresearch-marketplace-iyp
+time=2026-02-05T15:00:16.792+01:00 level=INFO msg="Export triggered by mutation events"
+time=2026-02-05T15:00:16.792+01:00 level=INFO msg="Starting %s..." !BADKEY=export
+time=2026-02-05T15:00:16.793+01:00 level=INFO msg="JSONL file created: %s" !BADKEY=/home/cybot/projects/netresearch-marketplace/.beads/issues.jsonl
+time=2026-02-05T15:00:16.793+01:00 level=INFO msg="Exported to JSONL"
+time=2026-02-05T15:00:16.793+01:00 level=INFO msg="Export complete"
+time=2026-02-05T15:00:16.793+01:00 level=INFO msg="File change detected: %s" !BADKEY=/home/cybot/projects/netresearch-marketplace/.beads/issues.jsonl
+time=2026-02-05T15:00:17.794+01:00 level=INFO msg="Import triggered by file change"
+time=2026-02-05T15:00:17.795+01:00 level=INFO msg="Starting %s..." !BADKEY=auto-import
+time=2026-02-05T15:00:17.795+01:00 level=INFO msg="JSONL content changed, proceeding with %s..." !BADKEY=auto-import
+time=2026-02-05T15:00:17.796+01:00 level=INFO msg="⚠️  WARNING: Uncommitted local changes detected in %s" !BADKEY=/home/cybot/projects/netresearch-marketplace/.beads/issues.jsonl
+time=2026-02-05T15:00:17.796+01:00 level=INFO msg="   Pulling from remote may overwrite local unpushed changes."
+time=2026-02-05T15:00:17.796+01:00 level=INFO msg="   Consider running 'bd sync' to commit and push your changes first."
+time=2026-02-05T15:00:19.169+01:00 level=INFO msg="Pulled from remote"
+time=2026-02-05T15:00:19.175+01:00 level=INFO msg="Imported from JSONL"
+time=2026-02-05T15:00:19.177+01:00 level=INFO msg="Auto-import complete"
+time=2026-02-05T15:00:24.601+01:00 level=INFO msg="Mutation detected: %s %s" create=netresearch-marketplace-4uk
+time=2026-02-05T15:00:25.102+01:00 level=INFO msg="Export triggered by mutation events"
+time=2026-02-05T15:00:25.102+01:00 level=INFO msg="Starting %s..." !BADKEY=export
+time=2026-02-05T15:00:25.104+01:00 level=INFO msg="Exported to JSONL"
+time=2026-02-05T15:00:25.104+01:00 level=INFO msg="Export complete"
+time=2026-02-05T15:00:25.104+01:00 level=INFO msg="JSONL file created: %s" !BADKEY=/home/cybot/projects/netresearch-marketplace/.beads/issues.jsonl
+time=2026-02-05T15:00:26.105+01:00 level=INFO msg="Import triggered by file change"
+time=2026-02-05T15:00:26.105+01:00 level=INFO msg="Starting %s..." !BADKEY=auto-import
+time=2026-02-05T15:00:26.105+01:00 level=INFO msg="JSONL content changed, proceeding with %s..." !BADKEY=auto-import
+time=2026-02-05T15:00:26.107+01:00 level=INFO msg="⚠️  WARNING: Uncommitted local changes detected in %s" !BADKEY=/home/cybot/projects/netresearch-marketplace/.beads/issues.jsonl
+time=2026-02-05T15:00:26.107+01:00 level=INFO msg="   Pulling from remote may overwrite local unpushed changes."
+time=2026-02-05T15:00:26.107+01:00 level=INFO msg="   Consider running 'bd sync' to commit and push your changes first."
+time=2026-02-05T15:00:27.553+01:00 level=INFO msg="Pulled from remote"
+time=2026-02-05T15:00:27.561+01:00 level=INFO msg="Imported from JSONL"
+time=2026-02-05T15:00:27.562+01:00 level=INFO msg="Auto-import complete"
+time=2026-02-05T15:00:32.943+01:00 level=INFO msg="Mutation detected: %s %s" create=netresearch-marketplace-3fm
+time=2026-02-05T15:00:33.444+01:00 level=INFO msg="Export triggered by mutation events"
+time=2026-02-05T15:00:33.444+01:00 level=INFO msg="Starting %s..." !BADKEY=export
+time=2026-02-05T15:00:33.445+01:00 level=INFO msg="JSONL file created: %s" !BADKEY=/home/cybot/projects/netresearch-marketplace/.beads/issues.jsonl
+time=2026-02-05T15:00:33.445+01:00 level=INFO msg="Exported to JSONL"
+time=2026-02-05T15:00:33.445+01:00 level=INFO msg="Export complete"
+time=2026-02-05T15:00:34.446+01:00 level=INFO msg="Import triggered by file change"
+time=2026-02-05T15:00:34.447+01:00 level=INFO msg="Starting %s..." !BADKEY=auto-import
+time=2026-02-05T15:00:34.447+01:00 level=INFO msg="JSONL content changed, proceeding with %s..." !BADKEY=auto-import
+time=2026-02-05T15:00:34.448+01:00 level=INFO msg="⚠️  WARNING: Uncommitted local changes detected in %s" !BADKEY=/home/cybot/projects/netresearch-marketplace/.beads/issues.jsonl
+time=2026-02-05T15:00:34.448+01:00 level=INFO msg="   Pulling from remote may overwrite local unpushed changes."
+time=2026-02-05T15:00:34.448+01:00 level=INFO msg="   Consider running 'bd sync' to commit and push your changes first."
+time=2026-02-05T15:00:35.827+01:00 level=INFO msg="Pulled from remote"
+time=2026-02-05T15:00:35.835+01:00 level=INFO msg="Imported from JSONL"
+time=2026-02-05T15:00:35.837+01:00 level=INFO msg="Auto-import complete"
+time=2026-02-05T15:00:40.788+01:00 level=INFO msg="Mutation detected: %s %s" create=netresearch-marketplace-hzr
+time=2026-02-05T15:00:41.289+01:00 level=INFO msg="Export triggered by mutation events"
+time=2026-02-05T15:00:41.289+01:00 level=INFO msg="Starting %s..." !BADKEY=export
+time=2026-02-05T15:00:41.291+01:00 level=INFO msg="JSONL file created: %s" !BADKEY=/home/cybot/projects/netresearch-marketplace/.beads/issues.jsonl
+time=2026-02-05T15:00:41.291+01:00 level=INFO msg="Exported to JSONL"
+time=2026-02-05T15:00:41.291+01:00 level=INFO msg="Export complete"
+time=2026-02-05T15:00:42.292+01:00 level=INFO msg="Import triggered by file change"
+time=2026-02-05T15:00:42.293+01:00 level=INFO msg="Starting %s..." !BADKEY=auto-import
+time=2026-02-05T15:00:42.293+01:00 level=INFO msg="JSONL content changed, proceeding with %s..." !BADKEY=auto-import
+time=2026-02-05T15:00:42.294+01:00 level=INFO msg="⚠️  WARNING: Uncommitted local changes detected in %s" !BADKEY=/home/cybot/projects/netresearch-marketplace/.beads/issues.jsonl
+time=2026-02-05T15:00:42.294+01:00 level=INFO msg="   Pulling from remote may overwrite local unpushed changes."
+time=2026-02-05T15:00:42.294+01:00 level=INFO msg="   Consider running 'bd sync' to commit and push your changes first."
+time=2026-02-05T15:00:43.732+01:00 level=INFO msg="Pulled from remote"
+time=2026-02-05T15:00:43.741+01:00 level=INFO msg="Imported from JSONL"
+time=2026-02-05T15:00:43.743+01:00 level=INFO msg="Auto-import complete"
+time=2026-02-05T15:00:48.038+01:00 level=INFO msg="Mutation detected: %s %s" create=netresearch-marketplace-h6v
+time=2026-02-05T15:00:48.539+01:00 level=INFO msg="Export triggered by mutation events"
+time=2026-02-05T15:00:48.539+01:00 level=INFO msg="Starting %s..." !BADKEY=export
+time=2026-02-05T15:00:48.541+01:00 level=INFO msg="JSONL file created: %s" !BADKEY=/home/cybot/projects/netresearch-marketplace/.beads/issues.jsonl
+time=2026-02-05T15:00:48.541+01:00 level=INFO msg="File change detected: %s" !BADKEY=/home/cybot/projects/netresearch-marketplace/.beads/issues.jsonl
+time=2026-02-05T15:00:48.541+01:00 level=INFO msg="Exported to JSONL"
+time=2026-02-05T15:00:48.541+01:00 level=INFO msg="Export complete"
+time=2026-02-05T15:00:49.542+01:00 level=INFO msg="Import triggered by file change"
+time=2026-02-05T15:00:49.542+01:00 level=INFO msg="Starting %s..." !BADKEY=auto-import
+time=2026-02-05T15:00:49.543+01:00 level=INFO msg="JSONL content changed, proceeding with %s..." !BADKEY=auto-import
+time=2026-02-05T15:00:49.544+01:00 level=INFO msg="⚠️  WARNING: Uncommitted local changes detected in %s" !BADKEY=/home/cybot/projects/netresearch-marketplace/.beads/issues.jsonl
+time=2026-02-05T15:00:49.544+01:00 level=INFO msg="   Pulling from remote may overwrite local unpushed changes."
+time=2026-02-05T15:00:49.544+01:00 level=INFO msg="   Consider running 'bd sync' to commit and push your changes first."
+time=2026-02-05T15:00:50.957+01:00 level=INFO msg="Pulled from remote"
+time=2026-02-05T15:00:50.964+01:00 level=INFO msg="Imported from JSONL"
+time=2026-02-05T15:00:50.966+01:00 level=INFO msg="Auto-import complete"
+time=2026-02-05T15:00:57.326+01:00 level=INFO msg="Mutation detected: %s %s" create=netresearch-marketplace-xkj
+time=2026-02-05T15:00:57.827+01:00 level=INFO msg="Export triggered by mutation events"
+time=2026-02-05T15:00:57.827+01:00 level=INFO msg="Starting %s..." !BADKEY=export
+time=2026-02-05T15:00:57.829+01:00 level=INFO msg="JSONL file created: %s" !BADKEY=/home/cybot/projects/netresearch-marketplace/.beads/issues.jsonl
+time=2026-02-05T15:00:57.829+01:00 level=INFO msg="Exported to JSONL"
+time=2026-02-05T15:00:57.829+01:00 level=INFO msg="Export complete"
+time=2026-02-05T15:00:57.829+01:00 level=INFO msg="File change detected: %s" !BADKEY=/home/cybot/projects/netresearch-marketplace/.beads/issues.jsonl
+time=2026-02-05T15:00:58.830+01:00 level=INFO msg="Import triggered by file change"
+time=2026-02-05T15:00:58.830+01:00 level=INFO msg="Starting %s..." !BADKEY=auto-import
+time=2026-02-05T15:00:58.830+01:00 level=INFO msg="JSONL content changed, proceeding with %s..." !BADKEY=auto-import
+time=2026-02-05T15:00:58.832+01:00 level=INFO msg="⚠️  WARNING: Uncommitted local changes detected in %s" !BADKEY=/home/cybot/projects/netresearch-marketplace/.beads/issues.jsonl
+time=2026-02-05T15:00:58.832+01:00 level=INFO msg="   Pulling from remote may overwrite local unpushed changes."
+time=2026-02-05T15:00:58.832+01:00 level=INFO msg="   Consider running 'bd sync' to commit and push your changes first."
+time=2026-02-05T15:01:00.219+01:00 level=INFO msg="Pulled from remote"
+time=2026-02-05T15:01:00.227+01:00 level=INFO msg="Imported from JSONL"
+time=2026-02-05T15:01:00.228+01:00 level=INFO msg="Auto-import complete"
+time=2026-02-05T15:01:03.692+01:00 level=INFO msg="Mutation detected: %s %s" update=netresearch-marketplace-6lo
+time=2026-02-05T15:01:04.080+01:00 level=INFO msg="Mutation detected: %s %s" update=netresearch-marketplace-av5
+time=2026-02-05T15:01:04.472+01:00 level=INFO msg="Mutation detected: %s %s" update=netresearch-marketplace-74z
+time=2026-02-05T15:01:04.865+01:00 level=INFO msg="Mutation detected: %s %s" update=netresearch-marketplace-oym
+time=2026-02-05T15:01:05.258+01:00 level=INFO msg="Mutation detected: %s %s" update=netresearch-marketplace-iyp
+time=2026-02-05T15:01:05.648+01:00 level=INFO msg="Mutation detected: %s %s" update=netresearch-marketplace-4uk
+time=2026-02-05T15:01:06.040+01:00 level=INFO msg="Mutation detected: %s %s" update=netresearch-marketplace-3fm
+time=2026-02-05T15:01:06.429+01:00 level=INFO msg="Mutation detected: %s %s" update=netresearch-marketplace-hzr
+time=2026-02-05T15:01:06.833+01:00 level=INFO msg="Mutation detected: %s %s" update=netresearch-marketplace-h6v
+time=2026-02-05T15:01:07.269+01:00 level=INFO msg="Mutation detected: %s %s" update=netresearch-marketplace-xkj
+time=2026-02-05T15:01:07.770+01:00 level=INFO msg="Export triggered by mutation events"
+time=2026-02-05T15:01:07.770+01:00 level=INFO msg="Starting %s..." !BADKEY=export
+time=2026-02-05T15:01:07.772+01:00 level=INFO msg="Exported to JSONL"
+time=2026-02-05T15:01:07.772+01:00 level=INFO msg="Export complete"
+time=2026-02-05T15:01:07.772+01:00 level=INFO msg="JSONL file created: %s" !BADKEY=/home/cybot/projects/netresearch-marketplace/.beads/issues.jsonl
+time=2026-02-05T15:01:08.773+01:00 level=INFO msg="Import triggered by file change"
+time=2026-02-05T15:01:08.774+01:00 level=INFO msg="Starting %s..." !BADKEY=auto-import
+time=2026-02-05T15:01:08.774+01:00 level=INFO msg="JSONL content changed, proceeding with %s..." !BADKEY=auto-import
+time=2026-02-05T15:01:08.776+01:00 level=INFO msg="⚠️  WARNING: Uncommitted local changes detected in %s" !BADKEY=/home/cybot/projects/netresearch-marketplace/.beads/issues.jsonl
+time=2026-02-05T15:01:08.776+01:00 level=INFO msg="   Pulling from remote may overwrite local unpushed changes."
+time=2026-02-05T15:01:08.776+01:00 level=INFO msg="   Consider running 'bd sync' to commit and push your changes first."
+time=2026-02-05T15:01:10.174+01:00 level=INFO msg="Pulled from remote"
+time=2026-02-05T15:01:10.179+01:00 level=INFO msg="Imported from JSONL"
+time=2026-02-05T15:01:10.181+01:00 level=INFO msg="Auto-import complete"
+time=2026-02-05T15:01:18.011+01:00 level=INFO msg="JSONL file created: %s" !BADKEY=/home/cybot/projects/netresearch-marketplace/.beads/issues.jsonl
+time=2026-02-05T15:01:18.011+01:00 level=INFO msg="File change detected: %s" !BADKEY=/home/cybot/projects/netresearch-marketplace/.beads/issues.jsonl
+time=2026-02-05T15:01:19.012+01:00 level=INFO msg="Import triggered by file change"
+time=2026-02-05T15:01:19.012+01:00 level=INFO msg="Starting %s..." !BADKEY=auto-import
+time=2026-02-05T15:01:19.013+01:00 level=INFO msg="Skipping %s: JSONL content unchanged" !BADKEY=auto-import
+time=2026-02-05T15:06:52.075+01:00 level=INFO msg="Mutation detected: %s %s" status=netresearch-marketplace-6lo
+time=2026-02-05T15:06:52.077+01:00 level=INFO msg="Mutation detected: %s %s" status=netresearch-marketplace-av5
+time=2026-02-05T15:06:52.079+01:00 level=INFO msg="Mutation detected: %s %s" status=netresearch-marketplace-74z
+time=2026-02-05T15:06:52.081+01:00 level=INFO msg="Mutation detected: %s %s" status=netresearch-marketplace-oym
+time=2026-02-05T15:06:52.083+01:00 level=INFO msg="Mutation detected: %s %s" status=netresearch-marketplace-iyp
+time=2026-02-05T15:06:52.085+01:00 level=INFO msg="Mutation detected: %s %s" status=netresearch-marketplace-4uk
+time=2026-02-05T15:06:52.087+01:00 level=INFO msg="Mutation detected: %s %s" status=netresearch-marketplace-3fm
+time=2026-02-05T15:06:52.089+01:00 level=INFO msg="Mutation detected: %s %s" status=netresearch-marketplace-hzr
+time=2026-02-05T15:06:52.092+01:00 level=INFO msg="Mutation detected: %s %s" status=netresearch-marketplace-h6v
+time=2026-02-05T15:06:52.094+01:00 level=INFO msg="Mutation detected: %s %s" status=netresearch-marketplace-xkj
+time=2026-02-05T15:06:52.097+01:00 level=INFO msg="Mutation detected: %s %s" status=netresearch-marketplace-98b
+time=2026-02-05T15:06:52.598+01:00 level=INFO msg="Export triggered by mutation events"
+time=2026-02-05T15:06:52.598+01:00 level=INFO msg="Starting %s..." !BADKEY=export
+time=2026-02-05T15:06:52.600+01:00 level=INFO msg="Exported to JSONL"
+time=2026-02-05T15:06:52.600+01:00 level=INFO msg="Export complete"
+time=2026-02-05T15:06:52.600+01:00 level=INFO msg="JSONL file created: %s" !BADKEY=/home/cybot/projects/netresearch-marketplace/.beads/issues.jsonl
+time=2026-02-05T15:06:52.600+01:00 level=INFO msg="File change detected: %s" !BADKEY=/home/cybot/projects/netresearch-marketplace/.beads/issues.jsonl
+time=2026-02-05T15:06:53.601+01:00 level=INFO msg="Import triggered by file change"
+time=2026-02-05T15:06:53.601+01:00 level=INFO msg="Starting %s..." !BADKEY=auto-import
+time=2026-02-05T15:06:53.601+01:00 level=INFO msg="JSONL content changed, proceeding with %s..." !BADKEY=auto-import
+time=2026-02-05T15:06:53.603+01:00 level=INFO msg="⚠️  WARNING: Uncommitted local changes detected in %s" !BADKEY=/home/cybot/projects/netresearch-marketplace/.beads/issues.jsonl
+time=2026-02-05T15:06:53.603+01:00 level=INFO msg="   Pulling from remote may overwrite local unpushed changes."
+time=2026-02-05T15:06:53.603+01:00 level=INFO msg="   Consider running 'bd sync' to commit and push your changes first."
+time=2026-02-05T15:06:54.888+01:00 level=INFO msg="Pulled from remote"
+time=2026-02-05T15:06:54.921+01:00 level=INFO msg="Imported from JSONL"
+time=2026-02-05T15:06:54.923+01:00 level=INFO msg="Auto-import complete"
+time=2026-02-05T15:06:56.879+01:00 level=INFO msg="JSONL file created: %s" !BADKEY=/home/cybot/projects/netresearch-marketplace/.beads/issues.jsonl
+time=2026-02-05T15:06:56.879+01:00 level=INFO msg="File change detected: %s" !BADKEY=/home/cybot/projects/netresearch-marketplace/.beads/issues.jsonl
+time=2026-02-05T15:06:57.880+01:00 level=INFO msg="Import triggered by file change"
+time=2026-02-05T15:06:57.880+01:00 level=INFO msg="Starting %s..." !BADKEY=auto-import
+time=2026-02-05T15:06:57.880+01:00 level=INFO msg="Skipping %s: JSONL content unchanged" !BADKEY=auto-import

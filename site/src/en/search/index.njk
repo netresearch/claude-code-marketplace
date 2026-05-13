@@ -1,0 +1,20 @@
+---
+permalink: /en/search-index.json
+eleventyExcludeFromCollections: true
+---
+{%- set records = [] -%}
+{%- for skill in skills -%}
+  {%- set entry = {
+    slug: skill.slug,
+    name: skill.displayName,
+    desc: skill.descriptionEn,
+    category: skill.categoryLabelEn,
+    categorySlug: skill.category,
+    group: skill.group,
+    tags: skill.tags,
+    useCases: skill.useCases,
+    url: ('/en/skills/' ~ skill.slug ~ '/') | url
+  } -%}
+  {%- set records = (records.push(entry), records) -%}
+{%- endfor -%}
+{{ records | dump | safe }}

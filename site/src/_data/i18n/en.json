@@ -73,11 +73,17 @@
   },
   "ui": {
     "copyShort": "Copy",
-    "copyCopied": "Copied"
+    "copyCopied": "Copied",
+    "searchLabel": "Search skills",
+    "searchPlaceholder": "Find a skill — try \"typo3\", \"docker\", \"jira\"…",
+    "searchClear": "Clear search",
+    "searchResults": "{count} skills match",
+    "searchNoResults": "No skills match your query. Try a shorter term."
   },
   "skill": {
     "install": "Install",
     "copyInstall": "Copy install command",
+    "latestVersion": "Latest release",
     "altInstall": "Or install for any Agent Skills-compatible CLI:",
     "useCases": "What you can do with it",
     "expectedOutputs": "What you get back",

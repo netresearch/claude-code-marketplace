@@ -5,6 +5,25 @@ title: "Netresearch Skills Marketplace — 40 curated Agent Skills for AI-assist
 description: "Curated Agent Skills for TYPO3, PHP, Go, Docker, security, and documentation. One install. Forty skills. Portable across Claude Code, Cursor, Copilot, Codex, Gemini CLI, and 30+ more agents."
 ---
 
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "{{ site.title }}",
+  "url": "{{ site.url }}{{ page.url | url }}",
+  "inLanguage": "en",
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": {
+      "@type": "EntryPoint",
+      "urlTemplate": "{{ site.url }}{{ '/en/#skills' | url }}?q={search_term_string}"
+    },
+    "query-input": "required name=search_term_string"
+  }
+}
+</script>
+
+
 <section class="hero">
   <h1>{{ t.hero.h1 }}</h1>
   <p class="lead">{{ t.hero.lead }}</p>
@@ -49,6 +68,15 @@ description: "Curated Agent Skills for TYPO3, PHP, Go, Docker, security, and doc
 <section class="section" id="skills">
   <h2>{{ t.categoriesSection.h2 }}</h2>
   <p class="lead">{{ t.categoriesSection.lead }}</p>
+
+  <form class="site-search" role="search" data-search data-index-url="{{ '/en/search-index.json' | url }}" data-no-results="{{ t.ui.searchNoResults }}" data-results-template="{{ t.ui.searchResults }}">
+    <label for="skills-search" class="site-search__label">{{ t.ui.searchLabel }}</label>
+    <div class="site-search__row">
+      <input id="skills-search" name="q" type="search" autocomplete="off" placeholder="{{ t.ui.searchPlaceholder }}" data-search-input />
+      <button type="reset" class="site-search__clear" aria-label="{{ t.ui.searchClear }}" hidden data-search-clear>×</button>
+    </div>
+    <p class="site-search__status" aria-live="polite" data-search-status></p>
+  </form>
 
   {% set vars = { skills: marketplace.skills, lang: 'en', categoryLabels: categories.labels.en } %}
 
