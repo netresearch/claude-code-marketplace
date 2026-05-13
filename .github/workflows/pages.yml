@@ -107,11 +107,12 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Stage built site at workspace root for lhci
+      - name: Stage built site under deploy prefix for lhci
         working-directory: ${{ github.workspace }}
         run: |
-          cp -r site/_site .lhci-site
-          ls -la .lhci-site/en/ | head
+          mkdir -p .lhci-site
+          cp -r site/_site .lhci-site/claude-code-marketplace
+          ls -la .lhci-site/claude-code-marketplace/en/ | head
 
       - name: Lighthouse CI
         uses: treosh/lighthouse-ci-action@3e7e23fb74242897f95c0ba9cabad3d0227b9b18 # 12.6.2

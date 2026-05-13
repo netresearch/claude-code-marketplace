@@ -3,12 +3,12 @@
     "collect": {
       "staticDistDir": "./.lhci-site",
       "url": [
-        "http://localhost/en/index.html",
-        "http://localhost/de/index.html",
-        "http://localhost/en/skills/typo3-conformance/index.html",
-        "http://localhost/en/skills/php-modernization/index.html",
-        "http://localhost/en/skills/security-audit/index.html",
-        "http://localhost/de/skills/typo3-conformance/index.html"
+        "http://localhost/claude-code-marketplace/en/",
+        "http://localhost/claude-code-marketplace/de/",
+        "http://localhost/claude-code-marketplace/en/skills/typo3-conformance/",
+        "http://localhost/claude-code-marketplace/en/skills/php-modernization/",
+        "http://localhost/claude-code-marketplace/en/skills/security-audit/",
+        "http://localhost/claude-code-marketplace/de/skills/typo3-conformance/"
       ],
       "numberOfRuns": 1,
       "settings": {

@@ -8,28 +8,28 @@
     <meta name="theme-color" content="#2F99A4" />
     {% if robots %}<meta name="robots" content="{{ robots }}" />{% endif %}
 
-    <link rel="canonical" href="{{ site.url }}{{ page.url }}" />
+    <link rel="canonical" href="{{ site.url }}{{ page.url | url }}" />
     {% if hreflangAlternate %}
-      <link rel="alternate" hreflang="{{ hreflangAlternate.lang }}" href="{{ site.url }}{{ hreflangAlternate.url }}" />
-      <link rel="alternate" hreflang="{{ lang }}" href="{{ site.url }}{{ page.url }}" />
-      <link rel="alternate" hreflang="x-default" href="{{ site.url }}{{ xDefaultUrl or '/en/' }}" />
+      <link rel="alternate" hreflang="{{ hreflangAlternate.lang }}" href="{{ site.url }}{{ hreflangAlternate.url | url }}" />
+      <link rel="alternate" hreflang="{{ lang }}" href="{{ site.url }}{{ page.url | url }}" />
+      <link rel="alternate" hreflang="x-default" href="{{ site.url }}{{ (xDefaultUrl or '/en/') | url }}" />
     {% endif %}
 
     <meta property="og:type" content="{{ ogType or 'website' }}" />
     <meta property="og:title" content="{{ title or site.title }}" />
     <meta property="og:description" content="{{ description or site.tagline }}" />
-    <meta property="og:url" content="{{ site.url }}{{ page.url }}" />
+    <meta property="og:url" content="{{ site.url }}{{ page.url | url }}" />
     <meta property="og:locale" content="{{ ogLocale or 'en_US' }}" />
-    <meta property="og:image" content="{{ site.url }}{{ ogImage or '/assets/og/landing.png' }}" />
+    <meta property="og:image" content="{{ site.url }}{{ (ogImage or '/assets/og/landing.png') | url }}" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     {% if hreflangAlternate %}
       <meta property="og:locale:alternate" content="{{ hreflangAlternate.ogLocale }}" />
     {% endif %}
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:image" content="{{ site.url }}{{ ogImage or '/assets/og/landing.png' }}" />
+    <meta name="twitter:image" content="{{ site.url }}{{ (ogImage or '/assets/og/landing.png') | url }}" />
 
-    <link rel="stylesheet" href="/assets/css/main.css" />
+    <link rel="stylesheet" href="{{ '/assets/css/main.css' | url }}" />
 
     <script type="application/ld+json">
       {
@@ -46,13 +46,13 @@
   </head>
   <body>
     <header class="site-header">
-      <a class="site-header__brand" href="/{{ lang or 'en' }}/">
+      <a class="site-header__brand" href="{{ ('/' + (lang or 'en') + '/') | url }}">
         <strong>Netresearch</strong> Skills Marketplace
       </a>
       <nav class="site-header__nav" aria-label="Primary">
-        <a href="/{{ lang or 'en' }}/">{{ t.nav.home }}</a>
+        <a href="{{ ('/' + (lang or 'en') + '/') | url }}">{{ t.nav.home }}</a>
         {% if hreflangAlternate %}
-          <a href="{{ hreflangAlternate.url }}" hreflang="{{ hreflangAlternate.lang }}" rel="alternate">{{ t.nav.switchLang }}</a>
+          <a href="{{ hreflangAlternate.url | url }}" hreflang="{{ hreflangAlternate.lang }}" rel="alternate">{{ t.nav.switchLang }}</a>
         {% endif %}
       </nav>
     </header>
@@ -73,6 +73,6 @@
       </p>
     </footer>
 
-    <script src="/assets/js/enhance.js" defer></script>
+    <script src="{{ '/assets/js/enhance.js' | url }}" defer></script>
   </body>
 </html>

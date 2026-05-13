@@ -2,15 +2,17 @@
 permalink: /index.html
 eleventyExcludeFromCollections: true
 ---
+{%- set enUrl = '/en/' | url -%}
+{%- set deUrl = '/de/' | url -%}
 <!doctype html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta http-equiv="refresh" content="0; url=/en/" />
-    <link rel="canonical" href="https://netresearch.github.io/claude-code-marketplace/en/" />
-    <link rel="alternate" hreflang="en" href="https://netresearch.github.io/claude-code-marketplace/en/" />
-    <link rel="alternate" hreflang="de" href="https://netresearch.github.io/claude-code-marketplace/de/" />
-    <link rel="alternate" hreflang="x-default" href="https://netresearch.github.io/claude-code-marketplace/en/" />
+    <meta http-equiv="refresh" content="0; url={{ enUrl }}" />
+    <link rel="canonical" href="{{ site.url }}{{ enUrl }}" />
+    <link rel="alternate" hreflang="en" href="{{ site.url }}{{ enUrl }}" />
+    <link rel="alternate" hreflang="de" href="{{ site.url }}{{ deUrl }}" />
+    <link rel="alternate" hreflang="x-default" href="{{ site.url }}{{ enUrl }}" />
     <title>Netresearch Skills Marketplace</title>
     <meta name="robots" content="noindex" />
     <script>
@@ -19,14 +21,14 @@ eleventyExcludeFromCollections: true
       (function () {
         var lang = (navigator.language || "en").toLowerCase();
         if (lang.indexOf("de") === 0) {
-          window.location.replace("/de/");
+          window.location.replace({{ deUrl | dump | safe }});
         } else {
-          window.location.replace("/en/");
+          window.location.replace({{ enUrl | dump | safe }});
         }
       })();
     </script>
   </head>
   <body>
-    <p>Redirecting to <a href="/en/">English</a> or <a href="/de/">Deutsch</a>…</p>
+    <p>Redirecting to <a href="{{ enUrl }}">English</a> or <a href="{{ deUrl }}">Deutsch</a>…</p>
   </body>
 </html>
