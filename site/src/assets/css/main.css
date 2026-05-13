@@ -51,15 +51,17 @@ h3 { font-size: var(--font-size-2xl); margin-bottom: var(--spacing-md); }
 p { margin-bottom: var(--spacing-md); }
 
 a {
-  color: var(--color-primary);
-  text-decoration: none;
+  color: var(--color-primary-dark);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
   transition: color 120ms ease;
 }
 
 a:hover,
 a:focus-visible {
-  color: var(--color-primary-dark);
-  text-decoration: underline;
+  color: var(--color-accent-dark);
+  text-decoration-thickness: 2px;
 }
 
 a:focus-visible {
@@ -147,13 +149,13 @@ pre {
   font-size: var(--font-size-xs);
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: var(--color-primary);
+  color: var(--color-primary-dark);
   margin-bottom: var(--spacing-sm);
 }
 
 .skill-card__description {
   font-size: var(--font-size-sm);
-  color: var(--color-text-secondary);
+  color: var(--color-text-primary);
   margin-bottom: var(--spacing-md);
 }
 
