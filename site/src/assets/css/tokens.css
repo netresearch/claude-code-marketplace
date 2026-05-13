@@ -1,0 +1,65 @@
+/*
+ * Brand tokens sourced from netresearch-branding-skill
+ * https://github.com/netresearch/netresearch-branding-skill
+ * Source: skills/netresearch-branding/templates/styles.css
+ *
+ * Keep this file in sync with the skill. Do not invent new tokens here.
+ */
+:root {
+  --color-primary: #2F99A4;
+  --color-primary-rgb: 47, 153, 164;
+  --color-primary-dark: #257880;
+  --color-accent: #FF4D00;
+  --color-accent-rgb: 255, 77, 0;
+  --color-accent-dark: #CC3D00;
+
+  --color-text-primary: #585961;
+  --color-text-secondary: #8A8B93;
+  --color-background: #FFFFFF;
+  --color-background-alt: #F5F5F5;
+  --color-border: #CCCDCC;
+  --color-border-light: #E5E5E5;
+
+  --font-headline: "Raleway", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-body: "Open Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: ui-monospace, "SFMono-Regular", "Menlo", "Consolas", monospace;
+
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
+  --font-size-base: 1rem;
+  --font-size-lg: 1.125rem;
+  --font-size-xl: 1.25rem;
+  --font-size-2xl: 1.5rem;
+  --font-size-3xl: 1.75rem;
+  --font-size-4xl: 2.25rem;
+  --font-size-5xl: 3rem;
+  --font-size-6xl: 3.5rem;
+
+  --spacing-xs: 0.5rem;
+  --spacing-sm: 0.75rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+  --spacing-xxl: 3rem;
+  --spacing-3xl: 4rem;
+  --spacing-4xl: 6rem;
+
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.12);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.16);
+
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-text-primary: #E5E5E5;
+    --color-text-secondary: #A8A9B1;
+    --color-background: #1A1A1A;
+    --color-background-alt: #242424;
+    --color-border: #3A3A3A;
+    --color-border-light: #2A2A2A;
+  }
+}

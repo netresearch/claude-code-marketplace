@@ -1,0 +1,36 @@
+---
+layout: layouts/base.njk
+title: "Netresearch Skills Marketplace · Phase 2a smoke test"
+description: "Foundation build — full landing and detail pages land in later sub-phases."
+---
+
+<h1>{{ marketplace.count }} curated Agent Skills</h1>
+<p class="lead">{{ marketplace.description }}</p>
+
+<pre><code>{{ marketplace.addCommand }}</code></pre>
+
+<div class="stats">
+  <div class="stats__item">
+    <span class="stats__number">{{ marketplace.count }}</span>
+    <span class="stats__label">total skills</span>
+  </div>
+  {% for category, count in marketplace.categoryCounts %}
+    <div class="stats__item">
+      <span class="stats__number">{{ count }}</span>
+      <span class="stats__label">{{ category }}</span>
+    </div>
+  {% endfor %}
+</div>
+
+<h2>Skills</h2>
+<div class="skill-grid">
+  {% for skill in marketplace.skills %}
+    <article class="skill-card">
+      <span class="skill-card__category">{{ skill.category }}</span>
+      <h3 class="skill-card__title">
+        <a href="{{ skill.repoUrl }}" rel="noopener">{{ skill.slug | titleCase }}</a>
+      </h3>
+      <p class="skill-card__description">{{ skill.description }}</p>
+    </article>
+  {% endfor %}
+</div>

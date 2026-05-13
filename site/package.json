@@ -1,0 +1,19 @@
+{
+  "name": "netresearch-marketplace-site",
+  "version": "0.1.0",
+  "description": "GitHub Pages storytelling site for the Netresearch Claude Code Marketplace.",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "eleventy",
+    "dev": "eleventy --serve --port=8080",
+    "preview": "npx http-server _site -p 8080 -c-1",
+    "clean": "rm -rf _site"
+  },
+  "devDependencies": {
+    "@11ty/eleventy": "^3.0.0"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
