@@ -109,7 +109,7 @@ jobs:
         run: npm run build
 
       - name: Lighthouse CI
-        uses: treosh/lighthouse-ci-action@1632ff7a40e44b3df93b9c97a32a92f8d33d2f08 # v12.1.0
+        uses: treosh/lighthouse-ci-action@3e7e23fb74242897f95c0ba9cabad3d0227b9b18 # 12.6.2
         with:
           configPath: site/tests/lighthouse/lighthouserc.json
           uploadArtifacts: true
