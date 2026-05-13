@@ -5,6 +5,12 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "fetch:readmes": "node scripts/fetch-readmes.js",
+    "check:orphans": "node scripts/check-orphans.js",
+    "check:categories": "node scripts/check-categories.js",
+    "check:seo": "node scripts/check-seo-copy.js",
+    "check": "npm run check:categories && npm run check:orphans && npm run check:seo",
+    "prebuild": "npm run check:categories",
     "build": "eleventy",
     "dev": "eleventy --serve --port=8080",
     "preview": "npx http-server _site -p 8080 -c-1",
@@ -15,5 +21,8 @@
   },
   "engines": {
     "node": ">=20"
+  },
+  "dependencies": {
+    "@octokit/rest": "^22.0.1"
   }
 }
