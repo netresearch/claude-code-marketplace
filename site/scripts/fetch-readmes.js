@@ -94,8 +94,25 @@ for (const plugin of marketplace.plugins) {
     process.stdout.write(`  ✓ ${plugin.name}${latestRelease ? ` (${latestRelease.tag})` : ""}\n`);
   } catch (err) {
     if (err.status === 304 && existing) {
+      // README unchanged, but the latest-release pointer drifts independently
+      // and old caches (pre-v5 fetch-readmes) may lack it entirely. Refresh
+      // the release field on every run so visual + JSON-LD snapshots stay
+      // current even on a cache hit.
+      const latestRelease = await fetchLatestRelease(owner, repo);
+      if (
+        latestRelease &&
+        JSON.stringify(latestRelease) !== JSON.stringify(existing.latestRelease)
+      ) {
+        existing.latestRelease = latestRelease;
+        writeFileSync(cachePath, JSON.stringify(existing, null, 2));
+      } else if (!("latestRelease" in existing)) {
+        existing.latestRelease = latestRelease;
+        writeFileSync(cachePath, JSON.stringify(existing, null, 2));
+      }
       cached++;
-      process.stdout.write(`  · ${plugin.name} (not modified)\n`);
+      process.stdout.write(
+        `  · ${plugin.name} (not modified${latestRelease ? `, ${latestRelease.tag}` : ""})\n`
+      );
       continue;
     }
     if (err.status === 404) {
