@@ -34,28 +34,58 @@ export default function (eleventyConfig) {
   /**
    * Inline-markdown filter: converts a string with markdown inline syntax
    * (links, bold, italic, code) into safe HTML. Block syntax is intentionally
-   * not handled — these are short bullet items, not full documents. Input is
-   * always HTML-escaped first so untrusted README content can't inject tags.
+   * not handled — these are short bullet items, not full documents.
+   *
+   * Two safety properties:
+   *
+   *   1. Input is HTML-escaped first so untrusted README content can't inject
+   *      tags. The output is then re-marked safe by `| safe` at the call site.
+   *
+   *   2. Code spans are extracted with a sentinel before any other inline
+   *      transformation runs, so `**bold**` inside `` `code` `` survives
+   *      verbatim and the surrounding bold/italic regexes don't see them.
+   *
+   *   3. Link hrefs go through an allowlist (http/https/mailto/relative), not
+   *      a "strip dangerous schemes" filter — `replace(/javascript:/, "")`
+   *      is trivially bypassed by `java\tscript:` or zero-width chars, an
+   *      allowlist closes that class entirely.
    */
-  eleventyConfig.addFilter("inlineMarkdown", (input) => {
-    if (!input || typeof input !== "string") return "";
-    let s = input
+  const SAFE_URL_PREFIX = /^(?:https?:\/\/|mailto:|\/|#|\.{0,2}\/|[A-Za-z0-9_-]+(?:\/|#|$))/;
+
+  function isSafeHref(href) {
+    return SAFE_URL_PREFIX.test(href);
+  }
+
+  function escapeHtml(s) {
+    return s
       .replace(/&/g, "&amp;")
       .replace(/</g, "&lt;")
       .replace(/>/g, "&gt;")
       .replace(/"/g, "&quot;")
       .replace(/'/g, "&#39;");
+  }
 
-    // Inline code first so the runes inside aren't interpreted further.
-    s = s.replace(/`([^`]+)`/g, (_, code) => `<code>${code}</code>`);
+  eleventyConfig.addFilter("inlineMarkdown", (input) => {
+    if (!input || typeof input !== "string") return "";
 
-    // [text](href) — href can be any non-paren run; we already escaped <>"'&.
-    s = s.replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, (_, text, href) => {
-      const safeHref = href.replace(/javascript:/gi, "");
-      return `<a href="${safeHref}" rel="noopener">${text}</a>`;
+    let s = escapeHtml(input);
+
+    // Stash code-span contents behind sentinels so later regexes can't reach
+    // them. Sentinel uses control chars that escapeHtml has already removed
+    // from the input, so collisions are impossible.
+    const codeStash = [];
+    s = s.replace(/`([^`\n]+)`/g, (_, code) => {
+      codeStash.push(code);
+      return `CODE${codeStash.length - 1}`;
     });
 
-    // **bold** then __bold__ — the lazy quantifier prevents runaway matches.
+    // [text](href) — href allowlisted; reject everything else by emitting
+    // plain text.
+    s = s.replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, (_, text, href) => {
+      if (!isSafeHref(href)) return `[${text}](${href})`;
+      return `<a href="${href}" rel="noopener">${text}</a>`;
+    });
+
     s = s.replace(/\*\*([^*]+?)\*\*/g, "<strong>$1</strong>");
     s = s.replace(/__([^_]+?)__/g, "<strong>$1</strong>");
 
@@ -63,6 +93,10 @@ export default function (eleventyConfig) {
     // (so file_names_like_this stay intact).
     s = s.replace(/(^|[^*\w])\*([^*\n]+?)\*(?!\w)/g, "$1<em>$2</em>");
     s = s.replace(/(^|[^_\w])_([^_\n]+?)_(?!\w)/g, "$1<em>$2</em>");
+
+    // Restore stashed code spans, escaping the original content one more time
+    // because the input was unescaped between the backticks.
+    s = s.replace(/CODE(\d+)/g, (_, idx) => `<code>${codeStash[Number(idx)]}</code>`);
 
     return s;
   });
