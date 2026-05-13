@@ -1,20 +1,10 @@
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, resolve } from "node:path";
-import displayNames from "./displayNames.json" with { type: "json" };
+import { displayName } from "./_helpers/display-name.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const MARKETPLACE_JSON = resolve(__dirname, "../../../.claude-plugin/marketplace.json");
-
-function displayName(slug) {
-  return (
-    displayNames[slug] ||
-    slug
-      .split("-")
-      .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
-      .join(" ")
-  );
-}
 
 export default function () {
   const raw = readFileSync(MARKETPLACE_JSON, "utf8");

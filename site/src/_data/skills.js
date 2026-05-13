@@ -21,7 +21,7 @@ const CACHE_DIR = resolve(__dirname, "../../cache/skills-readme");
 import categories from "./categories.js";
 import groups from "./groups.js";
 import descriptionsDe from "./descriptions_de.json" with { type: "json" };
-import displayNames from "./displayNames.json" with { type: "json" };
+import { displayName } from "./_helpers/display-name.js";
 
 function loadCache(slug) {
   const p = resolve(CACHE_DIR, `${slug}.json`);
@@ -68,12 +68,7 @@ export default function () {
 
     return {
       slug: plugin.name,
-      displayName:
-        displayNames[plugin.name] ||
-        plugin.name
-          .split("-")
-          .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
-          .join(" "),
+      displayName: displayName(plugin.name),
       description: plugin.description,
       descriptionEn: plugin.description,
       descriptionDe: descriptionsDe[plugin.name] || plugin.description,
