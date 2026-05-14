@@ -11,11 +11,14 @@
 
   // ----- search ---------------------------------------------------------
   var searchForm = document.querySelector("[data-search]");
-  if (searchForm) {
-    var input = searchForm.querySelector("[data-search-input]");
+  var input = searchForm && searchForm.querySelector("[data-search-input]");
+  var indexUrl = searchForm && searchForm.getAttribute("data-index-url");
+
+  // Bail out if anything the search module needs is missing — partial markup
+  // shouldn't bring down the rest of enhance.js (clipboard etc.).
+  if (searchForm && input && indexUrl) {
     var clearBtn = searchForm.querySelector("[data-search-clear]");
     var statusEl = searchForm.querySelector("[data-search-status]");
-    var indexUrl = searchForm.getAttribute("data-index-url");
     var noResultsMsg = searchForm.getAttribute("data-no-results") || "";
     var resultsTpl = searchForm.getAttribute("data-results-template") || "{count}";
 
@@ -76,6 +79,7 @@
       }
 
       if (clearBtn) clearBtn.hidden = false;
+      if (!statusEl) return;
 
       loadIndex().then(function (records) {
         if (!records) return;
@@ -122,6 +126,14 @@
     searchForm.addEventListener("reset", function () {
       setTimeout(function () { applyFilter(""); }, 0);
     });
+
+    // Prefill from ?q=... — supports the SearchAction urlTemplate
+    // (`/<lang>/?q={search_term_string}#skills`) and any shared link.
+    var initialQuery = new URLSearchParams(window.location.search).get("q");
+    if (initialQuery) {
+      input.value = initialQuery;
+      applyFilter(initialQuery.trim());
+    }
   }
 
   // ----- clipboard ------------------------------------------------------

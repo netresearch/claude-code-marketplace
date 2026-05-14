@@ -9,6 +9,7 @@
   --color-primary: #2F99A4;
   --color-primary-rgb: 47, 153, 164;
   --color-primary-dark: #257880;
+  --color-primary-darker: #1c5d63;
   --color-accent: #FF4D00;
   --color-accent-rgb: 255, 77, 0;
   --color-accent-dark: #CC3D00;
@@ -465,7 +466,7 @@ pre {
 
 .cta-links a:hover,
 .cta-links a:focus-visible {
-  background: #1c5d63;
+  background: var(--color-primary-darker);
   text-decoration: none;
 }
 
