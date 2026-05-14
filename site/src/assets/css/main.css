@@ -226,8 +226,9 @@ pre {
 
 .skill-card__footer {
   display: flex;
-  align-items: center;
-  gap: var(--spacing-sm);
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--spacing-xs);
   font-size: var(--font-size-xs);
 }
 
@@ -544,6 +545,30 @@ pre {
   border: 0;
 }
 
+.install-mode__hint {
+  display: none;
+  margin: var(--spacing-sm) 0 0;
+  padding: var(--spacing-sm) var(--spacing-md);
+  background: var(--color-background-alt);
+  border-radius: var(--radius-sm);
+  border-left: 3px solid var(--color-primary-dark);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-primary);
+}
+
+.install-mode__hint code {
+  background: transparent;
+  padding: 0;
+  font-size: 0.95em;
+}
+
+/* claude-code has hint:null and renders no element — no selector for it. */
+body[data-install-mode="npx"] .install-mode__hint--npx,
+body[data-install-mode="composer-require"] .install-mode__hint--composer-require,
+body[data-install-mode="composer-skills"] .install-mode__hint--composer-skills {
+  display: block;
+}
+
 /* ── Card install row — show one method at a time per body[data-install-mode] ── */
 .skill-card__installs {
   display: flex;
@@ -565,8 +590,6 @@ body[data-install-mode="composer-skills"] .skill-card__installs > .install--comp
 }
 
 .skill-card__more-install {
-  display: inline-block;
-  margin-top: var(--spacing-xs);
   font-size: var(--font-size-xs);
   color: var(--color-text-secondary);
 }
@@ -617,6 +640,18 @@ body[data-install-mode="composer-skills"] .skill-card__installs > .install--comp
 .install-methods__subtitle {
   font-size: var(--font-size-sm);
   color: var(--color-text-secondary);
+}
+
+.install-methods__hint {
+  margin: var(--spacing-sm) 0 0;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+}
+
+.install-methods__hint code {
+  background: transparent;
+  padding: 0;
+  color: var(--color-text-primary);
 }
 
 .site-search {

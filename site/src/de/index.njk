@@ -69,22 +69,8 @@ description: "Kuratierte Agent Skills für TYPO3, PHP, Go, Docker, Security und 
   <h2>{{ t.categoriesSection.h2 }}</h2>
   <p class="lead">{{ t.categoriesSection.lead }}</p>
 
-  <section class="install-mode" data-install-mode-switcher data-install-mode-announce="{{ t.ui.installMethodSrAnnounce }}" aria-labelledby="install-mode-h">
-    <h3 id="install-mode-h" class="install-mode__legend">{{ t.ui.installMethodLegend }}</h3>
-    <div class="install-mode__tabs" role="tablist" aria-labelledby="install-mode-h">
-      {% for method in installMethods.methods %}
-        <button type="button" role="tab"
-                class="install-mode__tab"
-                data-install-mode-id="{{ method.id }}"
-                aria-selected="{{ 'true' if method.id == installMethods.default else 'false' }}"
-                tabindex="{{ '0' if method.id == installMethods.default else '-1' }}">
-          <span class="install-mode__tab-label">{{ method.labels.de.tab }}</span>
-          <span class="install-mode__tab-subtitle">{{ method.labels.de.subtitle }}</span>
-        </button>
-      {% endfor %}
-    </div>
-    <p class="install-mode__sr" aria-live="polite" data-install-mode-status></p>
-  </section>
+  {% from "partials/install-mode-switcher.njk" import switcher as installModeSwitcher %}
+  {{ installModeSwitcher('de', installMethods, t) }}
 
   <form class="site-search" role="search" data-search data-index-url="{{ '/de/search-index.json' | url }}" data-no-results="{{ t.ui.searchNoResults }}" data-results-template="{{ t.ui.searchResults }}">
     <label for="skills-search" class="site-search__label">{{ t.ui.searchLabel }}</label>
