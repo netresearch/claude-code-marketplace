@@ -83,6 +83,13 @@ description: "Kuratierte Agent Skills für TYPO3, PHP, Go, Docker, Security und 
         </button>
       {% endfor %}
     </div>
+    {% for method in installMethods.methods %}
+      {% if method.hint %}
+        <p class="install-mode__hint install-mode__hint--{{ method.id }}">
+          {{ method.hint.de.text }} <a href="{{ method.hint.de.linkUrl }}" rel="noopener"><code>{{ method.hint.de.linkText }}</code></a> {{ method.hint.de.suffix }}
+        </p>
+      {% endif %}
+    {% endfor %}
     <p class="install-mode__sr" aria-live="polite" data-install-mode-status></p>
   </section>
 
