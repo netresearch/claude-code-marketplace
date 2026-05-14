@@ -473,20 +473,20 @@ pre {
 /* ── Install-method tablist on landings ─────────────────────────────── */
 .install-mode {
   margin: var(--spacing-xl) 0 var(--spacing-lg);
-  padding: 0;
-  border: none;
+}
+
+.install-mode__legend {
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin: 0 0 var(--spacing-xs);
+}
+
+.install-mode__tabs {
   display: flex;
   flex-wrap: wrap;
   gap: var(--spacing-sm);
   align-items: stretch;
-}
-
-.install-mode__legend {
-  width: 100%;
-  font-size: var(--font-size-sm);
-  font-weight: 600;
-  color: var(--color-text-secondary);
-  margin-bottom: var(--spacing-xs);
 }
 
 .install-mode__tab {
@@ -529,7 +529,7 @@ pre {
 }
 
 .install-mode__tab[aria-selected="true"] .install-mode__tab-subtitle {
-  color: rgba(255, 255, 255, 0.85);
+  color: #FFFFFF;
 }
 
 .install-mode__sr {
