@@ -314,7 +314,7 @@ pre {
   z-index: 1000;
   padding: var(--spacing-sm) var(--spacing-md);
   background: var(--color-text-primary);
-  color: #FFFFFF;
+  color: var(--color-background);
   text-decoration: none;
   border-radius: var(--radius-sm);
   transform: translateY(-200%);
@@ -324,7 +324,7 @@ pre {
 .skip-link:focus,
 .skip-link:focus-visible {
   transform: translateY(0);
-  color: #FFFFFF;
+  color: var(--color-background);
   outline: 2px solid var(--color-accent);
   outline-offset: 2px;
 }
