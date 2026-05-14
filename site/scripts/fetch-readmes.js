@@ -124,13 +124,12 @@ for (const plugin of marketplace.plugins) {
           dirty = true;
         }
       }
-      if (
-        latestRelease &&
-        JSON.stringify(latestRelease) !== JSON.stringify(existing.latestRelease)
-      ) {
-        existing.latestRelease = latestRelease;
-        dirty = true;
-      } else if (!("latestRelease" in existing)) {
+      // Compare on the canonical-null form so deletions / unpublished releases
+      // also write back (`null` !== `{tag: …}`). Also covers the legacy case
+      // where the cache predates `latestRelease` and has no key at all.
+      const existingRelease =
+        "latestRelease" in existing ? existing.latestRelease : undefined;
+      if (JSON.stringify(latestRelease) !== JSON.stringify(existingRelease ?? null)) {
         existing.latestRelease = latestRelease;
         dirty = true;
       }
