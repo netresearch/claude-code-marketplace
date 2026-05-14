@@ -1,0 +1,27 @@
+{% macro switcher(lang, installMethods, t) %}
+<section class="install-mode" data-install-mode-switcher data-install-mode-announce="{{ t.ui.installMethodSrAnnounce }}" aria-labelledby="install-mode-h">
+  <h3 id="install-mode-h" class="install-mode__legend">{{ t.ui.installMethodLegend }}</h3>
+  <div class="install-mode__tabs" role="tablist" aria-labelledby="install-mode-h">
+    {% for method in installMethods.methods %}
+      {% set labels = method.labels.de if lang == 'de' else method.labels.en %}
+      <button type="button" role="tab"
+              class="install-mode__tab"
+              data-install-mode-id="{{ method.id }}"
+              aria-selected="{{ 'true' if method.id == installMethods.default else 'false' }}"
+              tabindex="{{ '0' if method.id == installMethods.default else '-1' }}">
+        <span class="install-mode__tab-label">{{ labels.tab }}</span>
+        <span class="install-mode__tab-subtitle">{{ labels.subtitle }}</span>
+      </button>
+    {% endfor %}
+  </div>
+  {% for method in installMethods.methods %}
+    {% if method.hint %}
+      {% set hint = method.hint.de if lang == 'de' else method.hint.en %}
+      <p class="install-mode__hint install-mode__hint--{{ method.id }}">
+        {{ hint.text }} <a href="{{ hint.linkUrl }}" rel="noopener"><code>{{ hint.linkText }}</code></a> {{ hint.suffix | inlineMarkdown | safe }}
+      </p>
+    {% endif %}
+  {% endfor %}
+  <p class="install-mode__sr" aria-live="polite" data-install-mode-status></p>
+</section>
+{% endmacro %}
