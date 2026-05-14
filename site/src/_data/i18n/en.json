@@ -3,7 +3,8 @@
     "home": "Home",
     "skills": "Skills",
     "about": "About",
-    "switchLang": "Deutsch"
+    "switchLang": "Deutsch",
+    "skipToContent": "Skip to content"
   },
   "hero": {
     "h1": "You ship code. Your agent should know your stack.",
