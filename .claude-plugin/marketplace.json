@@ -18,7 +18,7 @@
     },
     {
       "name": "typo3-docs",
-      "description": "Create and maintain TYPO3 extension documentation following official TYPO3 documentation standards. Includes automated documentation extraction with priority-weighted gap analysis based on TYPO3 architecture, RST syntax reference, TYPO3-specific directives, local rendering, validation, and TYPO3 Intercept deployment setup.",
+      "description": "Create and maintain TYPO3 extension documentation following official TYPO3 documentation standards. Automated extraction with priority-weighted gap analysis, RST syntax reference, TYPO3-specific directives, local rendering, validation, and Intercept deployment setup.",
       "source": {
         "source": "github",
         "repo": "netresearch/typo3-docs-skill"
@@ -54,7 +54,7 @@
     },
     {
       "name": "typo3-conformance",
-      "description": "Evaluate TYPO3 extensions for conformance to official TYPO3 coding standards, architecture patterns, and best practices. Includes automated validation scripts for file structure, PSR-12 compliance, dependency injection, testing infrastructure, and comprehensive conformance scoring with priority-based action items.",
+      "description": "Evaluate TYPO3 extensions for conformance to official coding standards, architecture patterns, and best practices. Automated validation scripts for file structure, PSR-12 compliance, dependency injection, testing infrastructure, and priority-based conformance scoring.",
       "source": {
         "source": "github",
         "repo": "netresearch/typo3-conformance-skill"
@@ -63,7 +63,7 @@
     },
     {
       "name": "netresearch-branding",
-      "description": "Implement Netresearch brand guidelines in web projects with comprehensive color system, typography standards (Raleway, Open Sans, Calibri), responsive component library, and production-ready templates. Includes WCAG AA accessibility compliance, social media specifications, and complete web design patterns.",
+      "description": "Implement Netresearch brand guidelines in web projects with comprehensive color system, typography (Raleway, Open Sans, Calibri), responsive component library, and production-ready templates. WCAG AA accessibility compliance, social media specs, and complete web design patterns.",
       "source": {
         "source": "github",
         "repo": "netresearch/netresearch-branding-skill"
@@ -90,7 +90,7 @@
     },
     {
       "name": "cli-tools",
-      "description": "Automatic CLI tool management for coding agents. Detects missing tools from 'command not found' errors and installs them via optimal package managers. Includes 74+ tool catalog (ripgrep, fd, jq, docker, terraform, etc.), project environment auditing, and batch update capabilities. Supports Python, Node.js, Rust, Go, PHP, Ruby, and infrastructure projects.",
+      "description": "Automatic CLI tool management for coding agents. Detects missing tools from 'command not found' errors and installs via optimal package managers. 74+ tool catalog (ripgrep, fd, jq, docker, terraform, etc.), project environment auditing, batch updates across Python, Node, Rust, Go, PHP, Ruby.",
       "source": {
         "source": "github",
         "repo": "netresearch/cli-tools-skill"
@@ -99,7 +99,7 @@
     },
     {
       "name": "typo3-extension-upgrade",
-      "description": "Systematic TYPO3 extension upgrades to newer LTS versions with modern PHP compatibility. Covers Extension Scanner assessment, Rector for PHP migrations, Fractor for non-PHP file migrations (FlexForms, TypoScript, YAML, Fluid), PHPStan for static analysis, and testing setup. Includes version-specific guidance for v11→v12, v12→v13, and dual-compatibility scenarios.",
+      "description": "Systematic TYPO3 extension upgrades to newer LTS versions with modern PHP compatibility. Extension Scanner assessment, Rector for PHP migrations, Fractor for FlexForms/TypoScript/YAML/Fluid, PHPStan, and testing setup. Version-specific guidance for v11→v12, v12→v13, and dual-compatibility.",
       "source": {
         "source": "github",
         "repo": "netresearch/typo3-extension-upgrade-skill"
@@ -153,7 +153,7 @@
     },
     {
       "name": "github-project",
-      "description": "GitHub repository setup and platform-specific features. Covers branch protection rules, CODEOWNERS configuration, GitHub Issues/Discussions/Projects, PR review workflows with conversation resolution, Dependabot/Renovate auto-merge workflows, and GitHub Releases configuration. Focuses on GitHub platform features only - delegates CI/CD to language skills, security to security-audit, SLSA to enterprise-readiness. By Netresearch.",
+      "description": "GitHub repository setup and platform-specific features. Branch protection, CODEOWNERS, Issues/Discussions/Projects, PR review workflows with conversation resolution, Dependabot/Renovate auto-merge, and GitHub Releases. Platform-only — CI/CD and security live in sibling skills. By Netresearch.",
       "source": {
         "source": "github",
         "repo": "netresearch/github-project-skill"
@@ -207,7 +207,7 @@
     },
     {
       "name": "concourse-ci",
-      "description": "Expert guidance for Concourse CI pipeline development, optimization, and troubleshooting. Covers pipeline creation, git-resource and registry-image configuration, job lifecycle hooks, YAML anchors for DRY patterns, multi-branch pipelines with set_pipeline, container builds with oci-build-task, and critical gotchas like tag detection after force-push. Includes complete YAML schema reference, working example pipelines, and validation scripts. Targets Concourse v8.0+.",
+      "description": "Expert guidance for Concourse CI pipeline development, optimization, and troubleshooting. Pipeline creation, git/registry-image resources, job lifecycle hooks, YAML anchors, multi-branch pipelines with set_pipeline, oci-build-task, and gotchas like tag detection after force-push. Concourse v8.0+.",
       "source": {
         "source": "github",
         "repo": "netresearch/concourse-ci-skill"
@@ -225,7 +225,7 @@
     },
     {
       "name": "docker-development",
-      "description": "Docker image development patterns for Dockerfile, docker-compose.yml, compose.yml, docker-bake.hcl, and .dockerignore. Covers multi-stage builds, layer optimization, CI testing patterns (entrypoint bypass, DNS mocking, compose validation), Docker Bake for multi-platform builds, security scanning with Trivy, and network isolation. Based on production learnings. By Netresearch.",
+      "description": "Docker image development patterns for Dockerfile, docker-compose, docker-bake.hcl, and .dockerignore. Multi-stage builds, layer optimization, CI testing patterns (entrypoint bypass, DNS mocking, compose validation), Docker Bake multi-platform, Trivy scanning, network isolation. By Netresearch.",
       "source": {
         "source": "github",
         "repo": "netresearch/docker-development-skill"
@@ -261,7 +261,7 @@
     },
     {
       "name": "typo3-typoscript-ref",
-      "description": "Version-aware TypoScript, TSconfig and Fluid reference lookup with always-on best practices. Covers keyword search across cached documentation, 14 ready-to-use recipes, code review checklists, deprecation checks, migration guides, debugging reference, and project-specific lint rule detection. Supports TYPO3 v12, v13, and v14.",
+      "description": "Version-aware TypoScript, TSconfig and Fluid reference lookup with always-on best practices. Keyword search across cached documentation, 14 ready-to-use recipes, code review checklists, deprecation checks, migration guides, debugging reference. Supports TYPO3 v12, v13, and v14.",
       "source": {
         "source": "github",
         "repo": "netresearch/typo3-typoscript-ref-skill"
@@ -270,7 +270,7 @@
     },
     {
       "name": "typo3-project-upgrade",
-      "description": "Systematic TYPO3 project instance upgrades across major LTS versions. Covers sys_template to Site Sets migration, Bootstrap 4 to 5 patterns, Bootstrap Package v12–v16 breaking changes, SCSS variable injection, Docker infrastructure, database cleanup, and visual review methodology. Includes assessment checkpoints.",
+      "description": "Systematic TYPO3 project instance upgrades across major LTS versions. sys_template→Site Sets migration, Bootstrap 4→5 patterns, Bootstrap Package v12–v16 breaking changes, SCSS variable injection, Docker infrastructure, database cleanup, visual review methodology with assessment checkpoints.",
       "source": {
         "source": "github",
         "repo": "netresearch/typo3-project-upgrade-skill"
@@ -288,7 +288,7 @@
     },
     {
       "name": "typo3-a11y",
-      "description": "WCAG 2.1 AA accessibility patterns for TYPO3 projects. Covers document structure, landmarks, links, buttons, color contrast, focus management, ARIA, and automated testing. Includes 7 implementation patterns: skip links, accessible navigation, forms, filters, disclosure widgets, clickable cards, responsive tables.",
+      "description": "WCAG 2.1 AA accessibility patterns for TYPO3 projects. Document structure, landmarks, links, buttons, color contrast, focus management, ARIA, and automated testing. 7 implementation patterns: skip links, accessible navigation, forms, filters, disclosure widgets, clickable cards, responsive tables.",
       "source": {
         "source": "github",
         "repo": "netresearch/typo3-a11y-skill"
@@ -324,7 +324,7 @@
     },
     {
       "name": "german-technical-writing",
-      "description": "Enforce natural German technical register in Jira tickets, internal German docs and team-chat to German-speaking colleagues. Catches English→German anglicisms (brechen, gefangen, returnen, triggern, failen) and substitutes canonical verbs (werfen, abfangen, zurückgeben, auslösen, fehlschlagen) while accepting Denglisch loanwords (der Commit, die Pipeline, die Exception). Does not apply to commit messages or release notes.",
+      "description": "Enforce natural German technical register in Jira tickets, internal docs and team chat. Catches English→German anglicisms (brechen, gefangen, triggern, failen) and substitutes canonical verbs (werfen, abfangen, auslösen, fehlschlagen). Accepts Denglisch loanwords. Skips commit messages.",
       "source": {
         "source": "github",
         "repo": "netresearch/german-technical-writing-skill"
@@ -333,7 +333,7 @@
     },
     {
       "name": "peer-qa-review",
-      "description": "Round-1 IT QA peer-review runbook: lifecycle, checklist, severity vocabulary, structured Jira comment template, edge cases, anti-patterns. Triggers on tickets transitioned to QA status, 'ready for QA' comments, and explicit requests for IT QA / peer review / quality gate. Generic for any IT/Ops team; defers to internal team-specific skills for project-list, inventory, and announcement-channel overrides.",
+      "description": "Round-1 IT QA peer-review runbook: lifecycle, checklist, severity vocabulary, structured Jira comment template, edge cases, anti-patterns. Triggers on QA-status tickets, 'ready for QA' comments, and explicit IT QA / peer review / quality gate requests. Generic; defers to team-specific overrides.",
       "source": {
         "source": "github",
         "repo": "netresearch/peer-qa-review-skill"
@@ -351,7 +351,7 @@
     },
     {
       "name": "typo3-upgrade-effort-model",
-      "description": "Generic effort model for TYPO3 LTS major version upgrades: per-version risk multipliers (v14: Fluid 5 strict VHs, HashService removal, TSFE removal, asset-pipeline removal), breaking-change baselines, version-compatibility matrix, Rector coverage adjustments, and a 7-phase assessment workflow. Calibration-free — pair with your team's historical project data for tuned estimates.",
+      "description": "Generic effort model for TYPO3 LTS upgrades: per-version risk multipliers (v14 Fluid 5 strict VHs, HashService removal, TSFE removal, asset-pipeline removal), breaking-change baselines, compatibility matrix, Rector coverage adjustments, 7-phase assessment workflow. Pair with team history.",
       "source": {
         "source": "github",
         "repo": "netresearch/typo3-upgrade-effort-model-skill"
@@ -360,7 +360,7 @@
     },
     {
       "name": "retro",
-      "description": "LLM-driven session retrospection. Detects friction in agent sessions (mechanical pre-pass + LLM inference + cross-session) and materializes approved learnings into the correct destination (user memory, project rules, skill PRs, checkpoints, or harness artifacts). Provides /retro (sweep + spotlight), /retro outcome (post-hoc review of past session output), /retro audit (cross-session architectural review). Optional SessionEnd hook.",
+      "description": "LLM-driven session retrospection. Detects friction in agent sessions (mechanical pre-pass + LLM inference + cross-session) and materializes approved learnings into user memory, project rules, skill PRs, checkpoints, or harness artifacts. Commands: /retro, /retro outcome, /retro audit.",
       "source": {
         "source": "github",
         "repo": "netresearch/retro-skill"

@@ -24,6 +24,22 @@ const octokit = new Octokit({
   userAgent: "netresearch-marketplace-pages-build",
 });
 
+async function fetchLatestRelease(owner, repo) {
+  try {
+    const res = await octokit.repos.getLatestRelease({ owner, repo });
+    return {
+      tag: res.data.tag_name,
+      publishedAt: res.data.published_at,
+      htmlUrl: res.data.html_url,
+    };
+  } catch (err) {
+    // 404 = no releases yet — common for newer skill repos. Anything else is unexpected.
+    if (err.status === 404) return null;
+    console.warn(`  · ${owner}/${repo} release lookup failed (${err.status}): ${err.message}`);
+    return null;
+  }
+}
+
 mkdirSync(CACHE_DIR, { recursive: true });
 
 const marketplace = JSON.parse(readFileSync(MARKETPLACE, "utf8"));
@@ -56,6 +72,7 @@ for (const plugin of marketplace.plugins) {
     );
 
     const parsed = parseReadme(raw);
+    const latestRelease = await fetchLatestRelease(owner, repo);
 
     writeFileSync(
       cachePath,
@@ -67,17 +84,35 @@ for (const plugin of marketplace.plugins) {
           etag: res.headers.etag || null,
           fetchedAt: new Date().toISOString(),
           parsed,
+          latestRelease,
         },
         null,
         2
       )
     );
     fetched++;
-    process.stdout.write(`  ✓ ${plugin.name}\n`);
+    process.stdout.write(`  ✓ ${plugin.name}${latestRelease ? ` (${latestRelease.tag})` : ""}\n`);
   } catch (err) {
     if (err.status === 304 && existing) {
+      // README unchanged, but the latest-release pointer drifts independently
+      // and old caches (pre-v5 fetch-readmes) may lack it entirely. Refresh
+      // the release field on every run so visual + JSON-LD snapshots stay
+      // current even on a cache hit.
+      const latestRelease = await fetchLatestRelease(owner, repo);
+      if (
+        latestRelease &&
+        JSON.stringify(latestRelease) !== JSON.stringify(existing.latestRelease)
+      ) {
+        existing.latestRelease = latestRelease;
+        writeFileSync(cachePath, JSON.stringify(existing, null, 2));
+      } else if (!("latestRelease" in existing)) {
+        existing.latestRelease = latestRelease;
+        writeFileSync(cachePath, JSON.stringify(existing, null, 2));
+      }
       cached++;
-      process.stdout.write(`  · ${plugin.name} (not modified)\n`);
+      process.stdout.write(
+        `  · ${plugin.name} (not modified${latestRelease ? `, ${latestRelease.tag}` : ""})\n`
+      );
       continue;
     }
     if (err.status === 404) {

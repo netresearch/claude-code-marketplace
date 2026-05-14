@@ -9,6 +9,7 @@
   --color-primary: #2F99A4;
   --color-primary-rgb: 47, 153, 164;
   --color-primary-dark: #257880;
+  --color-primary-darker: #1c5d63;
   --color-accent: #FF4D00;
   --color-accent-rgb: 255, 77, 0;
   --color-accent-dark: #CC3D00;
@@ -173,7 +174,7 @@ pre {
   font-family: var(--font-headline);
   font-size: var(--font-size-3xl);
   font-weight: 700;
-  color: var(--color-primary);
+  color: var(--color-primary-dark);
   display: block;
 }
 
@@ -254,9 +255,9 @@ pre {
 
 .copy-btn:hover,
 .copy-btn:focus-visible {
-  background: var(--color-primary);
+  background: var(--color-primary-dark);
   color: #FFFFFF;
-  border-color: var(--color-primary);
+  border-color: var(--color-primary-dark);
 }
 
 .copy-btn--lg {
@@ -266,9 +267,9 @@ pre {
 }
 
 .copy-btn[data-state="copied"] {
-  background: var(--color-primary);
+  background: var(--color-primary-dark);
   color: #FFFFFF;
-  border-color: var(--color-primary);
+  border-color: var(--color-primary-dark);
 }
 
 .site-header {
@@ -334,13 +335,13 @@ pre {
 
 .btn--secondary {
   background: var(--color-background);
-  color: var(--color-primary);
-  border: 1px solid var(--color-primary);
+  color: var(--color-primary-dark);
+  border: 1px solid var(--color-primary-dark);
 }
 
 .btn--secondary:hover,
 .btn--secondary:focus-visible {
-  background: var(--color-primary);
+  background: var(--color-primary-dark);
   color: #FFFFFF;
   text-decoration: none;
 }
@@ -458,15 +459,78 @@ pre {
   display: inline-block;
   padding: 0.75rem 1.5rem;
   border-radius: var(--radius-md);
-  background: var(--color-primary);
+  background: var(--color-primary-dark);
   color: #FFFFFF;
   font-weight: 600;
 }
 
 .cta-links a:hover,
 .cta-links a:focus-visible {
-  background: var(--color-primary-dark);
+  background: var(--color-primary-darker);
   text-decoration: none;
+}
+
+.site-search {
+  margin: var(--spacing-lg) 0 var(--spacing-xl);
+  max-width: 36rem;
+}
+
+.site-search__label {
+  display: block;
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  margin-bottom: var(--spacing-xs);
+}
+
+.site-search__row {
+  position: relative;
+}
+
+.site-search input[type="search"] {
+  width: 100%;
+  font: inherit;
+  font-size: var(--font-size-base);
+  padding: 0.6rem 2.5rem 0.6rem 0.85rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-background);
+  color: var(--color-text-primary);
+  transition: border-color 120ms ease, box-shadow 120ms ease;
+}
+
+.site-search input[type="search"]:focus {
+  outline: none;
+  border-color: var(--color-primary-dark);
+  box-shadow: 0 0 0 3px rgba(var(--color-primary-rgb), 0.25);
+}
+
+.site-search__clear {
+  position: absolute;
+  top: 50%;
+  right: 0.4rem;
+  transform: translateY(-50%);
+  width: 1.75rem;
+  height: 1.75rem;
+  border: none;
+  background: transparent;
+  border-radius: 50%;
+  font-size: 1.25rem;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+}
+
+.site-search__clear:hover,
+.site-search__clear:focus-visible {
+  background: var(--color-background-alt);
+  color: var(--color-text-primary);
+}
+
+.site-search__status {
+  margin: var(--spacing-xs) 0 0;
+  min-height: 1.25em;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
 }
 
 .breadcrumbs {
@@ -490,12 +554,51 @@ pre {
   margin-bottom: var(--spacing-xxl);
 }
 
+.skill-detail__version {
+  margin: var(--spacing-md) 0 0;
+  font-size: var(--font-size-sm);
+}
+
+.skill-detail__version a {
+  display: inline-flex;
+  gap: 0.5rem;
+  align-items: baseline;
+  text-decoration: none;
+  padding: 0.25rem 0.75rem;
+  background: var(--color-background-alt);
+  border-radius: var(--radius-sm);
+  color: var(--color-text-primary);
+}
+
+.skill-detail__version a:hover,
+.skill-detail__version a:focus-visible {
+  background: var(--color-primary-dark);
+  color: #FFFFFF;
+}
+
+.skill-detail__version-label {
+  font-size: var(--font-size-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-text-secondary);
+}
+
+.skill-detail__version a:hover .skill-detail__version-label,
+.skill-detail__version a:focus-visible .skill-detail__version-label {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.skill-detail__version-tag {
+  font-family: var(--font-mono);
+  font-weight: 700;
+}
+
 .skill-detail__category {
   display: inline-block;
   font-size: var(--font-size-xs);
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  color: var(--color-primary);
+  color: var(--color-primary-dark);
   font-weight: 700;
   margin-bottom: var(--spacing-md);
 }

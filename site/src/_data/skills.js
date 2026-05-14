@@ -96,6 +96,9 @@ export default function () {
       tags: parsed?.tags?.length ? parsed.tags : [],
       relatedSkills: parsed?.relatedSkills?.length ? parsed.relatedSkills : [],
       readmeFetchedAt: cache?.fetchedAt || null,
+      version: cache?.latestRelease?.tag || null,
+      versionPublishedAt: cache?.latestRelease?.publishedAt || null,
+      versionUrl: cache?.latestRelease?.htmlUrl || null,
     };
   });
 

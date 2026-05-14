@@ -17,6 +17,13 @@ export default function (eleventyConfig) {
       .join(" ")
   );
 
+  // Render an ISO timestamp as YYYY-MM-DD. Used for skill-release dates.
+  eleventyConfig.addFilter("isoDate", (input) => {
+    if (!input || typeof input !== "string") return "";
+    const m = input.match(/^(\d{4}-\d{2}-\d{2})/);
+    return m ? m[1] : "";
+  });
+
   eleventyConfig.addFilter("skillsInGroup", (skills, slugs) => {
     const order = new Map(slugs.map((slug, i) => [slug, i]));
     return skills

@@ -73,11 +73,17 @@
   },
   "ui": {
     "copyShort": "Kopieren",
-    "copyCopied": "Kopiert"
+    "copyCopied": "Kopiert",
+    "searchLabel": "Skills durchsuchen",
+    "searchPlaceholder": "Skill finden — z. B. „typo3“, „docker“, „jira“…",
+    "searchClear": "Suche zurücksetzen",
+    "searchResults": "{count} Skills passen",
+    "searchNoResults": "Keine passenden Skills. Versuche einen kürzeren Begriff."
   },
   "skill": {
     "install": "Installation",
     "copyInstall": "Install-Befehl kopieren",
+    "latestVersion": "Letztes Release",
     "altInstall": "Oder in einem beliebigen Agent-Skills-kompatiblen CLI:",
     "useCases": "Wofür du den Skill einsetzt",
     "expectedOutputs": "Was du zurück­bekommst",

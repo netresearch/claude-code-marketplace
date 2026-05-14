@@ -529,15 +529,19 @@ Diese Tabelle dokumentiert **intentionale Abweichungen** vom „one canonical so
 
 ---
 
-## 14. Phase-2-Kandidaten (offene Wünsche, nicht Phase-1-Scope)
+## 14. Phase-2-Status
 
-Konkret gewünscht, aber nicht in der ersten Auslieferung:
+Phase-2-Auslieferung (siehe PR #48):
 
-- **Clientseitige Volltext-Suche** über alle Skill-Daten (Slug, displayName, Description, Use cases, Tags). Heute existiert **keine** Filter-UI — Skills werden über die Themen-Gruppen-Anker auf der Landing entdeckt. Eine schlanke `lunr`-basierte Indexsuche (vorab gebaut, ohne Server) wäre der nächste Schritt; zugleich würde damit das `WebSite + SearchAction`-JSON-LD wieder sinnvoll.
-- **`SKILL.md`-Frontmatter als Discovery-Quelle** (`useCases:`, `relatedSkills:`, `expectedOutputs:`, `contextRequirements:` als optionale Felder). Ersetzt das README-Parsing, mirroring-konform, kein separates Artefakt nötig. Voraussetzung: AGENTS.md / skill-repo-skill aktualisieren, dass diese Felder erlaubt + erwartet sind.
-- **Visual-Regression-Tests** (z. B. via Playwright-Screenshot-Diff oder `lost-pixel`) im CI-Workflow.
-- **Skill-Versionierung**: in `marketplace.json` heute nicht gepinnt; sobald `version:` pro Plugin-Entry vorhanden ist, wird die Detail-Page sie sichtbar machen.
-- **Lighthouse Phase-2-Targets**: Performance/Best-Practices ≥ 0.95, Accessibility 1.0 (heute Gate bei ≥ 0.9). Vor allem die Brand-Turquoise-Kontraste sollten dafür gegen WCAG-AA gegengelesen werden.
+- ✅ **Clientseitige Volltext-Suche** — pre-built JSON-Index pro Locale (`/<lang>/search-index.json`), ~40 KB, vanilla JS `~3 KB` mehr, in-place Card-Filtering mit `aria-live`-Status, debounced auf 80 ms. `WebSite + SearchAction`-JSON-LD auf beiden Landings.
+- ✅ **Visual-Regression** via Playwright (chromium-desktop, 1280×800), 5 Snapshots (Landings EN/DE + 3 Detail-Pages), maxDiffPixelRatio 0.005, im CI-Workflow als blocking job zwischen `build` und `deploy`.
+- ✅ **Skill-Versionen** — Latest-Release-Tag pro Skill-Repo wird zur Build-Zeit via Octokit (`getLatestRelease`) gefetcht und als verlinktes Badge auf der Detail-Page gerendert. Repos ohne Releases werden silently geskippt.
+- ✅ **Lighthouse Phase-2-Targets** scharf geschaltet: Performance/Best-Practices ≥ 0.95, A11y = 1.0, SEO = 1.0. Brand-Turquoise auf `--color-primary-dark` (5.3:1) für sämtliche Text/Button-Vorder- und -Hintergründe migriert.
+- ✅ **15 überlange Descriptions** in `marketplace.json` auf ≤300 Zeichen gekürzt (SEO-Snippet-Friendly), Linter zeigt jetzt 0 Warnings.
+
+**Verbleibender Phase-2-Kandidat** (eigene Initiative, nicht Pages):
+
+- **`SKILL.md`-Frontmatter als Discovery-Quelle** (`useCases:`, `relatedSkills:`, `expectedOutputs:`, `contextRequirements:` als optionale Felder). Ersetzt das README-Parsing, mirroring-konform, kein separates Artefakt nötig. Voraussetzung: AGENTS.md / skill-repo-skill aktualisieren, dass diese Felder erlaubt + erwartet sind. Multi-Repo-PR-Kampagne über alle 40 Skill-Repos.
 
 **Bewusst nicht vorgesehen** (für die Discussion-Schließung dokumentiert): Login/Skill-Submission-Form, Newsletter, RSS-Feed, dynamische API-Endpoints, serverseitige Logik. Das ist ein statischer Discovery-Hub — wer einen Skill einreichen will, öffnet eine PR gegen `marketplace.json`. Weitere Sprachen jenseits DE+EN sind heute kein Bedarf.
 
