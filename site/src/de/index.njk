@@ -69,6 +69,21 @@ description: "Kuratierte Agent Skills für TYPO3, PHP, Go, Docker, Security und 
   <h2>{{ t.categoriesSection.h2 }}</h2>
   <p class="lead">{{ t.categoriesSection.lead }}</p>
 
+  <fieldset class="install-mode" role="tablist" aria-label="{{ t.ui.installMethodLegend }}" data-install-mode-switcher data-install-mode-announce="{{ t.ui.installMethodSrAnnounce }}">
+    <legend class="install-mode__legend">{{ t.ui.installMethodLegend }}</legend>
+    {% for method in installMethods.methods %}
+      <button type="button" role="tab"
+              class="install-mode__tab"
+              data-install-mode-id="{{ method.id }}"
+              aria-selected="{{ 'true' if method.id == installMethods.default else 'false' }}"
+              tabindex="{{ '0' if method.id == installMethods.default else '-1' }}">
+        <span class="install-mode__tab-label">{{ method.labels.de.tab }}</span>
+        <span class="install-mode__tab-subtitle">{{ method.labels.de.subtitle }}</span>
+      </button>
+    {% endfor %}
+    <p class="install-mode__sr" aria-live="polite" data-install-mode-status></p>
+  </fieldset>
+
   <form class="site-search" role="search" data-search data-index-url="{{ '/de/search-index.json' | url }}" data-no-results="{{ t.ui.searchNoResults }}" data-results-template="{{ t.ui.searchResults }}">
     <label for="skills-search" class="site-search__label">{{ t.ui.searchLabel }}</label>
     <div class="site-search__row">
@@ -80,7 +95,7 @@ description: "Kuratierte Agent Skills für TYPO3, PHP, Go, Docker, Security und 
 
   {% for groupKey in groups.order %}
     {% set group = groups.groups[groupKey] %}
-    {% set members = marketplace.skills | skillsInGroup(group.slugs) %}
+    {% set members = skills | skillsInGroup(group.slugs) %}
     {% if members | length > 0 %}
       <section class="group group--{{ groupKey }}" id="group-{{ groupKey }}">
         <header class="group__header">
@@ -96,7 +111,7 @@ description: "Kuratierte Agent Skills für TYPO3, PHP, Go, Docker, Security und 
     {% endif %}
   {% endfor %}
 
-  {% set extras = marketplace.skills | skillsNotInAnyGroup(groups) %}
+  {% set extras = skills | skillsNotInAnyGroup(groups) %}
   {% if extras | length > 0 %}
     <section class="group group--uncategorized">
       <header class="group__header">

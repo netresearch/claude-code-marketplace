@@ -30,13 +30,21 @@ layout: layouts/base.njk
     {% endif %}
   </header>
 
-  <section class="skill-detail__install" aria-labelledby="install-h">
+  <section class="skill-detail__install" id="install" aria-labelledby="install-h">
     <h2 id="install-h">{{ t.skill.install }}</h2>
-    {{ installBlock("skill-install", skill.installCommand, t.skill.copyInstall, t.ui.copyCopied) }}
-    {% if skill.npxCommand %}
-      <p class="skill-detail__alt-install">{{ t.skill.altInstall }}</p>
-      {{ installBlock("skill-npx", skill.npxCommand, t.skill.copyInstall, t.ui.copyCopied) }}
-    {% endif %}
+    <p class="skill-detail__install-lead">{{ t.skill.installLead }}</p>
+    <ol class="install-methods">
+      {% for method in installMethods.methods %}
+        {% set labels = method.labels.de if lang == 'de' else method.labels.en %}
+        <li class="install-methods__item">
+          <header class="install-methods__header">
+            <span class="install-methods__label">{{ labels.tab }}</span>
+            <span class="install-methods__subtitle">{{ labels.subtitle }}</span>
+          </header>
+          {{ installBlock('skill-install-' ~ method.id, skill.installCommands[method.id], t.skill.copyInstall, t.ui.copyCopied) }}
+        </li>
+      {% endfor %}
+    </ol>
   </section>
 
   {% if skill.useCases | length > 0 %}
@@ -114,6 +122,10 @@ layout: layouts/base.njk
       <a href="{{ skill.repoUrl }}" rel="noopener">{{ t.skill.viewSource }} →</a>
       ·
       <a href="{{ skill.readmeUrl }}" rel="noopener">{{ t.skill.viewReadme }} →</a>
+      {% if skill.skillsShUrl %}
+        ·
+        <a href="{{ skill.skillsShUrl }}" rel="noopener">{{ t.ui.viewOnSkillsSh }} →</a>
+      {% endif %}
     </p>
   </footer>
 </article>

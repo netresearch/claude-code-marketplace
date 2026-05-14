@@ -74,6 +74,10 @@
   "ui": {
     "copyShort": "Kopieren",
     "copyCopied": "Kopiert",
+    "installMethodLegend": "Installation via",
+    "installMethodSrAnnounce": "Alle Install-Befehle nutzen jetzt {label}.",
+    "moreInstallMethods": "Weitere Installmethoden",
+    "viewOnSkillsSh": "Auch auf skills.sh",
     "searchLabel": "Skills durchsuchen",
     "searchPlaceholder": "Skill finden — z. B. „typo3“, „docker“, „jira“…",
     "searchClear": "Suche zurücksetzen",
@@ -82,6 +86,7 @@
   },
   "skill": {
     "install": "Installation",
+    "installLead": "Nimm den Weg, der zu deinem Projekt passt — alle führen zur selben Skill.",
     "copyInstall": "Install-Befehl kopieren",
     "latestVersion": "Letztes Release",
     "altInstall": "Oder in einem beliebigen Agent-Skills-kompatiblen CLI:",
