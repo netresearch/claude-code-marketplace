@@ -46,7 +46,7 @@ layout: layouts/base.njk
             {{ installBlock('skill-install-' ~ method.id, skill.installCommands[method.id], t.skill.copyInstall, t.ui.copyCopied) }}
             {% if hint %}
               <p class="install-methods__hint">
-                {{ hint.text }} <a href="{{ hint.linkUrl }}" rel="noopener"><code>{{ hint.linkText }}</code></a> {{ hint.suffix }}
+                {{ hint.text }} <a href="{{ hint.linkUrl }}" rel="noopener"><code>{{ hint.linkText }}</code></a> {{ hint.suffix | inlineMarkdown | safe }}
               </p>
             {% endif %}
           </li>

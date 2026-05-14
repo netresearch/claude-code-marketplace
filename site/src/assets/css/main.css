@@ -562,7 +562,7 @@ pre {
   font-size: 0.95em;
 }
 
-body[data-install-mode="claude-code"] .install-mode__hint--claude-code,
+/* claude-code has hint:null and renders no element — no selector for it. */
 body[data-install-mode="npx"] .install-mode__hint--npx,
 body[data-install-mode="composer-require"] .install-mode__hint--composer-require,
 body[data-install-mode="composer-skills"] .install-mode__hint--composer-skills {
@@ -590,8 +590,6 @@ body[data-install-mode="composer-skills"] .skill-card__installs > .install--comp
 }
 
 .skill-card__more-install {
-  display: inline-block;
-  margin-top: var(--spacing-xs);
   font-size: var(--font-size-xs);
   color: var(--color-text-secondary);
 }

@@ -86,7 +86,7 @@ description: "Kuratierte Agent Skills für TYPO3, PHP, Go, Docker, Security und 
     {% for method in installMethods.methods %}
       {% if method.hint %}
         <p class="install-mode__hint install-mode__hint--{{ method.id }}">
-          {{ method.hint.de.text }} <a href="{{ method.hint.de.linkUrl }}" rel="noopener"><code>{{ method.hint.de.linkText }}</code></a> {{ method.hint.de.suffix }}
+          {{ method.hint.de.text }} <a href="{{ method.hint.de.linkUrl }}" rel="noopener"><code>{{ method.hint.de.linkText }}</code></a> {{ method.hint.de.suffix | inlineMarkdown | safe }}
         </p>
       {% endif %}
     {% endfor %}
