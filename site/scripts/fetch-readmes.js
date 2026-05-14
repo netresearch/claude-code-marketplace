@@ -63,7 +63,12 @@ for (const plugin of marketplace.plugins) {
 
   try {
     const headers = {};
-    if (existing?.etag) headers["if-none-match"] = existing.etag;
+    // Only use the cached ETag when the cache entry actually has the raw
+    // markdown stashed (post-v6 schema). Older caches would force a 304
+    // and we'd be stuck with whatever parsed shape they captured.
+    if (existing?.etag && typeof existing.raw === "string") {
+      headers["if-none-match"] = existing.etag;
+    }
 
     const res = await octokit.repos.getReadme({ owner, repo, headers });
 
@@ -83,6 +88,7 @@ for (const plugin of marketplace.plugins) {
           repo,
           etag: res.headers.etag || null,
           fetchedAt: new Date().toISOString(),
+          raw,
           parsed,
           latestRelease,
         },
@@ -94,21 +100,40 @@ for (const plugin of marketplace.plugins) {
     process.stdout.write(`  ✓ ${plugin.name}${latestRelease ? ` (${latestRelease.tag})` : ""}\n`);
   } catch (err) {
     if (err.status === 304 && existing) {
-      // README unchanged, but the latest-release pointer drifts independently
-      // and old caches (pre-v5 fetch-readmes) may lack it entirely. Refresh
-      // the release field on every run so visual + JSON-LD snapshots stay
-      // current even on a cache hit.
+      // README content is unchanged upstream, but two things drift
+      // independently of the README's ETag:
+      //
+      //   1. The latest-release pointer (separate API).
+      //   2. The parser logic in `parse-readme.js`. A cache from an older
+      //      parser version would otherwise survive forever because the
+      //      ETag still matches; we'd ship stale parsed sections (this
+      //      bit the live deploy of #44/#46 — `### Marketplace
+      //      (Recommended)` leaked into context-requirements for skills
+      //      whose README had not changed since the parser fix).
+      //
+      // Mitigation: store the raw markdown in the cache and re-run
+      // `parseReadme` against it on every 304 so the latest parser
+      // logic always wins. Old caches (no `raw` field) fall back to
+      // the already-parsed sections.
       const latestRelease = await fetchLatestRelease(owner, repo);
-      if (
-        latestRelease &&
-        JSON.stringify(latestRelease) !== JSON.stringify(existing.latestRelease)
-      ) {
-        existing.latestRelease = latestRelease;
-        writeFileSync(cachePath, JSON.stringify(existing, null, 2));
-      } else if (!("latestRelease" in existing)) {
-        existing.latestRelease = latestRelease;
-        writeFileSync(cachePath, JSON.stringify(existing, null, 2));
+      let dirty = false;
+      if (typeof existing.raw === "string") {
+        const reparsed = parseReadme(existing.raw);
+        if (JSON.stringify(reparsed) !== JSON.stringify(existing.parsed)) {
+          existing.parsed = reparsed;
+          dirty = true;
+        }
       }
+      // Compare on the canonical-null form so deletions / unpublished releases
+      // also write back (`null` !== `{tag: …}`). Also covers the legacy case
+      // where the cache predates `latestRelease` and has no key at all.
+      const existingRelease =
+        "latestRelease" in existing ? existing.latestRelease : undefined;
+      if (JSON.stringify(latestRelease) !== JSON.stringify(existingRelease ?? null)) {
+        existing.latestRelease = latestRelease;
+        dirty = true;
+      }
+      if (dirty) writeFileSync(cachePath, JSON.stringify(existing, null, 2));
       cached++;
       process.stdout.write(
         `  · ${plugin.name} (not modified${latestRelease ? `, ${latestRelease.tag}` : ""})\n`
