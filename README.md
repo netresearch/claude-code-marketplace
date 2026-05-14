@@ -1,6 +1,15 @@
 # Netresearch Agentic Skills Marketplace
 
-Curated collection of **Agentic Skills** for AI coding agents — TYPO3, PHP, Go, Docker, Jira, security, documentation, and more.
+> **You ship code. Your agent should know your stack.**
+
+40 curated Agent Skills for TYPO3, PHP, Go, Docker, Jira, security, and documentation — portable across Claude Code, Cursor, Copilot, Codex, Gemini CLI, and 30+ other agents.
+
+[![Marketplace site](https://img.shields.io/badge/marketplace-netresearch.github.io-2F99A4)](https://netresearch.github.io/claude-code-marketplace/)
+[![Skills](https://img.shields.io/badge/skills-40-2F99A4)](https://netresearch.github.io/claude-code-marketplace/en/skills/)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
+[![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/netresearch/claude-code-marketplace/badge)](https://scorecard.dev/viewer/?uri=github.com/netresearch/claude-code-marketplace)
+
+**Browse the full catalog →** [netresearch.github.io/claude-code-marketplace](https://netresearch.github.io/claude-code-marketplace/) — per-skill detail pages, grouped by stack and category, in English and German.
 
 ## What are Agentic Skills?
 

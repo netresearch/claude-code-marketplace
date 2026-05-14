@@ -45,12 +45,15 @@
     </script>
   </head>
   <body data-install-mode="{{ installMethods.default }}">
+    <a class="skip-link" href="#main">{{ t.nav.skipToContent }}</a>
+    {% set homeUrl = ('/' ~ (lang or 'en') ~ '/') | url %}
+    {% set isHome = page.url == ('/' ~ (lang or 'en') ~ '/') %}
     <header class="site-header">
-      <a class="site-header__brand" href="{{ ('/' ~ (lang or 'en') ~ '/') | url }}">
+      <a class="site-header__brand" href="{{ homeUrl }}"{% if isHome %} aria-current="page"{% endif %}>
         <strong>Netresearch</strong> Skills Marketplace
       </a>
       <nav class="site-header__nav" aria-label="Primary">
-        <a href="{{ ('/' ~ (lang or 'en') ~ '/') | url }}">{{ t.nav.home }}</a>
+        <a href="{{ homeUrl }}"{% if isHome %} aria-current="page"{% endif %}>{{ t.nav.home }}</a>
         {% if hreflangAlternate %}
           <a href="{{ hreflangAlternate.url | url }}" hreflang="{{ hreflangAlternate.lang }}" rel="alternate">{{ t.nav.switchLang }}</a>
         {% endif %}

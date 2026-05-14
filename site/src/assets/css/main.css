@@ -287,14 +287,46 @@ pre {
   font-family: var(--font-headline);
   font-size: var(--font-size-lg);
   color: var(--color-text-primary);
+  text-decoration: none;
 }
 
-.site-header__brand:hover { text-decoration: none; }
+.site-header__brand:hover,
+.site-header__brand:focus-visible { text-decoration: none; }
 
 .site-header__nav {
   display: flex;
   gap: var(--spacing-md);
   font-size: var(--font-size-sm);
+}
+
+.site-header__nav a[aria-current="page"] {
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.3em;
+  color: var(--color-text-primary);
+  font-weight: 600;
+}
+
+/* Skip link — visible on keyboard focus only */
+.skip-link {
+  position: absolute;
+  top: var(--spacing-sm);
+  left: var(--spacing-sm);
+  z-index: 1000;
+  padding: var(--spacing-sm) var(--spacing-md);
+  background: var(--color-text-primary);
+  color: var(--color-background);
+  text-decoration: none;
+  border-radius: var(--radius-sm);
+  transform: translateY(-200%);
+  transition: transform 150ms ease;
+}
+
+.skip-link:focus,
+.skip-link:focus-visible {
+  transform: translateY(0);
+  color: var(--color-background);
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
 }
 
 .site-footer {
@@ -357,11 +389,14 @@ pre {
 
 .install-block__code {
   flex: 1;
+  min-width: 0;
   margin: 0;
   background: var(--color-background-alt);
   padding: var(--spacing-md) var(--spacing-lg);
   border-radius: var(--radius-md);
   overflow-x: auto;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
 }
 
 .section {
@@ -877,4 +912,20 @@ body[data-install-mode="composer-skills"] .skill-card__installs > .install--comp
   .install-block { flex-direction: column; }
   .copy-btn--lg { width: 100%; }
   .site-header { flex-direction: column; align-items: flex-start; gap: var(--spacing-sm); }
+}
+
+/* Touch-target sizing — 44pt minimum on coarse-pointer devices OR narrow viewports */
+@media (hover: none) and (pointer: coarse), (max-width: 640px) {
+  .copy-btn {
+    min-height: 44px;
+    padding: 0.55rem 0.9rem;
+  }
+  .skill-card__title a,
+  .skill-card__more-install,
+  .site-header__nav a {
+    display: inline-block;
+    min-height: 44px;
+    padding-block: 0.75rem;
+    line-height: 1.4;
+  }
 }

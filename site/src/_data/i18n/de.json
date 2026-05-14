@@ -3,7 +3,8 @@
     "home": "Start",
     "skills": "Skills",
     "about": "Über",
-    "switchLang": "English"
+    "switchLang": "English",
+    "skipToContent": "Zum Inhalt springen"
   },
   "hero": {
     "h1": "Du lieferst Software. Dein Agent kennt deinen Stack.",
