@@ -86,7 +86,7 @@
   },
   "skill": {
     "install": "Installation",
-    "installLead": "Nimm den Weg, der zu deinem Projekt passt — alle führen zur selben Skill.",
+    "installLead": "Nimm den Weg, der zu deinem Projekt passt — alle führen zum selben Skill.",
     "copyInstall": "Install-Befehl kopieren",
     "latestVersion": "Letztes Release",
     "altInstall": "Oder in einem beliebigen Agent-Skills-kompatiblen CLI:",

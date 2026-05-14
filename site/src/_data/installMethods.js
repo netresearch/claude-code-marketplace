@@ -26,6 +26,7 @@ export default {
         de: { tab: "npx", subtitle: "beliebige Agent-Skills-CLI" },
       },
       command(skill) {
+        if (!skill.repo) return null;
         return `npx skills add https://github.com/${skill.repo} --skill ${skill.slug}`;
       },
     },
@@ -36,6 +37,7 @@ export default {
         de: { tab: "composer require", subtitle: "PHP-Projekt, als Paket" },
       },
       command(skill) {
+        if (!skill.repo) return null;
         return `composer require ${skill.repo}`;
       },
     },
@@ -46,6 +48,7 @@ export default {
         de: { tab: "composer skills:add", subtitle: "PHP-Projekt, direkte Quelle" },
       },
       command(skill) {
+        if (!skill.repo) return null;
         return `composer skills:add github:${skill.repo}`;
       },
     },

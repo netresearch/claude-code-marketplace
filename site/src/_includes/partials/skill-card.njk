@@ -7,7 +7,9 @@
   <footer class="skill-card__footer">
     <div class="skill-card__installs" aria-label="Install command">
       {% for method in installMethods.methods %}
-        <code class="skill-card__install install--{{ method.id }}" id="install-{{ method.id }}-{{ skill.slug }}">{{ skill.installCommands[method.id] }}</code>
+        {% if skill.installCommands[method.id] %}
+          <code class="skill-card__install install--{{ method.id }}" id="install-{{ method.id }}-{{ skill.slug }}">{{ skill.installCommands[method.id] }}</code>
+        {% endif %}
       {% endfor %}
       <button type="button" class="copy-btn"
               data-copy-active-install

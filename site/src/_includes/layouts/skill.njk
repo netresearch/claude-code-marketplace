@@ -35,14 +35,16 @@ layout: layouts/base.njk
     <p class="skill-detail__install-lead">{{ t.skill.installLead }}</p>
     <ol class="install-methods">
       {% for method in installMethods.methods %}
-        {% set labels = method.labels.de if lang == 'de' else method.labels.en %}
-        <li class="install-methods__item">
-          <header class="install-methods__header">
-            <span class="install-methods__label">{{ labels.tab }}</span>
-            <span class="install-methods__subtitle">{{ labels.subtitle }}</span>
-          </header>
-          {{ installBlock('skill-install-' ~ method.id, skill.installCommands[method.id], t.skill.copyInstall, t.ui.copyCopied) }}
-        </li>
+        {% if skill.installCommands[method.id] %}
+          {% set labels = method.labels.de if lang == 'de' else method.labels.en %}
+          <li class="install-methods__item">
+            <header class="install-methods__header">
+              <span class="install-methods__label">{{ labels.tab }}</span>
+              <span class="install-methods__subtitle">{{ labels.subtitle }}</span>
+            </header>
+            {{ installBlock('skill-install-' ~ method.id, skill.installCommands[method.id], t.skill.copyInstall, t.ui.copyCopied) }}
+          </li>
+        {% endif %}
       {% endfor %}
     </ol>
   </section>

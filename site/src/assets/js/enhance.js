@@ -17,30 +17,37 @@
   // ----- install-method tablist -----------------------------------------
   var installSwitcher = document.querySelector("[data-install-mode-switcher]");
   if (installSwitcher) {
-    var tabs = Array.prototype.slice.call(
+    var installTabs = Array.prototype.slice.call(
       installSwitcher.querySelectorAll('[role="tab"]')
     );
-    var statusEl = installSwitcher.querySelector("[data-install-mode-status]");
+    var installStatusEl = installSwitcher.querySelector("[data-install-mode-status]");
     var STORAGE_KEY = "netresearch-marketplace:install-mode";
 
     function setMode(modeId, options) {
       options = options || {};
-      var matched = false;
-      tabs.forEach(function (tab) {
-        var isActive = tab.getAttribute("data-install-mode-id") === modeId;
+      // Validate first — never half-apply the change. If the stored mode is
+      // unknown (e.g. user came from an older deploy with different method
+      // ids), bail out and keep the markup-defined default.
+      var match = null;
+      for (var i = 0; i < installTabs.length; i++) {
+        if (installTabs[i].getAttribute("data-install-mode-id") === modeId) {
+          match = installTabs[i];
+          break;
+        }
+      }
+      if (!match) return false;
+
+      installTabs.forEach(function (tab) {
+        var isActive = tab === match;
         tab.setAttribute("aria-selected", isActive ? "true" : "false");
         tab.setAttribute("tabindex", isActive ? "0" : "-1");
-        if (isActive) {
-          matched = true;
-          if (options.focus) tab.focus();
-          if (statusEl) {
-            var template = installSwitcher.getAttribute("data-install-mode-announce") || "";
-            var label = (tab.querySelector(".install-mode__tab-label") || {}).textContent || modeId;
-            statusEl.textContent = template ? template.replace("{label}", label) : "";
-          }
-        }
       });
-      if (!matched) return false;
+      if (options.focus) match.focus();
+      if (installStatusEl) {
+        var template = installSwitcher.getAttribute("data-install-mode-announce") || "";
+        var label = (match.querySelector(".install-mode__tab-label") || {}).textContent || modeId;
+        installStatusEl.textContent = template ? template.replace("{label}", label) : "";
+      }
       document.body.setAttribute("data-install-mode", modeId);
       try { window.localStorage.setItem(STORAGE_KEY, modeId); } catch (_) {}
       return true;
@@ -60,15 +67,15 @@
 
     installSwitcher.addEventListener("keydown", function (event) {
       if (event.key !== "ArrowRight" && event.key !== "ArrowLeft" && event.key !== "Home" && event.key !== "End") return;
-      var idx = tabs.indexOf(document.activeElement);
+      var idx = installTabs.indexOf(document.activeElement);
       if (idx === -1) return;
       var next = idx;
-      if (event.key === "ArrowRight") next = (idx + 1) % tabs.length;
-      else if (event.key === "ArrowLeft") next = (idx - 1 + tabs.length) % tabs.length;
+      if (event.key === "ArrowRight") next = (idx + 1) % installTabs.length;
+      else if (event.key === "ArrowLeft") next = (idx - 1 + installTabs.length) % installTabs.length;
       else if (event.key === "Home") next = 0;
-      else if (event.key === "End") next = tabs.length - 1;
+      else if (event.key === "End") next = installTabs.length - 1;
       event.preventDefault();
-      setMode(tabs[next].getAttribute("data-install-mode-id"), { focus: true });
+      setMode(installTabs[next].getAttribute("data-install-mode-id"), { focus: true });
     });
   }
 
