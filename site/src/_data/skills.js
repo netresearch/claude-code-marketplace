@@ -22,6 +22,7 @@ import categories from "./categories.js";
 import groups from "./groups.js";
 import descriptionsDe from "./descriptions_de.json" with { type: "json" };
 import { displayName } from "./_helpers/display-name.js";
+import installMethods from "./installMethods.js";
 
 function loadCache(slug) {
   const p = resolve(CACHE_DIR, `${slug}.json`);
@@ -66,6 +67,16 @@ export default function () {
     const cache = loadCache(plugin.name);
     const parsed = cache?.parsed || null;
 
+    // Build install-command map once per skill so templates can just key by
+    // method id instead of recomputing strings per render.
+    const skillStub = {
+      slug: plugin.name,
+      repo: plugin.source?.repo,
+    };
+    const installCommands = Object.fromEntries(
+      installMethods.methods.map((m) => [m.id, m.command(skillStub, marketplace)])
+    );
+
     return {
       slug: plugin.name,
       displayName: displayName(plugin.name),
@@ -82,10 +93,12 @@ export default function () {
       readmeUrl: plugin.source?.repo
         ? `https://github.com/${plugin.source.repo}#readme`
         : null,
-      installCommand: `/plugin install ${plugin.name}@${marketplaceSlug}`,
-      npxCommand: plugin.source?.repo
-        ? `npx skills add https://github.com/${plugin.source.repo} --skill ${plugin.name}`
+      skillsShUrl: plugin.source?.repo
+        ? `https://www.skills.sh/${plugin.source.repo}`
         : null,
+      installCommand: installCommands["claude-code"],
+      npxCommand: installCommands["npx"],
+      installCommands,
       canonicalUrlEn: `/en/skills/${plugin.name}/`,
       canonicalUrlDe: `/de/skills/${plugin.name}/`,
       useCases: parsed?.useCases?.length ? parsed.useCases : [],

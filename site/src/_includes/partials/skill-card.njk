@@ -5,7 +5,17 @@
   </h3>
   <p class="skill-card__description">{{ skill.description }}</p>
   <footer class="skill-card__footer">
-    <code class="skill-card__install" id="install-{{ skill.slug }}">{{ skill.installCommand }}</code>
-    <button type="button" class="copy-btn" data-copy-target="install-{{ skill.slug }}" data-copied-label="{{ t.ui.copyCopied }}" aria-label="{{ t.skill.copyInstall }} {{ skill.slug }}">{{ t.ui.copyShort }}</button>
+    <div class="skill-card__installs" aria-label="Install command">
+      {% for method in installMethods.methods %}
+        {% if skill.installCommands[method.id] %}
+          <code class="skill-card__install install--{{ method.id }}" id="install-{{ method.id }}-{{ skill.slug }}">{{ skill.installCommands[method.id] }}</code>
+        {% endif %}
+      {% endfor %}
+      <button type="button" class="copy-btn"
+              data-copy-active-install
+              data-copied-label="{{ t.ui.copyCopied }}"
+              aria-label="{{ t.skill.copyInstall }} {{ skill.slug }}">{{ t.ui.copyShort }}</button>
+    </div>
+    <a class="skill-card__more-install" href="{{ ('/' ~ lang ~ '/skills/' ~ skill.slug ~ '/#install') | url }}">{{ t.ui.moreInstallMethods }} →</a>
   </footer>
 </article>

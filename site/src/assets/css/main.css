@@ -470,6 +470,155 @@ pre {
   text-decoration: none;
 }
 
+/* ── Install-method tablist on landings ─────────────────────────────── */
+.install-mode {
+  margin: var(--spacing-xl) 0 var(--spacing-lg);
+}
+
+.install-mode__legend {
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin: 0 0 var(--spacing-xs);
+}
+
+.install-mode__tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+  align-items: stretch;
+}
+
+.install-mode__tab {
+  flex: 1 1 12rem;
+  background: var(--color-background);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-sm) var(--spacing-md);
+  text-align: left;
+  cursor: pointer;
+  font-family: var(--font-body);
+  color: var(--color-text-primary);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  transition: border-color 120ms ease, background 120ms ease, color 120ms ease;
+}
+
+.install-mode__tab[aria-selected="true"] {
+  border-color: var(--color-primary-dark);
+  background: var(--color-primary-dark);
+  color: #FFFFFF;
+}
+
+.install-mode__tab:hover:not([aria-selected="true"]),
+.install-mode__tab:focus-visible:not([aria-selected="true"]) {
+  border-color: var(--color-primary-dark);
+  outline: none;
+}
+
+.install-mode__tab-label {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-sm);
+  font-weight: 700;
+}
+
+.install-mode__tab-subtitle {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+}
+
+.install-mode__tab[aria-selected="true"] .install-mode__tab-subtitle {
+  color: #FFFFFF;
+}
+
+.install-mode__sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ── Card install row — show one method at a time per body[data-install-mode] ── */
+.skill-card__installs {
+  display: flex;
+  gap: var(--spacing-sm);
+  align-items: center;
+  min-width: 0;
+}
+
+.skill-card__installs > .skill-card__install {
+  display: none;
+}
+
+body[data-install-mode="claude-code"] .skill-card__installs > .install--claude-code,
+body[data-install-mode="npx"] .skill-card__installs > .install--npx,
+body[data-install-mode="composer-require"] .skill-card__installs > .install--composer-require,
+body[data-install-mode="composer-skills"] .skill-card__installs > .install--composer-skills {
+  display: inline;
+  flex: 1;
+}
+
+.skill-card__more-install {
+  display: inline-block;
+  margin-top: var(--spacing-xs);
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+}
+
+.skill-card__more-install:hover,
+.skill-card__more-install:focus-visible {
+  color: var(--color-primary-dark);
+}
+
+/* ── Detail-page install: stacked list of all methods ───────────────── */
+.skill-detail__install-lead {
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+  margin-top: 0;
+  margin-bottom: var(--spacing-md);
+}
+
+.install-methods {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.install-methods__item {
+  background: var(--color-background);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-md);
+}
+
+.install-methods__header {
+  display: flex;
+  align-items: baseline;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-sm);
+  flex-wrap: wrap;
+}
+
+.install-methods__label {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  color: var(--color-text-primary);
+}
+
+.install-methods__subtitle {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+}
+
 .site-search {
   margin: var(--spacing-lg) 0 var(--spacing-xl);
   max-width: 36rem;
