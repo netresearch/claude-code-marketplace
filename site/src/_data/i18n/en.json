@@ -38,6 +38,36 @@
       "platformsValue": "8+"
     }
   },
+  "improvementLoop": {
+    "eyebrow": "The trinity",
+    "h2": "Three skills keep every other skill honest",
+    "lead": "Most marketplaces ship a list. This one ships a loop. Harness onboards your repo, Assessment audits the work against the same checkpoints we publish, and Retro feeds every friction back into rules, checkpoints, and skill PRs — including the harness itself.",
+    "nodes": [
+      {
+        "step": "1",
+        "title": "Harness",
+        "skillSlug": "agent-harness",
+        "role": "Makes a repo agent-ready",
+        "body": "AGENTS.md as index, docs/ structure, CI verification, enforcement mechanisms — the scaffolding every other skill assumes."
+      },
+      {
+        "step": "2",
+        "title": "Assessment",
+        "skillSlug": "automated-assessment",
+        "role": "Audits the work",
+        "body": "Runs checkpoint-enabled skills against the codebase — coverage, mutation score, release readiness, mechanical and LLM-assisted reviews."
+      },
+      {
+        "step": "3",
+        "title": "Retro",
+        "skillSlug": "retro",
+        "role": "Feeds learnings back",
+        "body": "Detects friction across a session and materialises it into user memory, project rules, skill PRs, checkpoints, or harness artefacts."
+      }
+    ],
+    "loopBack": "Retro feeds learnings back into Harness, Assessment checkpoints, and every other skill in this catalog.",
+    "browseCta": "See the three skills below"
+  },
   "categoriesSection": {
     "h2": "Pick by what you ship",
     "lead": "Skills grouped by the surfaces they touch. Categories are the AGENTS.md canonical enum; thematic groupings are surface for discovery."

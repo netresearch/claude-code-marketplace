@@ -38,6 +38,36 @@
       "platformsValue": "8+"
     }
   },
+  "improvementLoop": {
+    "eyebrow": "Die Dreifaltigkeit",
+    "h2": "Drei Skills halten alle anderen ehrlich",
+    "lead": "Die meisten Marketplaces liefern eine Liste. Dieser liefert eine Schleife. Harness macht dein Repo agent-ready, Assessment auditiert die Arbeit gegen dieselben Checkpoints, die wir veröffentlichen, und Retro speist jede Reibung zurück in Regeln, Checkpoints und Skill-PRs — inklusive der Harness selbst.",
+    "nodes": [
+      {
+        "step": "1",
+        "title": "Harness",
+        "skillSlug": "agent-harness",
+        "role": "Macht das Repo agent-ready",
+        "body": "AGENTS.md als Index, docs/-Struktur, CI-Verifikation, Enforcement-Mechanismen — das Gerüst, das jeder andere Skill voraussetzt."
+      },
+      {
+        "step": "2",
+        "title": "Assessment",
+        "skillSlug": "automated-assessment",
+        "role": "Auditiert die Arbeit",
+        "body": "Lässt checkpoint-fähige Skills gegen die Codebase laufen — Coverage, Mutation-Score, Release-Bereitschaft, mechanische und LLM-gestützte Reviews."
+      },
+      {
+        "step": "3",
+        "title": "Retro",
+        "skillSlug": "retro",
+        "role": "Speist Erkenntnisse zurück",
+        "body": "Erkennt Reibungspunkte über die Session hinweg und überführt sie in User-Memory, Projektregeln, Skill-PRs, Checkpoints oder Harness-Artefakte."
+      }
+    ],
+    "loopBack": "Retro speist Erkenntnisse zurück in Harness, Assessment-Checkpoints und jeden anderen Skill in diesem Katalog.",
+    "browseCta": "Die drei Skills unten ansehen"
+  },
   "categoriesSection": {
     "h2": "Wähle nach Lieferobjekt",
     "lead": "Skills gruppiert nach dem, was sie berühren. Kategorien folgen dem AGENTS.md-Enum; die thematischen Gruppen sind für die Discovery."
