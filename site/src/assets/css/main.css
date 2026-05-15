@@ -917,7 +917,7 @@ body[data-install-mode="composer-skills"] .skill-card__installs > .install--comp
   font-weight: 600;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--color-accent);
+  color: var(--color-primary-darker);
   margin-bottom: var(--spacing-sm);
 }
 
@@ -934,7 +934,6 @@ body[data-install-mode="composer-skills"] .skill-card__installs > .install--comp
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: var(--spacing-lg);
-  counter-reset: loop-step;
   position: relative;
   text-align: left;
 }
@@ -956,7 +955,7 @@ body[data-install-mode="composer-skills"] .skill-card__installs > .install--comp
   transform: translate(50%, -50%);
   font-size: var(--font-size-3xl);
   font-weight: 700;
-  color: var(--color-primary);
+  color: var(--color-primary-dark);
   line-height: 1;
   pointer-events: none;
 }
@@ -971,7 +970,7 @@ body[data-install-mode="composer-skills"] .skill-card__installs > .install--comp
   width: 2.25rem;
   height: 2.25rem;
   border-radius: 999px;
-  background: var(--color-primary);
+  background: var(--color-primary-dark);
   color: #FFFFFF;
   font-family: var(--font-headline);
   font-weight: 700;
@@ -1023,7 +1022,7 @@ body[data-install-mode="composer-skills"] .skill-card__installs > .install--comp
 .improvement-loop__feedback-icon {
   font-size: var(--font-size-2xl);
   font-weight: 700;
-  color: var(--color-accent);
+  color: var(--color-primary-darker);
   line-height: 1;
   flex-shrink: 0;
 }

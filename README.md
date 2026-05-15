@@ -43,6 +43,16 @@ Browse all skills at [skills.sh/netresearch](https://skills.sh/netresearch).
 
 ## Available Skills
 
+### The Improvement Loop
+
+Three meta-skills that keep every other skill in this catalog honest — onboard a repo, audit the work, feed learnings back.
+
+| Skill | Repository | Description |
+|-------|-----------|-------------|
+| agent-harness | [agent-harness-skill](https://github.com/netresearch/agent-harness-skill) | Agent Skill for bootstrapping, verifying, and enforcing agent-harness infrastructure in repositories |
+| automated-assessment | [automated-assessment-skill](https://github.com/netresearch/automated-assessment-skill) | Systematic project assessment with scripted + LLM verification |
+| retro | [retro-skill](https://github.com/netresearch/retro-skill) | LLM-driven session retrospection: detects friction and materializes learnings into user memory, project rules, skill PRs, checkpoints, or harness artifacts. Includes `/retro outcome` and `/retro audit` modes |
+
 ### TYPO3 Development
 
 | Skill | Repository | Description |
@@ -73,7 +83,6 @@ Browse all skills at [skills.sh/netresearch](https://skills.sh/netresearch).
 | php-modernization | [php-modernization-skill](https://github.com/netresearch/php-modernization-skill) | PHP 8.x modernization: type safety, enums, DTOs, PHPStan, Rector |
 | security-audit | [security-audit-skill](https://github.com/netresearch/security-audit-skill) | OWASP security audit patterns for PHP applications |
 | enterprise-readiness | [enterprise-readiness-skill](https://github.com/netresearch/enterprise-readiness-skill) | Supply chain security, SLSA, OpenSSF, SBOMs, quality gates |
-| automated-assessment | [automated-assessment-skill](https://github.com/netresearch/automated-assessment-skill) | Systematic project assessment with scripted + LLM verification |
 
 ### DevOps & Infrastructure
 
@@ -91,7 +100,6 @@ Browse all skills at [skills.sh/netresearch](https://skills.sh/netresearch).
 | Skill | Repository | Description |
 |-------|-----------|-------------|
 | agent-rules | [agent-rules-skill](https://github.com/netresearch/agent-rules-skill) | Generate AGENTS.md with CI rules, architecture, ADRs extraction |
-| agent-harness | [agent-harness-skill](https://github.com/netresearch/agent-harness-skill) | Agent Skill for bootstrapping, verifying, and enforcing agent-harness infrastructure in repositories |
 | jira-integration | [jira-skill](https://github.com/netresearch/jira-skill) | Jira API operations and wiki markup (two sub-skills) |
 | matrix-communication | [matrix-skill](https://github.com/netresearch/matrix-skill) | Send messages to Matrix rooms |
 | cli-tools | [cli-tools-skill](https://github.com/netresearch/cli-tools-skill) | Auto-install missing CLI tools (74+ tool catalog) |
@@ -100,7 +108,6 @@ Browse all skills at [skills.sh/netresearch](https://skills.sh/netresearch).
 | file-search | [file-search-skill](https://github.com/netresearch/file-search-skill) | Efficient code search with ripgrep, ast-grep, fd |
 | pagerangers-seo | [pagerangers-skill](https://github.com/netresearch/pagerangers-skill) | PageRangers SEO API: keyword rankings, SERP analysis |
 | coach | [claude-coach-plugin](https://github.com/netresearch/claude-coach-plugin) | Self-improving learning system with hooks and commands |
-| retro | [retro-skill](https://github.com/netresearch/retro-skill) | LLM-driven session retrospection: detects friction and materializes learnings into user memory, project rules, skill PRs, checkpoints, or harness artifacts. Includes `/retro outcome` and `/retro audit` modes |
 | german-technical-writing | [german-technical-writing-skill](https://github.com/netresearch/german-technical-writing-skill) | Natural German technical register for Jira, internal docs, team chat — catches anglicisms, enforces lexicon |
 | peer-qa-review | [peer-qa-review-skill](https://github.com/netresearch/peer-qa-review-skill) | Round-1 IT QA peer-review runbook: lifecycle, severity vocabulary, structured Jira comment template, edge cases, anti-patterns |
 | markdown-to-pdf | [markdown-to-pdf-skill](https://github.com/netresearch/markdown-to-pdf-skill) | Convert Markdown files to styled PDFs via WeasyPrint; CSS-overridable for branded output |
