@@ -13,6 +13,7 @@
  */
 export default {
   order: [
+    "improvement-loop",
     "typo3",
     "orocommerce",
     "quality-security",
@@ -21,6 +22,21 @@ export default {
     "meta",
   ],
   groups: {
+    "improvement-loop": {
+      en: {
+        title: "The improvement loop",
+        lead: "Three meta-skills that keep every other skill in this catalog honest — onboard a repo, audit the work, feed learnings back.",
+      },
+      de: {
+        title: "Die Verbesserungsschleife",
+        lead: "Drei Meta-Skills, die alle anderen im Katalog ehrlich halten — Repo agent-ready machen, Arbeit auditieren, Erkenntnisse zurückspielen.",
+      },
+      slugs: [
+        "agent-harness",
+        "automated-assessment",
+        "retro",
+      ],
+    },
     typo3: {
       en: { title: "TYPO3 Development", lead: "Stack-aware skills for TYPO3 extensions and projects." },
       de: { title: "TYPO3-Entwicklung", lead: "Stack-spezifische Skills für TYPO3-Extensions und -Projekte." },
@@ -52,7 +68,6 @@ export default {
         "php-modernization",
         "security-audit",
         "enterprise-readiness",
-        "automated-assessment",
       ],
     },
     devops: {
@@ -72,7 +87,6 @@ export default {
       de: { title: "Produktivität & Integration", lead: "Alltags-Werkzeuge für Engineering-Teams." },
       slugs: [
         "agent-rules",
-        "agent-harness",
         "jira-integration",
         "matrix-communication",
         "cli-tools",
@@ -81,7 +95,6 @@ export default {
         "file-search",
         "pagerangers-seo",
         "coach",
-        "retro",
         "german-technical-writing",
         "peer-qa-review",
         "markdown-to-pdf",

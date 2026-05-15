@@ -65,6 +65,31 @@ description: "Curated Agent Skills for TYPO3, PHP, Go, Docker, security, and doc
   </div>
 </section>
 
+<section class="section improvement-loop" id="improvement-loop" aria-labelledby="improvement-loop-h2">
+  <p class="improvement-loop__eyebrow">{{ t.improvementLoop.eyebrow }}</p>
+  <h2 id="improvement-loop-h2">{{ t.improvementLoop.h2 }}</h2>
+  <p class="lead improvement-loop__lead">{{ t.improvementLoop.lead }}</p>
+  <ol class="improvement-loop__nodes">
+    {% for node in t.improvementLoop.nodes %}
+      <li class="improvement-loop__node" id="loop-node-{{ node.skillSlug }}">
+        <span class="improvement-loop__step" aria-hidden="true">{{ node.step }}</span>
+        <h3 class="improvement-loop__title">
+          <a href="{{ ('/' ~ lang ~ '/skills/' ~ node.skillSlug ~ '/') | url }}">{{ node.title }}</a>
+        </h3>
+        <p class="improvement-loop__role">{{ node.role }}</p>
+        <p class="improvement-loop__body">{{ node.body }}</p>
+      </li>
+    {% endfor %}
+  </ol>
+  <p class="improvement-loop__feedback">
+    <span class="improvement-loop__feedback-icon" aria-hidden="true">↺</span>
+    {{ t.improvementLoop.loopBack }}
+  </p>
+  <p class="improvement-loop__cta">
+    <a class="btn btn--secondary" href="#group-improvement-loop">{{ t.improvementLoop.browseCta }}</a>
+  </p>
+</section>
+
 <section class="section" id="skills">
   <h2>{{ t.categoriesSection.h2 }}</h2>
   <p class="lead">{{ t.categoriesSection.lead }}</p>
