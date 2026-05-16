@@ -25,7 +25,7 @@ export default {
     "skill-skills": {
       en: {
         title: "Skill-skills",
-        lead: "A small family of skills whose subject matter is other skills. At the centre runs a loop — Harness, Assessment, Retro — and around it sit authoring and host-side tools that feed the loop.",
+        lead: "A small family of skills whose subject matter is other skills. At the center runs a loop — Harness, Assessment, Retro — and around it sit authoring and host-side tools that feed the loop.",
       },
       de: {
         title: "Skill-Skills",

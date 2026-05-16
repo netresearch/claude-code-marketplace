@@ -43,9 +43,9 @@ Browse all skills at [skills.sh/netresearch](https://skills.sh/netresearch).
 
 ## Available Skills
 
-### Skill-Skills
+### Skill-skills
 
-A small family of skills whose subject matter is other skills. At the centre runs a loop — Harness, Assessment, Retro — and around it sit authoring tools that feed the loop.
+A small family of skills whose subject matter is other skills. At the center runs a loop — Harness, Assessment, Retro — and around it sit authoring tools that feed the loop.
 
 | Skill | Repository | Description |
 |-------|-----------|-------------|

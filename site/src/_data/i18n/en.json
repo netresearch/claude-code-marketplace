@@ -41,8 +41,8 @@
   "improvementLoop": {
     "eyebrow": "Skill-skills",
     "h2": "Skills that work on skills",
-    "lead": "A small family of skills whose subject matter is other skills. At the centre runs a loop — Harness onboards your repo, Assessment audits the work against the same checkpoints we publish, and Retro feeds every friction back into rules, checkpoints, and skill PRs — including the harness itself. Around the loop sit five more skill-skills handling authoring and host-side concerns.",
-    "loopHeading": "The loop at the centre",
+    "lead": "A small family of skills whose subject matter is other skills. At the center runs a loop — Harness onboards your repo, Assessment audits the work against the same checkpoints we publish, and Retro feeds every friction back into rules, checkpoints, and skill PRs — including the harness itself. Around the loop sit five more skill-skills handling authoring and host-side concerns.",
+    "loopHeading": "The loop at the center",
     "nodes": [
       {
         "step": "1",
@@ -63,7 +63,7 @@
         "title": "Retro",
         "skillSlug": "retro",
         "role": "Feeds learnings back",
-        "body": "Detects friction across a session and materialises it into user memory, project rules, skill PRs, checkpoints, or harness artefacts."
+        "body": "Detects friction across a session and materializes it into user memory, project rules, skill PRs, checkpoints, or harness artifacts."
       }
     ],
     "loopBack": "Retro feeds learnings back into Harness, Assessment checkpoints, and every other skill in this catalog.",
