@@ -43,15 +43,22 @@ Browse all skills at [skills.sh/netresearch](https://skills.sh/netresearch).
 
 ## Available Skills
 
-### The Improvement Loop
+### Skill-skills
 
-Three meta-skills that keep every other skill in this catalog honest — onboard a repo, audit the work, feed learnings back.
+A small family of skills whose subject matter is other skills. At the center runs a loop — Harness, Assessment, Retro — and around it sit authoring tools that feed the loop.
 
 | Skill | Repository | Description |
 |-------|-----------|-------------|
 | agent-harness | [agent-harness-skill](https://github.com/netresearch/agent-harness-skill) | Agent Skill for bootstrapping, verifying, and enforcing agent-harness infrastructure in repositories |
 | automated-assessment | [automated-assessment-skill](https://github.com/netresearch/automated-assessment-skill) | Systematic project assessment with scripted + LLM verification |
 | retro | [retro-skill](https://github.com/netresearch/retro-skill) | LLM-driven session retrospection: detects friction and materializes learnings into user memory, project rules, skill PRs, checkpoints, or harness artifacts. Includes `/retro outcome` and `/retro audit` modes |
+| agent-rules | [agent-rules-skill](https://github.com/netresearch/agent-rules-skill) | Generate AGENTS.md with CI rules, architecture, ADRs extraction |
+| skill-repo | [skill-repo-skill](https://github.com/netresearch/skill-repo-skill) | Skill repository structure, validation, and distribution |
+
+Host-side tooling (not Agent Skills themselves, but part of the same family):
+
+- [composer-agent-skill-plugin](https://github.com/netresearch/composer-agent-skill-plugin) — Composer plugin that pulls Agent Skills into PHP projects.
+- [node-agent-skill-coordinator](https://github.com/netresearch/node-agent-skill-coordinator) — Discovers skills shipped via npm packages and registers them in the project's `AGENTS.md`.
 
 ### TYPO3 Development
 
@@ -99,7 +106,6 @@ Three meta-skills that keep every other skill in this catalog honest — onboard
 
 | Skill | Repository | Description |
 |-------|-----------|-------------|
-| agent-rules | [agent-rules-skill](https://github.com/netresearch/agent-rules-skill) | Generate AGENTS.md with CI rules, architecture, ADRs extraction |
 | jira-integration | [jira-skill](https://github.com/netresearch/jira-skill) | Jira API operations and wiki markup (two sub-skills) |
 | matrix-communication | [matrix-skill](https://github.com/netresearch/matrix-skill) | Send messages to Matrix rooms |
 | cli-tools | [cli-tools-skill](https://github.com/netresearch/cli-tools-skill) | Auto-install missing CLI tools (74+ tool catalog) |
@@ -113,11 +119,10 @@ Three meta-skills that keep every other skill in this catalog honest — onboard
 | markdown-to-pdf | [markdown-to-pdf-skill](https://github.com/netresearch/markdown-to-pdf-skill) | Convert Markdown files to styled PDFs via WeasyPrint; CSS-overridable for branded output |
 | typo3-upgrade-effort-model | [typo3-upgrade-effort-model-skill](https://github.com/netresearch/typo3-upgrade-effort-model-skill) | TYPO3 LTS upgrade effort model: risk multipliers, baselines, version compatibility, Rector coverage, 7-phase workflow |
 
-### Meta
+### Brand & visual identity
 
 | Skill | Repository | Description |
 |-------|-----------|-------------|
-| skill-repo | [skill-repo-skill](https://github.com/netresearch/skill-repo-skill) | Skill repository structure, validation, and distribution |
 | netresearch-branding | [netresearch-branding-skill](https://github.com/netresearch/netresearch-branding-skill) | Netresearch brand guidelines: colors, typography, components |
 
 ## Architecture

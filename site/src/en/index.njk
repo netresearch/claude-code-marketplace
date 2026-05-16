@@ -65,17 +65,18 @@ description: "Curated Agent Skills for TYPO3, PHP, Go, Docker, security, and doc
   </div>
 </section>
 
-<section class="section improvement-loop" id="improvement-loop" aria-labelledby="improvement-loop-h2">
+<section class="section improvement-loop" id="skill-skills" aria-labelledby="improvement-loop-h2">
   <p class="improvement-loop__eyebrow">{{ t.improvementLoop.eyebrow }}</p>
   <h2 id="improvement-loop-h2">{{ t.improvementLoop.h2 }}</h2>
   <p class="lead improvement-loop__lead">{{ t.improvementLoop.lead }}</p>
+  <h3 class="improvement-loop__subheading">{{ t.improvementLoop.loopHeading }}</h3>
   <ol class="improvement-loop__nodes">
     {% for node in t.improvementLoop.nodes %}
       <li class="improvement-loop__node" id="loop-node-{{ node.skillSlug }}">
         <span class="improvement-loop__step" aria-hidden="true">{{ node.step }}</span>
-        <h3 class="improvement-loop__title">
+        <h4 class="improvement-loop__title">
           <a href="{{ ('/' ~ lang ~ '/skills/' ~ node.skillSlug ~ '/') | url }}">{{ node.title }}</a>
-        </h3>
+        </h4>
         <p class="improvement-loop__role">{{ node.role }}</p>
         <p class="improvement-loop__body">{{ node.body }}</p>
       </li>
@@ -85,8 +86,21 @@ description: "Curated Agent Skills for TYPO3, PHP, Go, Docker, security, and doc
     <span class="improvement-loop__feedback-icon" aria-hidden="true">↺</span>
     {{ t.improvementLoop.loopBack }}
   </p>
+  <h3 class="improvement-loop__subheading">{{ t.improvementLoop.companionsHeading }}</h3>
+  <p class="improvement-loop__lead">{{ t.improvementLoop.companionsLead }}</p>
+  <ul class="improvement-loop__companions">
+    {% for c in t.improvementLoop.companions %}
+      <li class="improvement-loop__companion">
+        <h4 class="improvement-loop__companion-title">
+          <a href="{{ c.href | url }}"{% if c.external %} rel="noopener" target="_blank"{% endif %}>{{ c.title }}{% if c.external %} <span class="improvement-loop__companion-external" aria-hidden="true">↗</span>{% endif %}</a>
+        </h4>
+        <p class="improvement-loop__companion-role">{{ c.role }}</p>
+        <p class="improvement-loop__companion-body">{{ c.body }}</p>
+      </li>
+    {% endfor %}
+  </ul>
   <p class="improvement-loop__cta">
-    <a class="btn btn--secondary" href="#group-improvement-loop">{{ t.improvementLoop.browseCta }}</a>
+    <a class="btn btn--secondary" href="#group-skill-skills">{{ t.improvementLoop.browseCta }}</a>
   </p>
 </section>
 

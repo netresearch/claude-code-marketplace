@@ -39,9 +39,10 @@
     }
   },
   "improvementLoop": {
-    "eyebrow": "Die Dreifaltigkeit",
-    "h2": "Drei Skills prüfen alle anderen",
-    "lead": "Andere Marketplaces sind Listen. Dieser hier ist eine Schleife. Harness macht dein Repo agent-ready, Assessment prüft die Arbeit anhand derselben Checkpoints, die wir veröffentlichen, und Retro spielt alle Reibungspunkte zurück in Regeln, Checkpoints und Skill-PRs — einschließlich Harness.",
+    "eyebrow": "Skill-Skills",
+    "h2": "Skills, die mit Skills arbeiten",
+    "lead": "Eine kleine Familie von Skills, deren Gegenstand andere Skills sind. Im Zentrum läuft eine Schleife — Harness macht dein Repo agent-ready, Assessment prüft die Arbeit anhand derselben Checkpoints, die wir veröffentlichen, und Retro spielt alle Reibungspunkte zurück in Regeln, Checkpoints und Skill-PRs, einschließlich Harness. Drumherum stehen fünf weitere Skill-Skills für Autoren- und Host-Seite.",
+    "loopHeading": "Die Schleife im Zentrum",
     "nodes": [
       {
         "step": "1",
@@ -66,7 +67,46 @@
       }
     ],
     "loopBack": "Retro spielt Erkenntnisse zurück in Harness, Assessment-Checkpoints und jeden anderen Skill in diesem Katalog.",
-    "browseCta": "Zu den drei Skills im Katalog"
+    "companionsHeading": "Drumherum",
+    "companionsLead": "Autoren-Werkzeuge, die der Schleife Eingaben liefern — plus Host-seitige Werkzeuge, die Skills in Projekte außerhalb von Claude Code holen.",
+    "companions": [
+      {
+        "title": "agent-rules",
+        "href": "/de/skills/agent-rules/",
+        "external": false,
+        "role": "AGENTS.md-Generator",
+        "body": "Erzeugt die AGENTS.md-Inhalte, die Harness anschließend als Repo-Index verankert."
+      },
+      {
+        "title": "/add-checkpoints",
+        "href": "/de/skills/automated-assessment/",
+        "external": false,
+        "role": "Checkpoints einbauen",
+        "body": "Unterbefehl von automated-assessment: hängt Checkpoints an einen Skill, damit Assessment dagegen prüfen kann."
+      },
+      {
+        "title": "skill-repo",
+        "href": "/de/skills/skill-repo/",
+        "external": false,
+        "role": "Skill-Gerüst",
+        "body": "Vorlagen und Validierung für das Schreiben neuer Agent Skills — Split-Lizenz, plugin.json, Release-Workflow."
+      },
+      {
+        "title": "composer-agent-skill-plugin",
+        "href": "https://github.com/netresearch/composer-agent-skill-plugin",
+        "external": true,
+        "role": "PHP-Host",
+        "body": "Composer-Plugin, das Agent Skills in PHP-Projekte holt — unabhängig davon, welcher AI-Agent sie liest."
+      },
+      {
+        "title": "node-agent-skill-coordinator",
+        "href": "https://github.com/netresearch/node-agent-skill-coordinator",
+        "external": true,
+        "role": "Node-Host",
+        "body": "Findet Skills in installierten npm-Paketen und trägt sie in die AGENTS.md des Projekts ein."
+      }
+    ],
+    "browseCta": "Zur Skill-Skills-Gruppe im Katalog"
   },
   "categoriesSection": {
     "h2": "Wähle nach Lieferobjekt",

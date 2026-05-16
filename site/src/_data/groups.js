@@ -13,28 +13,30 @@
  */
 export default {
   order: [
-    "improvement-loop",
+    "skill-skills",
     "typo3",
     "orocommerce",
     "quality-security",
     "devops",
     "productivity",
-    "meta",
+    "brand",
   ],
   groups: {
-    "improvement-loop": {
+    "skill-skills": {
       en: {
-        title: "The improvement loop",
-        lead: "Three meta-skills that keep every other skill in this catalog honest — onboard a repo, audit the work, feed learnings back.",
+        title: "Skill-skills",
+        lead: "A small family of skills whose subject matter is other skills. At the center runs a loop — Harness, Assessment, Retro — and around it sit authoring and host-side tools that feed the loop.",
       },
       de: {
-        title: "Die Verbesserungsschleife",
-        lead: "Drei Meta-Skills, die jeden anderen Skill prüfbar machen — Repo agent-ready machen, Arbeit gegenprüfen, Erkenntnisse zurückspielen.",
+        title: "Skill-Skills",
+        lead: "Eine kleine Familie von Skills, deren Gegenstand andere Skills sind. Im Zentrum läuft eine Schleife — Harness, Assessment, Retro — drumherum stehen Autoren- und Host-seitige Werkzeuge, die in die Schleife einspeisen.",
       },
       slugs: [
         "agent-harness",
         "automated-assessment",
         "retro",
+        "agent-rules",
+        "skill-repo",
       ],
     },
     typo3: {
@@ -86,7 +88,6 @@ export default {
       en: { title: "Productivity & Integration", lead: "Daily-driver tooling for engineers and teams." },
       de: { title: "Produktivität & Integration", lead: "Alltags-Werkzeuge für Engineering-Teams." },
       slugs: [
-        "agent-rules",
         "jira-integration",
         "matrix-communication",
         "cli-tools",
@@ -100,10 +101,10 @@ export default {
         "markdown-to-pdf",
       ],
     },
-    meta: {
-      en: { title: "Meta", lead: "Skills about building skills." },
-      de: { title: "Meta", lead: "Skills über das Erstellen von Skills." },
-      slugs: ["skill-repo", "netresearch-branding"],
+    brand: {
+      en: { title: "Brand & visual identity", lead: "Visual conventions for Netresearch artifacts." },
+      de: { title: "Brand & visuelle Identität", lead: "Visuelle Konventionen für Netresearch-Artefakte." },
+      slugs: ["netresearch-branding"],
     },
   },
 };

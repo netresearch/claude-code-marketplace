@@ -39,9 +39,10 @@
     }
   },
   "improvementLoop": {
-    "eyebrow": "The improvement loop",
-    "h2": "Three skills keep every other skill honest",
-    "lead": "Most marketplaces ship a list. This one ships a loop. Harness onboards your repo, Assessment audits the work against the same checkpoints we publish, and Retro feeds every friction back into rules, checkpoints, and skill PRs — including the harness itself.",
+    "eyebrow": "Skill-skills",
+    "h2": "Skills that work on skills",
+    "lead": "A small family of skills whose subject matter is other skills. At the center runs a loop — Harness onboards your repo, Assessment audits the work against the same checkpoints we publish, and Retro feeds every friction back into rules, checkpoints, and skill PRs — including the harness itself. Around the loop sit five more skill-skills handling authoring and host-side concerns.",
+    "loopHeading": "The loop at the center",
     "nodes": [
       {
         "step": "1",
@@ -62,11 +63,50 @@
         "title": "Retro",
         "skillSlug": "retro",
         "role": "Feeds learnings back",
-        "body": "Detects friction across a session and materialises it into user memory, project rules, skill PRs, checkpoints, or harness artefacts."
+        "body": "Detects friction across a session and materializes it into user memory, project rules, skill PRs, checkpoints, or harness artifacts."
       }
     ],
     "loopBack": "Retro feeds learnings back into Harness, Assessment checkpoints, and every other skill in this catalog.",
-    "browseCta": "See the three skills below"
+    "companionsHeading": "Around the loop",
+    "companionsLead": "Authoring tools that produce inputs for the loop, plus host-side tooling that gets skills into non-Claude-Code projects.",
+    "companions": [
+      {
+        "title": "agent-rules",
+        "href": "/en/skills/agent-rules/",
+        "external": false,
+        "role": "AGENTS.md generator",
+        "body": "Generates the AGENTS.md content that Harness installs as a repo's index."
+      },
+      {
+        "title": "/add-checkpoints",
+        "href": "/en/skills/automated-assessment/",
+        "external": false,
+        "role": "Wires skills for audit",
+        "body": "Sub-command of automated-assessment that adds checkpoints to a skill so Assessment can audit against them."
+      },
+      {
+        "title": "skill-repo",
+        "href": "/en/skills/skill-repo/",
+        "external": false,
+        "role": "Skill scaffolding",
+        "body": "Templates and validation for authoring new Agent Skills — split licensing, plugin.json, release workflow."
+      },
+      {
+        "title": "composer-agent-skill-plugin",
+        "href": "https://github.com/netresearch/composer-agent-skill-plugin",
+        "external": true,
+        "role": "PHP host integration",
+        "body": "Composer plugin that pulls Agent Skills into PHP projects regardless of which AI agent reads them."
+      },
+      {
+        "title": "node-agent-skill-coordinator",
+        "href": "https://github.com/netresearch/node-agent-skill-coordinator",
+        "external": true,
+        "role": "Node host integration",
+        "body": "Discovers skills shipped via npm packages and registers them in the project's AGENTS.md."
+      }
+    ],
+    "browseCta": "Browse the skill-skills group in the catalog"
   },
   "categoriesSection": {
     "h2": "Pick by what you ship",
