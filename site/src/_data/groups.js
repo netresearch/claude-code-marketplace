@@ -29,7 +29,7 @@ export default {
       },
       de: {
         title: "Die Verbesserungsschleife",
-        lead: "Drei Meta-Skills, die jeden anderen Skill prüfbar machen — Repo agent-ready aufstellen, Arbeit gegenprüfen, Erkenntnisse zurückspielen.",
+        lead: "Drei Meta-Skills, die jeden anderen Skill prüfbar machen — Repo agent-ready machen, Arbeit gegenprüfen, Erkenntnisse zurückspielen.",
       },
       slugs: [
         "agent-harness",

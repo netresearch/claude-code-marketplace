@@ -41,7 +41,7 @@
   "improvementLoop": {
     "eyebrow": "Die Dreifaltigkeit",
     "h2": "Drei Skills prüfen alle anderen",
-    "lead": "Andere Marketplaces sind Listen. Dieser hier ist eine Schleife. Harness macht dein Repo agent-ready, Assessment prüft die Arbeit anhand derselben Checkpoints, die wir veröffentlichen, und Retro spielt jede Reibung zurück in Regeln, Checkpoints und Skill-PRs — Harness eingeschlossen.",
+    "lead": "Andere Marketplaces sind Listen. Dieser hier ist eine Schleife. Harness macht dein Repo agent-ready, Assessment prüft die Arbeit anhand derselben Checkpoints, die wir veröffentlichen, und Retro spielt alle Reibungspunkte zurück in Regeln, Checkpoints und Skill-PRs — einschließlich Harness.",
     "nodes": [
       {
         "step": "1",
