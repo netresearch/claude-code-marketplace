@@ -7,6 +7,13 @@
       "value": "none (justified)",
       "reason": "Sole representative of the OroCommerce group; no closely related skills currently in this marketplace. Do not invent relationships for SEO (AGENTS.md §No orphan skills).",
       "decided": "2026-05-13"
+    },
+    {
+      "slug": "netresearch-branding",
+      "field": "relatedSkills",
+      "value": "none (justified)",
+      "reason": "Sole representative of the Brand & visual identity group after the Meta split. Brand guidelines are orthogonal to every other catalog skill; inventing relationships would mislead. Do not invent relationships for SEO (AGENTS.md §No orphan skills).",
+      "decided": "2026-05-16"
     }
   ]
 }
