@@ -366,6 +366,15 @@
         "repo": "netresearch/retro-skill"
       },
       "category": "productivity"
+    },
+    {
+      "name": "anticipating-shadow-points",
+      "description": "Pre-mortem + Berkeley MAST 14-mode failure detection + independent validator subagent + contractual TaskCreate micro-TODO + claude -p /goal subprocess execution kernel + per-deliverable sign-off for non-trivial engineering tasks. 12 Iron Laws. Multilingual (EN/ES/PT/IT/HE).",
+      "source": {
+        "source": "github",
+        "repo": "ulissesflores/anticipating-shadow-points"
+      },
+      "category": "workflow"
     }
   ]
 }
