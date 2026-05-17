@@ -118,6 +118,7 @@ Host-side tooling (not Agent Skills themselves, but part of the same family):
 | peer-qa-review | [peer-qa-review-skill](https://github.com/netresearch/peer-qa-review-skill) | Round-1 IT QA peer-review runbook: lifecycle, severity vocabulary, structured Jira comment template, edge cases, anti-patterns |
 | markdown-to-pdf | [markdown-to-pdf-skill](https://github.com/netresearch/markdown-to-pdf-skill) | Convert Markdown files to styled PDFs via WeasyPrint; CSS-overridable for branded output |
 | typo3-upgrade-effort-model | [typo3-upgrade-effort-model-skill](https://github.com/netresearch/typo3-upgrade-effort-model-skill) | TYPO3 LTS upgrade effort model: risk multipliers, baselines, version compatibility, Rector coverage, 7-phase workflow |
+| anticipating-shadow-points | [anticipating-shadow-points](https://github.com/ulissesflores/anticipating-shadow-points) | Planning protocol: Klein pre-mortem + Berkeley MAST 14-mode failure detection + validator subagent + contractual TaskCreate micro-TODO + `claude -p /goal` subprocess execution kernel; 12 Iron Laws; multilingual docs (EN/ES/PT/IT/HE) |
 
 ### Brand & visual identity
 
