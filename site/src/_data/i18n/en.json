@@ -131,11 +131,11 @@
     "link": "Read the spec at agentskills.io"
   },
   "cta": {
-    "h2": "Use it. Improve it. Submit your own.",
+    "h2": "Use it. Improve it. Fork it.",
     "links": {
       "star": "Star the repo",
       "issue": "Open an issue",
-      "contribute": "Submit a skill"
+      "contribute": "Fork for your own catalog"
     }
   },
   "footer": {
