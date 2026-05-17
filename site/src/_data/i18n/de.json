@@ -131,11 +131,11 @@
     "link": "Spec auf agentskills.io lesen"
   },
   "cta": {
-    "h2": "Nutzen. Verbessern. Eigene einreichen.",
+    "h2": "Nutzen. Verbessern. Forken.",
     "links": {
       "star": "Repo starren",
       "issue": "Issue eröffnen",
-      "contribute": "Skill einreichen"
+      "contribute": "Eigenen Katalog forken"
     }
   },
   "footer": {
