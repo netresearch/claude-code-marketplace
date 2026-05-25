@@ -8,6 +8,15 @@
   },
   "plugins": [
     {
+      "name": "authsome",
+      "description": "Local credential broker for AI agents. Log in once via OAuth2 or API key. Credentials sit in an encrypted local vault and a local proxy injects them at request time so agents never see raw secrets. 45 providers bundled.",
+      "source": {
+        "source": "github",
+        "repo": "agentrhq/authsome"
+      },
+      "category": "security"
+    },
+    {
       "name": "enterprise-readiness",
       "description": "Assess and enhance software projects for enterprise-grade security, quality, and automation. Includes supply chain security (SLSA, signing, SBOMs), quality gates, and platform-specific hardening with dynamic scoring.",
       "source": {
