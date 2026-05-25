@@ -366,6 +366,15 @@
         "repo": "netresearch/retro-skill"
       },
       "category": "productivity"
+    },
+    {
+      "name": "longbridge",
+      "description": "Agent skills for Longbridge Securities — real-time quotes, charts, fundamentals, portfolio analytics for HK/US/A-share/SG markets. 125+ skills covering prices, earnings, options, watchlist, sector screening, and more. Trilingual (ZH-Hans/ZH-Hant/EN).",
+      "source": {
+        "source": "github",
+        "repo": "longbridge/skills"
+      },
+      "category": "finance"
     }
   ]
 }

@@ -125,6 +125,12 @@ Host-side tooling (not Agent Skills themselves, but part of the same family):
 |-------|-----------|-------------|
 | netresearch-branding | [netresearch-branding-skill](https://github.com/netresearch/netresearch-branding-skill) | Netresearch brand guidelines: colors, typography, components |
 
+### Finance & Trading
+
+| Skill | Repository | Description |
+|-------|-----------|-------------|
+| longbridge | [longbridge/skills](https://github.com/longbridge/skills) | Agent skills for Longbridge Securities — real-time quotes, charts, fundamentals, portfolio analytics for HK/US/A-share/SG. 125+ skills, trilingual (ZH-Hans/ZH-Hant/EN) |
+
 ## Architecture
 
 This marketplace uses **source references** — it contains only a `marketplace.json` catalog that points to individual skill repositories. Claude Code fetches skills directly from their source repos when installed.
