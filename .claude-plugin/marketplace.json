@@ -62,6 +62,15 @@
       "category": "development"
     },
     {
+      "name": "typo3-site-conformance",
+      "description": "Conformance and hardening for deployable TYPO3 v14 site/project repos (type:project + Docker/Compose): layout, Compose topology, Concourse CI, supply-chain gating (Trivy/SBOM/cosign), secret-free config, Valkey/ofelia runtime. Site/project counterpart to typo3-conformance.",
+      "source": {
+        "source": "github",
+        "repo": "netresearch/typo3-site-conformance-skill"
+      },
+      "category": "development"
+    },
+    {
       "name": "netresearch-branding",
       "description": "Implement Netresearch brand guidelines in web projects with comprehensive color system, typography (Raleway, Open Sans, Calibri), responsive component library, and production-ready templates. WCAG AA accessibility compliance, social media specs, and complete web design patterns.",
       "source": {
