@@ -65,7 +65,7 @@ Host-side tooling (not Agent Skills themselves, but part of the same family):
 | Skill | Repository | Description |
 |-------|-----------|-------------|
 | typo3-conformance | [typo3-conformance-skill](https://github.com/netresearch/typo3-conformance-skill) | Evaluate TYPO3 extension quality and standards compliance |
-| typo3-site-conformance | [typo3-site-conformance-skill](https://github.com/netresearch/typo3-site-conformance-skill) | Conformance for deployable TYPO3 site/project repos (containers, CI, supply-chain, secrets) |
+| typo3-site-conformance | [typo3-site-conformance-skill](https://github.com/netresearch/typo3-site-conformance-skill) | Conformance for deployable TYPO3 site/project repos (containers / CI / supply-chain / secrets) |
 | typo3-testing | [typo3-testing-skill](https://github.com/netresearch/typo3-testing-skill) | Test infrastructure: unit, functional, E2E, architecture, mutation |
 | typo3-docs | [typo3-docs-skill](https://github.com/netresearch/typo3-docs-skill) | Create and maintain TYPO3 extension documentation for docs.typo3.org |
 | typo3-ddev | [typo3-ddev-skill](https://github.com/netresearch/typo3-ddev-skill) | DDEV environment setup for TYPO3 extension development |
