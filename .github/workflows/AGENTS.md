@@ -13,14 +13,14 @@ build/deploy pipeline. Root [AGENTS.md](../../AGENTS.md) applies on top.
 |------|---------|
 | `pages.yml` | Pages pipeline: build → compliance checks → Lighthouse → visual regression → deploy (push to main, PRs, weekly cron, dispatch) |
 | `validate.yml` | Marketplace catalog validation (`scripts/validate.sh`) |
-| `security.yml` | Secret scanning (gitleaks/betterleaks), dependency review |
+| `security.yml` | gitleaks secret scanning + dependency review (via `netresearch/.github` reusable workflows); the separate `betterleaks` check comes from GitHub Advanced Security, not this file |
 
 ## Commands
 
 | Task | Command |
 |------|---------|
 | Lint workflows locally | `actionlint .github/workflows/*.yml` |
-| Check run annotations | `gh api repos/netresearch/claude-code-marketplace/commits/SHA/check-runs --jq '.check_runs[] | select(.output.annotations_count > 0)'` |
+| Check run annotations | `gh api repos/netresearch/claude-code-marketplace/commits/<SHA>/check-runs --jq '.check_runs[] | select(.output.annotations_count > 0)'` |
 
 ## Workflow conventions
 

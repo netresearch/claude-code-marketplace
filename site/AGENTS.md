@@ -18,7 +18,7 @@ Data flow (do not bypass): `../.claude-plugin/marketplace.json` →
 
 ```bash
 cd site && npm install
-export GITHUB_TOKEN=$(gh auth token)   # needed for fetch:readmes
+export GITHUB_TOKEN=$(gh auth token)   # optional for fetch:readmes; avoids the 60-req/h anonymous rate limit
 ```
 
 ## Commands (run from `site/`)
@@ -30,7 +30,8 @@ export GITHUB_TOKEN=$(gh auth token)   # needed for fetch:readmes
 | Dev server | `npm run dev` |
 | Compliance checks | `npm run check` (categories, orphans, SEO) |
 | Hreflang pairs (post-build) | `npm run check:hreflang` |
-| Visual regression | `npm run test:visual` (`:update` to refresh baselines) |
+| Visual regression | `npm run test:visual` |
+| Refresh visual baselines | `npm run test:visual:update` |
 
 ## Conventions
 
@@ -64,8 +65,8 @@ export GITHUB_TOKEN=$(gh auth token)   # needed for fetch:readmes
 
 1. `npm run check` green (categories, orphans; SEO warnings reviewed).
 2. `npm run build` + `npm run check:hreflang` green.
-3. `npm run test:visual` — update baselines only for intended UI changes,
-   inspect the diff first.
+3. `npm run test:visual` green — for intended UI changes, refresh baselines
+   with `npm run test:visual:update` after inspecting the diff.
 4. `src/assets/og/` not staged (generated, gitignored).
 5. Quality gates stay blocking — never weaken Lighthouse thresholds
    (Perf/BP ≥ 0.95, A11y = 1.0, SEO = 1.0).

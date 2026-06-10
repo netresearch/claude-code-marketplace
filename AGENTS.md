@@ -5,7 +5,7 @@
 Rules for coding agents editing **`netresearch/claude-code-marketplace`**.  
 They apply to marketplace maintenance only: catalog, landing pages, SEO presentation, cross-linking, and aggregation.
 
-**Precedence:** the **closest `AGENTS.md`** to the files you're changing wins. This root file holds marketplace-wide policy; see the [scope index](#index-of-scoped-agentsmd) below.
+**Precedence:** rules are additive — scoped files extend this root policy, and on conflict the **closest `AGENTS.md`** to the files you're changing wins. See the [scope index](#index-of-scoped-agentsmd) below.
 
 **Do not copy skill-repository quality rules here.** Those live in [`netresearch/skill-repo-skill`](https://github.com/netresearch/skill-repo-skill) (skill-repo skill). **Do not duplicate runtime instructions from individual `SKILL.md` files** — the marketplace describes *how skills are found and presented*, not how they execute.
 
