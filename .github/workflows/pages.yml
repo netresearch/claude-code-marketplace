@@ -37,7 +37,7 @@ jobs:
         run: npm ci
 
       - name: Restore README cache
-        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+        uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5.0.5
         with:
           path: site/cache/skills-readme
           key: skills-readme-${{ hashFiles('.claude-plugin/marketplace.json', 'site/scripts/fetch-readmes.js', 'site/scripts/parse-readme.js') }}
@@ -89,7 +89,7 @@ jobs:
         run: npm ci
 
       - name: Restore README cache
-        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+        uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5.0.5
         with:
           path: site/cache/skills-readme
           key: skills-readme-${{ hashFiles('.claude-plugin/marketplace.json', 'site/scripts/fetch-readmes.js', 'site/scripts/parse-readme.js') }}
@@ -147,7 +147,7 @@ jobs:
         run: npx playwright install --with-deps chromium
 
       - name: Restore README cache
-        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+        uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5.0.5
         with:
           path: site/cache/skills-readme
           key: skills-readme-${{ hashFiles('.claude-plugin/marketplace.json', 'site/scripts/fetch-readmes.js', 'site/scripts/parse-readme.js') }}
