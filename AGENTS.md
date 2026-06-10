@@ -1,9 +1,21 @@
+<!-- Managed by agent: keep sections and order; edit content, not structure. Last updated: 2026-06-10 -->
+
 # AGENTS.md — Netresearch Claude Code Marketplace
 
 Rules for coding agents editing **`netresearch/claude-code-marketplace`**.  
 They apply to marketplace maintenance only: catalog, landing pages, SEO presentation, cross-linking, and aggregation.
 
+**Precedence:** the **closest `AGENTS.md`** to the files you're changing wins. This root file holds marketplace-wide policy; see the [scope index](#index-of-scoped-agentsmd) below.
+
 **Do not copy skill-repository quality rules here.** Those live in [`netresearch/skill-repo-skill`](https://github.com/netresearch/skill-repo-skill) (skill-repo skill). **Do not duplicate runtime instructions from individual `SKILL.md` files** — the marketplace describes *how skills are found and presented*, not how they execute.
+
+---
+
+## Commands
+
+| Task | Command |
+|------|---------|
+| Validate marketplace.json + README catalog | `./scripts/validate.sh` |
 
 ---
 
@@ -129,3 +141,10 @@ Before completing a marketplace PR:
 
 - Skill repository structure and validation: **`netresearch/skill-repo-skill`**
 - Do **not** move runtime behavior documentation into this marketplace; link to source repos instead.
+
+## Index of scoped AGENTS.md
+
+| Directory | Read first when touching |
+|---|---|
+| [site/AGENTS.md](./site/AGENTS.md) | Eleventy Pages site: templates, data pipeline, checks |
+| [.github/workflows/AGENTS.md](./.github/workflows/AGENTS.md) | CI workflows: pages, validate, security |
