@@ -130,6 +130,8 @@ Host-side tooling (not Agent Skills themselves, but part of the same family):
 
 This marketplace uses **source references** — it contains only a `marketplace.json` catalog that points to individual skill repositories. Claude Code fetches skills directly from their source repos when installed.
 
+The GitHub Pages site is built from [`site/`](site/README.md); the design decisions behind it are recorded as [ADRs in `docs/decisions/`](docs/decisions/README.md).
+
 ## Adding a Skill
 
 Add an entry to `.claude-plugin/marketplace.json`:
