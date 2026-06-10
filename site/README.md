@@ -6,8 +6,10 @@ discovery and storytelling layer for this marketplace.
 
 All skill data is read from [`../.claude-plugin/marketplace.json`](../.claude-plugin/marketplace.json)
 (single source of truth) and enriched at build time with sections fetched
-from each skill repo's README. Nothing is hand-maintained per skill in this
-directory. Design rationale lives in [`../docs/decisions/`](../docs/decisions/).
+from each skill repo's README. Procedural skill content is never duplicated
+here; the only per-skill data maintained in this directory is curated
+presentation data in `src/_data/` (display names, German descriptions,
+overrides). Design rationale lives in [`../docs/decisions/`](../docs/decisions/).
 
 ## Quick start
 
@@ -32,7 +34,7 @@ npm run dev
 | `npm run dev` | Dev server with live reload |
 | `npm run preview` | Static preview of `_site/` after a build |
 | `npm run fetch:readmes` | Fetch skill-repo READMEs (ETag-cached; needs `GITHUB_TOKEN`) |
-| `npm run og:generate` | Regenerate OG images (Sharp + SVG template, one PNG per page) |
+| `npm run og:generate` | Regenerate OG images (Sharp + SVG template, `landing.png` + one PNG per skill) |
 | `npm run check` | All compliance checks: categories, orphans, SEO copy |
 | `npm run check:categories` | Blocking — category enum from AGENTS.md |
 | `npm run check:orphans` | Blocking — required fields per skill (AGENTS.md §No orphan skills) |

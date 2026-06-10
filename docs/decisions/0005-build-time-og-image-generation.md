@@ -10,16 +10,19 @@ Accepted
 
 ## Context
 
-Every page (landing plus one per skill and locale) needs a 1200×630 OG
-image for social sharing. With 40+ skills that is far too many images to
-author or maintain by hand, and committed PNGs would bloat the repo with
-binary diffs on every content change.
+The landing page and every skill detail page need a 1200×630 OG image for
+social sharing; one image per skill is shared across both locales. With
+40+ skills that is far too many images to author or maintain by hand, and
+committed PNGs would bloat the repo with binary diffs on every content
+change.
 
 ## Decision
 
 Generate all OG images at build time (`site/scripts/generate-og-images.js`)
-from an SVG template rendered with Sharp — skill title and category badge
-composed per skill. Images are build artifacts, never committed.
+from an SVG template rendered with Sharp — `landing.png` plus one PNG per
+skill slug (skill title and category badge composed per skill, shared
+across locales). Images are build artifacts, never committed
+(`site/src/assets/og/` is gitignored).
 
 ## Alternatives considered
 
