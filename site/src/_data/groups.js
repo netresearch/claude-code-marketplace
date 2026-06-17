@@ -20,6 +20,7 @@ export default {
     "devops",
     "productivity",
     "brand",
+    "creative-media",
   ],
   groups: {
     "skill-skills": {
@@ -105,6 +106,25 @@ export default {
       en: { title: "Brand & visual identity", lead: "Visual conventions for Netresearch artifacts." },
       de: { title: "Brand & visuelle Identität", lead: "Visuelle Konventionen für Netresearch-Artefakte." },
       slugs: ["netresearch-branding"],
+    },
+    "creative-media": {
+      en: {
+        title: "Creative & visual tooling (community)",
+        lead: "External community-contributed skills for visual tuning, design review, and screen/media capture.",
+      },
+      de: {
+        title: "Kreativ- & Visual-Tooling (Community)",
+        lead: "Externe Community-Skills für visuelles Tuning, Design-Review und Screen-/Media-Aufnahme.",
+      },
+      slugs: [
+        "lookdev",
+        "lookdev-auto",
+        "deterministic-design",
+        "ckw-design",
+        "screenstudio-alt",
+        "web-media-getter",
+        "macos-screen-recorder",
+      ],
     },
   },
 };

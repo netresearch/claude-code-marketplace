@@ -375,6 +375,69 @@
         "repo": "netresearch/retro-skill"
       },
       "category": "productivity"
+    },
+    {
+      "name": "lookdev",
+      "description": "Human-in-the-loop web studio to tune AI-generated output by eye.",
+      "source": {
+        "source": "github",
+        "repo": "connerkward/lookdev-studio-skill"
+      },
+      "category": "design"
+    },
+    {
+      "name": "deterministic-design",
+      "description": "Render the UI and prove it's balanced + usable: deterministic layout audit + vision-judged usability.",
+      "source": {
+        "source": "github",
+        "repo": "connerkward/deterministic-design-skill"
+      },
+      "category": "design"
+    },
+    {
+      "name": "ckw-design",
+      "description": "Frontend design skill: direction, design system, visual philosophy.",
+      "source": {
+        "source": "github",
+        "repo": "connerkward/ckw-design-skill"
+      },
+      "category": "design"
+    },
+    {
+      "name": "screenstudio-alt",
+      "description": "Open-source headless Screen Studio alternative: auto-zoom, idle speed-up, vertical export.",
+      "source": {
+        "source": "github",
+        "repo": "connerkward/screenstudio-alternative-skill"
+      },
+      "category": "productivity"
+    },
+    {
+      "name": "web-media-getter",
+      "description": "One query across free image/video/GIF APIs, license-tagged results.",
+      "source": {
+        "source": "github",
+        "repo": "connerkward/web-media-getter-skill"
+      },
+      "category": "productivity"
+    },
+    {
+      "name": "macos-screen-recorder",
+      "description": "macOS screen recorder with system audio via ScreenCaptureKit, CLI, no driver.",
+      "source": {
+        "source": "github",
+        "repo": "connerkward/macos-screen-recorder-system-audio"
+      },
+      "category": "productivity"
+    },
+    {
+      "name": "lookdev-auto",
+      "description": "Automated visual tuning: a vision model rates rendered variants in a loop.",
+      "source": {
+        "source": "github",
+        "repo": "connerkward/lookdev-auto-skill"
+      },
+      "category": "design"
     }
   ]
 }

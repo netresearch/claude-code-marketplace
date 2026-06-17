@@ -2,10 +2,10 @@
 
 > **You ship code. Your agent should know your stack.**
 
-40 curated Agent Skills for TYPO3, PHP, Go, Docker, Jira, security, and documentation — portable across Claude Code, Cursor, Copilot, Codex, Gemini CLI, and 30+ other agents.
+48 curated Agent Skills for TYPO3, PHP, Go, Docker, Jira, security, and documentation — portable across Claude Code, Cursor, Copilot, Codex, Gemini CLI, and 30+ other agents.
 
 [![Marketplace site](https://img.shields.io/badge/marketplace-netresearch.github.io-2F99A4)](https://netresearch.github.io/claude-code-marketplace/)
-[![Skills](https://img.shields.io/badge/skills-40-2F99A4)](https://netresearch.github.io/claude-code-marketplace/en/skills/)
+[![Skills](https://img.shields.io/badge/skills-48-2F99A4)](https://netresearch.github.io/claude-code-marketplace/en/skills/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 [![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/netresearch/claude-code-marketplace/badge)](https://scorecard.dev/viewer/?uri=github.com/netresearch/claude-code-marketplace)
 
@@ -125,6 +125,20 @@ Host-side tooling (not Agent Skills themselves, but part of the same family):
 | Skill | Repository | Description |
 |-------|-----------|-------------|
 | netresearch-branding | [netresearch-branding-skill](https://github.com/netresearch/netresearch-branding-skill) | Netresearch brand guidelines: colors, typography, components |
+
+### Creative & visual tooling (community)
+
+External community-contributed skills for visual tuning, design review, and screen/media capture. Maintained outside Netresearch under [github.com/connerkward](https://github.com/connerkward).
+
+| Skill | Repository | Description |
+|-------|-----------|-------------|
+| lookdev | [lookdev-studio-skill](https://github.com/connerkward/lookdev-studio-skill) | Human-in-the-loop web studio to tune AI-generated output by eye |
+| lookdev-auto | [lookdev-auto-skill](https://github.com/connerkward/lookdev-auto-skill) | Automated visual tuning: a vision model rates rendered variants in a loop |
+| deterministic-design | [deterministic-design-skill](https://github.com/connerkward/deterministic-design-skill) | Deterministic layout audit + vision-judged usability for rendered UIs |
+| ckw-design | [ckw-design-skill](https://github.com/connerkward/ckw-design-skill) | Frontend design skill: direction, design system, visual philosophy |
+| screenstudio-alt | [screenstudio-alternative-skill](https://github.com/connerkward/screenstudio-alternative-skill) | Open-source headless Screen Studio alternative: auto-zoom, idle speed-up, vertical export |
+| web-media-getter | [web-media-getter-skill](https://github.com/connerkward/web-media-getter-skill) | One query across free image/video/GIF APIs, license-tagged results |
+| macos-screen-recorder | [macos-screen-recorder-system-audio](https://github.com/connerkward/macos-screen-recorder-system-audio) | macOS screen recorder with system audio via ScreenCaptureKit, CLI, no driver |
 
 ## Architecture
 
