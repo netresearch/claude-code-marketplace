@@ -375,6 +375,15 @@
         "repo": "netresearch/retro-skill"
       },
       "category": "productivity"
+    },
+    {
+      "name": "apple-notes",
+      "description": "Semantic search and connection-discovery across your own Apple Notes — hybrid search, Swanson-ABC bridges, entity threads, cited synthesis. On-device embeddings; macOS.",
+      "source": {
+        "source": "github",
+        "repo": "connerkward/mcp-apple-notes"
+      },
+      "category": "productivity"
     }
   ]
 }

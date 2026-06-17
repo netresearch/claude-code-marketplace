@@ -2,10 +2,10 @@
 
 > **You ship code. Your agent should know your stack.**
 
-40 curated Agent Skills for TYPO3, PHP, Go, Docker, Jira, security, and documentation — portable across Claude Code, Cursor, Copilot, Codex, Gemini CLI, and 30+ other agents.
+42 curated Agent Skills for TYPO3, PHP, Go, Docker, Jira, security, and documentation — portable across Claude Code, Cursor, Copilot, Codex, Gemini CLI, and 30+ other agents.
 
 [![Marketplace site](https://img.shields.io/badge/marketplace-netresearch.github.io-2F99A4)](https://netresearch.github.io/claude-code-marketplace/)
-[![Skills](https://img.shields.io/badge/skills-40-2F99A4)](https://netresearch.github.io/claude-code-marketplace/en/skills/)
+[![Skills](https://img.shields.io/badge/skills-42-2F99A4)](https://netresearch.github.io/claude-code-marketplace/en/skills/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 [![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/netresearch/claude-code-marketplace/badge)](https://scorecard.dev/viewer/?uri=github.com/netresearch/claude-code-marketplace)
 
@@ -119,6 +119,7 @@ Host-side tooling (not Agent Skills themselves, but part of the same family):
 | peer-qa-review | [peer-qa-review-skill](https://github.com/netresearch/peer-qa-review-skill) | Round-1 IT QA peer-review runbook: lifecycle, severity vocabulary, structured Jira comment template, edge cases, anti-patterns |
 | markdown-to-pdf | [markdown-to-pdf-skill](https://github.com/netresearch/markdown-to-pdf-skill) | Convert Markdown files to styled PDFs via WeasyPrint; CSS-overridable for branded output |
 | typo3-upgrade-effort-model | [typo3-upgrade-effort-model-skill](https://github.com/netresearch/typo3-upgrade-effort-model-skill) | TYPO3 LTS upgrade effort model: risk multipliers, baselines, version compatibility, Rector coverage, 7-phase workflow |
+| apple-notes | [connerkward/mcp-apple-notes](https://github.com/connerkward/mcp-apple-notes) | Semantic search and connection-discovery across your own Apple Notes — hybrid search, Swanson-ABC bridges, entity threads, cited synthesis (on-device, macOS) |
 
 ### Brand & visual identity
 
