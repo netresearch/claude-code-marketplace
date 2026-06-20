@@ -375,6 +375,15 @@
         "repo": "netresearch/retro-skill"
       },
       "category": "productivity"
+    },
+    {
+      "name": "okf-author",
+      "description": "Markdown knowledge bases drift without a shared structure, so agents can't reliably parse them. okf-author authors, converts, and validates Markdown in Open Knowledge Format (OKF) — Google's open spec for knowledge as Markdown files with YAML frontmatter — with a dependency-free OKF v0.1 validator.",
+      "source": {
+        "source": "github",
+        "repo": "parkscloud/okf-author"
+      },
+      "category": "document"
     }
   ]
 }
