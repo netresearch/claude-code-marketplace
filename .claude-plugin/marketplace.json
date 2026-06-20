@@ -270,7 +270,7 @@
     },
     {
       "name": "hermes-tweet",
-      "description": "Native Hermes Agent X/Twitter plugin for social listening, account reads, trends, monitors, and approval-gated posting through tweet_explore, tweet_read, and disabled-by-default tweet_action tools.",
+      "description": "Monitor X/Twitter activity, read accounts, track trends, and post approval-gated updates through tweet_explore, tweet_read, and disabled-by-default tweet_action tools.",
       "source": {
         "source": "github",
         "repo": "Xquik-dev/hermes-tweet"
