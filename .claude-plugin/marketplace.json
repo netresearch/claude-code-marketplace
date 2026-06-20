@@ -269,6 +269,15 @@
       "category": "workflow"
     },
     {
+      "name": "hermes-tweet",
+      "description": "Native Hermes Agent X/Twitter plugin for social listening, account reads, trends, monitors, and approval-gated posting through tweet_explore, tweet_read, and disabled-by-default tweet_action tools.",
+      "source": {
+        "source": "github",
+        "repo": "Xquik-dev/hermes-tweet"
+      },
+      "category": "workflow"
+    },
+    {
       "name": "typo3-typoscript-ref",
       "description": "Version-aware TypoScript, TSconfig and Fluid reference lookup with always-on best practices. Keyword search across cached documentation, 14 ready-to-use recipes, code review checklists, deprecation checks, migration guides, debugging reference. Supports TYPO3 v12, v13, and v14.",
       "source": {

@@ -115,6 +115,7 @@ Host-side tooling (not Agent Skills themselves, but part of the same family):
 | file-search | [file-search-skill](https://github.com/netresearch/file-search-skill) | Efficient code search with ripgrep, ast-grep, fd |
 | pagerangers-seo | [pagerangers-skill](https://github.com/netresearch/pagerangers-skill) | PageRangers SEO API: keyword rankings, SERP analysis |
 | coach | [claude-coach-plugin](https://github.com/netresearch/claude-coach-plugin) | Self-improving learning system with hooks and commands |
+| hermes-tweet | [hermes-tweet](https://github.com/Xquik-dev/hermes-tweet) | Native Hermes Agent X/Twitter plugin for social listening, account reads, trends, monitors, and approval-gated posting |
 | german-technical-writing | [german-technical-writing-skill](https://github.com/netresearch/german-technical-writing-skill) | Natural German technical register for Jira, internal docs, team chat — catches anglicisms, enforces lexicon |
 | peer-qa-review | [peer-qa-review-skill](https://github.com/netresearch/peer-qa-review-skill) | Round-1 IT QA peer-review runbook: lifecycle, severity vocabulary, structured Jira comment template, edge cases, anti-patterns |
 | markdown-to-pdf | [markdown-to-pdf-skill](https://github.com/netresearch/markdown-to-pdf-skill) | Convert Markdown files to styled PDFs via WeasyPrint; CSS-overridable for branded output |

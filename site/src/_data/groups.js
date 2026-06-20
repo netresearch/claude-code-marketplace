@@ -94,6 +94,7 @@ export default {
         "context7",
         "data-tools",
         "file-search",
+        "hermes-tweet",
         "pagerangers-seo",
         "coach",
         "german-technical-writing",

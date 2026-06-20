@@ -22,6 +22,7 @@
   "concourse-ci": "Concourse-CI-Pipeline-Entwicklung und -Optimierung.",
   "go-development": "Production-Grade-Go-Patterns: Testing, Docker, LDAP, Resilience.",
   "git-workflow": "Branching-Strategien, Conventional Commits, PR-Workflows.",
+  "hermes-tweet": "Native Hermes-Agent-Integration für X/Twitter: Social Listening, Account-Reads, Trends, Monitoring und freigabegebundene Veröffentlichungen.",
   "github-project": "GitHub-Repo-Setup: Branch-Protection, CODEOWNERS, Auto-Merge.",
   "github-release": "Sichere automatisierte GitHub-Releases mit Supply-Chain-Security. Verhindert riskante gh-release-Kommandos, orchestriert Version-Bumps, signierte Tags und CI-getriebene Releases.",
   "agent-rules": "Generiert AGENTS.md mit CI-Regeln, Architektur und ADR-Extraktion.",
