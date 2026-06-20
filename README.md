@@ -109,13 +109,13 @@ Host-side tooling (not Agent Skills themselves, but part of the same family):
 |-------|-----------|-------------|
 | jira-integration | [jira-skill](https://github.com/netresearch/jira-skill) | Jira API operations and wiki markup (two sub-skills) |
 | matrix-communication | [matrix-skill](https://github.com/netresearch/matrix-skill) | Send messages to Matrix rooms |
+| hermes-tweet | [hermes-tweet](https://github.com/Xquik-dev/hermes-tweet) | Coordinate X/Twitter monitoring, account reads, trend tracking, and approval-gated posting |
 | cli-tools | [cli-tools-skill](https://github.com/netresearch/cli-tools-skill) | Auto-install missing CLI tools (74+ tool catalog) |
 | context7 | [context7-skill](https://github.com/netresearch/context7-skill) | Library documentation lookup via Context7 REST API |
 | data-tools | [data-tools-skill](https://github.com/netresearch/data-tools-skill) | Structured data manipulation with jq, yq, dasel, qsv |
 | file-search | [file-search-skill](https://github.com/netresearch/file-search-skill) | Efficient code search with ripgrep, ast-grep, fd |
 | pagerangers-seo | [pagerangers-skill](https://github.com/netresearch/pagerangers-skill) | PageRangers SEO API: keyword rankings, SERP analysis |
 | coach | [claude-coach-plugin](https://github.com/netresearch/claude-coach-plugin) | Self-improving learning system with hooks and commands |
-| hermes-tweet | [hermes-tweet](https://github.com/Xquik-dev/hermes-tweet) | Monitor X/Twitter activity, read accounts, track trends, and post approval-gated updates |
 | german-technical-writing | [german-technical-writing-skill](https://github.com/netresearch/german-technical-writing-skill) | Natural German technical register for Jira, internal docs, team chat — catches anglicisms, enforces lexicon |
 | peer-qa-review | [peer-qa-review-skill](https://github.com/netresearch/peer-qa-review-skill) | Round-1 IT QA peer-review runbook: lifecycle, severity vocabulary, structured Jira comment template, edge cases, anti-patterns |
 | markdown-to-pdf | [markdown-to-pdf-skill](https://github.com/netresearch/markdown-to-pdf-skill) | Convert Markdown files to styled PDFs via WeasyPrint; CSS-overridable for branded output |

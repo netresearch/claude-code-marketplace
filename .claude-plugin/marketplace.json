@@ -270,7 +270,7 @@
     },
     {
       "name": "hermes-tweet",
-      "description": "Monitor X/Twitter activity, read accounts, track trends, and post approval-gated updates through tweet_explore, tweet_read, and disabled-by-default tweet_action tools.",
+      "description": "Coordinate X/Twitter monitoring, account reads, trend tracking, and approval-gated posting for social media workflows.",
       "source": {
         "source": "github",
         "repo": "Xquik-dev/hermes-tweet"
