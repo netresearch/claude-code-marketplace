@@ -102,6 +102,7 @@ Host-side tooling (not Agent Skills themselves, but part of the same family):
 | git-workflow | [git-workflow-skill](https://github.com/netresearch/git-workflow-skill) | Branching strategies, Conventional Commits, PR workflows |
 | github-project | [github-project-skill](https://github.com/netresearch/github-project-skill) | GitHub repo setup: branch protection, CODEOWNERS, auto-merge |
 | github-release | [github-release-skill](https://github.com/netresearch/github-release-skill) | Safe, automated GitHub releases with supply chain security. Prevents dangerous gh release commands, orchestrates version bumps, signed tags, and CI-driven releases across ecosystems. |
+| jujutsu-workflow | [jujutsu-workflow-skill](https://github.com/netresearch/jujutsu-workflow-skill) | Agent-safe version control with Jujutsu (jj): jj as the local change layer (reversible op-log undo, conflicts-as-data, non-interactive history surgery), Git as the canonical remote/PR/CI interface; proven with evals to beat pure git for agents |
 
 ### Productivity & Integration
 

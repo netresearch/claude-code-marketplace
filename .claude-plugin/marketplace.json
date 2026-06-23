@@ -170,6 +170,15 @@
       "category": "development"
     },
     {
+      "name": "jujutsu-workflow",
+      "description": "Stop coding agents losing work and corrupting branch state in git: use Jujutsu (jj) as the local change layer — reversible op-log undo, conflicts-as-data, non-interactive history surgery — while Git stays the canonical remote/PR/CI interface. Proven with evals to beat pure git for agents.",
+      "source": {
+        "source": "github",
+        "repo": "netresearch/jujutsu-workflow-skill"
+      },
+      "category": "development"
+    },
+    {
       "name": "skill-repo",
       "description": "Guide for structuring Netresearch skill repositories with multi-channel distribution. Covers repository standards, composer.json configuration, release workflows, and validation scripts.",
       "source": {
