@@ -90,6 +90,7 @@ export default {
       slugs: [
         "jira-integration",
         "matrix-communication",
+        "aident-skill",
         "cli-tools",
         "context7",
         "data-tools",

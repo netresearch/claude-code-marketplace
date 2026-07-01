@@ -2,10 +2,10 @@
 
 > **You ship code. Your agent should know your stack.**
 
-40 curated Agent Skills for TYPO3, PHP, Go, Docker, Jira, security, and documentation — portable across Claude Code, Cursor, Copilot, Codex, Gemini CLI, and 30+ other agents.
+43 curated Agent Skills for TYPO3, PHP, Go, Docker, Jira, security, and documentation — portable across Claude Code, Cursor, Copilot, Codex, Gemini CLI, and 30+ other agents.
 
 [![Marketplace site](https://img.shields.io/badge/marketplace-netresearch.github.io-2F99A4)](https://netresearch.github.io/claude-code-marketplace/)
-[![Skills](https://img.shields.io/badge/skills-40-2F99A4)](https://netresearch.github.io/claude-code-marketplace/en/skills/)
+[![Skills](https://img.shields.io/badge/skills-43-2F99A4)](https://netresearch.github.io/claude-code-marketplace/en/skills/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 [![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/netresearch/claude-code-marketplace/badge)](https://scorecard.dev/viewer/?uri=github.com/netresearch/claude-code-marketplace)
 
@@ -110,6 +110,7 @@ Host-side tooling (not Agent Skills themselves, but part of the same family):
 |-------|-----------|-------------|
 | jira-integration | [jira-skill](https://github.com/netresearch/jira-skill) | Jira API operations and wiki markup (two sub-skills) |
 | matrix-communication | [matrix-skill](https://github.com/netresearch/matrix-skill) | Send messages to Matrix rooms |
+| aident-skill | [aident-skill](https://github.com/Aident-AI/aident-skill) | Use Aident Loadout to connect your AI agents to 1,000+ real-world apps and tools like Gmail, Slack, Linear, Notion, Firecrawl, and Fal, unlock 27,000+ executable actions, and track full audit history so your agents can get real work done reliably. |
 | cli-tools | [cli-tools-skill](https://github.com/netresearch/cli-tools-skill) | Auto-install missing CLI tools (74+ tool catalog) |
 | context7 | [context7-skill](https://github.com/netresearch/context7-skill) | Library documentation lookup via Context7 REST API |
 | data-tools | [data-tools-skill](https://github.com/netresearch/data-tools-skill) | Structured data manipulation with jq, yq, dasel, qsv |

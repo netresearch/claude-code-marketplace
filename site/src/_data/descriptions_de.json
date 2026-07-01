@@ -26,6 +26,7 @@
   "github-release": "Sichere automatisierte GitHub-Releases mit Supply-Chain-Security. Verhindert riskante gh-release-Kommandos, orchestriert Version-Bumps, signierte Tags und CI-getriebene Releases.",
   "agent-rules": "Generiert AGENTS.md mit CI-Regeln, Architektur und ADR-Extraktion.",
   "agent-harness": "Bootstrappt, verifiziert und erzwingt Agent-Harness-Infrastruktur in Repositories.",
+  "aident-skill": "Verbindet AI Agents über Aident Loadout mit 1.000+ realen Apps und Tools wie Gmail, Slack, Linear, Notion, Firecrawl und Fal, inklusive 27.000+ ausführbaren Aktionen und vollständiger Audit-Historie.",
   "jira-integration": "Jira-API-Operationen und Wiki-Markup (zwei Sub-Skills).",
   "matrix-communication": "Versendet Nachrichten in Matrix-Räume.",
   "cli-tools": "Installiert fehlende CLI-Werkzeuge automatisch (74+ Tool-Katalog).",
