@@ -288,6 +288,17 @@ def render_report(
     return "\n".join(lines)
 
 
+def write_report(report: str) -> Path:
+    """Write `report` to the fixed, non-configurable output path.
+
+    Takes no path argument by design: DEFAULT_OUTPUT is a module-level
+    constant derived only from `__file__`, never from argv, so this
+    function has no CLI-controlled path to validate (CWE-22).
+    """
+    DEFAULT_OUTPUT.write_text(report + "\n", encoding="utf-8")
+    return DEFAULT_OUTPUT
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
@@ -325,11 +336,9 @@ def main(argv: list[str] | None = None) -> int:
         pairs, corpus, args.threshold, args.skill_md_root, len(plugins)
     )
 
-    # Fixed, non-configurable report path (not derived from any CLI
-    # argument): see the module docstring for why --output was removed.
-    DEFAULT_OUTPUT.write_text(report + "\n", encoding="utf-8")
+    output_path = write_report(report)
     print(report)
-    print(f"Report written to {DEFAULT_OUTPUT}", file=sys.stderr)
+    print(f"Report written to {output_path}", file=sys.stderr)
     return 0
 
 
