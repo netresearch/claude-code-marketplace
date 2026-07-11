@@ -158,16 +158,20 @@ def extract_skill_md_description(text: str) -> str | None:
 def find_local_skill_md(skills_root: Path, repo: str) -> Path | None:
     """Locate a locally checked-out SKILL.md for `owner/repo`, if present.
 
-    Looks for `<skills_root>/<repo-basename>/**/skills/*/SKILL.md`, which
-    covers both flat checkouts and the git-worktree layout
-    (`<repo>/main/skills/<slug>/SKILL.md`). Prefers a `main` worktree when
-    several branches are checked out; otherwise picks the lexicographically
-    first match for determinism.
+    Looks for `<skills_root>/<repo-basename>/skills/*/SKILL.md` (flat
+    checkout) and `<skills_root>/<repo-basename>/*/skills/*/SKILL.md`
+    (one level of worktree branch dirs, e.g. `<repo>/main/skills/<slug>/
+    SKILL.md`) — bounded to the documented layout rather than an unbounded
+    recursive glob. Prefers a `main` worktree when several branches are
+    checked out; otherwise picks the lexicographically first match for
+    determinism.
     """
     base_dir = skills_root / repo.split("/")[-1]
     if not base_dir.is_dir():
         return None
-    candidates = sorted(base_dir.glob("**/skills/*/SKILL.md"))
+    candidates = sorted(
+        [*base_dir.glob("skills/*/SKILL.md"), *base_dir.glob("*/skills/*/SKILL.md")]
+    )
     if not candidates:
         return None
     for candidate in candidates:
@@ -214,12 +218,19 @@ def build_corpus(plugins: list[dict], skills_root: Path | None) -> dict[str, dic
             if repo:
                 skill_md_path = find_local_skill_md(skills_root, repo)
                 if skill_md_path is not None:
-                    skill_desc = extract_skill_md_description(
-                        skill_md_path.read_text(encoding="utf-8")
-                    )
-                    if skill_desc:
-                        text_sources.append(skill_desc)
-                        skill_md_used = True
+                    try:
+                        skill_desc = extract_skill_md_description(
+                            skill_md_path.read_text(encoding="utf-8")
+                        )
+                    except (OSError, UnicodeDecodeError) as exc:
+                        print(
+                            f"Warning: failed to read {skill_md_path}: {exc}",
+                            file=sys.stderr,
+                        )
+                    else:
+                        if skill_desc:
+                            text_sources.append(skill_desc)
+                            skill_md_used = True
         corpus[name] = {
             "tokens": tokenize(" ".join(text_sources)),
             "category": plugin.get("category", ""),
