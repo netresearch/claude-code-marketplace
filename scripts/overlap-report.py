@@ -187,8 +187,12 @@ def _resolve_within_repo(path: Path, label: str) -> Path:
     argument.
     """
     resolved = path.resolve()
-    if not resolved.is_relative_to(REPO_ROOT):
-        raise ValueError(f"--{label} must resolve inside {REPO_ROOT}, got {resolved}")
+    try:
+        resolved.relative_to(REPO_ROOT)
+    except ValueError:
+        raise ValueError(
+            f"--{label} must resolve inside {REPO_ROOT}, got {resolved}"
+        ) from None
     return resolved
 
 
