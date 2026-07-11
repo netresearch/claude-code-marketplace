@@ -301,6 +301,16 @@ def write_report(report: str) -> Path:
     return DEFAULT_OUTPUT
 
 
+def _unit_float(raw: str) -> float:
+    """argparse `type=` validator: a Jaccard threshold is always in [0.0, 1.0]."""
+    value = float(raw)
+    if not 0.0 <= value <= 1.0:
+        raise argparse.ArgumentTypeError(
+            f"--threshold must be between 0.0 and 1.0, got {value}"
+        )
+    return value
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
@@ -314,9 +324,9 @@ def main(argv: list[str] | None = None) -> int:
     )
     parser.add_argument(
         "--threshold",
-        type=float,
+        type=_unit_float,
         default=DEFAULT_THRESHOLD,
-        help=f"Minimum Jaccard score to report a pair (default: {DEFAULT_THRESHOLD})",
+        help=f"Minimum Jaccard score to report a pair, 0.0-1.0 (default: {DEFAULT_THRESHOLD})",
     )
     parser.add_argument(
         "--skill-md-root",
