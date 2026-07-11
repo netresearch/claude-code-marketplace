@@ -19,6 +19,7 @@ const MARKETPLACE = resolve(__dirname, "../../../.claude-plugin/marketplace.json
 const CACHE_DIR = resolve(__dirname, "../../cache/skills-readme");
 
 import categories from "./categories.js";
+import valueTypes from "./valueTypes.js";
 import groups from "./groups.js";
 import descriptionsDe from "./descriptions_de.json" with { type: "json" };
 import { displayName } from "./_helpers/display-name.js";
@@ -87,6 +88,9 @@ export default function () {
       category: plugin.category,
       categoryLabelEn: categories.labels.en[plugin.category],
       categoryLabelDe: categories.labels.de[plugin.category],
+      valueType: plugin.value_type || null,
+      valueTypeLabelEn: plugin.value_type ? valueTypes.labels.en[plugin.value_type] : null,
+      valueTypeLabelDe: plugin.value_type ? valueTypes.labels.de[plugin.value_type] : null,
       group: groupOf(plugin.name),
       repo: plugin.source?.repo,
       repoUrl: plugin.source?.repo ? `https://github.com/${plugin.source.repo}` : null,

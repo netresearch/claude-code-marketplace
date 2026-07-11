@@ -41,7 +41,8 @@
         "source": "github",
         "repo": "netresearch/typo3-ddev-skill"
       },
-      "category": "development"
+      "category": "development",
+      "value_type": "org-convention"
     },
     {
       "name": "typo3-core-contributions",
@@ -59,7 +60,8 @@
         "source": "github",
         "repo": "netresearch/typo3-conformance-skill"
       },
-      "category": "development"
+      "category": "development",
+      "value_type": "version-facts"
     },
     {
       "name": "typo3-site-conformance",
@@ -140,7 +142,8 @@
         "source": "github",
         "repo": "netresearch/security-audit-skill"
       },
-      "category": "security"
+      "category": "security",
+      "value_type": "guardrail"
     },
     {
       "name": "typo3-ckeditor5",
@@ -167,7 +170,8 @@
         "source": "github",
         "repo": "netresearch/github-project-skill"
       },
-      "category": "development"
+      "category": "development",
+      "value_type": "org-convention"
     },
     {
       "name": "jujutsu-workflow",
@@ -212,7 +216,8 @@
         "source": "github",
         "repo": "netresearch/data-tools-skill"
       },
-      "category": "development"
+      "category": "development",
+      "value_type": "automation-script"
     },
     {
       "name": "coach",
@@ -374,7 +379,8 @@
         "source": "github",
         "repo": "netresearch/retro-skill"
       },
-      "category": "productivity"
+      "category": "productivity",
+      "value_type": "failure-patterns"
     }
   ]
 }

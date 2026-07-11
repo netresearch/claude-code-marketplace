@@ -15,5 +15,6 @@ export default {
   eleventyComputed: {
     t: (data) => data.i18n.en,
     categoryLabels: (data) => data.categories.labels.en,
+    valueTypeLabels: (data) => data.valueTypes.labels.en,
   },
 };

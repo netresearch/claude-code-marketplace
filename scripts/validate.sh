@@ -54,6 +54,22 @@ if [ -n "$BAD_CATEGORIES" ]; then
 fi
 echo "✓ Categories within canonical set"
 
+# Canonical value types — optional field, keep in sync with AGENTS.md.
+# Maps to the A1 six-category value rubric (skill-repo-skill#143); inference
+# suppression and anti-rationalization guards both map to "guardrail".
+ALLOWED_VALUE_TYPES='automation-script org-convention version-facts failure-patterns guardrail'
+BAD_VALUE_TYPES=$(jq -r --arg allowed "$ALLOWED_VALUE_TYPES" '
+    [.plugins[] | select(.value_type != null) | select((.value_type) as $v | ($allowed | split(" ")) | index($v) | not)
+                | "\(.name)=\(.value_type)"]
+    | join("\n")
+' "$MARKETPLACE")
+if [ -n "$BAD_VALUE_TYPES" ]; then
+    echo "✗ Non-canonical value_type (allowed: $ALLOWED_VALUE_TYPES):"
+    printf '%s\n' "$BAD_VALUE_TYPES" | sed 's/^/    /'
+    exit 1
+fi
+echo "✓ value_type within canonical set (where present; field is optional)"
+
 # Slugs must be lowercase / hyphens / ≤ 64 chars.
 BAD_SLUGS=$(jq -r '
     [.plugins[].name | select(test("^[a-z0-9][a-z0-9-]{0,63}$") | not)]
