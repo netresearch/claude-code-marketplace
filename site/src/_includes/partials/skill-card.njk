@@ -1,5 +1,8 @@
 <article class="skill-card">
   <span class="skill-card__category" aria-label="Category">{{ categoryLabels[skill.category] or skill.category }}</span>
+  {% if skill.valueType %}
+    <span class="skill-card__value-type" aria-label="Value type">{{ valueTypeLabels[skill.valueType] or skill.valueType }}</span>
+  {% endif %}
   <h3 class="skill-card__title">
     <a href="{{ ('/' ~ lang ~ '/skills/' ~ skill.slug ~ '/') | url }}">{{ skill.displayName }}</a>
   </h3>

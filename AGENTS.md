@@ -69,6 +69,16 @@ Use **exactly one** of these values in `plugins[].category` — do not invent ne
 
 ---
 
+## Value type (optional)
+
+`plugins[].value_type` is an **optional** classifier mapping a skill to the six-category value rubric from the skill value-gate program ([skill-repo-skill#143](https://github.com/netresearch/skill-repo-skill/issues/143)). Allowed values:
+
+`automation-script` · `org-convention` · `version-facts` · `failure-patterns` · `guardrail`
+
+`guardrail` covers two rubric categories (inference suppression and anti-rationalization guards). Absence of the field is valid — `scripts/validate.sh` only checks the enum when the field is present. Populate it as skills are audited against the rubric; do not backfill guesses.
+
+---
+
 ## SEO and discovery rules (marketplace copy)
 
 Marketplace-facing text **must**:

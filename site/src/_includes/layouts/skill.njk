@@ -16,6 +16,9 @@ layout: layouts/base.njk
 <article class="skill-detail">
   <header class="skill-detail__header">
     <span class="skill-detail__category">{{ categoryLabel }}</span>
+    {% if skill.valueType %}
+      <span class="skill-detail__value-type">{{ valueTypeLabel }}</span>
+    {% endif %}
     <h1>{{ skill.displayName }}</h1>
     <p class="lead">{{ description }}</p>
     {% if skill.version %}
