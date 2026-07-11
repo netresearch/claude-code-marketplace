@@ -12,7 +12,7 @@ build/deploy pipeline. Root [AGENTS.md](../../AGENTS.md) applies on top.
 | File | Purpose |
 |------|---------|
 | `pages.yml` | Pages pipeline: build → compliance checks → Lighthouse → visual regression → deploy (push to main, PRs, weekly cron, dispatch) |
-| `validate.yml` | Marketplace catalog validation (`scripts/validate.sh`) |
+| `validate.yml` | Marketplace catalog validation (`scripts/validate.sh`) plus an advisory, non-blocking overlap report (`scripts/overlap-report.py`) uploaded as a build artifact |
 | `security.yml` | gitleaks secret scanning + dependency review (via `netresearch/.github` reusable workflows); the separate `betterleaks` check comes from GitHub Advanced Security, not this file |
 
 ## Commands

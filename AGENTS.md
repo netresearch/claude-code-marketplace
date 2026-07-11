@@ -16,6 +16,7 @@ They apply to marketplace maintenance only: catalog, landing pages, SEO presenta
 | Task | Command |
 |------|---------|
 | Validate marketplace.json + README catalog | `./scripts/validate.sh` |
+| Advisory catalog overlap report (non-blocking) | `python3 scripts/overlap-report.py` |
 
 ---
 
