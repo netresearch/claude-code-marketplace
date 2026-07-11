@@ -75,7 +75,6 @@ Host-side tooling (not Agent Skills themselves, but part of the same family):
 | typo3-core-contributions | [typo3-core-contributions-skill](https://github.com/netresearch/typo3-core-contributions-skill) | Guide TYPO3 core contributions via Gerrit |
 | typo3-typoscript-ref | [typo3-typoscript-ref-skill](https://github.com/netresearch/typo3-typoscript-ref-skill) | Version-aware TypoScript, TSconfig, and Fluid reference lookup |
 | typo3-a11y | [typo3-a11y-skill](https://github.com/netresearch/typo3-a11y-skill) | WCAG 2.1 AA accessibility patterns for TYPO3 projects |
-| typo3-frontend-patterns | [typo3-frontend-patterns-skill](https://github.com/netresearch/typo3-frontend-patterns-skill) | Reusable frontend patterns (sticky header, breadcrumb, lazy loading) |
 | typo3-vite | [typo3-vite-skill](https://github.com/netresearch/typo3-vite-skill) | Vite build setup, SCSS architecture, Bootstrap 5 theming |
 
 ### OroCommerce
