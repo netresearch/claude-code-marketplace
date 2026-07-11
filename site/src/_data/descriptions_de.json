@@ -10,7 +10,6 @@
   "typo3-core-contributions": "Begleitet Beiträge zum TYPO3-Core über Gerrit.",
   "typo3-typoscript-ref": "Versionsspezifischer Lookup für TypoScript, TSconfig und Fluid.",
   "typo3-a11y": "WCAG-2.1-AA-Patterns für TYPO3-Projekte.",
-  "typo3-frontend-patterns": "Wiederverwendbare Frontend-Patterns: Sticky Header, Breadcrumb, Lazy Loading.",
   "typo3-vite": "Vite-Build-Setup, SCSS-Architektur, Bootstrap-5-Theming für TYPO3.",
   "typo3-upgrade-effort-model": "Aufwands-Modell für TYPO3-LTS-Upgrades: Risiko-Multiplikatoren, Baselines, Version-Compat, Rector-Coverage, 7-Phasen-Workflow.",
   "orocommerce": "OroCommerce-Entwicklung: Entities, Datagrids, REST-API, Workflows, Frontend, Security, Integration, Bundle-Scaffolding.",

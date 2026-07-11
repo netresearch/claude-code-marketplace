@@ -53,7 +53,6 @@ export default {
         "typo3-core-contributions",
         "typo3-typoscript-ref",
         "typo3-a11y",
-        "typo3-frontend-patterns",
         "typo3-vite",
         "typo3-upgrade-effort-model",
       ],
