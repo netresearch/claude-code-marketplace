@@ -5,10 +5,12 @@ on:
     paths:
       - '.claude-plugin/marketplace.json'
       - 'scripts/validate.sh'
+      - 'scripts/overlap-report.py'
   pull_request:
     paths:
       - '.claude-plugin/marketplace.json'
       - 'scripts/validate.sh'
+      - 'scripts/overlap-report.py'
 
 jobs:
   validate:
@@ -25,3 +27,14 @@ jobs:
           echo "" >> $GITHUB_STEP_SUMMARY
           jq -r '.plugins[] | "- **\(.name)** (\(.category // "uncategorized"))"' \
             .claude-plugin/marketplace.json >> $GITHUB_STEP_SUMMARY
+
+      - name: Overlap report (advisory, non-blocking)
+        run: python3 scripts/overlap-report.py | tee overlap-report.md >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload overlap report
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: overlap-report
+          path: overlap-report.md
+          if-no-files-found: warn
