@@ -295,6 +295,8 @@ def write_report(report: str) -> Path:
     constant derived only from `__file__`, never from argv, so this
     function has no CLI-controlled path to validate (CWE-22).
     """
+    if not DEFAULT_OUTPUT.parent.is_dir():
+        raise NotADirectoryError(f"expected a directory: {DEFAULT_OUTPUT.parent}")
     DEFAULT_OUTPUT.write_text(report + "\n", encoding="utf-8")
     return DEFAULT_OUTPUT
 
