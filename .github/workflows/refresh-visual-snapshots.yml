@@ -1,0 +1,85 @@
+name: Refresh visual snapshots
+
+# Manually regenerate the Playwright visual-regression baselines and open a PR
+# with the updated PNGs. The baselines are environment-specific
+# (chromium-desktop-linux), so they must be generated on a runner that matches
+# CI — this job mirrors the pages.yml visual-regression build exactly
+# (fetch READMEs + OG images + build) before running --update-snapshots.
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: site
+    steps:
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - name: Setup Node
+        uses: actions/setup-node@2028fbc5c25fe9cf00d9f06a71cc4710d4507903 # v6.0.0
+        with:
+          node-version-file: site/.nvmrc
+          cache: npm
+          cache-dependency-path: site/package-lock.json
+
+      - name: Install
+        run: npm ci
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+
+      - name: Restore README cache
+        uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5.0.5
+        with:
+          path: site/cache/skills-readme
+          key: skills-readme-${{ hashFiles('.claude-plugin/marketplace.json', 'site/scripts/fetch-readmes.js', 'site/scripts/parse-readme.js') }}
+          restore-keys: |
+            skills-readme-
+
+      - name: Fetch READMEs
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npm run fetch:readmes
+
+      - name: Generate OG images
+        run: npm run og:generate
+
+      - name: Build
+        run: npm run build
+
+      - name: Update snapshots
+        run: npm run test:visual:update
+
+      - name: Open PR if snapshots changed
+        working-directory: ${{ github.workspace }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if git diff --quiet -- site/tests/visual; then
+            echo "Snapshots already current — nothing to refresh."
+            exit 0
+          fi
+          branch="chore/refresh-visual-snapshots-${GITHUB_RUN_ID}"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git switch -c "$branch"
+          git add site/tests/visual
+          git commit --signoff \
+            -m "chore(visual): refresh Playwright visual-regression snapshots" \
+            -m "Regenerated on CI after marketplace.json content changes so the visual-regression gate (a deploy dependency on main) passes again."
+          git push origin "$branch"
+          gh pr create --base main --head "$branch" \
+            --title "chore(visual): refresh visual-regression snapshots" \
+            --body "Automated snapshot refresh (\`workflow_dispatch\` of refresh-visual-snapshots.yml, run ${GITHUB_RUN_ID}).
+
+          The landing/detail baselines went stale after marketplace.json content changes (removed plugin card, edited descriptions, value_type facet), which failed the \`visual-regression\` job and skipped the Pages \`deploy\` on main. These PNGs were regenerated on a runner matching CI (full build + \`test:visual:update\`), so the gate passes again.
+
+          Review the image diffs, then merge to restore the Pages deploy. If PR checks did not start (GITHUB_TOKEN-created PR), close and reopen to trigger them."
