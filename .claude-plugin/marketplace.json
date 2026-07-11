@@ -306,7 +306,7 @@
     },
     {
       "name": "typo3-a11y",
-      "description": "WCAG 2.1 AA accessibility patterns for TYPO3 projects. Document structure, landmarks, links, buttons, color contrast, focus management, ARIA, and automated testing. 16 implementation patterns: skip links, accessible navigation, forms, filters, disclosure widgets, clickable cards, responsive tables, sticky header, lazy loading, breadcrumb, language switcher, animations, scroll-to-anchor, skeleton loading, toast notifications, back-to-top.",
+      "description": "Ensures TYPO3 projects meet WCAG 2.1 AA accessibility: skip links, navigation, forms, filters, disclosure widgets, clickable cards, responsive tables, sticky header, lazy loading, breadcrumb, language switcher, animations, scroll-to-anchor, skeleton loading, toast notifications, back-to-top.",
       "source": {
         "source": "github",
         "repo": "netresearch/typo3-a11y-skill"
