@@ -11,6 +11,12 @@ Pure standard library, no network access, no LLM calls. This repository
 does not vendor SKILL.md files, so a CI run compares descriptions only;
 pass --skill-md-root to opt into the richer local comparison when skill
 repos are checked out as siblings (see --help).
+
+--marketplace and --output must resolve inside this repository (CWE-22
+hardening: a script invoked by CI or an agent should not be redirectable
+to arbitrary filesystem paths by a crafted argument); --skill-md-root has
+no such restriction since it is expected to point at sibling checkouts
+outside the repository.
 """
 
 from __future__ import annotations
@@ -91,6 +97,39 @@ def jaccard(a: frozenset[str], b: frozenset[str]) -> float:
     return len(a & b) / union if union else 0.0
 
 
+def _frontmatter_lines(text: str) -> list[str] | None:
+    """Return the lines between the opening and closing `---` markers."""
+    lines = text.splitlines()
+    if not lines or lines[0].strip() != "---":
+        return None
+    try:
+        end = lines.index("---", 1)
+    except ValueError:
+        return None
+    return lines[1:end]
+
+
+def _parse_quoted_scalar(rest: str) -> str:
+    """Unwrap a single-line double-quoted YAML scalar."""
+    quoted = re.match(r'^"(.*)"\s*$', rest)
+    return quoted.group(1).replace('\\"', '"') if quoted else rest.strip('"')
+
+
+def _parse_block_scalar(indicator: str, following_lines: list[str]) -> str:
+    """Collect an indented YAML block scalar (`>-`, `>`, `|`, `|-`)."""
+    block_lines = []
+    for cont in following_lines:
+        if cont.strip() == "":
+            if indicator.startswith("|"):
+                block_lines.append("")
+            continue
+        if not cont.startswith((" ", "\t")):
+            break
+        block_lines.append(cont.strip())
+    joiner = "\n" if indicator.startswith("|") else " "
+    return joiner.join(block_lines).strip()
+
+
 def extract_skill_md_description(text: str) -> str | None:
     """Best-effort extraction of the frontmatter `description:` field.
 
@@ -100,35 +139,18 @@ def extract_skill_md_description(text: str) -> str | None:
     None so callers fall back to description-only comparison rather than
     guessing at a malformed extraction.
     """
-    lines = text.splitlines()
-    if not lines or lines[0].strip() != "---":
+    frontmatter = _frontmatter_lines(text)
+    if frontmatter is None:
         return None
-    try:
-        end = lines.index("---", 1)
-    except ValueError:
-        return None
-    frontmatter = lines[1:end]
 
     for i, line in enumerate(frontmatter):
-        match = re.match(r"^description:\s*(.*)$", line)
-        if not match:
+        if not line.startswith("description:"):
             continue
-        rest = match.group(1).strip()
+        rest = line[len("description:") :].strip()
         if rest.startswith('"'):
-            quoted = re.match(r'^"(.*)"\s*$', rest)
-            return quoted.group(1).replace('\\"', '"') if quoted else rest.strip('"')
+            return _parse_quoted_scalar(rest)
         if rest in (">-", ">", "|", "|-"):
-            block_lines = []
-            for cont in frontmatter[i + 1 :]:
-                if cont.strip() == "":
-                    if rest.startswith("|"):
-                        block_lines.append("")
-                    continue
-                if not cont.startswith((" ", "\t")):
-                    break
-                block_lines.append(cont.strip())
-            joiner = "\n" if rest.startswith("|") else " "
-            return joiner.join(block_lines).strip()
+            return _parse_block_scalar(rest, frontmatter[i + 1 :])
         return rest  # plain unquoted scalar
     return None
 
@@ -154,8 +176,27 @@ def find_local_skill_md(skills_root: Path, repo: str) -> Path | None:
     return candidates[0]
 
 
+def _resolve_within_repo(path: Path, label: str) -> Path:
+    """Resolve `path` and reject it if it falls outside REPO_ROOT.
+
+    `--marketplace` and `--output` are plain CLI arguments with no
+    surrounding "trusted base directory" of their own, so this is the
+    input-validation step itself (CWE-22): confine both reads and writes
+    to the repository, since a script invoked by CI or an agent should
+    not be redirectable to arbitrary filesystem paths by a crafted
+    argument.
+    """
+    resolved = path.resolve()
+    if not resolved.is_relative_to(REPO_ROOT):
+        raise ValueError(f"--{label} must resolve inside {REPO_ROOT}, got {resolved}")
+    return resolved
+
+
 def load_plugins(marketplace_path: Path) -> list[dict]:
-    data = json.loads(marketplace_path.read_text(encoding="utf-8"))
+    resolved = _resolve_within_repo(marketplace_path, "marketplace")
+    if not resolved.is_file():
+        raise FileNotFoundError(f"marketplace file not found: {resolved}")
+    data = json.loads(resolved.read_text(encoding="utf-8"))
     return data.get("plugins", [])
 
 
@@ -249,7 +290,10 @@ def main(argv: list[str] | None = None) -> int:
         "--marketplace",
         type=Path,
         default=MARKETPLACE_JSON,
-        help="Path to marketplace.json (default: .claude-plugin/marketplace.json)",
+        help=(
+            "Path to marketplace.json, must resolve inside the repository "
+            "(default: .claude-plugin/marketplace.json)"
+        ),
     )
     parser.add_argument(
         "--threshold",
@@ -261,7 +305,10 @@ def main(argv: list[str] | None = None) -> int:
         "--output",
         type=Path,
         default=DEFAULT_OUTPUT,
-        help="Report file to write (default: overlap-report.md at repo root)",
+        help=(
+            "Report file to write, must resolve inside the repository "
+            "(default: overlap-report.md at repo root)"
+        ),
     )
     parser.add_argument(
         "--skill-md-root",
@@ -283,9 +330,10 @@ def main(argv: list[str] | None = None) -> int:
         pairs, corpus, args.threshold, args.skill_md_root, len(plugins)
     )
 
-    args.output.write_text(report + "\n", encoding="utf-8")
+    output_path = _resolve_within_repo(args.output, "output")
+    output_path.write_text(report + "\n", encoding="utf-8")
     print(report)
-    print(f"Report written to {args.output}", file=sys.stderr)
+    print(f"Report written to {output_path}", file=sys.stderr)
     return 0
 
 
