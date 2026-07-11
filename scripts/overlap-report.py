@@ -32,7 +32,6 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parent.parent
 MARKETPLACE_JSON = REPO_ROOT / ".claude-plugin" / "marketplace.json"
 DEFAULT_THRESHOLD = 0.15
-DEFAULT_OUTPUT = REPO_ROOT / "overlap-report.md"
 
 # Boilerplate shared by nearly every skill description ("use when ...",
 # "triggers on ..."). Excluding it keeps the score sensitive to topical
@@ -288,19 +287,6 @@ def render_report(
     return "\n".join(lines)
 
 
-def write_report(report: str) -> Path:
-    """Write `report` to the fixed, non-configurable output path.
-
-    Takes no path argument by design: DEFAULT_OUTPUT is a module-level
-    constant derived only from `__file__`, never from argv, so this
-    function has no CLI-controlled path to validate (CWE-22).
-    """
-    if not DEFAULT_OUTPUT.parent.is_dir():
-        raise NotADirectoryError(f"expected a directory: {DEFAULT_OUTPUT.parent}")
-    DEFAULT_OUTPUT.write_text(report + "\n", encoding="utf-8")
-    return DEFAULT_OUTPUT
-
-
 def _unit_float(raw: str) -> float:
     """argparse `type=` validator: a Jaccard threshold is always in [0.0, 1.0]."""
     value = float(raw)
@@ -348,9 +334,11 @@ def main(argv: list[str] | None = None) -> int:
         pairs, corpus, args.threshold, args.skill_md_root, len(plugins)
     )
 
-    output_path = write_report(report)
+    # Print the report to stdout only; the caller (CI step or a shell
+    # redirect) owns writing it to a file. Keeping all file writes out of
+    # this script avoids CWE-22 path-write findings on a tool whose only
+    # job is to compute and print an advisory.
     print(report)
-    print(f"Report written to {output_path}", file=sys.stderr)
     return 0
 
 

@@ -29,7 +29,7 @@ jobs:
             .claude-plugin/marketplace.json >> $GITHUB_STEP_SUMMARY
 
       - name: Overlap report (advisory, non-blocking)
-        run: python3 scripts/overlap-report.py >> "$GITHUB_STEP_SUMMARY"
+        run: python3 scripts/overlap-report.py | tee overlap-report.md >> "$GITHUB_STEP_SUMMARY"
 
       - name: Upload overlap report
         if: always()
