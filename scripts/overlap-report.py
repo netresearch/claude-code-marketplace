@@ -12,11 +12,12 @@ does not vendor SKILL.md files, so a CI run compares descriptions only;
 pass --skill-md-root to opt into the richer local comparison when skill
 repos are checked out as siblings (see --help).
 
---marketplace and --output must resolve inside this repository (CWE-22
-hardening: a script invoked by CI or an agent should not be redirectable
-to arbitrary filesystem paths by a crafted argument); --skill-md-root has
-no such restriction since it is expected to point at sibling checkouts
-outside the repository.
+--marketplace must resolve inside this repository (CWE-22 hardening: a
+script invoked by CI or an agent should not be redirectable to arbitrary
+filesystem paths by a crafted argument). The report is always written to
+overlap-report.md at the repository root — not configurable — for the
+same reason. --skill-md-root has no such restriction since it is expected
+to point at sibling checkouts outside the repository.
 """
 
 from __future__ import annotations
@@ -179,12 +180,11 @@ def find_local_skill_md(skills_root: Path, repo: str) -> Path | None:
 def _resolve_within_repo(path: Path, label: str) -> Path:
     """Resolve `path` and reject it if it falls outside REPO_ROOT.
 
-    `--marketplace` and `--output` are plain CLI arguments with no
-    surrounding "trusted base directory" of their own, so this is the
-    input-validation step itself (CWE-22): confine both reads and writes
-    to the repository, since a script invoked by CI or an agent should
-    not be redirectable to arbitrary filesystem paths by a crafted
-    argument.
+    `--marketplace` is a plain CLI argument with no surrounding "trusted
+    base directory" of its own, so this is the input-validation step
+    itself (CWE-22): confine reads to the repository, since a script
+    invoked by CI or an agent should not be redirectable to arbitrary
+    filesystem paths by a crafted argument.
     """
     resolved = path.resolve()
     try:
@@ -306,15 +306,6 @@ def main(argv: list[str] | None = None) -> int:
         help=f"Minimum Jaccard score to report a pair (default: {DEFAULT_THRESHOLD})",
     )
     parser.add_argument(
-        "--output",
-        type=Path,
-        default=DEFAULT_OUTPUT,
-        help=(
-            "Report file to write, must resolve inside the repository "
-            "(default: overlap-report.md at repo root)"
-        ),
-    )
-    parser.add_argument(
         "--skill-md-root",
         type=Path,
         default=None,
@@ -334,10 +325,11 @@ def main(argv: list[str] | None = None) -> int:
         pairs, corpus, args.threshold, args.skill_md_root, len(plugins)
     )
 
-    output_path = _resolve_within_repo(args.output, "output")
-    output_path.write_text(report + "\n", encoding="utf-8")
+    # Fixed, non-configurable report path (not derived from any CLI
+    # argument): see the module docstring for why --output was removed.
+    DEFAULT_OUTPUT.write_text(report + "\n", encoding="utf-8")
     print(report)
-    print(f"Report written to {output_path}", file=sys.stderr)
+    print(f"Report written to {DEFAULT_OUTPUT}", file=sys.stderr)
     return 0
 
 
