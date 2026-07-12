@@ -220,15 +220,6 @@
       "value_type": "automation-script"
     },
     {
-      "name": "coach",
-      "description": "Self-improving learning system that detects friction signals (corrections, tool failures, repetition) and proposes rule updates. Includes /coach slash commands for reviewing, approving, and managing learning candidates. Auto-configures hooks for signal detection.",
-      "source": {
-        "source": "github",
-        "repo": "netresearch/claude-coach-plugin"
-      },
-      "category": "productivity"
-    },
-    {
       "name": "concourse-ci",
       "description": "Expert guidance for Concourse CI pipeline development, optimization, and troubleshooting. Pipeline creation, git/registry-image resources, job lifecycle hooks, YAML anchors, multi-branch pipelines with set_pipeline, oci-build-task, and gotchas like tag detection after force-push. Concourse v8.0+.",
       "source": {
