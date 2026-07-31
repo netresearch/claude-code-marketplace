@@ -15,178 +15,54 @@ concurrency:
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
+  # Build the site once and upload it as an artifact; lighthouse + visual
+  # download that artifact instead of rebuilding. GITHUB_TOKEN is exposed to
+  # the build phase for fetch:readmes.
   build:
-    runs-on: ubuntu-latest
+    uses: netresearch/.github/.github/workflows/pages-build.yml@main
     permissions:
       contents: read
-    defaults:
-      run:
-        working-directory: site
-    steps:
-      - name: Checkout
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-
-      - name: Setup Node
-        uses: actions/setup-node@2028fbc5c25fe9cf00d9f06a71cc4710d4507903 # v6.0.0
-        with:
-          node-version-file: site/.nvmrc
-          cache: npm
-          cache-dependency-path: site/package-lock.json
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Restore README cache
-        uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5.0.5
-        with:
-          path: site/cache/skills-readme
-          key: skills-readme-${{ hashFiles('.claude-plugin/marketplace.json', 'site/scripts/fetch-readmes.js', 'site/scripts/parse-readme.js') }}
-          restore-keys: |
-            skills-readme-
-
-      - name: Fetch skill READMEs
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: npm run fetch:readmes
-
-      - name: Generate OG images
-        run: npm run og:generate
-
-      - name: AGENTS.md compliance checks
-        run: npm run check
-
-      - name: Build
-        run: npm run build
-
-      - name: Hreflang consistency
-        run: node scripts/check-hreflang.js
-
-      - name: Upload pages artifact
-        uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
-        with:
-          path: site/_site
+    with:
+      setup-node: true
+      node-version: 'lts/*'
+      artifact-path: site/_site
+      expose-github-token: build
+      pre-build-command: cd site && npm ci
+      build-command: |
+        cd site
+        npm run fetch:readmes
+        npm run og:generate
+        npm run check
+        npm run build:once
+        node scripts/check-hreflang.js
 
   lighthouse:
     needs: build
-    runs-on: ubuntu-latest
+    uses: netresearch/.github/.github/workflows/lighthouse.yml@main
     permissions:
       contents: read
-    defaults:
-      run:
-        working-directory: site
-    steps:
-      - name: Checkout
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-
-      - name: Setup Node
-        uses: actions/setup-node@2028fbc5c25fe9cf00d9f06a71cc4710d4507903 # v6.0.0
-        with:
-          node-version-file: site/.nvmrc
-          cache: npm
-          cache-dependency-path: site/package-lock.json
-
-      - name: Install
-        run: npm ci
-
-      - name: Restore README cache
-        uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5.0.5
-        with:
-          path: site/cache/skills-readme
-          key: skills-readme-${{ hashFiles('.claude-plugin/marketplace.json', 'site/scripts/fetch-readmes.js', 'site/scripts/parse-readme.js') }}
-          restore-keys: |
-            skills-readme-
-
-      - name: Fetch READMEs
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: npm run fetch:readmes
-
-      - name: Generate OG images
-        run: npm run og:generate
-
-      - name: Build
-        run: npm run build
-
-      - name: Stage built site under deploy prefix for lhci
-        working-directory: ${{ github.workspace }}
-        run: |
-          mkdir -p .lhci-site
-          cp -r site/_site .lhci-site/claude-code-marketplace
-          ls -la .lhci-site/claude-code-marketplace/en/ | head
-
-      - name: Lighthouse CI
-        uses: treosh/lighthouse-ci-action@3e7e23fb74242897f95c0ba9cabad3d0227b9b18 # 12.6.2
-        with:
-          configPath: lighthouserc.json
-          uploadArtifacts: true
-          temporaryPublicStorage: true
+    with:
+      static-dir: .lhci-site/claude-code-marketplace
+      config-path: lighthouserc.json
 
   visual-regression:
     needs: build
-    runs-on: ubuntu-latest
+    uses: netresearch/.github/.github/workflows/playwright-visual.yml@main
     permissions:
       contents: read
-    defaults:
-      run:
-        working-directory: site
-    steps:
-      - name: Checkout
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-
-      - name: Setup Node
-        uses: actions/setup-node@2028fbc5c25fe9cf00d9f06a71cc4710d4507903 # v6.0.0
-        with:
-          node-version-file: site/.nvmrc
-          cache: npm
-          cache-dependency-path: site/package-lock.json
-
-      - name: Install
-        run: npm ci
-
-      - name: Install Playwright browsers
-        run: npx playwright install --with-deps chromium
-
-      - name: Restore README cache
-        uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5.0.5
-        with:
-          path: site/cache/skills-readme
-          key: skills-readme-${{ hashFiles('.claude-plugin/marketplace.json', 'site/scripts/fetch-readmes.js', 'site/scripts/parse-readme.js') }}
-          restore-keys: |
-            skills-readme-
-
-      - name: Fetch READMEs
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: npm run fetch:readmes
-
-      - name: Generate OG images
-        run: npm run og:generate
-
-      - name: Build
-        run: npm run build
-
-      - name: Run visual regression
-        run: npm run test:visual
-
-      - name: Upload diffs on failure
-        if: failure()
-        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4.4.3
-        with:
-          name: playwright-report
-          path: site/playwright-report
-          retention-days: 14
+    with:
+      working-directory: site
+      node-version-file: site/.nvmrc
+      artifact-name: github-pages-site
+      artifact-path: site/_site
+      test-command: npm run test:visual
+      browsers: chromium
 
   deploy:
     needs: [build, lighthouse, visual-regression]
     if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+    uses: netresearch/.github/.github/workflows/pages-deploy.yml@main
     permissions:
       pages: write
       id-token: write
-    steps:
-      - name: Deploy
-        id: deployment
-        uses: actions/deploy-pages@cd2ce8fcbc39b97be8ca5fce6e763baed58fa128 # v5.0.0
+      contents: read
