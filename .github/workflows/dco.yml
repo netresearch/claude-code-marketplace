@@ -1,0 +1,18 @@
+name: DCO
+
+# Enforced sign-off gate via the shared reusable (dependency bots exempt;
+# reports on merge_group). Humans must sign off (git commit -s).
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+  merge_group:
+
+permissions: {}
+
+jobs:
+  dco:
+    uses: netresearch/.github/.github/workflows/dco.yml@main # NOSONAR — own-org reusable deliberately tracks main
+    permissions:
+      contents: read
+      pull-requests: read
