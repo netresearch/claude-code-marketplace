@@ -9,8 +9,6 @@ on:
 jobs:
   gitleaks:
     uses: netresearch/.github/.github/workflows/gitleaks.yml@main
-    secrets:
-      GITLEAKS_LICENSE: ${{ secrets.GITLEAKS_LICENSE }}
 
   dependency-review:
     if: github.event_name == 'pull_request'
