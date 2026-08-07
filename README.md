@@ -15,6 +15,8 @@
 
 **Agentic Skills** are portable packages of procedural knowledge that work across any AI coding agent supporting the [Agent Skills specification](https://agentskills.io).
 
+Every listed repository is also an [Agent Plugins 1.0.0](https://agent-plugins.org) package: a `plugin.json` at the repository root plus the `skills/` directory, which conformant clients load directly from the source repository. This marketplace stays the Claude Code install path — Agent Plugins standardizes packaging, not distribution.
+
 **Supported Platforms:**
 - Claude Code (Anthropic)
 - Cursor
