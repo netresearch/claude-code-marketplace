@@ -93,7 +93,6 @@ export default {
         "context7",
         "data-tools",
         "file-search",
-        "pagerangers-seo",
         "coach",
         "german-technical-writing",
         "peer-qa-review",
