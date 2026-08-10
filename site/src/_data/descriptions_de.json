@@ -31,7 +31,6 @@
   "context7": "Bibliotheks-Dokumentations-Lookup über die Context7-REST-API.",
   "data-tools": "Strukturierte Daten-Manipulation mit jq, yq, dasel, qsv.",
   "file-search": "Effiziente Code-Suche mit ripgrep, ast-grep, fd.",
-  "pagerangers-seo": "PageRangers-SEO-API: Keyword-Rankings, SERP-Analyse.",
   "coach": "Selbstverbesserndes Lernsystem mit Hooks und Commands.",
   "retro": "LLM-gestützte Session-Retrospektion: erkennt Reibungspunkte und materialisiert Erkenntnisse in User-Memory, Project-Rules, Skill-PRs, Checkpoints oder Harness-Artefakte. Inklusive /retro outcome und /retro audit.",
   "german-technical-writing": "Natürliches deutsches technisches Register für Jira, interne Doku, Team-Chat — fängt Anglizismen ab, erzwingt Lexikon.",

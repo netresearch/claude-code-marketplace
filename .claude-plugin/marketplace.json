@@ -229,15 +229,6 @@
       "category": "devops"
     },
     {
-      "name": "pagerangers-seo",
-      "description": "PageRangers SEO API integration for AI assistants. Query keyword rankings, SERP analysis, project KPIs, and keyword opportunities via the PageRangers Monitoring API. Includes credential detection hook for guided setup.",
-      "source": {
-        "source": "github",
-        "repo": "netresearch/pagerangers-skill"
-      },
-      "category": "workflow"
-    },
-    {
       "name": "docker-development",
       "description": "Docker image development patterns for Dockerfile, docker-compose, docker-bake.hcl, and .dockerignore. Multi-stage builds, layer optimization, CI testing patterns (entrypoint bypass, DNS mocking, compose validation), Docker Bake multi-platform, Trivy scanning, network isolation. By Netresearch.",
       "source": {
