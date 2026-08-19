@@ -16,6 +16,9 @@ permissions:
 jobs:
   refresh:
     runs-on: ubuntu-latest
+    # A full pass (install, browsers, fetch, build, snapshots) takes ~4 minutes.
+    # Without a bound, a hung step holds the runner until the 6-hour ceiling.
+    timeout-minutes: 20
     defaults:
       run:
         working-directory: site
@@ -34,7 +37,11 @@ jobs:
         run: npm ci
 
       - name: Install Playwright browsers
-        run: npx playwright install --with-deps chromium
+        # Same invocation as netresearch/.github's playwright-visual reusable,
+        # which runs this install on every push without hanging. This step still
+        # hangs here for reasons nobody has pinned down (#99) — matching the
+        # reusable removes one variable, it does not fix that.
+        run: ./node_modules/.bin/playwright install --with-deps chromium
 
       - name: Restore README cache
         uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5.0.5
