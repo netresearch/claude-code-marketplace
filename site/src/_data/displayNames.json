@@ -21,6 +21,7 @@
   "cli-tools": "CLI Tools",
   "go-development": "Go Development",
   "php-modernization": "PHP Modernization",
+  "php-structured-edit": "PHP Structured Edit",
   "security-audit": "Security Audit",
   "automated-assessment": "Automated Assessment",
   "docker-development": "Docker Development",
