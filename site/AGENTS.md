@@ -66,10 +66,31 @@ export GITHUB_TOKEN=$(gh auth token)   # optional for fetch:readmes; avoids the 
 1. `npm run check` green (categories, orphans; SEO warnings reviewed).
 2. `npm run build` + `npm run check:hreflang` green.
 3. `npm run test:visual` green — for intended UI changes, refresh baselines
-   with `npm run test:visual:update` after inspecting the diff.
+   after inspecting the render (see [Visual baselines](#visual-baselines)).
 4. `src/assets/og/` not staged (generated, gitignored).
 5. Quality gates stay blocking — never weaken Lighthouse thresholds
    (Perf/BP ≥ 0.95, A11y = 1.0, SEO = 1.0).
+
+## Visual baselines
+
+Baselines in `tests/visual/landings.spec.js-snapshots/` are rendered on CI. A PNG generated on a workstation differs in font rendering and fails the gate, so never commit one.
+
+Adding or removing a catalog entry changes the landing by one card plus the hero count, which shifts every following row and invalidates both `landing-en` and `landing-de`. The `deploy` job needs `visual-regression`, so a stale baseline does not merely fail a check — it stops the site from publishing.
+
+Two ways to obtain the new PNGs:
+
+- `refresh-visual-snapshots.yml` (`workflow_dispatch`) — dispatch on the branch carrying the content change. It always opens its own PR against `main`, so lift the snapshot commit onto your branch and close that PR. It can hang on the install step ([#99](https://github.com/netresearch/claude-code-marketplace/issues/99)).
+- The failing gate's own artefact — `pages.yml` uploads `playwright-report` when `visual-regression` fails. Its *actual* screenshots for the run on your head are the PNGs `--update-snapshots` would write. Tell actual from diff by opening them (the diff carries a red/yellow overlay), not by comparing file sizes.
+
+Inspect the render before committing a baseline. A refresh freezes whatever is on screen, a bug included: a card title falling back to a title-cased slug (`Php Structured Edit`) was caught exactly here, and would otherwise have become the reference image.
+
+## Per-slug data
+
+A new catalog slug needs a row in every per-slug source under `src/_data/`, not only in `marketplace.json`:
+
+- `displayNames.json` — curated name; without it `_helpers/display-name.js` title-cases the slug
+- `descriptions_de.json` — German landing copy
+- `groups.js` — group membership; a slug in no group renders under "uncategorized"
 
 ## When stuck
 
