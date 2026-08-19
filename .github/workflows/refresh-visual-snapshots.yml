@@ -36,12 +36,35 @@ jobs:
       - name: Install
         run: npm ci
 
+      # apt has no default timeout on package acquisition, so a mirror that
+      # accepts the connection and then stops responding blocks forever instead
+      # of failing. That is what hung this job (#99): `--with-deps` shells out
+      # to `apt-get update`, which stalled on its first mirror fetch for twenty
+      # minutes. Playwright owns that apt invocation, so the bound goes into
+      # apt's own config where the child process picks it up.
+      - name: Bound apt acquisition
+        working-directory: ${{ github.workspace }}
+        run: |
+          sudo tee /etc/apt/apt.conf.d/99-ci-timeouts >/dev/null <<'CONF'
+          Acquire::Retries "3";
+          Acquire::http::Timeout "30";
+          Acquire::https::Timeout "30";
+          Acquire::ftp::Timeout "30";
+          CONF
+
       - name: Install Playwright browsers
-        # Same invocation as netresearch/.github's playwright-visual reusable,
-        # which runs this install on every push without hanging. This step still
-        # hangs here for reasons nobody has pinned down (#99) — matching the
-        # reusable removes one variable, it does not fix that.
-        run: ./node_modules/.bin/playwright install --with-deps chromium
+        # Belt and braces: if a stall survives the apt bound, `timeout` ends the
+        # attempt rather than the job. Output is deliberately not discarded —
+        # a silent stall is what made this take three runs to diagnose.
+        run: |
+          for attempt in 1 2 3; do
+            if timeout 300 ./node_modules/.bin/playwright install --with-deps chromium; then
+              exit 0
+            fi
+            echo "::warning::playwright install attempt ${attempt} did not complete within 300s"
+          done
+          echo "::error::playwright install did not complete in three attempts"
+          exit 1
 
       - name: Restore README cache
         uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5.0.5
