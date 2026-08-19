@@ -136,6 +136,15 @@
       "category": "development"
     },
     {
+      "name": "php-structured-edit",
+      "description": "Edits PHP through its AST rather than regex, sed or patch, so a rename hits the identifier and not the same-named string literal beside it. Ten typed operations on nikic/php-parser, guarded by SHA-256 and expected node type, reparsed before write. Ships the php-ast-edit CLI.",
+      "source": {
+        "source": "github",
+        "repo": "netresearch/php-ast-edit-skill"
+      },
+      "category": "development"
+    },
+    {
       "name": "security-audit",
       "description": "Security audit patterns for PHP applications following OWASP guidelines. Covers XXE, SQL injection, XSS, CSRF detection, CVSS v3.1 scoring, and secure coding practices. By Netresearch.",
       "source": {

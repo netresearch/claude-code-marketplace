@@ -67,6 +67,7 @@ export default {
       de: { title: "Code-Qualität & Sicherheit", lead: "Modernisierung, Audits, Supply-Chain-Härtung." },
       slugs: [
         "php-modernization",
+        "php-structured-edit",
         "security-audit",
         "enterprise-readiness",
       ],
