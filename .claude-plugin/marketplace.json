@@ -372,6 +372,15 @@
       },
       "category": "productivity",
       "value_type": "failure-patterns"
+    },
+    {
+      "name": "offload",
+      "description": "Delegate parallel coding, research, and review work to headless agy workers with verified outputs.",
+      "source": {
+        "source": "github",
+        "repo": "anthonyandrei/offload"
+      },
+      "category": "workflow"
     }
   ]
 }
