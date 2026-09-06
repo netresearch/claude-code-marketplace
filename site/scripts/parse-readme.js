@@ -192,8 +192,11 @@ export function parseReadme(markdown) {
   const useCasesBlock = findSection(markdown, SECTION_ALIASES.useCases);
   const expectedOutputsBlock = findSection(markdown, SECTION_ALIASES.expectedOutputs);
   // Dedicated context guidance takes priority when onboarding appears first.
+  // Exclude it from fallback matching so an empty section cannot hide onboarding.
   const contextBlock = findSection(markdown, ["context requirements"])
-    ?? findSection(markdown, SECTION_ALIASES.contextRequirements);
+    ?? findSection(markdown, SECTION_ALIASES.contextRequirements.filter(
+      (alias) => alias !== "context requirements",
+    ));
   const relatedBlock = findSection(markdown, SECTION_ALIASES.relatedSkills);
   const tagsBlock = findSection(markdown, SECTION_ALIASES.tags);
 

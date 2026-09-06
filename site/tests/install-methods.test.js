@@ -70,3 +70,8 @@ test("an empty explicit context section retains installation fallback", () => {
   const parsed = parseReadme("## Installation\n\nPHP 8.2 and Composer.\n\n## Context requirements\n\n## Outputs\n\nA diff.\n");
   assert.deepEqual(parsed.contextRequirements, ["PHP 8.2 and Composer."]);
 });
+
+test("an empty explicit context section does not hide a later installation fallback", () => {
+  const parsed = parseReadme("## Context requirements\n\n## Installation\n\nPHP 8.2 and Composer.\n\n## Outputs\n\nA diff.\n");
+  assert.deepEqual(parsed.contextRequirements, ["PHP 8.2 and Composer."]);
+});
