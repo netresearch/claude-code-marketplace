@@ -19,6 +19,6 @@
               data-copied-label="{{ t.ui.copyCopied }}"
               aria-label="{{ t.skill.copyInstall }} {{ skill.slug }}">{{ t.ui.copyShort }}</button>
     </div>
-    <a class="skill-card__more-install" href="{{ ('/' ~ lang ~ '/skills/' ~ skill.slug ~ '/#install') | url }}">{{ t.ui.moreInstallMethods }} →</a>
+    <a class="skill-card__more-install" href="{{ ('/' ~ lang ~ '/skills/' ~ skill.slug ~ '/#install') | url }}">{{ skill.installLinkLabel[lang] if skill.installLinkLabel else t.ui.moreInstallMethods }} →</a>
   </footer>
 </article>

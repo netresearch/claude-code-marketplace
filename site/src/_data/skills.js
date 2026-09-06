@@ -24,6 +24,7 @@ import groups from "./groups.js";
 import descriptionsDe from "./descriptions_de.json" with { type: "json" };
 import { displayName } from "./_helpers/display-name.js";
 import installMethods from "./installMethods.js";
+import installOverrides from "./installOverrides.json" with { type: "json" };
 
 function loadCache(slug) {
   const p = resolve(CACHE_DIR, `${slug}.json`);
@@ -74,8 +75,15 @@ export default function () {
       slug: plugin.name,
       repo: plugin.source?.repo,
     };
+    const installOverride = installOverrides[plugin.name] || {};
     const installCommands = Object.fromEntries(
-      installMethods.methods.map((m) => [m.id, m.command(skillStub, marketplace)])
+      installMethods.methods.map((m) => [
+        m.id,
+        installOverride.methods?.[m.id]?.command ?? m.command(skillStub, marketplace),
+      ])
+    );
+    const installHints = Object.fromEntries(
+      installMethods.methods.map((m) => [m.id, installOverride.methods?.[m.id]?.hint ?? m.hint])
     );
 
     return {
@@ -103,6 +111,8 @@ export default function () {
       installCommand: installCommands["claude-code"],
       npxCommand: installCommands["npx"],
       installCommands,
+      installHints,
+      installLinkLabel: installOverride.linkLabel || null,
       canonicalUrlEn: `/en/skills/${plugin.name}/`,
       canonicalUrlDe: `/de/skills/${plugin.name}/`,
       useCases: parsed?.useCases?.length ? parsed.useCases : [],

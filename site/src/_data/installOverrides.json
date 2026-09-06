@@ -1,0 +1,76 @@
+{
+  "_doc": "Per-skill installation exceptions owned by the marketplace. Commands follow the linked source guide; default methods for every other skill remain unchanged.",
+  "php-structured-edit": {
+    "linkLabel": {
+      "en": "Engine and skill setup",
+      "de": "Engine und Skill einrichten"
+    },
+    "methods": {
+      "claude-code": {
+        "hint": {
+          "en": {
+            "text": "Installs the agent instructions. The PHP editing engine is set up separately:",
+            "linkText": "engine installation guide",
+            "linkUrl": "https://github.com/netresearch/php-ast-edit-skill#installation",
+            "suffix": "Requires PHP 8.2+, ext-json and ext-tokenizer."
+          },
+          "de": {
+            "text": "Installiert die Agent-Anweisungen. Die PHP-Engine wird getrennt eingerichtet:",
+            "linkText": "Engine installieren",
+            "linkUrl": "https://github.com/netresearch/php-ast-edit-skill#installation",
+            "suffix": "Benötigt PHP 8.2+, ext-json und ext-tokenizer."
+          }
+        }
+      },
+      "npx": {
+        "hint": {
+          "en": {
+            "text": "Installs the agent instructions. The PHP editing engine is set up separately:",
+            "linkText": "engine installation guide",
+            "linkUrl": "https://github.com/netresearch/php-ast-edit-skill#installation",
+            "suffix": "Requires PHP 8.2+, ext-json and ext-tokenizer."
+          },
+          "de": {
+            "text": "Installiert die Agent-Anweisungen. Die PHP-Engine wird getrennt eingerichtet:",
+            "linkText": "Engine installieren",
+            "linkUrl": "https://github.com/netresearch/php-ast-edit-skill#installation",
+            "suffix": "Benötigt PHP 8.2+, ext-json und ext-tokenizer."
+          }
+        }
+      },
+      "composer-require": {
+        "command": "composer config repositories.php-ast-edit vcs https://github.com/netresearch/php-ast-edit-skill.git && composer require --dev --no-plugins --no-scripts netresearch/php-ast-edit-skill:dev-main",
+        "hint": {
+          "en": {
+            "text": "Installs the PHP engine from the development branch with Composer plugins and scripts disabled. For release status and separate skill registration, see",
+            "linkText": "source installation guide",
+            "linkUrl": "https://github.com/netresearch/php-ast-edit-skill#installation",
+            "suffix": "No Packagist publication or plugin activation is required for this engine path."
+          },
+          "de": {
+            "text": "Installiert die PHP-Engine aus dem Entwicklungszweig; Composer-Plugins und -Skripte bleiben deaktiviert. Releasestand und separate Skill-Registrierung:",
+            "linkText": "Installationsanleitung",
+            "linkUrl": "https://github.com/netresearch/php-ast-edit-skill#installation",
+            "suffix": "Dieser Weg benötigt weder eine Packagist-Veröffentlichung noch ein aktiviertes Composer-Plugin."
+          }
+        }
+      },
+      "composer-skills": {
+        "hint": {
+          "en": {
+            "text": "Requires the Composer skill installer and registers the agent instructions. Set up the PHP engine separately:",
+            "linkText": "engine installation guide",
+            "linkUrl": "https://github.com/netresearch/php-ast-edit-skill#installation",
+            "suffix": "The skills:add command does not install the engine dependencies."
+          },
+          "de": {
+            "text": "Benötigt den Composer-Skill-Installer und registriert die Agent-Anweisungen. Die PHP-Engine wird getrennt eingerichtet:",
+            "linkText": "Engine installieren",
+            "linkUrl": "https://github.com/netresearch/php-ast-edit-skill#installation",
+            "suffix": "skills:add installiert die Abhängigkeiten der Engine nicht."
+          }
+        }
+      }
+    }
+  }
+}

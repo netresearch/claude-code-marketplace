@@ -90,7 +90,7 @@ Host-side tooling (not Agent Skills themselves, but part of the same family):
 | Skill | Repository | Description |
 |-------|-----------|-------------|
 | php-modernization | [php-modernization-skill](https://github.com/netresearch/php-modernization-skill) | PHP 8.x modernization: type safety, enums, DTOs, PHPStan, Rector |
-| php-structured-edit | [php-ast-edit-skill](https://github.com/netresearch/php-ast-edit-skill) | AST-native PHP edits via nikic/php-parser — typed mutations, hash guards, reparse before write |
+| php-structured-edit | [php-ast-edit-skill](https://github.com/netresearch/php-ast-edit-skill) | Select PHP symbols, apply typed edits in guarded batches, and review the diff; project tests remain necessary |
 | security-audit | [security-audit-skill](https://github.com/netresearch/security-audit-skill) | OWASP security audit patterns for PHP applications |
 | enterprise-readiness | [enterprise-readiness-skill](https://github.com/netresearch/enterprise-readiness-skill) | Supply chain security, SLSA, OpenSSF, SBOMs, quality gates |
 

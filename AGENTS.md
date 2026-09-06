@@ -131,6 +131,7 @@ Record intentional deviations from a source skill repo. Empty by default.
 
 | Slug | Field | Marketplace value | Reason | Decided |
 |---|---|---|---|---|
+| php-structured-edit | Installation commands and hints | `site/src/_data/installOverrides.json` | The PHP engine needs a VCS install until Packagist publication; skill registration alone does not install its runtime. Commands follow the source installation guide. | 2026-09-06 |
 
 ---
 
