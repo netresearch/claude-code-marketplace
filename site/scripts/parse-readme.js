@@ -191,7 +191,9 @@ export function parseReadme(markdown) {
 
   const useCasesBlock = findSection(markdown, SECTION_ALIASES.useCases);
   const expectedOutputsBlock = findSection(markdown, SECTION_ALIASES.expectedOutputs);
-  const contextBlock = findSection(markdown, SECTION_ALIASES.contextRequirements);
+  // Dedicated context guidance takes priority when onboarding appears first.
+  const contextBlock = findSection(markdown, ["context requirements"])
+    ?? findSection(markdown, SECTION_ALIASES.contextRequirements);
   const relatedBlock = findSection(markdown, SECTION_ALIASES.relatedSkills);
   const tagsBlock = findSection(markdown, SECTION_ALIASES.tags);
 
