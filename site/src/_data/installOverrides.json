@@ -1,5 +1,5 @@
 {
-  "_doc": "Per-skill installation exceptions owned by the marketplace. Commands follow the linked source guide; default methods for every other skill remain unchanged.",
+  "_doc": "Per-skill installation exceptions owned by the marketplace. The PHP override follows the source guide updated in https://github.com/netresearch/php-ast-edit-skill/pull/29; publish this override after that source change merges. Default methods for every other skill remain unchanged.",
   "php-structured-edit": {
     "linkLabel": {
       "en": "Engine and skill setup",

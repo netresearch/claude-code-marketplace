@@ -29,7 +29,7 @@
     "http-server": "^14.1.1"
   },
   "engines": {
-    "node": ">=20"
+    "node": ">=20.10.0"
   },
   "dependencies": {
     "@octokit/rest": "^22.0.1",
