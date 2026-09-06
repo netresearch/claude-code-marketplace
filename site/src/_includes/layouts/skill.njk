@@ -41,7 +41,7 @@ layout: layouts/base.njk
       {% for method in installMethods.methods %}
         {% if skill.installCommands[method.id] %}
           {% set labels = method.labels.de if lang == 'de' else method.labels.en %}
-          {% set hint = (method.hint.de if lang == 'de' else method.hint.en) if method.hint else null %}
+          {% set hint = (skill.installHints[method.id].de if lang == 'de' else skill.installHints[method.id].en) if skill.installHints[method.id] else null %}
           <li class="install-methods__item">
             <header class="install-methods__header">
               <span class="install-methods__label">{{ labels.tab }}</span>

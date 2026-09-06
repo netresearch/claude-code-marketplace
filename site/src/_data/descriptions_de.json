@@ -14,7 +14,7 @@
   "typo3-upgrade-effort-model": "Aufwands-Modell für TYPO3-LTS-Upgrades: Risiko-Multiplikatoren, Baselines, Version-Compat, Rector-Coverage, 7-Phasen-Workflow.",
   "orocommerce": "OroCommerce-Entwicklung: Entities, Datagrids, REST-API, Workflows, Frontend, Security, Integration, Bundle-Scaffolding.",
   "php-modernization": "PHP-8.x-Modernisierung: Type-Safety, Enums, DTOs, PHPStan, Rector.",
-  "php-structured-edit": "PHP-Änderungen über den AST statt über Regex oder sed: typisierte Operationen auf nikic/php-parser, Hash-Guards, erneutes Parsen vor dem Schreiben.",
+  "php-structured-edit": "PHP-Methoden, Parameter und Ausdrücke gezielt ändern: AST-Selektoren, typisierte Operationen und Hash-Prüfungen; mehrere Dateien pro Auftrag. Ohne Normalisierung starten; kanonische Formatierung ist optional. Syntaxprüfung ersetzt keine Verhaltenstests.",
   "security-audit": "OWASP-Security-Audit-Patterns für PHP-Anwendungen.",
   "enterprise-readiness": "Supply-Chain-Security, SLSA, OpenSSF, SBOMs, Quality-Gates.",
   "automated-assessment": "Systematische Projekt-Bewertung mit Skript- und LLM-gestützter Verifikation.",
