@@ -13,6 +13,8 @@ overrides). Design rationale lives in [`../docs/decisions/`](../docs/decisions/)
 
 ## Quick start
 
+Requires Node.js 20.10.0 or newer for JSON import attributes.
+
 ```bash
 cd site
 npm install

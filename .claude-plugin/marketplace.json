@@ -137,7 +137,7 @@
     },
     {
       "name": "php-structured-edit",
-      "description": "Edits PHP through its AST rather than regex, sed or patch, so a rename hits the identifier and not the same-named string literal beside it. Ten typed operations on nikic/php-parser, guarded by SHA-256 and expected node type, reparsed before write. Ships the php-ast-edit CLI.",
+      "description": "Edit PHP methods, parameters and expressions with named selectors, typed operations and SHA-256 guards. Supports multi-file batches, format-preserving output and optional canonical printing. Review diffs and run lint/project tests; syntax checks do not prove behavior.",
       "source": {
         "source": "github",
         "repo": "netresearch/php-ast-edit-skill"
