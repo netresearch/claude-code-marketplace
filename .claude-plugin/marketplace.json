@@ -375,7 +375,7 @@
     },
     {
       "name": "offload",
-      "description": "Delegate bounded implementation and research work with orchestrator review.",
+      "description": "Bounded implementation and research with pre-delegation offers and orchestrator review.",
       "source": {
         "source": "github",
         "repo": "anthonyandrei/offload"
