@@ -375,7 +375,7 @@
     },
     {
       "name": "offload",
-      "description": "Delegate parallel coding, research, and review work to headless agy workers with verified outputs.",
+      "description": "Delegate bounded implementation and research work with orchestrator review.",
       "source": {
         "source": "github",
         "repo": "anthonyandrei/offload"
