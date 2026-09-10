@@ -372,6 +372,15 @@
       },
       "category": "productivity",
       "value_type": "failure-patterns"
+    },
+    {
+      "name": "offload",
+      "description": "Bounded implementation and research with pre-delegation offers and orchestrator review.",
+      "source": {
+        "source": "github",
+        "repo": "anthonyandrei/offload"
+      },
+      "category": "workflow"
     }
   ]
 }
