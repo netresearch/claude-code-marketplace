@@ -34,7 +34,11 @@ jobs:
           cache-dependency-path: site/package-lock.json
 
       - name: Install
-        run: npm ci
+        # --ignore-scripts: no production or dev dependency in site/package-lock.json
+        # declares an install lifecycle script except fsevents, which is macOS-only
+        # and never installed on ubuntu-latest. Skipping them removes an arbitrary
+        # code-execution surface from the supply chain at no cost.
+        run: npm ci --ignore-scripts
 
       # apt has no default timeout on package acquisition, so a mirror that
       # accepts the connection and then stops responding blocks forever instead
