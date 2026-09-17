@@ -9,7 +9,7 @@
  * GITHUB_TOKEN is optional (public READMEs work without one) but strongly
  * recommended in CI to avoid the 60-req/h anonymous rate limit.
  */
-import { readFileSync, writeFileSync, mkdirSync, existsSync } from "node:fs";
+import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { Octokit } from "@octokit/rest";
@@ -50,9 +50,15 @@ let failed = 0;
 
 for (const plugin of marketplace.plugins) {
   const cachePath = resolve(CACHE_DIR, `${plugin.name}.json`);
-  const existing = existsSync(cachePath)
-    ? JSON.parse(readFileSync(cachePath, "utf8"))
-    : null;
+  // Read-and-catch rather than existsSync-then-read: the check-then-use pair
+  // is what CodeQL's js/file-system-race flags, and the absent-cache case is
+  // an ENOENT we have to handle anyway.
+  let existing = null;
+  try {
+    existing = JSON.parse(readFileSync(cachePath, "utf8"));
+  } catch (err) {
+    if (err.code !== "ENOENT") throw err;
+  }
 
   if (!plugin.source?.repo) {
     console.warn(`  skip ${plugin.name} (no source.repo)`);
