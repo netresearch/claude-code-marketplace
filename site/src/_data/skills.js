@@ -63,7 +63,6 @@ function deriveTagsFromCategoryAndGroup(skill) {
 
 export default function () {
   const marketplace = JSON.parse(readFileSync(MARKETPLACE, "utf8"));
-  const marketplaceSlug = marketplace.name;
 
   const skills = marketplace.plugins.map((plugin) => {
     const cache = loadCache(plugin.name);

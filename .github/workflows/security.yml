@@ -6,9 +6,14 @@ on:
   pull_request:
     branches: [main, master]
 
+permissions: {}
+
 jobs:
   gitleaks:
     uses: netresearch/.github/.github/workflows/gitleaks.yml@main
+    permissions:
+      contents: read
+      security-events: write
 
   dependency-review:
     if: github.event_name == 'pull_request'

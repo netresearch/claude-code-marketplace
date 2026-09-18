@@ -1,0 +1,51 @@
+name: CodeQL
+
+# Advanced setup, restoring CodeQL coverage that this repository lost on
+# 2026-01-19. Its last default-setup analysis of `main` ran that evening at
+# commit 74eefce; the toggle was switched off afterwards and nothing recorded
+# why, so two alerts (a `py/clear-text-storage-sensitive-data` finding whose
+# file no longer exists, and a missing-permissions finding on validate.yml)
+# sat open with no scanner left to close them.
+#
+# Advanced rather than re-enabling default setup, for two reasons. Default
+# setup never reports on fork pull requests, which matters for a public
+# marketplace (netresearch/git-workflow-skill#237 documents the fleet-wide
+# move for that reason). And the org configuration "Legacy - public
+# repositories" attaches with `code_scanning_default_setup: enabled` yet does
+# not hold the per-repo toggle on — simple-ldap-go, jira-skill,
+# git-workflow-skill and timetracker all sit `enforced` with default setup
+# off, replaced by a workflow like this one.
+#
+# Default setup MUST stay disabled in the repository settings: with it
+# enabled, GitHub refuses SARIF uploads from advanced configurations.
+#
+# `languages` is explicit rather than `auto`: the reusable workflow's
+# detection covers `actions`, `go` and `javascript-typescript` only, and this
+# repository also ships Python (scripts/overlap-report.py). `auto` would
+# silently drop it — which is the same class of gap the reusable's own
+# comments record for JavaScript in the t3x extensions.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  schedule:
+    - cron: '30 5 * * 1' # Weekly on Monday
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+
+# Least privilege by default; the reusable's jobs request their own subset.
+permissions: {}
+
+jobs:
+  codeql:
+    uses: netresearch/.github/.github/workflows/codeql.yml@main
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+    with:
+      languages: actions,javascript-typescript,python

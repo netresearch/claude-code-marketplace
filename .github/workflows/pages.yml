@@ -27,7 +27,9 @@ jobs:
       node-version: 'lts/*'
       artifact-path: site/_site
       expose-github-token: build
-      pre-build-command: cd site && npm ci
+      # --ignore-scripts for the same reason as in refresh-visual-snapshots.yml:
+      # fsevents is the only dependency with an install script and it is macOS-only.
+      pre-build-command: cd site && npm ci --ignore-scripts
       build-command: |
         cd site
         npm run fetch:readmes
