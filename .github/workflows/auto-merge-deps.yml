@@ -1,0 +1,16 @@
+name: Auto-merge dependency PRs
+
+on:
+  # auto-merge only calls `gh pr merge` via the reusable with the base-repo
+  # token; it never checks out or runs PR head code, so pull_request_target
+  # (required for a write token on Dependabot/Renovate fork PRs) is safe here.
+  pull_request_target: # zizmor: ignore[dangerous-triggers]
+
+permissions: {}
+
+jobs:
+  auto-merge:
+    uses: netresearch/.github/.github/workflows/auto-merge-deps.yml@main
+    permissions:
+      contents: write
+      pull-requests: write
