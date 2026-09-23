@@ -9,8 +9,8 @@ on:
 permissions: {}
 
 jobs:
-  gitleaks:
-    uses: netresearch/.github/.github/workflows/gitleaks.yml@main
+  betterleaks:
+    uses: netresearch/.github/.github/workflows/betterleaks.yml@main
     permissions:
       contents: read
       security-events: write
