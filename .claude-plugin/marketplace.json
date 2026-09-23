@@ -101,10 +101,10 @@
     },
     {
       "name": "cli-tools",
-      "description": "Automatic CLI tool management for coding agents. Detects missing tools from 'command not found' errors and installs via optimal package managers. 74+ tool catalog (ripgrep, fd, jq, docker, terraform, etc.), project environment auditing, batch updates across Python, Node, Rust, Go, PHP, Ruby.",
+      "description": "Automatic CLI tool management for coding agents. Detects missing tools from 'command not found' errors and installs via optimal package managers. 100+ tool catalog (ripgrep, fd, jq, docker, terraform, etc.), project environment auditing, batch updates across Python, Node, Rust, Go, PHP, Ruby.",
       "source": {
         "source": "github",
-        "repo": "netresearch/cli-tools-skill"
+        "repo": "netresearch/coding_agent_cli_toolset"
       },
       "category": "development"
     },

@@ -112,7 +112,7 @@ Host-side tooling (not Agent Skills themselves, but part of the same family):
 |-------|-----------|-------------|
 | jira-integration | [jira-skill](https://github.com/netresearch/jira-skill) | Jira API operations and wiki markup (two sub-skills) |
 | matrix-communication | [matrix-skill](https://github.com/netresearch/matrix-skill) | Send messages to Matrix rooms |
-| cli-tools | [cli-tools-skill](https://github.com/netresearch/cli-tools-skill) | Auto-install missing CLI tools (74+ tool catalog) |
+| cli-tools | [coding_agent_cli_toolset](https://github.com/netresearch/coding_agent_cli_toolset) | Auto-install missing CLI tools (100+ tool catalog) |
 | context7 | [context7-skill](https://github.com/netresearch/context7-skill) | Library documentation lookup via Context7 REST API |
 | data-tools | [data-tools-skill](https://github.com/netresearch/data-tools-skill) | Structured data manipulation with jq, yq, dasel, qsv |
 | file-search | [file-search-skill](https://github.com/netresearch/file-search-skill) | Efficient code search with ripgrep, ast-grep, fd |

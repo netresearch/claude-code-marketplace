@@ -28,7 +28,7 @@
   "agent-harness": "Bootstrappt, verifiziert und erzwingt Agent-Harness-Infrastruktur in Repositories.",
   "jira-integration": "Jira-API-Operationen und Wiki-Markup (zwei Sub-Skills).",
   "matrix-communication": "Versendet Nachrichten in Matrix-Räume.",
-  "cli-tools": "Installiert fehlende CLI-Werkzeuge automatisch (74+ Tool-Katalog).",
+  "cli-tools": "Installiert fehlende CLI-Werkzeuge automatisch (Katalog mit über 100 Werkzeugen).",
   "context7": "Bibliotheks-Dokumentations-Lookup über die Context7-REST-API.",
   "data-tools": "Strukturierte Daten-Manipulation mit jq, yq, dasel, qsv.",
   "file-search": "Effiziente Code-Suche mit ripgrep, ast-grep, fd.",
