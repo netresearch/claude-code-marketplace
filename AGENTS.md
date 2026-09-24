@@ -153,7 +153,7 @@ Before completing a marketplace PR:
 
 - Skill repository structure and validation: **`netresearch/skill-repo-skill`**
 - Do **not** move runtime behavior documentation into this marketplace; link to source repos instead.
-- **`netresearch/claude-code-marketplace-P`** is a private, content-only copy of `netresearch/claude-code-marketplace`. It cannot publish GitHub Pages, so its workflows stay disabled (`gh workflow disable "<name>" --repo netresearch/claude-code-marketplace-P`) — an Actions setting, not a file change, so the copied files stay as they are. A workflow file carried over later has to be disabled the same way. Content changes land here first and are carried over to the private copy.
+- **`netresearch/claude-code-marketplace-P`** is a private, content-only copy of `netresearch/claude-code-marketplace`. It cannot publish GitHub Pages, so every workflow defined in its `.github/workflows/` stays disabled (`gh workflow disable "<name>" --repo netresearch/claude-code-marketplace-P`) — an Actions setting, not a file change, so the copied files stay as they are. A workflow file carried over later has to be disabled the same way. Make content changes here and carry them over to the private copy.
 
 ## Index of scoped AGENTS.md
 
