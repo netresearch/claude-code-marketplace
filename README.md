@@ -193,6 +193,8 @@ Checks that run on every pull request to `main`:
 
 A ruleset on `main` requires the DCO check, and branch protection of `main` requires signed commits. The other checks run on every pull request but are not required checks.
 
+What you can and cannot expect from this repository in terms of security, with its threat model: [docs/SECURITY-ASSURANCE.md](docs/SECURITY-ASSURANCE.md).
+
 ---
 
 **Maintained by:** [Netresearch DTT GmbH](https://www.netresearch.de), Leipzig
