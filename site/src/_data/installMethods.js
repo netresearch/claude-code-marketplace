@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: MIT
+// SPDX-FileCopyrightText: Netresearch DTT GmbH
 /**
  * Install-method config. Drives the global tablist on the landing,
  * the per-card command swap, and the per-skill detail-page section.

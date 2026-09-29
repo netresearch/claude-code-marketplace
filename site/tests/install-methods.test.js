@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: MIT
+// SPDX-FileCopyrightText: Netresearch DTT GmbH
 import assert from "node:assert/strict";
 import test from "node:test";
 import { readFileSync } from "node:fs";

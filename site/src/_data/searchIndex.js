@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: MIT
+// SPDX-FileCopyrightText: Netresearch DTT GmbH
 /**
  * Search-index payload per locale. Templates under src/<lang>/search/
  * just dump the matching list, no Nunjucks array mutation needed.

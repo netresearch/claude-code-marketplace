@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: MIT
+// SPDX-FileCopyrightText: Netresearch DTT GmbH
 /**
  * Canonical skills array — merges marketplace.json (Tier 1) with cached parsed
  * Skill-Repo READMEs (Tier 2) and category/group metadata.

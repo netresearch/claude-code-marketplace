@@ -1,3 +1,6 @@
+<!-- SPDX-License-Identifier: MIT -->
+<!-- SPDX-FileCopyrightText: Netresearch DTT GmbH -->
+
 # Architecture Decision Records
 
 Decisions behind the GitHub Pages site (`site/`) and its data pipeline.

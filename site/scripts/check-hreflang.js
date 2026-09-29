@@ -1,4 +1,6 @@
 #!/usr/bin/env node
+// SPDX-License-Identifier: MIT
+// SPDX-FileCopyrightText: Netresearch DTT GmbH
 /**
  * Verifies, against _site/ after `npm run build`:
  *   1. every EN indexable page has a matching DE counterpart (and vice versa)

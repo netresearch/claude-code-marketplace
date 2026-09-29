@@ -1,4 +1,6 @@
 #!/usr/bin/env node
+// SPDX-License-Identifier: MIT
+// SPDX-FileCopyrightText: Netresearch DTT GmbH
 /**
  * AGENTS.md §Canonical categories: plugins[].category MUST be one of
  * `development | devops | security | design | workflow | productivity | document`.

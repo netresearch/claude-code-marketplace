@@ -1,4 +1,6 @@
 #!/usr/bin/env node
+// SPDX-License-Identifier: MIT
+// SPDX-FileCopyrightText: Netresearch DTT GmbH
 /**
  * Fetch all skill-repo READMEs referenced from .claude-plugin/marketplace.json.
  *

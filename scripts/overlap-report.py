@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: MIT
+# SPDX-FileCopyrightText: Netresearch DTT GmbH
 """Advisory pairwise token-overlap similarity report for the marketplace catalog.
 
 Compares each plugin's marketplace.json description (plus, when a local

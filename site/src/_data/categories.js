@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: MIT
+// SPDX-FileCopyrightText: Netresearch DTT GmbH
 /**
  * Canonical category enum per AGENTS.md §Canonical categories.
  * Mirrors the 7 values enforced by scripts/validate.sh.

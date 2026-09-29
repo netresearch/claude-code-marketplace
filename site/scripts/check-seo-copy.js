@@ -1,4 +1,6 @@
 #!/usr/bin/env node
+// SPDX-License-Identifier: MIT
+// SPDX-FileCopyrightText: Netresearch DTT GmbH
 /**
  * AGENTS.md §SEO and discovery rules — non-blocking warning checks against
  * the merged skill descriptions:

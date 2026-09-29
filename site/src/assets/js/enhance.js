@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: MIT
+// SPDX-FileCopyrightText: Netresearch DTT GmbH
 /*
  * Progressive enhancement — landing functions without this script.
  * Total budget: under 5 KB minified. No frameworks. No third-party imports.
