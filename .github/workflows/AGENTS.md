@@ -15,7 +15,7 @@ build/deploy pipeline. Root [AGENTS.md](../../AGENTS.md) applies on top.
 |------|---------|
 | `pages.yml` | Pages pipeline: build → compliance checks → Lighthouse → visual regression → deploy (push to main, PRs, weekly cron, dispatch) |
 | `validate.yml` | Marketplace catalog validation (`scripts/validate.sh`) plus an advisory, non-blocking overlap report (`scripts/overlap-report.py`) uploaded as a build artifact |
-| `security.yml` | gitleaks secret scanning + dependency review (via `netresearch/.github` reusable workflows); the separate `betterleaks` check comes from GitHub Advanced Security, not this file |
+| `security.yml` | Betterleaks secret scanning over the git history, SARIF uploaded to code scanning (job `betterleaks`), and dependency review on pull requests (job `dependency-review`), both via `netresearch/.github` reusable workflows |
 | `codeql.yml` | CodeQL analysis via the `netresearch/.github` reusable workflow (advanced setup). GitHub's **default setup must stay disabled** in repository settings — with it enabled, SARIF uploads from this workflow are refused |
 | `sync-private-copy.yml` | Force-pushes `main` to the private copy `netresearch/claude-code-marketplace-P` after every push (deploy key in the `private-copy` environment) |
 
