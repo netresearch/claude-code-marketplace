@@ -14,7 +14,7 @@ This document states what a user can expect from this repository in terms of sec
 | Discovery site generator | `site/` (Eleventy templates under `site/src/`, data layer under `site/src/_data/`, build scripts under `site/scripts/`) | In CI (`.github/workflows/pages.yml`) and on contributors' machines |
 | Discovery site | the static HTML, CSS, JavaScript, JSON and images built into `site/_site/` | Served by GitHub Pages at `https://netresearch.github.io/claude-code-marketplace/`, rendered in visitors' browsers |
 
-The repository contains no skill code: each catalogue entry names a skill repository (`source.repo`), and Claude Code fetches the skill from there. The site has no server component, no user accounts, no forms and no cookies, and it stores no visitor data.
+The repository contains no skill code: each catalogue entry names a skill repository (`source.repo`), and Claude Code fetches the skill from there. The site has no server component, no user accounts and no cookies; its only form is the search field, whose search runs in the browser against the site's own index (`enhance.js`). The only data it keeps about a visitor is the chosen install mode, in the visitor's own browser (`localStorage` in `site/src/assets/js/enhance.js`).
 
 ## Security requirements
 
@@ -30,7 +30,7 @@ The repository contains no skill code: each catalogue entry names a skill reposi
 - **Maintainers and contributors** change the catalogue, the site and the workflows through pull requests (see [Governance](https://github.com/netresearch/.github/blob/main/GOVERNANCE.md)). Data committed here is trusted: `marketplace.json`, the files under `site/src/_data/` (display names, German descriptions, install overrides, locale strings) and the templates.
 - **Skill repositories.** `site/scripts/fetch-readmes.js` fetches the README and the latest release of each of the 40 repositories that `marketplace.json` names — all of them under `github.com/netresearch/` — through the GitHub API (`@octokit/rest`). The README text crosses a trust boundary: it is written by whoever can change that repository, it is not reviewed here, and it is cached in `site/cache/skills-readme/` (not committed, `site/.gitignore`). `site/scripts/parse-readme.js` extracts sections from it by string matching; it does not execute or render the Markdown.
 - **GitHub API.** `fetch-readmes.js` authenticates with `GITHUB_TOKEN` from the environment when it is set and anonymously otherwise. In CI the token is the job's `GITHUB_TOKEN`, which the reusable build workflow exposes to the build phase and not to the dependency install (`expose-github-token: build` in `pages.yml`).
-- **Site visitors.** Visitors receive static files from GitHub Pages. The only script file is `site/src/assets/js/enhance.js`, loaded from the site itself, besides the inline locale redirect of the root page (`site/src/index.njk`). `enhance.js` fetches the site's own search index (`search-index.json`) and never inserts HTML: it sets text with `textContent`, toggles `hidden`, sets attributes and the search field's value, and copies install commands to the clipboard.
+- **Site visitors.** Visitors receive static files from GitHub Pages. The only script file is `site/src/assets/js/enhance.js`, loaded from the site itself, besides the inline locale redirect of the root page (`site/src/index.njk`). `enhance.js` fetches the site's own search index (`search-index.json`) and never inserts HTML: it sets text with `textContent`, toggles `hidden`, sets attributes and the search field's value, copies install commands to the clipboard, and remembers the chosen install mode in `localStorage`.
 - **Claude Code users.** Claude Code reads `marketplace.json` and installs the skill repositories it names. What a skill does is decided in its own repository.
 - **CI.** Workflows run on GitHub-hosted runners and call reusable workflows from `netresearch/.github`. `sync-private-copy.yml` force-pushes `main` to the private copy `netresearch/claude-code-marketplace-P` on every push to `main`, with a write deploy key stored as `PRIVATE_COPY_DEPLOY_KEY` in the `private-copy` environment.
 
@@ -39,7 +39,8 @@ The repository contains no skill code: each catalogue entry names a skill reposi
 | Threat | Countermeasure | Evidence |
 | --- | --- | --- |
 | README text from a skill repository injects HTML elements into a detail page (CWE-79) | Templates are rendered with Nunjucks autoescaping, which is on by default: Eleventy 3.1.6 passes no `autoescape` option, and Nunjucks 3.2.4 then enables it. Use cases, expected outputs and context requirements go through the `inlineMarkdown` filter, which HTML-escapes the whole input before it converts any inline Markdown | `site/.eleventy.js` (`inlineMarkdown`, `escapeHtml`); `site/src/_includes/layouts/skill.njk`; `site/package-lock.json` |
-| A Markdown link in the use-case, expected-output or context-requirement lists carries a `javascript:` or other script URL (CWE-79) | `inlineMarkdown` emits a link only when its target matches an allowlist (`http:`, `https:`, `mailto:`, relative paths and fragments); any other target stays plain text | `site/.eleventy.js` (`SAFE_URL_PREFIX`, `isSafeHref`) |
+| A Markdown link in the use-case, expected-output or context-requirement lists carries a `javascript:` or other script URL (CWE-79) | `inlineMarkdown` emits a link only when its target matches an allowlist (`http:`, `https:`, `mailto:`, relative paths and fragments); any other target stays plain text | `site/scripts/safe-href.js` (`SAFE_URL_PREFIX`, `isSafeHref`); `site/.eleventy.js` (`inlineMarkdown`) |
+| A link in the related-skills section of a README carries a `javascript:` or other script URL (CWE-79) | `parseReadme` keeps a related-skill link only when its target matches the same allowlist | `site/scripts/parse-readme.js`; `site/scripts/safe-href.js`; `site/tests/install-methods.test.js` |
 | Text in the OG images injects SVG markup | `generate-og-images.js` XML-escapes every text value before building the SVG that `sharp` renders | `site/scripts/generate-og-images.js` (`escapeXml`) |
 | A third-party script or tracker is added to the site | No template loads an external script, font or stylesheet; the decision is recorded in ADR-0003 | `site/src/_includes/layouts/base.njk`; `docs/decisions/0003-no-client-side-analytics.md` |
 | A build token leaks | The token is read from `process.env.GITHUB_TOKEN` only; the README cache holds README text, ETag and release metadata, not the token | `site/scripts/fetch-readmes.js`; `site/.gitignore` |
@@ -55,10 +56,10 @@ The repository contains no skill code: each catalogue entry names a skill reposi
 
 ## Secure design principles applied
 
-- **Minimal attack surface:** the published site is static. It has no server code, no forms, no accounts and no cookies, and it loads no third-party resource.
+- **Minimal attack surface:** the published site is static. It has no server code, no accounts and no cookies, its search runs in the browser, and it loads no third-party resource.
 - **Least privilege:** workflows grant token permissions per job; write permissions for Pages exist only in the `deploy` job (`.github/workflows/pages.yml`).
 - **Escape by default:** templates rely on Nunjucks autoescaping; `| safe` appears only on the page content inside the base layout, after `inlineMarkdown`, which escapes first, and after `dump`, which serialises data to JSON (`site/src/`).
-- **Allowlist over blocklist:** link targets in rendered README bullets are matched against permitted schemes rather than filtered for forbidden ones (`site/.eleventy.js`).
+- **Allowlist over blocklist:** link targets taken from README text (the rendered bullets and the related-skills links) are matched against permitted schemes rather than filtered for forbidden ones (`site/scripts/safe-href.js`).
 - **Data, not code:** README text from skill repositories is parsed by string matching and never evaluated (`site/scripts/parse-readme.js`).
 
 ## What a user cannot expect
