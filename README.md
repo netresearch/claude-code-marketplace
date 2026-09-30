@@ -189,7 +189,7 @@ Checks that run on every pull request to `main`:
 - DCO (`.github/workflows/dco.yml`): every commit carries a `Signed-off-by` line.
 - Site build (`.github/workflows/pages.yml`): installs `site/` with `npm ci --ignore-scripts`, runs the catalogue checks and the unit tests (`npm run check`), builds the site and checks the language pairs; Lighthouse and Playwright visual regression then test the built site.
 
-`scripts/validate.sh` and the advisory overlap report (`.github/workflows/validate.yml`) run on pull requests that change `.claude-plugin/marketplace.json`, the two scripts or that workflow, and in the pre-commit hook (`.githooks/pre-commit`, enabled by `.envrc`).
+`scripts/validate.sh` and the advisory overlap report (`.github/workflows/validate.yml`) run on pull requests that change `.claude-plugin/marketplace.json`, the two scripts or that workflow. The pre-commit hook (`.githooks/pre-commit`, enabled by `.envrc`) runs `scripts/validate.sh`.
 
 A ruleset on `main` requires the DCO check, and branch protection of `main` requires signed commits. The other checks run on every pull request but are not required checks.
 
