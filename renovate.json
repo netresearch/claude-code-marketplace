@@ -2,5 +2,12 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
     "local>netresearch/renovate-config"
+  ],
+  "packageRules": [
+    {
+      "description": "The private copy is a force-pushed mirror of this repository; updates land here and reach it with the next sync",
+      "matchRepositories": ["netresearch/claude-code-marketplace-P"],
+      "enabled": false
+    }
   ]
 }

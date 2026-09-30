@@ -158,6 +158,10 @@ Netresearch also maintains an internal marketplace for proprietary skills:
 /plugin marketplace add git@git.netresearch.de:coding-ai/marketplace.git
 ```
 
+## Organization sync
+
+The private copy `netresearch/claude-code-marketplace-P` feeds the Claude organization marketplace. A workflow force-pushes this repository's `main` there after every push, and an update of its `main` may start an organization plugin sync. The catalog carries no `version` fields, so each sync resolves every plugin to the current commit of its source.
+
 ## Discover
 
 Browse the full catalog with per-skill detail pages on the marketplace website:

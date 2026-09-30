@@ -1,0 +1,53 @@
+name: Sync private copy
+
+# Force-pushes main to netresearch/claude-code-marketplace-P, the private copy
+# the Claude organization marketplace reads (it only accepts a private
+# repository). The copy is a byte-identical mirror of main; never commit to it
+# directly. Actions are disabled in the copy, so this workflow runs only here.
+#
+# Credential: a write deploy key of the copy, stored as PRIVATE_COPY_DEPLOY_KEY
+# in the private-copy environment, which only main may use. A deploy key can
+# push workflow files, which GITHUB_TOKEN cannot.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions: {}
+
+concurrency:
+  group: sync-private-copy
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    if: github.repository == 'netresearch/claude-code-marketplace'
+    runs-on: ubuntu-latest
+    environment: private-copy
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Push main to the private copy
+        env:
+          DEPLOY_KEY: ${{ secrets.PRIVATE_COPY_DEPLOY_KEY }}
+          # github.com host key as published by GET https://api.github.com/meta
+          KNOWN_HOST: github.com ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOMqqnkVzrm0SdG6UOoqKLsabgH5C9okWi0dh2l9GKJl
+        run: |
+          set -eu
+          dir=$(mktemp -d)
+          trap 'rm -rf "$dir"' EXIT
+          printf '%s\n' "$DEPLOY_KEY" > "$dir/key"
+          chmod 600 "$dir/key"
+          printf '%s\n' "$KNOWN_HOST" > "$dir/known_hosts"
+          export GIT_SSH_COMMAND="ssh -i $dir/key -o IdentitiesOnly=yes -o UserKnownHostsFile=$dir/known_hosts -o StrictHostKeyChecking=yes"
+          # origin/main as fetched now, not GITHUB_SHA: a re-run of an older
+          # run must not roll the copy back.
+          sha=$(git rev-parse refs/remotes/origin/main)
+          git push --force git@github.com:netresearch/claude-code-marketplace-P.git "${sha}:refs/heads/main"
+          echo "Pushed ${sha} to netresearch/claude-code-marketplace-P main" >> "$GITHUB_STEP_SUMMARY"
