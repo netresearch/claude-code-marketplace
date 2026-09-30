@@ -1,4 +1,6 @@
 #!/usr/bin/env node
+// SPDX-License-Identifier: MIT
+// SPDX-FileCopyrightText: Netresearch DTT GmbH
 /**
  * AGENTS.md §No orphan skills: every listed skill MUST be connected to:
  *   1. at least one category

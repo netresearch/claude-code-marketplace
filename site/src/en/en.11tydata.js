@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: MIT
+// SPDX-FileCopyrightText: Netresearch DTT GmbH
 /**
  * Directory data for all /en/ pages.
  * Aliases the EN locale strings + category labels so templates don't

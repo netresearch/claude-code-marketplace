@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: MIT
+// SPDX-FileCopyrightText: Netresearch DTT GmbH
 import { test, expect } from "@playwright/test";
 
 const PAGES = [

@@ -1,3 +1,6 @@
+<!-- SPDX-License-Identifier: MIT -->
+<!-- SPDX-FileCopyrightText: Netresearch DTT GmbH -->
+
 # Marketplace Pages Site
 
 Eleventy 3.x source for the bilingual (EN/DE) GitHub Pages site at

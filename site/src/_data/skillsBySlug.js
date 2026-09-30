@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: MIT
+// SPDX-FileCopyrightText: Netresearch DTT GmbH
 /**
  * Lookup index for related-skill rendering on detail pages.
  * Mirrors skills.js but keyed by slug so templates can resolve

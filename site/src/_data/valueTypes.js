@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: MIT
+// SPDX-FileCopyrightText: Netresearch DTT GmbH
 /**
  * Canonical value_type enum per AGENTS.md §Value type (optional).
  * Mirrors the 5 values enforced by scripts/validate.sh. Maps to the A1

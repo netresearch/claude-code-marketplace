@@ -1,3 +1,5 @@
+<!-- SPDX-License-Identifier: MIT -->
+<!-- SPDX-FileCopyrightText: Netresearch DTT GmbH -->
 <!-- Managed by agent: keep sections and order; edit content, not structure. Last updated: 2026-09-24 -->
 
 # AGENTS.md — Netresearch Claude Code Marketplace

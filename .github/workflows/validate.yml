@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: MIT
+# SPDX-FileCopyrightText: Netresearch DTT GmbH
 name: Validate Marketplace
 
 on:
@@ -29,10 +31,12 @@ jobs:
 
       - name: Summary
         run: |
-          echo "## Plugins in marketplace" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          jq -r '.plugins[] | "- **\(.name)** (\(.category // "uncategorized"))"' \
-            .claude-plugin/marketplace.json >> $GITHUB_STEP_SUMMARY
+          {
+            echo "## Plugins in marketplace"
+            echo ""
+            jq -r '.plugins[] | "- **\(.name)** (\(.category // "uncategorized"))"' \
+              .claude-plugin/marketplace.json
+          } >> "$GITHUB_STEP_SUMMARY"
 
       - name: Overlap report (advisory, non-blocking)
         run: python3 scripts/overlap-report.py | tee overlap-report.md >> "$GITHUB_STEP_SUMMARY"

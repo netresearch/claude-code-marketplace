@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: MIT
+# SPDX-FileCopyrightText: Netresearch DTT GmbH
 """Advisory pairwise token-overlap similarity report for the marketplace catalog.
 
 Compares each plugin's marketplace.json description (plus, when a local
@@ -14,9 +16,10 @@ repos are checked out as siblings (see --help).
 
 --marketplace must resolve inside this repository (CWE-22 hardening: a
 script invoked by CI or an agent should not be redirectable to arbitrary
-filesystem paths by a crafted argument). The report is always written to
-overlap-report.md at the repository root — not configurable — for the
-same reason. --skill-md-root has no such restriction since it is expected
+filesystem paths by a crafted argument). The report is printed to standard
+output; the script writes no file, for the same reason. A caller that wants
+a file redirects the output (validate.yml tees it to overlap-report.md).
+--skill-md-root has no such restriction since it is expected
 to point at sibling checkouts outside the repository.
 """
 

@@ -1,3 +1,7 @@
+// SPDX-License-Identifier: MIT
+// SPDX-FileCopyrightText: Netresearch DTT GmbH
+import { isSafeHref } from "./safe-href.js";
+
 /**
  * Tolerant Markdown section extractor.
  *
@@ -210,7 +214,9 @@ export function parseReadme(markdown) {
     contextRequirements: bulletsFromBlock(contextBlock).length
       ? bulletsFromBlock(contextBlock)
       : (leadParagraph(contextBlock) ? [leadParagraph(contextBlock)] : []),
-    relatedSkills: extractLinks(relatedBlock).map((l) => ({
+    // Related-skill links are rendered as <a href> without further checks,
+    // so a target outside the allowlist (e.g. `javascript:`) is dropped here.
+    relatedSkills: extractLinks(relatedBlock).filter((l) => isSafeHref(l.href)).map((l) => ({
       label: l.label,
       href: l.href,
       slug: (l.href.match(/netresearch\/([a-z0-9-]+)-skill/) || [])[1] || null,

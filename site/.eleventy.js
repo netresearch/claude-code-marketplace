@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: MIT
+// SPDX-FileCopyrightText: Netresearch DTT GmbH
 /**
  * Eleventy config for the Netresearch Marketplace Pages site.
  *
@@ -7,6 +9,8 @@
  * scripts/fetch-readmes.js (cached in cache/skills-readme/) + the static
  * marketplace.json catalog.
  */
+import { isSafeHref } from "./scripts/safe-href.js";
+
 export default function (eleventyConfig) {
   eleventyConfig.addPassthroughCopy({ "src/assets": "assets" });
 
@@ -55,13 +59,9 @@ export default function (eleventyConfig) {
    *   3. Link hrefs go through an allowlist (http/https/mailto/relative), not
    *      a "strip dangerous schemes" filter — `replace(/javascript:/, "")`
    *      is trivially bypassed by `java\tscript:` or zero-width chars, an
-   *      allowlist closes that class entirely.
+   *      allowlist closes that class entirely (`isSafeHref` in
+   *      scripts/safe-href.js, shared with parse-readme.js).
    */
-  const SAFE_URL_PREFIX = /^(?:https?:\/\/|mailto:|\/|#|\.{0,2}\/|[A-Za-z0-9_-]+(?:\/|#|$))/;
-
-  function isSafeHref(href) {
-    return SAFE_URL_PREFIX.test(href);
-  }
 
   function escapeHtml(s) {
     return s

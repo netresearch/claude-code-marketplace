@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: MIT
+// SPDX-FileCopyrightText: Netresearch DTT GmbH
 /**
  * Marketplace-level metadata for landings (count, descriptions, owner,
  * add-marketplace command, category histogram).

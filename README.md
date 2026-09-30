@@ -1,3 +1,6 @@
+<!-- SPDX-License-Identifier: MIT -->
+<!-- SPDX-FileCopyrightText: Netresearch DTT GmbH -->
+
 # Netresearch Agentic Skills Marketplace
 
 > **You ship code. Your agent should know your stack.**
@@ -167,6 +170,30 @@ The private copy `netresearch/claude-code-marketplace-P` feeds the Claude organi
 Browse the full catalog with per-skill detail pages on the marketplace website:
 
 **[netresearch.github.io/claude-code-marketplace](https://netresearch.github.io/claude-code-marketplace/)** — DE + EN, canonical landing per skill, grouped by stack and category.
+
+## Governance and policies
+
+This repository follows the organisation-wide policies of `netresearch`:
+
+- [Governance](https://github.com/netresearch/.github/blob/main/GOVERNANCE.md): roles, how changes are decided and disputes resolved, and who controls access to sensitive resources.
+- [Roadmap](https://github.com/netresearch/.github/blob/main/ROADMAP.md): the maintenance work planned and excluded for the coming year.
+- [Handling of dependency and code analysis findings](https://github.com/netresearch/.github/blob/main/SECURITY.md#handling-of-dependency-and-code-analysis-findings): which vulnerability, licence and static-analysis findings block a change, the deadlines for the others, and how exceptions are recorded.
+- [Secret management](https://github.com/netresearch/.github/blob/main/SECURITY.md#secret-management): where CI secrets are stored, who can access them, and when they are rotated.
+- [Access roster](https://github.com/netresearch/.github/blob/main/docs/access-roster.md): the accounts with admin, maintain and write access to this repository.
+
+Checks that run on every pull request to `main`:
+
+- Dependency review (`.github/workflows/security.yml`): fails on a known vulnerability of severity high or critical in a dependency the pull request adds or changes.
+- Betterleaks (`.github/workflows/security.yml`): scans the Git history and fails on a committed secret.
+- CodeQL (`.github/workflows/codeql.yml`): static security analysis of the GitHub Actions workflows, the JavaScript of `site/` and the Python in `scripts/`; results go to code scanning.
+- DCO (`.github/workflows/dco.yml`): every commit carries a `Signed-off-by` line.
+- Site build (`.github/workflows/pages.yml`): installs `site/` with `npm ci --ignore-scripts`, runs the catalogue checks and the unit tests (`npm run check`), builds the site and checks the language pairs; Lighthouse and Playwright visual regression then test the built site.
+
+`scripts/validate.sh` and the advisory overlap report (`.github/workflows/validate.yml`) run on pull requests that change `.claude-plugin/marketplace.json`, the two scripts or that workflow. The pre-commit hook (`.githooks/pre-commit`, enabled by `.envrc`) runs `scripts/validate.sh`.
+
+A ruleset on `main` requires the DCO check, and branch protection of `main` requires signed commits. The other checks run on every pull request but are not required checks.
+
+What you can and cannot expect from this repository in terms of security, with its threat model: [docs/SECURITY-ASSURANCE.md](docs/SECURITY-ASSURANCE.md).
 
 ---
 

@@ -1,4 +1,6 @@
 #!/bin/sh
+# SPDX-License-Identifier: MIT
+# SPDX-FileCopyrightText: Netresearch DTT GmbH
 # Validate marketplace.json structure and content.
 # Used by: pre-commit hook, CI workflow.
 # Mechanical guard for the rules in AGENTS.md.
