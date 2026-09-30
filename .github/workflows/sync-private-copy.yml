@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: MIT
+# SPDX-FileCopyrightText: Netresearch DTT GmbH
 name: Sync private copy
 
 # Force-pushes main to netresearch/claude-code-marketplace-P, the private copy
