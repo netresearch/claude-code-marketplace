@@ -77,3 +77,21 @@ test("an empty explicit context section does not hide a later installation fallb
   const parsed = parseReadme("## Context requirements\n\n## Installation\n\nPHP 8.2 and Composer.\n\n## Outputs\n\nA diff.\n");
   assert.deepEqual(parsed.contextRequirements, ["PHP 8.2 and Composer."]);
 });
+
+test("related-skill links outside the link allowlist are dropped", () => {
+  const parsed = parseReadme([
+    "## Related skills",
+    "",
+    "- [Script](javascript:alert%28document.domain%29)",
+    "- [Tabbed](java\tscript:alert(1))",
+    "- [Data](data:text/html,x)",
+    "- [Harness](https://github.com/netresearch/agent-harness-skill)",
+    "- [Local](../docs/)",
+    "",
+  ].join("\n"));
+  assert.deepEqual(parsed.relatedSkills.map(({ href }) => href), [
+    "https://github.com/netresearch/agent-harness-skill",
+    "../docs/",
+  ]);
+  assert.equal(parsed.relatedSkills[0].slug, "agent-harness");
+});
