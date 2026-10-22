@@ -37,15 +37,15 @@ const SECTION_ALIASES = {
     "results",
     "output format",
   ],
+  // Only sections that state what a project must provide. Installation,
+  // setup and dependency sections hold install commands, not context
+  // requirements; a README without a requirements section shows none (#132).
   contextRequirements: [
     "context requirements",
     "requirements",
     "prerequisites",
     "context",
     "what this skill needs",
-    "installation",
-    "setup",
-    "dependencies",
   ],
   relatedSkills: ["related skills", "related", "see also", "companion skills"],
   tags: ["tags", "topics", "keywords"],
@@ -118,7 +118,10 @@ function parseBullet(line) {
   let i = 0;
   while (i < line.length && (line[i] === " " || line[i] === "\t")) i++;
   if (i >= line.length) return null;
-  if (line[i] !== "-" && line[i] !== "*" && line[i] !== "+") return null;
+  // Ordered list items ("1. ", "2) ") count as bullets too.
+  const ordered = line.slice(i).match(/^\d{1,3}[.)]/);
+  if (ordered) i += ordered[0].length - 1;
+  else if (line[i] !== "-" && line[i] !== "*" && line[i] !== "+") return null;
   if (i + 1 >= line.length || (line[i + 1] !== " " && line[i + 1] !== "\t")) return null;
   let j = i + 1;
   while (j < line.length && (line[j] === " " || line[j] === "\t")) j++;
@@ -195,8 +198,9 @@ export function parseReadme(markdown) {
 
   const useCasesBlock = findSection(markdown, SECTION_ALIASES.useCases);
   const expectedOutputsBlock = findSection(markdown, SECTION_ALIASES.expectedOutputs);
-  // Dedicated context guidance takes priority when onboarding appears first.
-  // Exclude it from fallback matching so an empty section cannot hide onboarding.
+  // A dedicated "Context requirements" section takes priority over an earlier
+  // generic alias. It is excluded from the second lookup so an empty one cannot
+  // hide a later "Requirements" or "Prerequisites" section.
   const contextBlock = findSection(markdown, ["context requirements"])
     ?? findSection(markdown, SECTION_ALIASES.contextRequirements.filter(
       (alias) => alias !== "context requirements",

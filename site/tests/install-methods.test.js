@@ -61,20 +61,50 @@ Provide the target file paths, intended change, and a writable working tree.
   assert.deepEqual(parsed.expectedOutputs, ["A guarded edit and a measured diff."]);
 });
 
-test("context extraction retains existing fallback aliases and document order", () => {
-  for (const heading of ["Installation", "Requirements", "Setup", "Dependencies"]) {
-    const parsed = parseReadme(`## ${heading}\n\n- PHP 8.2 and Composer.\n\n## Context\n\n- A later fallback.\n`);
+// The orocommerce-skill README as fetched on 2026-10-22: its Installation
+// section opens with a fenced block, and its Requirements section comes later.
+const orocommerceReadme = readFileSync(new URL("./fixtures/orocommerce-skill-README.md", import.meta.url), "utf8");
+
+test("a real README's requirements section wins over its earlier installation commands (#132)", () => {
+  const parsed = parseReadme(orocommerceReadme);
+  assert.deepEqual(parsed.contextRequirements, [
+    "[Claude Code](https://docs.anthropic.com/en/docs/claude-code) CLI",
+  ]);
+});
+
+test("a README without a requirements section shows no context requirements (#132)", () => {
+  const withoutRequirements = orocommerceReadme.replace(/^## Requirements\n[\s\S]*?(?=^## )/m, "");
+  assert.notEqual(withoutRequirements, orocommerceReadme);
+  assert.match(withoutRequirements, /^## Installation$/m);
+  assert.deepEqual(parseReadme(withoutRequirements).contextRequirements, []);
+});
+
+test("installation, setup and dependency sections are not context requirements", () => {
+  for (const heading of ["Installation", "Setup", "Dependencies"]) {
+    const parsed = parseReadme(`## ${heading}\n\n- composer require vendor/skill\n`);
+    assert.deepEqual(parsed.contextRequirements, [], heading);
+  }
+});
+
+test("context extraction keeps the requirement aliases and document order", () => {
+  for (const heading of ["Requirements", "Prerequisites", "Context", "What this skill needs"]) {
+    const parsed = parseReadme(`## Installation\n\n- composer require vendor/skill\n\n## ${heading}\n\n- PHP 8.2 and Composer.\n\n## Context\n\n- A later fallback.\n`);
     assert.deepEqual(parsed.contextRequirements, ["PHP 8.2 and Composer."], heading);
   }
 });
 
-test("an empty explicit context section retains installation fallback", () => {
-  const parsed = parseReadme("## Installation\n\nPHP 8.2 and Composer.\n\n## Context requirements\n\n## Outputs\n\nA diff.\n");
+test("ordered requirement lists become one item per entry", () => {
+  const parsed = parseReadme("## Requirements\n\n1. PHP 8.2\n2) Composer\n");
+  assert.deepEqual(parsed.contextRequirements, ["PHP 8.2", "Composer"]);
+});
+
+test("an empty explicit context section falls back to an earlier requirements section", () => {
+  const parsed = parseReadme("## Requirements\n\nPHP 8.2 and Composer.\n\n## Context requirements\n\n## Outputs\n\nA diff.\n");
   assert.deepEqual(parsed.contextRequirements, ["PHP 8.2 and Composer."]);
 });
 
-test("an empty explicit context section does not hide a later installation fallback", () => {
-  const parsed = parseReadme("## Context requirements\n\n## Installation\n\nPHP 8.2 and Composer.\n\n## Outputs\n\nA diff.\n");
+test("an empty explicit context section does not hide a later requirements section", () => {
+  const parsed = parseReadme("## Context requirements\n\n## Prerequisites\n\nPHP 8.2 and Composer.\n\n## Outputs\n\nA diff.\n");
   assert.deepEqual(parsed.contextRequirements, ["PHP 8.2 and Composer."]);
 });
 
