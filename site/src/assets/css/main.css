@@ -1158,6 +1158,9 @@ main > * { min-width: 0; }
 :target { scroll-margin-top: 96px; }
 .nr-hero .install-block { width: 100%; }
 .nr-hero .install-block__code { background: #0A5057; border: 1px solid #8A8B93; color: #fff; }
+@media print {
+  .nr-hero .install-block__code { background: #fff; color: #000; }
+}
 .nr-hero .install-block__code code { background: transparent; color: inherit; white-space: pre-wrap; overflow-wrap: anywhere; }
 .problem-item, .stats__item, .how-list li { border: 1px solid var(--color-border-light); box-shadow: var(--shadow-sm); border-radius: 16px; }
 .skill-card__unavailable { margin: 0; font-size: 0.875rem; }
