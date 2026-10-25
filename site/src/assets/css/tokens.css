@@ -1,34 +1,40 @@
-/*
- * SPDX-License-Identifier: MIT
+/* SPDX-License-Identifier: MIT
  * SPDX-FileCopyrightText: Netresearch DTT GmbH
- *
- * Brand tokens sourced from netresearch-branding-skill
- * https://github.com/netresearch/netresearch-branding-skill
- * Source: skills/netresearch-branding/templates/styles.css
- *
- * Keep this file in sync with the skill. Do not invent new tokens here.
+ * Brand tokens are also inlined into main.css to retain one CSS payload.
  */
 :root {
-  --color-primary: #2F99A4;
+  color-scheme: light;
+  --nr-primary: #2F99A4;
+  --nr-primary-fill: #15585E;
+  --nr-primary-text: #15585E;
+  --nr-primary-deep: #0A5057;
+  --nr-accent: #FF4D00;
+  --nr-accent-text: #9A2E00;
+  --nr-text: #585961;
+  --nr-text-aaa: #4D4F57;
+  --nr-bg: #FFFFFF;
+  --nr-bg-alt: #F5F5F5;
+  --nr-border: #CCCDCC;
+  --nr-border-strong: #8A8B93;
+  --color-primary: var(--nr-primary);
   --color-primary-rgb: 47, 153, 164;
-  --color-primary-dark: #257880;
-  --color-primary-darker: #1c5d63;
-  --color-accent: #FF4D00;
+  --color-primary-dark: var(--nr-primary-text);
+  --color-primary-darker: var(--nr-primary-deep);
+  --color-primary-fill: var(--nr-primary-fill);
+  --color-accent: var(--nr-accent);
   --color-accent-rgb: 255, 77, 0;
-  --color-accent-dark: #CC3D00;
-
-  --color-text-primary: #2D2E33;
-  --color-text-secondary: #5A5B63;
-  --color-background: #FFFFFF;
-  --color-background-alt: #F5F5F5;
-  --color-border: #CCCDCC;
+  --color-accent-dark: var(--nr-accent-text);
+  --color-text-primary: var(--nr-text-aaa);
+  --color-text-secondary: var(--nr-text-aaa);
+  --color-background: var(--nr-bg);
+  --color-background-alt: var(--nr-bg-alt);
+  --color-border: var(--nr-border-strong);
   --color-border-light: #E5E5E5;
-
-  --font-headline: "Raleway", system-ui, -apple-system, "Segoe UI", sans-serif;
-  --font-body: "Open Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --color-focus: #15585E;
+  --font-headline: "Raleway", Arial, sans-serif;
+  --font-body: "Open Sans", Arial, sans-serif;
   --font-mono: ui-monospace, "SFMono-Regular", "Menlo", "Consolas", monospace;
-
-  --font-size-xs: 0.75rem;
+  --font-size-xs: 0.875rem;
   --font-size-sm: 0.875rem;
   --font-size-base: 1rem;
   --font-size-lg: 1.125rem;
@@ -38,7 +44,6 @@
   --font-size-4xl: 2.25rem;
   --font-size-5xl: 3rem;
   --font-size-6xl: 3.5rem;
-
   --spacing-xs: 0.5rem;
   --spacing-sm: 0.75rem;
   --spacing-md: 1rem;
@@ -47,23 +52,36 @@
   --spacing-xxl: 3rem;
   --spacing-3xl: 4rem;
   --spacing-4xl: 6rem;
+  --shadow-sm: 0 1px 2px rgb(0 0 0 / 4%), 0 6px 20px rgb(0 0 0 / 3%);
+  --shadow-md: 0 2px 6px rgb(0 0 0 / 5%), 0 12px 32px rgb(0 0 0 / 4%);
+  --shadow-lg: 0 6px 24px rgb(0 0 0 / 10%);
+  --radius-sm: 10px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+}
 
-  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
-  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.12);
-  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.16);
-
-  --radius-sm: 4px;
-  --radius-md: 8px;
-  --radius-lg: 12px;
+html[data-theme="dark"] {
+  color-scheme: dark;
+  --nr-primary-text: #7FD6E0;
+  --nr-primary-deep: #A1E2E8;
+  --nr-accent-text: #FFB28F;
+  --nr-text-aaa: #E8EDEF;
+  --nr-bg: #1A1A1A;
+  --nr-bg-alt: #242424;
+  --color-border-light: #3A3A3A;
+  --color-focus: #7FD6E0;
 }
 
 @media (prefers-color-scheme: dark) {
-  :root {
-    --color-text-primary: #E5E5E5;
-    --color-text-secondary: #A8A9B1;
-    --color-background: #1A1A1A;
-    --color-background-alt: #242424;
-    --color-border: #3A3A3A;
-    --color-border-light: #2A2A2A;
+  html:not([data-theme="light"]) {
+    color-scheme: dark;
+    --nr-primary-text: #7FD6E0;
+    --nr-primary-deep: #A1E2E8;
+    --nr-accent-text: #FFB28F;
+    --nr-text-aaa: #E8EDEF;
+    --nr-bg: #1A1A1A;
+    --nr-bg-alt: #242424;
+    --color-border-light: #3A3A3A;
+    --color-focus: #7FD6E0;
   }
 }

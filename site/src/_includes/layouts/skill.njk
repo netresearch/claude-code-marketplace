@@ -6,7 +6,7 @@ layout: layouts/base.njk
 
 {% from "partials/install-block.njk" import installBlock %}
 
-<nav class="breadcrumbs" aria-label="Breadcrumb">
+<nav class="breadcrumbs" aria-label="{{ t.nav.breadcrumbLabel }}">
   <ol>
     <li><a href="{{ ('/' ~ lang ~ '/') | url }}">{{ t.nav.home }}</a></li>
     {%- set groupAnchor = ('#group-' ~ skill.group) if skill.group else '#skills' -%}
@@ -49,10 +49,10 @@ layout: layouts/base.njk
               <span class="install-methods__label">{{ labels.tab }}</span>
               <span class="install-methods__subtitle">{{ labels.subtitle }}</span>
             </header>
-            {{ installBlock('skill-install-' ~ method.id, skill.installCommands[method.id], t.skill.copyInstall, t.ui.copyCopied) }}
+            {{ installBlock('skill-install-' ~ method.id, skill.installCommands[method.id], t.skill.copyInstall, t.ui.copyCopied, t.ui.copyFailed, t.ui.copyPrompt) }}
             {% if hint %}
               <p class="install-methods__hint">
-                {{ hint.text }} <a href="{{ hint.linkUrl }}" rel="noopener"><code>{{ hint.linkText }}</code></a> {{ hint.suffix | inlineMarkdown | safe }}
+                {% if hint.prerequisite %}{{ hint.prerequisite | inlineMarkdown | safe }} {% endif %}{{ hint.text }} <a href="{{ hint.linkUrl }}" rel="noopener"><code>{{ hint.linkText }}</code></a> {{ hint.suffix | inlineMarkdown | safe }}
               </p>
             {% endif %}
           </li>
@@ -61,38 +61,41 @@ layout: layouts/base.njk
     </ol>
   </section>
 
-  {% if skill.useCases | length > 0 %}
-    <section class="skill-detail__block" aria-labelledby="use-cases-h">
-      <h2 id="use-cases-h">{{ t.skill.useCases }}</h2>
+  {% set sectionItems = skill.useCasesDe if lang == 'de' else skill.useCases %}
+  <section class="skill-detail__block" aria-labelledby="use-cases-h">
+    <h2 id="use-cases-h">{{ t.skill.useCases }}</h2>
+    {% if sectionItems | length > 0 %}
       <ul class="bullet-list">
-        {% for item in skill.useCases %}
-          <li>{{ item | inlineMarkdown | safe }}</li>
-        {% endfor %}
+        {% for item in sectionItems %}<li>{{ item | inlineMarkdown | safe }}</li>{% endfor %}
       </ul>
-    </section>
-  {% endif %}
+    {% else %}
+      <p>{{ t.skill.sourceGuidance }} <a href="{{ skill.readmeUrl }}">{{ t.skill.viewReadme }}</a></p>
+    {% endif %}
+  </section>
 
-  {% if skill.expectedOutputs | length > 0 %}
-    <section class="skill-detail__block" aria-labelledby="outputs-h">
-      <h2 id="outputs-h">{{ t.skill.expectedOutputs }}</h2>
+  {% set sectionItems = skill.expectedOutputsDe if lang == 'de' else skill.expectedOutputs %}
+  <section class="skill-detail__block" aria-labelledby="outputs-h">
+    <h2 id="outputs-h">{{ t.skill.expectedOutputs }}</h2>
+    {% if sectionItems | length > 0 %}
       <ul class="bullet-list">
-        {% for item in skill.expectedOutputs %}
-          <li>{{ item | inlineMarkdown | safe }}</li>
-        {% endfor %}
+        {% for item in sectionItems %}<li>{{ item | inlineMarkdown | safe }}</li>{% endfor %}
       </ul>
-    </section>
-  {% endif %}
+    {% else %}
+      <p>{{ t.skill.sourceGuidance }} <a href="{{ skill.readmeUrl }}">{{ t.skill.viewReadme }}</a></p>
+    {% endif %}
+  </section>
 
-  {% if skill.contextRequirements | length > 0 %}
-    <section class="skill-detail__block" aria-labelledby="context-h">
-      <h2 id="context-h">{{ t.skill.contextRequirements }}</h2>
+  {% set sectionItems = skill.contextRequirementsDe if lang == 'de' else skill.contextRequirements %}
+  <section class="skill-detail__block" aria-labelledby="context-h">
+    <h2 id="context-h">{{ t.skill.contextRequirements }}</h2>
+    {% if sectionItems | length > 0 %}
       <ul class="bullet-list">
-        {% for item in skill.contextRequirements %}
-          <li>{{ item | inlineMarkdown | safe }}</li>
-        {% endfor %}
+        {% for item in sectionItems %}<li>{{ item | inlineMarkdown | safe }}</li>{% endfor %}
       </ul>
-    </section>
-  {% endif %}
+    {% else %}
+      <p>{{ t.skill.sourceGuidance }} <a href="{{ skill.readmeUrl }}">{{ t.skill.viewReadme }}</a></p>
+    {% endif %}
+  </section>
 
   <section class="skill-detail__block" aria-labelledby="related-h">
     <h2 id="related-h">{{ t.skill.relatedSkills }}</h2>
@@ -171,7 +174,7 @@ layout: layouts/base.njk
   "@type": "BreadcrumbList",
   "itemListElement": [
     { "@type": "ListItem", "position": 1, "name": t.nav.home, "item": site.url ~ (("/" ~ lang ~ "/") | url) },
-    { "@type": "ListItem", "position": 2, "name": categoryLabel, "item": site.url ~ (("/" ~ lang ~ "/" ~ groupAnchor) | url) },
+    { "@type": "ListItem", "position": 2, "name": t.nav.skills, "item": site.url ~ (("/" ~ lang ~ "/" ~ groupAnchor) | url) },
     { "@type": "ListItem", "position": 3, "name": skill.displayName }
   ]
 } | dump(2) | safe }}

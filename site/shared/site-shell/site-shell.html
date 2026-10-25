@@ -1,0 +1,32 @@
+<header class="nr-shell" data-nr-shell>
+  <div class="nr-shell-inner">
+    <a class="nr-shell-logo" href="https://www.netresearch.de/" aria-label="Netresearch DTT GmbH">
+      <img src="{{assetBase}}/netresearch-symbol-only.svg" width="44" height="44" alt="Netresearch DTT GmbH">
+    </a>
+    <nav class="nr-shell-desktop" aria-label="{{navigation}}">{{globalLinks}}</nav>
+    <div class="nr-shell-actions">
+      <nav class="nr-shell-locales" aria-label="{{languages}}">
+        <a href="{{deUrl}}" lang="de" hreflang="de" aria-label="DE – Deutsch" aria-current="{{deCurrent}}">DE</a>
+        <a href="{{enUrl}}" lang="en" hreflang="en" aria-label="EN – English" aria-current="{{enCurrent}}">EN</a>
+      </nav>
+      <details class="nr-shell-theme" data-nr-theme-picker hidden>
+        <summary class="nr-shell-icon-button" aria-label="{{appearance}}" title="{{appearance}}" data-nr-theme-trigger>
+          <svg class="nr-shell-icon nr-shell-theme-icon" data-theme-icon="system" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 21h8m-4-5v5"/></svg>
+          <svg class="nr-shell-icon nr-shell-theme-icon" data-theme-icon="light" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"/></svg>
+          <svg class="nr-shell-icon nr-shell-theme-icon" data-theme-icon="dark" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 15.3A8.5 8.5 0 0 1 8.7 4 8.5 8.5 0 1 0 20 15.3Z"/></svg>
+        </summary>
+        <fieldset class="nr-shell-theme-panel nr-shell-popover">
+          <legend>{{appearance}}</legend>
+          <label class="nr-shell-theme-option"><input type="radio" name="nr-shell-theme" value="system" data-nr-theme-option checked><svg class="nr-shell-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 21h8m-4-5v5"/></svg><span>{{system}}</span><svg class="nr-shell-icon nr-shell-check" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4L19 6"/></svg></label>
+          <label class="nr-shell-theme-option"><input type="radio" name="nr-shell-theme" value="light" data-nr-theme-option><svg class="nr-shell-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"/></svg><span>{{light}}</span><svg class="nr-shell-icon nr-shell-check" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4L19 6"/></svg></label>
+          <label class="nr-shell-theme-option"><input type="radio" name="nr-shell-theme" value="dark" data-nr-theme-option><svg class="nr-shell-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 15.3A8.5 8.5 0 0 1 8.7 4 8.5 8.5 0 1 0 20 15.3Z"/></svg><span>{{dark}}</span><svg class="nr-shell-icon nr-shell-check" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4L19 6"/></svg></label>
+        </fieldset>
+      </details>
+      <a class="nr-shell-contact" href="{{contactHref}}">{{contact}}</a>
+      <details class="nr-shell-mobile" data-nr-mobile-menu>
+        <summary class="nr-shell-icon-button" aria-label="{{menu}}" title="{{menu}}"><svg class="nr-shell-icon nr-shell-menu-open" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg><svg class="nr-shell-icon nr-shell-menu-close" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></summary>
+        <nav class="nr-shell-menu-panel nr-shell-popover" aria-label="{{navigation}}">{{globalLinks}}<a class="nr-shell-menu-contact" href="{{contactHref}}">{{contact}}</a></nav>
+      </details>
+    </div>
+  </div>
+</header>

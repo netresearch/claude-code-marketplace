@@ -1,173 +1,202 @@
 {
   "nav": {
-    "home": "Start",
+    "home": "Skill-Katalog",
     "skills": "Skills",
-    "about": "Über",
+    "about": "Über Netresearch",
     "switchLang": "English",
-    "skipToContent": "Zum Inhalt springen"
+    "skipToContent": "Zum Inhalt springen",
+    "breadcrumbLabel": "Seitenpfad"
   },
   "hero": {
-    "h1": "Du lieferst Software. Dein Agent kennt deinen Stack.",
-    "lead": "40 kuratierte Agent Skills für TYPO3, PHP, Go, Docker, Jira, Security und Dokumentation — portabel zwischen Claude Code, Cursor, Copilot, Codex, Gemini CLI und 30+ weiteren Agents.",
-    "primaryCta": "Install-Befehl kopieren",
-    "secondaryCta": "Skills ansehen"
+    "h1": "Skills für deinen Stack.",
+    "lead": "Finde Skill-Pakete für deinen Stack. Vergleiche Voraussetzungen und installiere gezielt, was du brauchst.",
+    "primaryCta": "Registrierungsbefehl kopieren",
+    "secondaryCta": "Skills ansehen",
+    "eyebrow": "Agent Skills von Netresearch"
   },
   "problem": {
-    "h2": "Allzweck-AI verfehlt die Konventionen, gegen die du täglich lieferst",
+    "h2": "Dein Projekt braucht mehr als allgemeine Codevorschläge",
     "items": [
       {
-        "title": "TYPO3-Konventionen",
-        "body": "Generische Agents kennen PSR-12-Eigenheiten, TCA, FlexForms oder das DDEV-Setup deiner Extensions nicht."
+        "title": "TYPO3 im Projekt",
+        "body": "TCA, FlexForms, Extension-Tests und DDEV folgen eigenen Regeln. Die passenden Skills bündeln Anleitungen und Referenzen."
       },
       {
-        "title": "Härtungs-Erwartungen",
-        "body": "Supply-Chain-Security, SBOMs, OpenSSF Scorecard, signierte Releases — nicht die Defaults out of the box."
+        "title": "Sicherheit und Releases",
+        "body": "SBOMs, signierte Releases und Prüfungen der Lieferkette brauchen eine gezielte Einrichtung. Im Katalog findest du die passenden Quellen und Werkzeuge."
       },
       {
-        "title": "Operativer Zuschnitt",
-        "body": "Concourse-Pipelines, Matrix-Benachrichtigungen, Jira-Workflows, Netresearch-CI — generische Vorschläge brauchen Nacharbeit."
+        "title": "Zusammenarbeit im Team",
+        "body": "Für Concourse-Pipelines, Matrix und Jira gelten eigene Abläufe. Die Skills beschreiben benötigte Werkzeuge, Zugriffe und Prüfschritte."
       }
     ]
   },
   "marketplace": {
-    "h2": "Ein Install. Vierzig Skills. Jeder unterstützte Agent.",
+    "h2": "Passendes Paket finden und gezielt installieren",
     "stats": {
-      "skillsLabel": "kuratierte Skills",
+      "skillsLabel": "Katalogeinträge",
       "categoriesLabel": "Kategorien",
-      "platformsLabel": "unterstützte Agents",
-      "platformsValue": "8+"
+      "platformsLabel": "vom skills-Installer unterstützte Agents",
+      "platformsValue": "30+"
     }
   },
   "improvementLoop": {
-    "eyebrow": "Skill-Skills",
-    "h2": "Skills, die mit Skills arbeiten",
-    "lead": "Eine kleine Familie von Skills, deren Gegenstand andere Skills sind. Im Zentrum läuft eine Schleife — Harness macht dein Repo agent-ready, Assessment prüft die Arbeit anhand derselben Checkpoints, die wir veröffentlichen, und Retro spielt alle Reibungspunkte zurück in Regeln, Checkpoints und Skill-PRs, einschließlich Harness. Drumherum stehen fünf weitere Skill-Skills für Autoren- und Host-Seite.",
-    "loopHeading": "Die Schleife im Zentrum",
+    "eyebrow": "Skills pflegen",
+    "h2": "Werkzeuge für die Arbeit an Skills",
+    "lead": "Harness prüft die Anweisungen und Prüfmechanismen im Repository. Assessment wertet passende Checkpoints aus. Retro untersucht Reibungspunkte einer Sitzung und schlägt Verbesserungen vor; ergänzende Skills und Werkzeuge unterstützen Erstellung und Installation.",
+    "loopHeading": "Von der Projektprüfung zur Verbesserung",
     "nodes": [
       {
         "step": "1",
         "title": "Harness",
         "skillSlug": "agent-harness",
-        "role": "Macht das Repo agent-ready",
-        "body": "AGENTS.md als Index, docs/-Struktur, CI-Verifikation, Enforcement-Mechanismen — das Gerüst, das jeder andere Skill voraussetzt."
+        "role": "Projektanweisungen prüfen",
+        "body": "Prüft AGENTS.md, verlinkte Dokumentation und technische Prüfmechanismen. Fehlende Bestandteile können anschließend ergänzt werden."
       },
       {
         "step": "2",
         "title": "Assessment",
         "skillSlug": "automated-assessment",
-        "role": "Prüft die Arbeit",
-        "body": "Wendet checkpoint-fähige Skills auf die Codebase an — Coverage, Mutation-Score, Release-Bereitschaft, mechanische und LLM-gestützte Reviews."
+        "role": "Checkpoints auswerten",
+        "body": "Verbindet Skriptprüfungen mit LLM-gestützten Reviews. Ausgewertet werden Checkpoints, die zum geprüften Projekt passen."
       },
       {
         "step": "3",
         "title": "Retro",
         "skillSlug": "retro",
-        "role": "Spielt Erkenntnisse zurück",
-        "body": "Findet Reibungspunkte während einer Sitzung und macht daraus User-Memory-Einträge, Projektregeln, Skill-PRs, Checkpoints oder Harness-Artefakte."
+        "role": "Verbesserungen vorschlagen",
+        "body": "Untersucht Reibungspunkte und schlägt Änderungen an Projektregeln, Skills, Checkpoints oder Memory vor. Die Umsetzung braucht eine Freigabe."
       }
     ],
-    "loopBack": "Retro spielt Erkenntnisse zurück in Harness, Assessment-Checkpoints und jeden anderen Skill in diesem Katalog.",
-    "companionsHeading": "Drumherum",
-    "companionsLead": "Autoren-Werkzeuge, die der Schleife Eingaben liefern — plus Host-seitige Werkzeuge, die Skills in Projekte außerhalb von Claude Code holen.",
+    "loopBack": "Freigegebene Retro-Vorschläge können Projektregeln, Assessment-Checkpoints und weitere Skills verbessern.",
+    "companionsHeading": "Ergänzende Skills und Installer",
+    "companionsLead": "Die Autorenwerkzeuge bereiten Anweisungen und Checkpoints vor. Die Installer binden Skills in PHP- und Node-Projekte ein.",
     "companions": [
       {
         "title": "agent-rules",
         "href": "/de/skills/agent-rules/",
         "external": false,
-        "role": "AGENTS.md-Generator",
-        "body": "Erzeugt die AGENTS.md-Inhalte, die Harness anschließend als Repo-Index verankert."
+        "role": "Anweisungen für das Repository",
+        "body": "Übernimmt Projektbefehle, Architektur und Konventionen in AGENTS.md und weitere Regeldateien."
       },
       {
-        "title": "/add-checkpoints",
+        "title": "add-checkpoints",
         "href": "/de/skills/automated-assessment/",
         "external": false,
-        "role": "Checkpoints einbauen",
-        "body": "Unterbefehl von automated-assessment: hängt Checkpoints an einen Skill, damit Assessment dagegen prüfen kann."
+        "role": "Begleitender Assessment-Skill",
+        "body": "Eigenständiger Skill im Paket automated-assessment. Ergänzt prüfbare Checkpoints; bei einer reinen Skill-Installation muss er gesondert gewählt werden."
       },
       {
         "title": "skill-repo",
         "href": "/de/skills/skill-repo/",
         "external": false,
-        "role": "Skill-Gerüst",
-        "body": "Vorlagen und Validierung für das Schreiben neuer Agent Skills — Split-Lizenz, plugin.json, Release-Workflow."
+        "role": "Skill-Repositories aufbauen",
+        "body": "Liefert Vorlagen und Prüfungen für Manifeste, getrennte Lizenzen und Release-Workflows."
       },
       {
         "title": "composer-agent-skill-plugin",
         "href": "https://github.com/netresearch/composer-agent-skill-plugin",
         "external": true,
-        "role": "PHP-Host",
-        "body": "Composer-Plugin, das Agent Skills in PHP-Projekte holt — unabhängig davon, welcher AI-Agent sie liest."
+        "role": "Einbindung in PHP-Projekte",
+        "body": "Erkennt freigegebene Skill-Pakete oder direkte Quellen und trägt ihre Anweisungen in AGENTS.md ein."
       },
       {
         "title": "node-agent-skill-coordinator",
         "href": "https://github.com/netresearch/node-agent-skill-coordinator",
         "external": true,
-        "role": "Node-Host",
-        "body": "Findet Skills in installierten npm-Paketen und trägt sie in die AGENTS.md des Projekts ein."
+        "role": "Einbindung in Node-Projekte",
+        "body": "Findet Skills in npm-Abhängigkeiten und trägt sie in die AGENTS.md des Projekts ein."
       }
     ],
-    "browseCta": "Zur Skill-Skills-Gruppe im Katalog"
+    "browseCta": "Pakete zur Skill-Pflege ansehen"
   },
   "categoriesSection": {
-    "h2": "Wähle nach Lieferobjekt",
-    "lead": "Skills gruppiert nach dem, was sie berühren. Kategorien folgen dem AGENTS.md-Enum; die thematischen Gruppen sind für die Discovery."
+    "h2": "Nach Aufgabe und Technologie auswählen",
+    "lead": "Ob Extension, Website, Pipeline oder Review: Die Gruppen führen zu passenden Paketen. Auf den Detailseiten findest du den jeweiligen Umfang und die Voraussetzungen."
   },
   "story": {
-    "h2": "Gebaut von Netresearch",
-    "body1": "Die Netresearch DTT GmbH ist eine TYPO3-Agentur aus Leipzig, die täglich produktive LMS-, e-Commerce- und Enterprise-CMS-Workloads ausliefert. Diese Skills sind keine Experimente — es sind die Patterns, zu denen unsere Engineers in echter Projektarbeit greifen.",
-    "body2": "Wir veröffentlichen die Patterns, denen wir selbst vertrauen. Jeder Skill in diesem Marketplace läuft auf mindestens einem Netresearch-Projekt."
+    "h2": "Von Netresearch veröffentlicht",
+    "body1": "Die Netresearch DTT GmbH veröffentlicht Agent Skills für TYPO3, Softwareentwicklung und Teamabläufe. Jeder Eintrag führt zum Repository, in dem die Anweisungen und Werkzeuge gepflegt werden.",
+    "body2": "Das Quell-README beschreibt das jeweilige Paket. Prüfe dort die Werkzeuge, Zugriffsrechte und Installationshinweise für dein Projekt."
   },
   "howItWorks": {
-    "h2": "So wird's eingesetzt",
+    "h2": "So installierst du ein Paket",
     "steps": [
-      { "title": "1. Marketplace hinzufügen", "code": "/plugin marketplace add netresearch/claude-code-marketplace" },
-      { "title": "2. Skill installieren", "code": "/plugin install typo3-conformance@netresearch-claude-code-marketplace" },
-      { "title": "3. Oder aus jedem anderen Agent", "code": "npx skills add https://github.com/netresearch/typo3-conformance-skill --skill typo3-conformance" }
+      {
+        "title": "1. Marketplace in Claude Code hinzufügen",
+        "code": "/plugin marketplace add netresearch/claude-code-marketplace"
+      },
+      {
+        "title": "2. Gewünschtes Plugin installieren",
+        "code": "/plugin install typo3-conformance@netresearch-claude-code-marketplace"
+      },
+      {
+        "title": "Alternative: Skill mit npx installieren",
+        "code": "npx skills add https://github.com/netresearch/typo3-conformance-skill --skill typo3-conformance"
+      }
     ]
   },
   "openStandard": {
-    "h2": "Offener Standard",
-    "body": "Gebaut auf der Agent-Skills-Spec — portabel zwischen Claude Code, Cursor, GitHub Copilot, OpenAI Codex, Gemini CLI, Amp, Goose, Roo Code, OpenCode und 30+ weiteren Agents.",
-    "link": "Spec auf agentskills.io lesen"
+    "h2": "Offenes Format",
+    "body": "Die Anweisungen folgen dem Agent-Skills-Format. Claude Code, Cursor, GitHub Copilot, Codex, Gemini CLI und weitere Agents unterstützen es. Zusätzliche Hooks, Befehle und Laufzeitwerkzeuge hängen vom Paket und vom Installer ab.",
+    "link": "Agent-Skills-Spezifikation lesen"
   },
   "cta": {
-    "h2": "Nutzen. Verbessern. Forken.",
+    "h2": "Quellen ansehen und mitarbeiten",
     "links": {
-      "star": "Repo starren",
-      "issue": "Issue eröffnen",
-      "contribute": "Eigenen Katalog forken"
+      "star": "Repository auf GitHub ansehen",
+      "issue": "Problem melden",
+      "contribute": "Eigenen Katalog erstellen"
     }
   },
   "footer": {
     "maintained": "Gepflegt von der Netresearch DTT GmbH, Leipzig.",
-    "license": "Marketplace-Katalog: MIT. Skill-Inhalte: CC-BY-SA-4.0."
+    "license": "Marketplace-Katalog: MIT. Für Skills gilt die Lizenz des jeweiligen Quell-Repositories.",
+    "licenseLink": "Lizenz",
+    "commitsLink": "Letzte Änderungen"
   },
   "ui": {
     "copyShort": "Kopieren",
     "copyCopied": "Kopiert",
-    "installMethodLegend": "Installation via",
-    "installMethodSrAnnounce": "Alle Install-Befehle nutzen jetzt {label}.",
-    "moreInstallMethods": "Weitere Installmethoden",
+    "installMethodLegend": "Installationsweg",
+    "installMethodSrAnnounce": "Die Installationsbefehle verwenden jetzt {label}.",
+    "moreInstallMethods": "Alle Installationswege",
     "viewOnSkillsSh": "Auch auf skills.sh",
     "searchLabel": "Skills durchsuchen",
     "searchPlaceholder": "Skill finden — z. B. „typo3“, „docker“, „jira“…",
     "searchClear": "Suche zurücksetzen",
-    "searchResults": "{count} Skills passen",
-    "searchNoResults": "Keine passenden Skills. Versuche einen kürzeren Begriff."
+    "searchResults": "{count} passende Einträge",
+    "searchNoResults": "Keine passenden Einträge. Versuche einen kürzeren Suchbegriff.",
+    "searchError": "Suche derzeit nicht verfügbar. Alle Skills bleiben sichtbar.",
+    "copyFailed": "Kopieren fehlgeschlagen. Befehl bitte manuell kopieren.",
+    "copyPrompt": "Installationsbefehl kopieren:",
+    "categoryLabel": "Kategorie",
+    "valueTypeLabel": "Art des Nutzens",
+    "installCommandsLabel": "Installationsbefehle",
+    "installUnavailable": "Für dieses Paket nicht verfügbar"
   },
   "skill": {
     "install": "Installation",
-    "installLead": "Nimm den Weg, der zu deinem Projekt passt — alle führen zum selben Skill.",
-    "copyInstall": "Install-Befehl kopieren",
-    "latestVersion": "Letztes Release",
-    "altInstall": "Oder in einem beliebigen Agent-Skills-kompatiblen CLI:",
-    "useCases": "Wofür du den Skill einsetzt",
-    "expectedOutputs": "Was du zurück­bekommst",
-    "contextRequirements": "Was der Skill im Projekt erwartet",
+    "installLead": "Wähle einen unterstützten Installationsweg. Paketumfang, Einbindung in den Agent und benötigte Laufzeitwerkzeuge können sich unterscheiden.",
+    "copyInstall": "Installationsbefehl kopieren",
+    "latestVersion": "Neuestes Release",
+    "altInstall": "Skill-Anweisungen mit dem skills-Installer installieren:",
+    "useCases": "Wofür du das Paket einsetzt",
+    "expectedOutputs": "Ergebnisse und Beispiele",
+    "contextRequirements": "Voraussetzungen im Projekt",
     "relatedSkills": "Verwandte Skills",
-    "noRelated": "Aktuell keine eng verwandten Skills im Marketplace — wirf einen Blick in den Gesamt­katalog.",
+    "noRelated": "Im Katalog sind noch keine eng verwandten Pakete verknüpft.",
     "tags": "Tags",
     "viewSource": "Quell-Repository öffnen",
-    "viewReadme": "Vollständiges README"
+    "viewReadme": "Quell-README lesen",
+    "sourceGuidance": "Aktuelle Beispiele, Voraussetzungen und Grenzen stehen im Quell-README.",
+    "requirementsCoverage": "Angaben aus der Quelldokumentation"
+  },
+  "notFound": {
+    "title": "Seite nicht gefunden — Netresearch Skills Marketplace",
+    "description": "Diese Adresse existiert nicht. Der Skill-Katalog ist auf Deutsch und Englisch verfügbar.",
+    "heading": "Seite nicht gefunden",
+    "lead": "Diese Adresse existiert nicht. Im Katalog findest du die verfügbaren Pakete.",
+    "catalogLink": "Katalog auf Deutsch ansehen"
   }
 }

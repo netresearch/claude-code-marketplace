@@ -17,7 +17,6 @@
   "netresearch-branding": "Netresearch Branding",
   "agent-rules": "Agent Rules",
   "agent-harness": "Agent Harness",
-  "agents": "Agents",
   "cli-tools": "CLI Tools",
   "go-development": "Go Development",
   "php-modernization": "PHP Modernization",
@@ -35,9 +34,10 @@
   "context7": "Context7",
   "data-tools": "Data Tools",
   "file-search": "File Search",
-  "coach": "Coach",
   "retro": "Retro",
   "german-technical-writing": "German Technical Writing",
   "peer-qa-review": "Peer QA Review",
-  "markdown-to-pdf": "Markdown to PDF"
+  "markdown-to-pdf": "Markdown to PDF",
+  "typo3-site-conformance": "TYPO3 Site Conformance",
+  "jujutsu-workflow": "Jujutsu Workflow"
 }

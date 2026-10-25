@@ -11,17 +11,19 @@
     "check:categories": "node scripts/check-categories.js",
     "check:seo": "node scripts/check-seo-copy.js",
     "check:hreflang": "node scripts/check-hreflang.js",
-    "check": "npm run check:categories && npm run check:orphans && npm run check:seo && npm run check:install",
+    "check": "npm run check:categories && npm run check:orphans && npm run check:seo && npm run check:metadata && npm run test:unit",
     "test:visual": "playwright test",
     "test:visual:update": "playwright test --update-snapshots",
     "prebuild": "npm run check:categories && npm run og:generate",
     "build:once": "eleventy",
     "build": "npm run build:once",
-    "build:all": "npm run fetch:readmes && npm run check && npm run build:once && npm run check:hreflang",
+    "build:all": "npm run fetch:readmes && npm run og:generate && npm run check && npm run build:once && npm run check:hreflang",
     "dev": "eleventy --serve --port=8080",
     "preview": "npx http-server _site -p 8080 -c-1",
     "clean": "rm -rf _site",
-    "check:install": "node --test tests/install-methods.test.js"
+    "check:install": "node --test tests/install-methods.test.js",
+    "test:unit": "node --test tests/*.test.js",
+    "check:metadata": "node scripts/check-catalog-metadata.js"
   },
   "devDependencies": {
     "@11ty/eleventy": "^3.0.0",

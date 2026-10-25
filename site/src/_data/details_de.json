@@ -1,0 +1,920 @@
+{
+  "_doc": "Curated German marketplace presentation, independently authored from source README snapshots. These summaries do not define skill runtime behavior. Missing source sections use explicit German source guidance.",
+  "_provenance": {
+    "reviewedAt": "2026-10-25",
+    "marketplaceBaseCommit": "aaa5e7deafc587ea16007b448d6928ed437535b5",
+    "reason": "Prevent English fallback on German pages while retaining source-owned facts. Hashes identify the reviewed README snapshot exported by jq -r .raw; they are audit provenance, not a build freshness lock."
+  },
+  "enterprise-readiness": {
+    "useCases": [
+      "Ein Projekt auf passende Sicherheits-, Qualitäts- und Release-Anforderungen prüfen.",
+      "Prüfungen für Lieferketten, SBOMs, Signaturen und Qualitätskriterien vorbereiten."
+    ],
+    "expectedOutputs": [
+      "Eine Bewertung von Projektsicherheit, Lieferketten-Kontrollen und Qualitätskriterien mit Empfehlungen für die ausgewählten Standards."
+    ],
+    "contextRequirements": [
+      "Die Voraussetzungen sind hier nicht gesondert zusammengefasst. [Werkzeuge und Projektzugriffe im Quell-README prüfen](https://github.com/netresearch/enterprise-readiness-skill#readme)."
+    ],
+    "provenance": {
+      "reviewedAt": "2026-10-25",
+      "sourceUrl": "https://github.com/netresearch/enterprise-readiness-skill#readme",
+      "sourceSnapshotSha256": "bf95aa64a344e13a8acaefd3ab7e71bda5f13bd3b6c1156373d2b71d0f058ecd",
+      "basis": {
+        "useCases": "Features, Usage",
+        "expectedOutputs": "Features, Usage / Example Prompts",
+        "contextRequirements": "Source guidance: no complete prerequisite summary adopted"
+      }
+    }
+  },
+  "typo3-docs": {
+    "useCases": [
+      "Dokumentationslücken einer TYPO3-Extension bestimmen und Inhalte aufbauen.",
+      "Dokumentation lokal rendern, prüfen und die Veröffentlichung auf docs.typo3.org vorbereiten."
+    ],
+    "expectedOutputs": [
+      "TYPO3-Dokumentation in reStructuredText, eine Lückenanalyse und Ergebnisse des lokalen Renderings oder der Validierung, je nach Auftrag."
+    ],
+    "contextRequirements": [
+      "Je nach Skript werden Bash, Git, PHP, Python, jq oder weitere im Quell-README genannte Werkzeuge benötigt; lokales Rendering verwendet Docker.",
+      "Für die beschriebene Intercept-Veröffentlichung: TER-Eintrag mit Git-Repository-Verweis und eine gültige Documentation-Struktur. Diese Voraussetzungen gelten für die Veröffentlichung, nicht für jede redaktionelle Arbeit."
+    ],
+    "provenance": {
+      "reviewedAt": "2026-10-25",
+      "sourceUrl": "https://github.com/netresearch/typo3-docs-skill#readme",
+      "sourceSnapshotSha256": "9866d1064500f4fc6f3e21cdcc79ffd48325bfaae8970086eab8a554e8955e08",
+      "basis": {
+        "useCases": "Overview, Features, Usage",
+        "expectedOutputs": "Overview, Features, Contents / scripts",
+        "contextRequirements": "Automatic Documentation Deployment / Prerequisites, Dependencies"
+      }
+    }
+  },
+  "typo3-testing": {
+    "useCases": [
+      "Unit-, Functional- und E2E-Tests für TYPO3-Extensions aufbauen.",
+      "Testkonfiguration, Hilfsskripte und CI-Einbindung prüfen und passende Testarten wählen."
+    ],
+    "expectedOutputs": [
+      "Unit-, Functional- oder Browser-Tests mit den benötigten Fixtures, der Testkonfiguration und einer CI-Einbindung für den gewählten Prüfumfang."
+    ],
+    "contextRequirements": [
+      "Das Requirements-Kapitel des eingefrorenen Quell-README nennt PHP 8.1+, Composer und TYPO3 v12 oder v13.",
+      "Für Functional-Tests ist dort Docker genannt, für E2E-Tests Node.js 22.18+. Vor dem Einsatz die versionsspezifischen Vorgaben der aktuellen Quelle prüfen."
+    ],
+    "provenance": {
+      "reviewedAt": "2026-10-25",
+      "sourceUrl": "https://github.com/netresearch/typo3-testing-skill#readme",
+      "sourceSnapshotSha256": "11d9ef233edbfb6c80ad3206e5cf8cb9832645fbc1888a119aa7ffcc849d7eb4",
+      "basis": {
+        "useCases": "Features, Test Types",
+        "expectedOutputs": "Features, Quick Start",
+        "contextRequirements": "Requirements (version scope retained without widening), Dependencies"
+      }
+    }
+  },
+  "typo3-ddev": {
+    "useCases": [
+      "DDEV für eine vorhandene TYPO3-Extension einrichten.",
+      "Lokale TYPO3-Installationen aus Extension-Metadaten vorbereiten und die Umgebung starten."
+    ],
+    "expectedOutputs": [
+      "Eine auf die Extension abgestimmte .ddev-Konfiguration mit Webserver- und Installationsdateien.",
+      "Anleitung zum Start der Umgebung und zur TYPO3-Installation; die erzeugte Konfiguration ist vor der Nutzung zu prüfen."
+    ],
+    "contextRequirements": [
+      "Installiertes DDEV und laufendes Docker.",
+      "Ein TYPO3-Extension-Projekt mit ext_emconf.php oder composer.json und ein Agent mit Skill-Unterstützung."
+    ],
+    "provenance": {
+      "reviewedAt": "2026-10-25",
+      "sourceUrl": "https://github.com/netresearch/typo3-ddev-skill#readme",
+      "sourceSnapshotSha256": "2c3463a26abd7226168961eb93b03521f35fcbdc39a25d84c9116a1f81bd496c",
+      "basis": {
+        "useCases": "Overview, Usage",
+        "expectedOutputs": "Usage / What You'll Get",
+        "contextRequirements": "Prerequisites"
+      }
+    }
+  },
+  "typo3-core-contributions": {
+    "useCases": [
+      "Einen TYPO3-Core-Beitrag von der Vorbereitung bis zum Gerrit-Review bearbeiten.",
+      "Lokale Entwicklungsumgebung, Tests und die Metadaten des Beitrags prüfen."
+    ],
+    "expectedOutputs": [
+      "Ein vorbereiteter TYPO3-Core-Patch mit passender Commit-Nachricht und Prüfungen vor der Einreichung oder eine Diagnose einer fehlgeschlagenen Beitrags-Pipeline."
+    ],
+    "contextRequirements": [
+      "Git mit der TYPO3.org-E-Mail-Adresse und ein bei review.typo3.org hinterlegter SSH-Schlüssel.",
+      "Docker für DDEV oder eine native PHP-Umgebung ab Version 8.2; die konkrete Aufgabe kann weitere im Quell-README genannte Werkzeuge benötigen."
+    ],
+    "provenance": {
+      "reviewedAt": "2026-10-25",
+      "sourceUrl": "https://github.com/netresearch/typo3-core-contributions-skill#readme",
+      "sourceSnapshotSha256": "3fac1df800e60af8540a5eeab8e7d6f968091f4fb430396fb09a158b9baa5396",
+      "basis": {
+        "useCases": "Overview, Features, Quick Start",
+        "expectedOutputs": "Overview, Features, Key Workflows",
+        "contextRequirements": "Quick Start / Prerequisites, Dependencies"
+      }
+    }
+  },
+  "typo3-conformance": {
+    "useCases": [
+      "Struktur, Architektur, Codingstandards und Testaufbau einer TYPO3-Extension prüfen.",
+      "Befunde anhand der dokumentierten Prüfbereiche priorisieren und passende Werkzeuge auswählen."
+    ],
+    "expectedOutputs": [
+      "Ein Konformitätsbericht zur Extension mit einer Übersicht und einer Maßnahmenliste für die durchgeführten Prüfungen."
+    ],
+    "contextRequirements": [
+      "Die Voraussetzungen sind hier nicht gesondert zusammengefasst. [Werkzeuge und Projektzugriffe im Quell-README prüfen](https://github.com/netresearch/typo3-conformance-skill#readme)."
+    ],
+    "provenance": {
+      "reviewedAt": "2026-10-25",
+      "sourceUrl": "https://github.com/netresearch/typo3-conformance-skill#readme",
+      "sourceSnapshotSha256": "12ab50d957c657f8ad46075970f0b5f6cab83e47f54ca2d71abd2dbd6800079a",
+      "basis": {
+        "useCases": "Overview, Features, Conformance Areas",
+        "expectedOutputs": "Contributing / Tests: check-conformance.sh and generate-report.sh",
+        "contextRequirements": "Source guidance: no complete prerequisite summary adopted"
+      }
+    }
+  },
+  "typo3-site-conformance": {
+    "useCases": [
+      "Ein TYPO3-Projekt mit Composer-Typ project und Docker-Compose-Konfiguration prüfen.",
+      "Container, CI, Lieferkette und Site-Konfiguration untersuchen oder eine Migration zum dokumentierten Projektaufbau planen."
+    ],
+    "expectedOutputs": [
+      "Ein Urteil je Regelfamilie mit Datei- und Zeilenbelegen für Struktur, Container, CI, Deployment, Abhängigkeiten, Sicherheit und Dokumentation.",
+      "Eine priorisierte Liste der Korrekturen; bei Migrationen den dokumentierten Plan mit sieben Umstellungen."
+    ],
+    "contextRequirements": [
+      "Lesezugriff auf Composer-, Docker-, Compose-, CI- und TYPO3-Konfiguration sowie AGENTS.md des Zielprojekts.",
+      "Python 3 und PyYAML für den Checker. Git wird für zusätzliche Prüfungen genutzt, wenn es vorhanden ist."
+    ],
+    "provenance": {
+      "reviewedAt": "2026-10-25",
+      "sourceUrl": "https://github.com/netresearch/typo3-site-conformance-skill#readme",
+      "sourceSnapshotSha256": "e7fefa6074a87130ee6363558b7b09e81fde5cb4604ff536f31c9942ca784572",
+      "basis": {
+        "useCases": "Use when",
+        "expectedOutputs": "Expected outputs",
+        "contextRequirements": "Context requirements, Dependencies"
+      }
+    }
+  },
+  "netresearch-branding": {
+    "useCases": [
+      "Netresearch-Farben, Typografie und Gestaltungsvorgaben in Beiträgen oder Oberflächen anwenden.",
+      "Vorlagen für Webseiten, Komponenten und soziale Medien passend zur Marke auswählen."
+    ],
+    "expectedOutputs": [
+      "Seiten- oder Komponentenentwürfe, HTML/CSS-Beispiele und Empfehlungen aus der Markenprüfung für das gewählte Netresearch-Profil."
+    ],
+    "contextRequirements": [
+      "Die Voraussetzungen sind hier nicht gesondert zusammengefasst. [Werkzeuge und Projektzugriffe im Quell-README prüfen](https://github.com/netresearch/netresearch-branding-skill#readme)."
+    ],
+    "provenance": {
+      "reviewedAt": "2026-10-25",
+      "sourceUrl": "https://github.com/netresearch/netresearch-branding-skill#readme",
+      "sourceSnapshotSha256": "b7a79614e37fa0fcae2d5384aaae20e3ee94650aa3bd407332c011a281c5af3e",
+      "basis": {
+        "useCases": "Why this skill is public, Overview, Features",
+        "expectedOutputs": "Features, Usage / Example Workflows, Quality Checklist",
+        "contextRequirements": "Source guidance: no complete prerequisite summary adopted"
+      }
+    }
+  },
+  "agent-rules": {
+    "useCases": [
+      "AGENTS.md und weitere Agent-Regeldateien aus belegbaren Projektinformationen erstellen.",
+      "Anweisungen für einzelne Verzeichnisse pflegen und an vorhandene Konventionen anpassen."
+    ],
+    "expectedOutputs": [
+      "Eine kompakte AGENTS.md im Projektstamm und Regeln für Teilbereiche mit Befehlen und Konventionen aus den Projektmetadaten."
+    ],
+    "contextRequirements": [
+      "Die Voraussetzungen sind hier nicht gesondert zusammengefasst. [Werkzeuge und Projektzugriffe im Quell-README prüfen](https://github.com/netresearch/agent-rules-skill#readme)."
+    ],
+    "provenance": {
+      "reviewedAt": "2026-10-25",
+      "sourceUrl": "https://github.com/netresearch/agent-rules-skill#readme",
+      "sourceSnapshotSha256": "b9f14e810ab50859a3a815a54f8481a10a4937c565b397d349aedf687cc8a16f",
+      "basis": {
+        "useCases": "Features, Usage",
+        "expectedOutputs": "Features, Supported Projects",
+        "contextRequirements": "Source guidance: no complete prerequisite summary adopted"
+      }
+    }
+  },
+  "agent-harness": {
+    "useCases": [
+      "Projektanweisungen, verlinkte Dokumentation und technische Prüfmechanismen auf Widersprüche prüfen.",
+      "Fehlende AGENTS.md-Struktur, Hooks oder CI-Prüfungen gezielt ergänzen."
+    ],
+    "expectedOutputs": [
+      "Eine Bewertung der Harness-Konsistenz oder fehlende Projektartefakte wie ein AGENTS.md-Index, Dokumentation, Hooks und eine CI-Prüfung."
+    ],
+    "contextRequirements": [
+      "Die Voraussetzungen sind hier nicht gesondert zusammengefasst. [Werkzeuge und Projektzugriffe im Quell-README prüfen](https://github.com/netresearch/agent-harness-skill#readme)."
+    ],
+    "provenance": {
+      "reviewedAt": "2026-10-25",
+      "sourceUrl": "https://github.com/netresearch/agent-harness-skill#readme",
+      "sourceSnapshotSha256": "f3db402672291048814ce2f107e5e955d7dcac565a1b65b5d594927a6b038035",
+      "basis": {
+        "useCases": "What is Agent Harness?, Usage",
+        "expectedOutputs": "What is Agent Harness?, Usage, Maturity Levels",
+        "contextRequirements": "Source guidance: no complete prerequisite summary adopted"
+      }
+    }
+  },
+  "cli-tools": {
+    "useCases": [
+      "Installierte CLI-Werkzeuge mit aktuellen Versionen aus ihren Bezugsquellen vergleichen.",
+      "Fehlende oder veraltete Werkzeuge erkennen und die bereitgestellten Installationsskripte gezielt einsetzen."
+    ],
+    "expectedOutputs": [
+      "Tabelle oder JSON-Bericht mit Werkzeug, installierter und verfügbarer Version, Installationsweg und Status."
+    ],
+    "contextRequirements": [
+      "Für den Python-Audit: Python 3.14+ und Netzwerkzugriff auf GitHub, PyPI, crates.io oder npm.",
+      "Die Shell-Skripte benötigen Bash und jq; der Python-Audit nutzt die im Quell-README beschriebene uv-Umgebung."
+    ],
+    "provenance": {
+      "reviewedAt": "2026-10-25",
+      "sourceUrl": "https://github.com/netresearch/coding_agent_cli_toolset#readme",
+      "sourceSnapshotSha256": "e4a0fff67f9b35e22e992bc1033876b26b59db57864a6b2050e102f4028ffca4",
+      "basis": {
+        "useCases": "Primary Use Case: AI coding agent readiness, Claude Code plugin",
+        "expectedOutputs": "Output Format",
+        "contextRequirements": "Requirements, Claude Code plugin"
+      }
+    }
+  },
+  "typo3-extension-upgrade": {
+    "useCases": [
+      "TYPO3-Extension-Code für eine neuere LTS-Version prüfen und migrieren.",
+      "Extension Scanner, Rector, Fractor, PHPStan und Tests je nach Änderung kombinieren; Upgrades ganzer Instanzen gehören zum Schwesterpaket."
+    ],
+    "expectedOutputs": [
+      "Migrierter Extension-Code und angepasste Konfiguration sowie Ergebnisse von Scanner, statischer Analyse und Tests für das angestrebte TYPO3-Upgrade."
+    ],
+    "contextRequirements": [
+      "Die Voraussetzungen sind hier nicht gesondert zusammengefasst. [Werkzeuge und Projektzugriffe im Quell-README prüfen](https://github.com/netresearch/typo3-extension-upgrade-skill#readme)."
+    ],
+    "provenance": {
+      "reviewedAt": "2026-10-25",
+      "sourceUrl": "https://github.com/netresearch/typo3-extension-upgrade-skill#readme",
+      "sourceSnapshotSha256": "e301cdcb3ea99df9d28a557c512b51c0b343b61fbdb847c32f169f23fce434c4",
+      "basis": {
+        "useCases": "Overview, Scope, Supported Upgrade Paths",
+        "expectedOutputs": "Overview, Scope, Usage",
+        "contextRequirements": "Source guidance: no complete prerequisite summary adopted"
+      }
+    }
+  },
+  "go-development": {
+    "useCases": [
+      "Go-Anwendungen mit passenden Architektur-, Fehlerbehandlungs- und Testmustern entwickeln.",
+      "Jobplanung mit go-cron, Docker- oder LDAP-Anbindungen und Nebenläufigkeit bearbeiten."
+    ],
+    "expectedOutputs": [
+      "Go-Service- oder Integrationscode und Tests für die gewählte Aufgabe mit Zeitplanung, Ausfallsicherheit, Docker oder LDAP."
+    ],
+    "contextRequirements": [
+      "Die Voraussetzungen sind hier nicht gesondert zusammengefasst. [Werkzeuge und Projektzugriffe im Quell-README prüfen](https://github.com/netresearch/go-development-skill#readme)."
+    ],
+    "provenance": {
+      "reviewedAt": "2026-10-25",
+      "sourceUrl": "https://github.com/netresearch/go-development-skill#readme",
+      "sourceSnapshotSha256": "76237bd19d70c569fdacf03bc9b56432d78dead0de69b9192982f537dd6bd063",
+      "basis": {
+        "useCases": "Features, Expertise Areas",
+        "expectedOutputs": "Features, Usage / Example queries",
+        "contextRequirements": "Source guidance: no complete prerequisite summary adopted"
+      }
+    }
+  },
+  "php-modernization": {
+    "useCases": [
+      "Ein PHP-Projekt profilieren und passende Modernisierungs- oder Prüfaufgaben bestimmen.",
+      "Typsicherheit, Codingstandards, PHPStan, Rector und weitere Projektwerkzeuge mit ihren jeweiligen Grenzen einsetzen."
+    ],
+    "expectedOutputs": [
+      "Strukturierte Prüfberichte als JSON, SARIF oder JUnit XML mit maschinenlesbaren Handlungsempfehlungen."
+    ],
+    "contextRequirements": [
+      "Die Python-Werkzeuge benötigen Python 3.11+; uv ist ein empfohlener Runner, keine Pflichtabhängigkeit.",
+      "PHP-Werkzeuge wie PHPStan, Rector und PHP-CS-Fixer müssen im untersuchten Projekt vorhanden sein; der Skill installiert sie nicht als eigene Laufzeitabhängigkeiten."
+    ],
+    "provenance": {
+      "reviewedAt": "2026-10-25",
+      "sourceUrl": "https://github.com/netresearch/php-modernization-skill#readme",
+      "sourceSnapshotSha256": "09202aa5726b9d5f323324e490eedb0e1b207ddf67151bdd263e7d1f61e30b75",
+      "basis": {
+        "useCases": "Features, Agent Contract",
+        "expectedOutputs": "Agent Contract, Output formats",
+        "contextRequirements": "Dependencies"
+      }
+    }
+  },
+  "php-structured-edit": {
+    "useCases": [
+      "PHP-Symbole gezielt auswählen und zusammengehörige Änderungen über mehrere Dateien ausführen.",
+      "Veraltete Quellstände und mehrdeutige Ziele vor dem Schreiben erkennen; anschließend Diff und passende Projekttests prüfen."
+    ],
+    "expectedOutputs": [
+      "Eine durch Ziel- und Hash-Prüfungen abgesicherte Änderung, ein Diff und getrennte Ergebnisse für Parser, Lint und konfigurierte Projektprüfungen.",
+      "Inspektionsaufrufe liefern Knoteninformationen und Quell-Hash; abgelehnte Aufträge liefern maschinenlesbare Fehler."
+    ],
+    "contextRequirements": [
+      "Gewünschte Änderung und gegebenenfalls den Quellstand angeben, aus dem die Ziele gewählt wurden; die Arbeitskopie muss beschreibbar sein.",
+      "Die Engine benötigt PHP 8.2+, JSON- und Tokenizer-Erweiterungen sowie nikic/php-parser. Eine reine Skill-Installation richtet die Engine nicht automatisch ein.",
+      "Projektformatierung und Prüfkommandos sind optional konfigurierbar. Für projektweite Methoden-Renames gilt die separate Resolver-Anleitung."
+    ],
+    "provenance": {
+      "reviewedAt": "2026-10-25",
+      "sourceUrl": "https://github.com/netresearch/php-ast-edit-skill#readme",
+      "sourceSnapshotSha256": "1d1b0e0ab118fe1fb8d3191e6fa2d1e8e89f6ae88fbcb3aeb7bbef139e00f4d6",
+      "basis": {
+        "useCases": "Use when, Guarantees and limits",
+        "expectedOutputs": "Expected outputs",
+        "contextRequirements": "Context requirements, Installation, Dependencies"
+      }
+    }
+  },
+  "security-audit": {
+    "useCases": [
+      "PHP-Anwendungen auf typische Schwachstellen wie Injection, XSS, CSRF oder unsichere Dateiverarbeitung prüfen.",
+      "Befunde mit Risikobewertung, Nachweisen und passenden Maßnahmen dokumentieren."
+    ],
+    "expectedOutputs": [
+      "Sicherheitsbefunde mit Risikobewertung und Empfehlungen zur Behebung für den geprüften Code und die konfigurierten Prüfungen."
+    ],
+    "contextRequirements": [
+      "Die Voraussetzungen sind hier nicht gesondert zusammengefasst. [Werkzeuge und Projektzugriffe im Quell-README prüfen](https://github.com/netresearch/security-audit-skill#readme)."
+    ],
+    "provenance": {
+      "reviewedAt": "2026-10-25",
+      "sourceUrl": "https://github.com/netresearch/security-audit-skill#readme",
+      "sourceSnapshotSha256": "4faad34df452d3746efaaee9384ec6acec1be1b67149d160ce475c1f76d07ada",
+      "basis": {
+        "useCases": "Features, Expertise Areas",
+        "expectedOutputs": "Features, Usage / Example queries",
+        "contextRequirements": "Source guidance: no complete prerequisite summary adopted"
+      }
+    }
+  },
+  "typo3-ckeditor5": {
+    "useCases": [
+      "Eigene CKEditor-5-Plugins und passende Schema- oder Konvertierungsregeln entwickeln.",
+      "TYPO3-RTE-Konfigurationen prüfen oder Anpassungen von CKEditor 4 auf 5 migrieren."
+    ],
+    "expectedOutputs": [
+      "CKEditor-5-Plugin-Code, YAML-RTE-Vorgaben oder Migrationsänderungen für die gewünschte TYPO3-Editor-Integration."
+    ],
+    "contextRequirements": [
+      "Die Voraussetzungen sind hier nicht gesondert zusammengefasst. [Werkzeuge und Projektzugriffe im Quell-README prüfen](https://github.com/netresearch/typo3-ckeditor5-skill#readme)."
+    ],
+    "provenance": {
+      "reviewedAt": "2026-10-25",
+      "sourceUrl": "https://github.com/netresearch/typo3-ckeditor5-skill#readme",
+      "sourceSnapshotSha256": "c686a7e90f11b918ec45f9b4b45a78188e9bea0e11b1a9af623ef3d15bfc6d2c",
+      "basis": {
+        "useCases": "Features, Expertise Areas",
+        "expectedOutputs": "Features, Usage / Example queries",
+        "contextRequirements": "Source guidance: no complete prerequisite summary adopted"
+      }
+    }
+  },
+  "git-workflow": {
+    "useCases": [
+      "Branch-, Commit- und Pull-Request-Abläufe für das Team festlegen.",
+      "Änderungen für Reviews vorbereiten und Konflikte oder missglückte Git-Operationen bearbeiten."
+    ],
+    "expectedOutputs": [
+      "Anpassungen an Branch-, Commit-, Hook- oder Pull-Request-Abläufen mit Review- und CI-Nachweisen für die beauftragte Git-Aufgabe."
+    ],
+    "contextRequirements": [
+      "Die Voraussetzungen sind hier nicht gesondert zusammengefasst. [Werkzeuge und Projektzugriffe im Quell-README prüfen](https://github.com/netresearch/git-workflow-skill#readme)."
+    ],
+    "provenance": {
+      "reviewedAt": "2026-10-25",
+      "sourceUrl": "https://github.com/netresearch/git-workflow-skill#readme",
+      "sourceSnapshotSha256": "ebea632c1fbfcf2be43bdc582405dac38cf0a6f8a09e4839047d98017b9e9334",
+      "basis": {
+        "useCases": "Features, Expertise Areas",
+        "expectedOutputs": "Features, Usage, Commands / pr-finish",
+        "contextRequirements": "Source guidance: no complete prerequisite summary adopted"
+      }
+    }
+  },
+  "github-project": {
+    "useCases": [
+      "GitHub-Repositories mit Branch-Schutz, CODEOWNERS und passenden Zusammenarbeitseinstellungen einrichten.",
+      "Issues, Pull Requests, Review-Threads und Aktualisierungen durch Dependabot oder Renovate verwalten."
+    ],
+    "expectedOutputs": [
+      "Eine GitHub-Repository-Konfiguration oder Änderungen an Issue- und Review-Abläufen für die gewünschte Plattformaufgabe."
+    ],
+    "contextRequirements": [
+      "Die Voraussetzungen sind hier nicht gesondert zusammengefasst. [Werkzeuge und Projektzugriffe im Quell-README prüfen](https://github.com/netresearch/github-project-skill#readme)."
+    ],
+    "provenance": {
+      "reviewedAt": "2026-10-25",
+      "sourceUrl": "https://github.com/netresearch/github-project-skill#readme",
+      "sourceSnapshotSha256": "3e46c42ed8df61b35993fcf02d4e24e82e3939065e69b72e3f4d593fdce55454",
+      "basis": {
+        "useCases": "Scope Boundaries, Triggers, Workflows",
+        "expectedOutputs": "Scope Boundaries, Triggers",
+        "contextRequirements": "Source guidance: no complete prerequisite summary adopted"
+      }
+    }
+  },
+  "jujutsu-workflow": {
+    "useCases": [
+      "Lokale Änderungen mit jj organisieren, trennen und bei Bedarf über das Operation Log wiederherstellen.",
+      "Änderungen als Git-sichtbare Branches oder Bookmarks an Pull Requests und CI übergeben."
+    ],
+    "expectedOutputs": [
+      "Mit jj beschriebene oder gespeicherte Änderungen, getrennt von nicht zugehöriger Arbeit.",
+      "Ein Git-sichtbarer Branch oder Bookmark für die Übergabe an ein Review.",
+      "Ein Abschlussbericht zum Zustand von jj und Git sowie zu den tatsächlich ausgeführten Prüfungen."
+    ],
+    "contextRequirements": [
+      "Ein Git-basiertes Repository mit lokal installiertem Jujutsu; eine gemeinsame jj-/Git-Arbeitskopie wird bevorzugt.",
+      "Branch-Schutz, CODEOWNERS, Commit-Konventionen, Signaturen und CI-Regeln des Projekts gelten weiter.",
+      "Externe Zugriffe beschränken sich auf das Git-Remote, das das Projekt bereits verwendet."
+    ],
+    "provenance": {
+      "reviewedAt": "2026-10-25",
+      "sourceUrl": "https://github.com/netresearch/jujutsu-workflow-skill#readme",
+      "sourceSnapshotSha256": "6ee3660931fc5f91718464f9c48f87b1e82879627da5245dfb7309843a826130",
+      "basis": {
+        "useCases": "Use when",
+        "expectedOutputs": "Expected outputs",
+        "contextRequirements": "Context requirements"
+      }
+    }
+  },
+  "skill-repo": {
+    "useCases": [
+      "Ein Skill-Repository mit passenden Manifesten, Lizenzen und Prüfungen aufbauen.",
+      "Bestehende Skill-Pakete auf Struktur- oder Veröffentlichungsfehler prüfen."
+    ],
+    "expectedOutputs": [
+      "Dokumentierte Verzeichnisstruktur und Vorlagen für neue Skill-Repositories.",
+      "Strukturprüfungen für SKILL.md, Lizenzen und Manifeste sowie Hinweise für tagbasierte Releases."
+    ],
+    "contextRequirements": [
+      "Für den Validator: Bash 4.3+ und Python 3.11+ im PATH.",
+      "Die Anleitung richtet sich an GitHub-Repositories mit Netresearch-Konventionen, getrennten Lizenzen und Composer-Typ ai-agent-skill.",
+      "Die CI-Einbindung verwendet die im Quell-Repository angebotenen wiederverwendbaren Workflows."
+    ],
+    "provenance": {
+      "reviewedAt": "2026-10-25",
+      "sourceUrl": "https://github.com/netresearch/skill-repo-skill#readme",
+      "sourceSnapshotSha256": "31f025d1953b4b264e94b5b6a58a25f2d7d8781921fdd2ef8868aa59d2aea7b5",
+      "basis": {
+        "useCases": "Use when",
+        "expectedOutputs": "Expected outputs",
+        "contextRequirements": "Context requirements"
+      }
+    }
+  },
+  "jira-integration": {
+    "useCases": [
+      "Jira-Tickets, Worklogs und weitere Vorgänge über den Skill jira-communication bearbeiten.",
+      "Jira-Beschreibungen und Kommentare mit dem getrennten Skill jira-syntax formatieren und prüfen."
+    ],
+    "expectedOutputs": [
+      "Jira-Suchergebnisse oder freigegebene Ticketänderungen mit Beschreibungen und Kommentaren im benötigten Jira-Wiki-Format."
+    ],
+    "contextRequirements": [
+      "Die Voraussetzungen sind hier nicht gesondert zusammengefasst. [Werkzeuge und Projektzugriffe im Quell-README prüfen](https://github.com/netresearch/jira-skill#readme)."
+    ],
+    "provenance": {
+      "reviewedAt": "2026-10-25",
+      "sourceUrl": "https://github.com/netresearch/jira-skill#readme",
+      "sourceSnapshotSha256": "fc47d19c15022d7731045bff196d2c6db382551d876d6350212f0f7f5a0fb700",
+      "basis": {
+        "useCases": "Plugin Structure, Features, Quick Start",
+        "expectedOutputs": "Plugin Structure, Features, Quick Start",
+        "contextRequirements": "Source guidance: no complete prerequisite summary adopted"
+      }
+    }
+  },
+  "context7": {
+    "useCases": [
+      "Aktuelle Dokumentation einer Bibliothek über die Context7-REST-API abrufen.",
+      "Die Anfrage auf ein Thema wie Hooks, Routing oder Middleware eingrenzen."
+    ],
+    "expectedOutputs": [
+      "Aus Context7 abgerufene Bibliotheksdokumentation, eingegrenzt auf die gewünschte Bibliothek und das Thema."
+    ],
+    "contextRequirements": [
+      "Die Voraussetzungen sind hier nicht gesondert zusammengefasst. [Werkzeuge und Projektzugriffe im Quell-README prüfen](https://github.com/netresearch/context7-skill#readme)."
+    ],
+    "provenance": {
+      "reviewedAt": "2026-10-25",
+      "sourceUrl": "https://github.com/netresearch/context7-skill#readme",
+      "sourceSnapshotSha256": "d46e4ec3c092242ed3a9dacf6ed924b769b3693a748c0a5dab6a82b53be9c300",
+      "basis": {
+        "useCases": "Features, Usage",
+        "expectedOutputs": "Features, Usage",
+        "contextRequirements": "Source guidance: no complete prerequisite summary adopted"
+      }
+    }
+  },
+  "data-tools": {
+    "useCases": [
+      "JSON, YAML, TOML, XML oder CSV mit einem zum Format passenden Werkzeug abfragen und bearbeiten.",
+      "Daten konvertieren oder zusammenführen, ohne ihre Struktur durch einfache Textverarbeitung zu beschädigen."
+    ],
+    "expectedOutputs": [
+      "Abfragen, Transformationen oder Formatumwandlungen strukturierter Daten mit einem passenden Werkzeug für JSON, YAML, TOML, XML oder Tabellendaten."
+    ],
+    "contextRequirements": [
+      "Die Voraussetzungen sind hier nicht gesondert zusammengefasst. [Werkzeuge und Projektzugriffe im Quell-README prüfen](https://github.com/netresearch/data-tools-skill#readme)."
+    ],
+    "provenance": {
+      "reviewedAt": "2026-10-25",
+      "sourceUrl": "https://github.com/netresearch/data-tools-skill#readme",
+      "sourceSnapshotSha256": "5ba28401589c23d06f78837c74269281634d1870ca43194d5d39081e10347a86",
+      "basis": {
+        "useCases": "Tools Covered, Core Principle",
+        "expectedOutputs": "Tools Covered, Core Principle",
+        "contextRequirements": "Source guidance: no complete prerequisite summary adopted"
+      }
+    }
+  },
+  "concourse-ci": {
+    "useCases": [
+      "Concourse-Pipelines mit passenden Ressourcen, Jobs und Hooks aufbauen.",
+      "Container-Builds, Parallelisierung und Pipelines für mehrere Branches prüfen oder Fehler untersuchen."
+    ],
+    "expectedOutputs": [
+      "Eine Concourse-Pipeline- und Ressourcen-Konfiguration, Validierungsergebnisse oder eine Diagnose des gemeldeten Pipeline-Fehlers."
+    ],
+    "contextRequirements": [
+      "Die Voraussetzungen sind hier nicht gesondert zusammengefasst. [Werkzeuge und Projektzugriffe im Quell-README prüfen](https://github.com/netresearch/concourse-ci-skill#readme)."
+    ],
+    "provenance": {
+      "reviewedAt": "2026-10-25",
+      "sourceUrl": "https://github.com/netresearch/concourse-ci-skill#readme",
+      "sourceSnapshotSha256": "48455d7b0a70f697f683e09148f8030e29939f759aef1f46b092c2c7ff5a8bc9",
+      "basis": {
+        "useCases": "Features, Key Topics Covered",
+        "expectedOutputs": "Features, Usage, Skill Contents",
+        "contextRequirements": "Source guidance: no complete prerequisite summary adopted"
+      }
+    }
+  },
+  "docker-development": {
+    "useCases": [
+      "Dockerfiles, Compose-Konfiguration und Bake-Builds entwickeln oder prüfen.",
+      "Container in CI testen und Besonderheiten von Entrypoints, Netzwerken oder WSL berücksichtigen."
+    ],
+    "expectedOutputs": [
+      "Dockerfiles, Compose- oder Bake-Konfiguration und angepasste Container-Tests für die gewählte Build- oder Orchestrierungsaufgabe."
+    ],
+    "contextRequirements": [
+      "Die Voraussetzungen sind hier nicht gesondert zusammengefasst. [Werkzeuge und Projektzugriffe im Quell-README prüfen](https://github.com/netresearch/docker-development-skill#readme)."
+    ],
+    "provenance": {
+      "reviewedAt": "2026-10-25",
+      "sourceUrl": "https://github.com/netresearch/docker-development-skill#readme",
+      "sourceSnapshotSha256": "5e35b54482756e4b6f70cc91d69cbb4bacf502f7aa8f586616a52d0d110345ff",
+      "basis": {
+        "useCases": "Features, Skills, Key Patterns",
+        "expectedOutputs": "Features, Skills, Usage / Example Prompts",
+        "contextRequirements": "Source guidance: no complete prerequisite summary adopted"
+      }
+    }
+  },
+  "automated-assessment": {
+    "useCases": [
+      "Ein Projekt anhand passender Skill-Checkpoints systematisch prüfen.",
+      "Mechanische Prüfungen und LLM-Reviews auswerten; mit dem separaten Begleit-Skill add-checkpoints neue Checkpoints ergänzen."
+    ],
+    "expectedOutputs": [
+      "Strukturierte Prüfergebnisse mit Status je Checkpoint und einer Übersicht erkannter Lücken. Die Aussage gilt für die tatsächlich ausgewerteten Checkpoints."
+    ],
+    "contextRequirements": [
+      "Die Voraussetzungen sind hier nicht gesondert zusammengefasst. [Werkzeuge und Projektzugriffe im Quell-README prüfen](https://github.com/netresearch/automated-assessment-skill#readme)."
+    ],
+    "provenance": {
+      "reviewedAt": "2026-10-25",
+      "sourceUrl": "https://github.com/netresearch/automated-assessment-skill#readme",
+      "sourceSnapshotSha256": "023323a60bd9c63947b03128ce68bcae73ebf0677a64278118a00e70896da3a4",
+      "basis": {
+        "useCases": "Why This Skill Exists, Usage, Adding Checkpoints to Skills",
+        "expectedOutputs": "Example Assessment Output",
+        "contextRequirements": "Source guidance: no complete prerequisite summary adopted"
+      }
+    }
+  },
+  "file-search": {
+    "useCases": [
+      "Quellcode und Dateipfade mit gezielt eingegrenzten Suchanfragen untersuchen.",
+      "Je nach Aufgabe Textsuche, Struktursuche, Dokumentensuche oder Code-Statistik wählen."
+    ],
+    "expectedOutputs": [
+      "Passende Code- oder Dateifundstellen, Suchergebnisse aus Dokumenten oder Code-Statistiken aus dem gewählten Suchwerkzeug."
+    ],
+    "contextRequirements": [
+      "Die Voraussetzungen sind hier nicht gesondert zusammengefasst. [Werkzeuge und Projektzugriffe im Quell-README prüfen](https://github.com/netresearch/file-search-skill#readme)."
+    ],
+    "provenance": {
+      "reviewedAt": "2026-10-25",
+      "sourceUrl": "https://github.com/netresearch/file-search-skill#readme",
+      "sourceSnapshotSha256": "cd0e89c644fa5d5392ba3828bb3c796c5ebf7d295dd5103b8cf8df8a4224c29c",
+      "basis": {
+        "useCases": "Tools Covered, Key Principles",
+        "expectedOutputs": "Tools Covered, Key Principles",
+        "contextRequirements": "Source guidance: no complete prerequisite summary adopted"
+      }
+    }
+  },
+  "matrix-communication": {
+    "useCases": [
+      "Matrix-Räume lesen, Nachrichten bearbeiten oder senden und verschlüsselte Räume fortlaufend verfolgen.",
+      "Mit den weiteren Skills Ankündigungen verfassen oder einen Synapse-Homeserver administrieren."
+    ],
+    "expectedOutputs": [
+      "Gelesene Raumereignisse, freigegebene Nachrichtenaktionen oder Ergebnisse der Serververwaltung wie Raum-Snapshots und Graphviz-Karten, je nach gewähltem Skill des Pakets."
+    ],
+    "contextRequirements": [
+      "Für verschlüsselte Räume ist laut Quell-README libolm erforderlich; die Installation hängt vom Betriebssystem ab.",
+      "Die Administration benötigt Synapse und die dafür vorgesehenen Admin-Zugriffe. Ankündigungen verfassen und Nachrichten versenden sind getrennte Aufgaben."
+    ],
+    "provenance": {
+      "reviewedAt": "2026-10-25",
+      "sourceUrl": "https://github.com/netresearch/matrix-skill#readme",
+      "sourceSnapshotSha256": "b9239231c8fe9f9dc048268a7a1b08252174289fef76fb1646ca382a21ff473e",
+      "basis": {
+        "useCases": "Introduction, matrix-communication — Features, matrix-administration — Features, matrix-announcement — Features",
+        "expectedOutputs": "Skill table, matrix-communication — Features, matrix-administration",
+        "contextRequirements": "Prerequisites, Introduction"
+      }
+    }
+  },
+  "typo3-typoscript-ref": {
+    "useCases": [
+      "TypoScript, TSconfig oder Fluid für die erkannte TYPO3-Version nachschlagen.",
+      "Migrationen, Deprecations, Code-Reviews oder konkrete Fehlermeldungen mit Referenzen und Rezepten bearbeiten."
+    ],
+    "expectedOutputs": [
+      "Versionsbezogene Auszüge der offiziellen TYPO3-Dokumentation mit Einordnung sowie fertige Rezepte.",
+      "Review-Befunde, Migrationsbeispiele oder Debugging-Hinweise passend zur Anfrage."
+    ],
+    "contextRequirements": [
+      "Bash 4+, Python 3 und für das Laden des Dokumentationscaches eine angemeldete GitHub-CLI.",
+      "Beim ersten Laden wird Netzwerkzugriff benötigt; danach erfolgen Abfragen aus dem lokalen Cache.",
+      "composer.json oder composer.lock ermöglicht die Erkennung der TYPO3-Version. Fehlt beides, verwendet der Lookup laut README den Entwicklungszweig main der Dokumentation."
+    ],
+    "provenance": {
+      "reviewedAt": "2026-10-25",
+      "sourceUrl": "https://github.com/netresearch/typo3-typoscript-ref-skill#readme",
+      "sourceSnapshotSha256": "fd7775b2741be22bf9da1c363d3f722061eaedb27fdff259124c5adc2d67f73f",
+      "basis": {
+        "useCases": "Use when",
+        "expectedOutputs": "Expected outputs",
+        "contextRequirements": "Context requirements"
+      }
+    }
+  },
+  "typo3-project-upgrade": {
+    "useCases": [
+      "Eine deployte TYPO3-Instanz einschließlich Konfiguration, Templates und Datenbank auf eine neue LTS-Version umstellen.",
+      "Site Sets, Bootstrap Package, Infrastruktur und Bereinigungen prüfen; Extension-API-Migrationen gesondert behandeln."
+    ],
+    "expectedOutputs": [
+      "Änderungen an Projektkonfiguration, Templates, Infrastruktur oder Datenbankmigration sowie strukturelle und visuelle Prüfungen für den gewählten Upgrade-Umfang."
+    ],
+    "contextRequirements": [
+      "Die Voraussetzungen sind hier nicht gesondert zusammengefasst. [Werkzeuge und Projektzugriffe im Quell-README prüfen](https://github.com/netresearch/typo3-project-upgrade-skill#readme)."
+    ],
+    "provenance": {
+      "reviewedAt": "2026-10-25",
+      "sourceUrl": "https://github.com/netresearch/typo3-project-upgrade-skill#readme",
+      "sourceSnapshotSha256": "882f14c622e07a515e16c9f6ee9f8e8adce526f0e41d469ef90fd437e0219685",
+      "basis": {
+        "useCases": "Scope, What It Covers",
+        "expectedOutputs": "Scope, What It Covers, Assessment Checkpoints",
+        "contextRequirements": "Source guidance: no complete prerequisite summary adopted"
+      }
+    }
+  },
+  "orocommerce": {
+    "useCases": [
+      "Für OroCommerce 6.1 den passenden Spezial-Skill für Entities, Datagrids, APIs, Workflows oder Sicherheit wählen.",
+      "Behat-, Functional- oder Lasttests vorbereiten, ausführen und untersuchen; das Paket enthält 14 eigenständige Skills."
+    ],
+    "expectedOutputs": [
+      "Aufgabenbezogener OroCommerce-6.1-Code, Konfiguration oder Tests nach den Vorgaben des passenden Skills aus dem Paket mit 14 Skills."
+    ],
+    "contextRequirements": [
+      "Das Quell-README nennt Claude Code als Client und richtet die Anleitung an Entwickler mit OroCommerce-Erfahrung.",
+      "Projekt- und Werkzeuganforderungen hängen vom gewählten der 14 Spezial-Skills ab; vor der Nutzung dessen Anleitung lesen."
+    ],
+    "provenance": {
+      "reviewedAt": "2026-10-25",
+      "sourceUrl": "https://github.com/netresearch/orocommerce-skill#readme",
+      "sourceSnapshotSha256": "89bbf0923f2b9b4e3c7140e648a7091db6ce1f52d6d63cb5a7b6338c0be501d7",
+      "basis": {
+        "useCases": "Introduction, Skills",
+        "expectedOutputs": "Introduction, Skills",
+        "contextRequirements": "Introduction, Requirements, Skills"
+      }
+    }
+  },
+  "typo3-a11y": {
+    "useCases": [
+      "Navigation, Formulare, Filter und Tabellen in TYPO3-Sitepackages barrierearm umsetzen.",
+      "Fokus, Skip-Links, ARIA und reduzierte Bewegung anhand der WCAG-2.2-AA-Muster prüfen."
+    ],
+    "expectedOutputs": [
+      "HTML/ARIA-Muster, SCSS- und TypeScript-Beispiele sowie Barrierefreiheitsprüfungen für die gewünschte TYPO3-Frontend-Komponente."
+    ],
+    "contextRequirements": [
+      "Die Anleitung richtet sich an TYPO3-Sitepackages ab Version 13.",
+      "Der Skill selbst enthält Text und Konfiguration ohne eigene ausführbare Laufzeit. Projektwerkzeuge und Versionsanforderungen stehen in den jeweiligen Referenzen."
+    ],
+    "provenance": {
+      "reviewedAt": "2026-10-25",
+      "sourceUrl": "https://github.com/netresearch/typo3-a11y-skill#readme",
+      "sourceSnapshotSha256": "f7a266974cac3ef072812b10507b23cc47066259c03051e95aa593c7f2572bc0",
+      "basis": {
+        "useCases": "Introduction, References",
+        "expectedOutputs": "Introduction, References",
+        "contextRequirements": "Introduction, Tests"
+      }
+    }
+  },
+  "typo3-vite": {
+    "useCases": [
+      "Vite-Einstiegspunkte und eine passende SCSS-Struktur für ein TYPO3-Sitepackage einrichten.",
+      "Bootstrap-Theming, SVG-Verarbeitung und die im Quell-README verlinkten Konfigurationsmuster anwenden."
+    ],
+    "expectedOutputs": [
+      "Vite-Konfiguration und Einstiegspunkte, eine SCSS-Struktur und Beispiele für das Bootstrap-Theming eines TYPO3-Sitepackages."
+    ],
+    "contextRequirements": [
+      "Ein TYPO3-Sitepackage ab Version 13; Vite, zugehörige Plugins, SVGO, Bootstrap und vite-asset-collector sind Pakete des Zielprojekts.",
+      "Der Skill selbst ist Text. Das Zielprojekt wählt und sperrt die benötigten Paketversionen."
+    ],
+    "provenance": {
+      "reviewedAt": "2026-10-25",
+      "sourceUrl": "https://github.com/netresearch/typo3-vite-skill#readme",
+      "sourceSnapshotSha256": "ea5de37e242fa1197917b932b06ae1641072c02624894b903181a6d4e309837a",
+      "basis": {
+        "useCases": "Introduction, References",
+        "expectedOutputs": "Introduction, References",
+        "contextRequirements": "Introduction, Dependencies"
+      }
+    }
+  },
+  "github-release": {
+    "useCases": [
+      "Versionsänderung, Review, signierten Tag und CI-Veröffentlichung eines GitHub-Releases koordinieren.",
+      "Release-Konfiguration und Status prüfen; enthaltene Schutz-Hooks nur über einen dafür geeigneten Installer nutzen."
+    ],
+    "expectedOutputs": [
+      "Ein Pull Request zur Versionsänderung oder ein koordinierter Release mit signiertem Tag und CI-Veröffentlichung sowie Ergebnisse der Release-Statusprüfung für den gewählten Befehl."
+    ],
+    "contextRequirements": [
+      "Die Voraussetzungen sind hier nicht gesondert zusammengefasst. [Werkzeuge und Projektzugriffe im Quell-README prüfen](https://github.com/netresearch/github-release-skill#readme)."
+    ],
+    "provenance": {
+      "reviewedAt": "2026-10-25",
+      "sourceUrl": "https://github.com/netresearch/github-release-skill#readme",
+      "sourceSnapshotSha256": "2fa90df09a91585d8ee24385e6b9f7611338e29d2765aadb03cc65cd246844e0",
+      "basis": {
+        "useCases": "Features, Commands, Installation",
+        "expectedOutputs": "Features, Commands",
+        "contextRequirements": "Source guidance: no complete prerequisite summary adopted"
+      }
+    }
+  },
+  "german-technical-writing": {
+    "useCases": [
+      "Deutsche Jira-Texte, interne Dokumentation und Team-Nachrichten auf verständliches technisches Deutsch prüfen.",
+      "Unpassende Übertragungen aus dem Englischen, mehrdeutige Verweise und unnötig komplizierte Sätze überarbeiten."
+    ],
+    "expectedOutputs": [
+      "Überarbeiteter deutscher Fachtext mit eindeutigen Verweisen, passender Terminologie und den Konventionen der gewünschten Textart."
+    ],
+    "contextRequirements": [
+      "Die Voraussetzungen sind hier nicht gesondert zusammengefasst. [Werkzeuge und Projektzugriffe im Quell-README prüfen](https://github.com/netresearch/german-technical-writing-skill#readme)."
+    ],
+    "provenance": {
+      "reviewedAt": "2026-10-25",
+      "sourceUrl": "https://github.com/netresearch/german-technical-writing-skill#readme",
+      "sourceSnapshotSha256": "a1e65b6833576839528aa2a38714fbde8b335dedf122439055e3ebf9b4d11201",
+      "basis": {
+        "useCases": "Features, Usage",
+        "expectedOutputs": "Introduction, Features, Usage",
+        "contextRequirements": "Source guidance: no complete prerequisite summary adopted"
+      }
+    }
+  },
+  "peer-qa-review": {
+    "useCases": [
+      "Abgeschlossene Arbeit vor Kundenabnahme oder internem Abschluss systematisch gegenprüfen.",
+      "Nachweise, erneute Verifikation, Dokumentation und Rückweg prüfen und ein nachvollziehbares Urteil formulieren."
+    ],
+    "expectedOutputs": [
+      "Ein strukturierter QA-Kommentar mit Schweregraden, Nachweisen und einem klaren Urteil zum weiteren Ticketstatus."
+    ],
+    "contextRequirements": [
+      "Für qa-gather.sh: Bash 3.2+, find, dirname und uv sowie jira-communication aus dem über einen Plugin-Marketplace installierten Jira-Paket.",
+      "Der Reviewer braucht Zugriff auf Ticket und relevante Nachweise. Die automatisierte Datensammlung ersetzt die Prüfung durch einen Kollegen nicht."
+    ],
+    "provenance": {
+      "reviewedAt": "2026-10-25",
+      "sourceUrl": "https://github.com/netresearch/peer-qa-review-skill#readme",
+      "sourceSnapshotSha256": "d894c2e1969073e0fa152fc9cbb8f81f7b1581639d4dd230b4bcf23db4663c6e",
+      "basis": {
+        "useCases": "What this skill is for",
+        "expectedOutputs": "What this skill is for (explicit output statement)",
+        "contextRequirements": "Dependencies, What this skill is for"
+      }
+    }
+  },
+  "markdown-to-pdf": {
+    "useCases": [
+      "Eine oder mehrere Markdown-Dateien mit WeasyPrint als PDF ausgeben.",
+      "Für ein eigenes Erscheinungsbild eine CSS-Datei anstelle der neutralen Standardgestaltung verwenden."
+    ],
+    "expectedOutputs": [
+      "Gestaltete PDF-Dateien aus den übergebenen Markdown-Dateien mit der neutralen Standardgestaltung oder einer vorgegebenen CSS-Datei."
+    ],
+    "contextRequirements": [
+      "uv lädt die in convert.py deklarierten Python-Pakete markdown und weasyprint.",
+      "WeasyPrint benötigt zusätzlich die Pango-Systembibliotheken; die Installationsanleitung steht im Quell-README."
+    ],
+    "provenance": {
+      "reviewedAt": "2026-10-25",
+      "sourceUrl": "https://github.com/netresearch/markdown-to-pdf-skill#readme",
+      "sourceSnapshotSha256": "1e4569e769884436d17a851b35769f4b496aaa27fcc79de76a6dc59d486c857a",
+      "basis": {
+        "useCases": "Introduction, Usage, Branded output",
+        "expectedOutputs": "Introduction, Usage, Branded output",
+        "contextRequirements": "Usage, Dependencies"
+      }
+    }
+  },
+  "typo3-upgrade-effort-model": {
+    "useCases": [
+      "Aufwand und Risiken eines TYPO3-LTS-Upgrades je Extension und Projekt schätzen.",
+      "Versionsrisiken, verfügbare Migrationstools und Erfahrungswerte des Teams in die Schätzung einbeziehen."
+    ],
+    "expectedOutputs": [
+      "Aufwandsbandbreiten je Extension und Projekt aus dem beschriebenen Ablauf. Der Kalibrierungsfaktor des Teams wird zusätzlich angewendet."
+    ],
+    "contextRequirements": [
+      "Der Skill liefert keinen Kalibrierungsfaktor: historische Projektdaten und Erfahrungswerte des Teams werden separat benötigt.",
+      "Die in den Referenzen verwendeten Werkzeuge wie Composer, PHP, jq oder Rector stammen aus dem untersuchten Projekt; der Skill ist Text."
+    ],
+    "provenance": {
+      "reviewedAt": "2026-10-25",
+      "sourceUrl": "https://github.com/netresearch/typo3-upgrade-effort-model-skill#readme",
+      "sourceSnapshotSha256": "432bfd078368fa253eb7d02659b9d3c189fd62696f801e399c6a6438f2d3f385",
+      "basis": {
+        "useCases": "What this skill does, Usage",
+        "expectedOutputs": "Usage (explicit output statement)",
+        "contextRequirements": "What this skill does NOT do, Dependencies"
+      }
+    }
+  },
+  "retro": {
+    "useCases": [
+      "Reibungspunkte in einer Agent-Sitzung und über mehrere Sitzungen hinweg untersuchen.",
+      "Konkrete Verbesserungen für Projektregeln, Skills, Checkpoints oder Memory vorschlagen und freigegebene Vorschläge umsetzen."
+    ],
+    "expectedOutputs": [
+      "Umsetzbare Retro-Vorschläge, geordnet nach ihrem vorgesehenen Ziel; dauerhafte Änderungen werden erst nach Freigabe des jeweiligen Vorschlags vorgenommen."
+    ],
+    "contextRequirements": [
+      "Das Quell-README beschreibt Claude Code als Laufzeit. Die Shell-Hilfen benötigen Bash, Git, jq und uv.",
+      "Python-Skripte werden mit uv gestartet; ihre Skriptmetadaten verlangen Python 3.11 oder neuer. uv wählt oder lädt einen passenden Interpreter und installiert für bestimmte Analyseschritte die deklarierten Parser-Abhängigkeiten.",
+      "Für GitHub-PRs beziehungsweise GitLab-MRs werden gh oder glab benötigt.",
+      "Jede Umsetzung eines Vorschlags braucht eine ausdrückliche Freigabe; Zugangsdaten und Quellen richten sich nach dem gewählten Ziel."
+    ],
+    "provenance": {
+      "reviewedAt": "2026-10-25",
+      "sourceUrl": "https://github.com/netresearch/retro-skill#readme",
+      "sourceSnapshotSha256": "2bf295a08e85b23bf1a8ecd4f45641589bd644d5a69c54e47941c1371c0fb328",
+      "basis": {
+        "useCases": "What it does, Usage — the six modes, How it stays safe",
+        "expectedOutputs": "What it does, How it stays safe",
+        "contextRequirements": "Requirements, Dependencies, How it stays safe"
+      }
+    }
+  }
+}

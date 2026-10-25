@@ -5,9 +5,9 @@
  * Total budget: under 5 KB minified. No frameworks. No third-party imports.
  *
  * Features:
- *   - Install-method tablist on landings (claude-code | npx | composer-require
+ *   - Install-method buttons on landings (claude-code | npx | composer-require
  *     | composer-skills); persists in localStorage; CSS show/hides per
- *     body[data-install-mode]; ARIA tablist with arrow-key navigation.
+ *     body[data-install-mode]; native buttons expose their pressed state.
  *   - Copy-to-clipboard for install commands (with localized "Copied/Kopiert"
  *     flash; supports both explicit data-copy-target and dynamic
  *     data-copy-active-install resolution against the active mode).
@@ -16,17 +16,27 @@
 (function () {
   "use strict";
 
-  // ----- install-method tablist -----------------------------------------
+  function reveal(control) {
+    if (control && control.hasAttribute("data-enhance-only")) control.hidden = false;
+  }
+
+  function updateCardCopies(mode) {
+    document.querySelectorAll("[data-copy-active-install]").forEach(function (btn) {
+      var container = btn.closest(".skill-card__installs");
+      btn.disabled = !container || !container.querySelector("code.install--" + mode);
+    });
+  }
+
+  // ----- install-method preference --------------------------------------
   var installSwitcher = document.querySelector("[data-install-mode-switcher]");
   if (installSwitcher) {
     var installTabs = Array.prototype.slice.call(
-      installSwitcher.querySelectorAll('[role="tab"]')
+      installSwitcher.querySelectorAll("[data-install-mode-id]")
     );
     var installStatusEl = installSwitcher.querySelector("[data-install-mode-status]");
     var STORAGE_KEY = "netresearch-marketplace:install-mode";
 
-    function setMode(modeId, options) {
-      options = options || {};
+    function setMode(modeId) {
       // Validate first — never half-apply the change. If the stored mode is
       // unknown (e.g. user came from an older deploy with different method
       // ids), bail out and keep the markup-defined default.
@@ -41,16 +51,15 @@
 
       installTabs.forEach(function (tab) {
         var isActive = tab === match;
-        tab.setAttribute("aria-selected", isActive ? "true" : "false");
-        tab.setAttribute("tabindex", isActive ? "0" : "-1");
+        tab.setAttribute("aria-pressed", isActive ? "true" : "false");
       });
-      if (options.focus) match.focus();
       if (installStatusEl) {
         var template = installSwitcher.getAttribute("data-install-mode-announce") || "";
         var label = (match.querySelector(".install-mode__tab-label") || {}).textContent || modeId;
         installStatusEl.textContent = template ? template.replace("{label}", label) : "";
       }
       document.body.setAttribute("data-install-mode", modeId);
+      updateCardCopies(modeId);
       try { window.localStorage.setItem(STORAGE_KEY, modeId); } catch (_) {}
       return true;
     }
@@ -62,23 +71,12 @@
     } catch (_) {}
 
     installSwitcher.addEventListener("click", function (event) {
-      var tab = event.target.closest('[role="tab"]');
+      var tab = event.target.closest("[data-install-mode-id]");
       if (!tab) return;
       setMode(tab.getAttribute("data-install-mode-id"));
     });
 
-    installSwitcher.addEventListener("keydown", function (event) {
-      if (event.key !== "ArrowRight" && event.key !== "ArrowLeft" && event.key !== "Home" && event.key !== "End") return;
-      var idx = installTabs.indexOf(document.activeElement);
-      if (idx === -1) return;
-      var next = idx;
-      if (event.key === "ArrowRight") next = (idx + 1) % installTabs.length;
-      else if (event.key === "ArrowLeft") next = (idx - 1 + installTabs.length) % installTabs.length;
-      else if (event.key === "Home") next = 0;
-      else if (event.key === "End") next = installTabs.length - 1;
-      event.preventDefault();
-      setMode(installTabs[next].getAttribute("data-install-mode-id"), { focus: true });
-    });
+    reveal(installSwitcher);
   }
 
   // ----- search ---------------------------------------------------------
@@ -93,9 +91,11 @@
     var statusEl = searchForm.querySelector("[data-search-status]");
     var noResultsMsg = searchForm.getAttribute("data-no-results") || "";
     var resultsTpl = searchForm.getAttribute("data-results-template") || "{count}";
+    var searchErrorMsg = searchForm.getAttribute("data-search-error") || "";
 
     var indexCache = null;
     var indexPending = null;
+    var searchRevision = 0;
 
     function loadIndex() {
       if (indexCache) return Promise.resolve(indexCache);
@@ -106,13 +106,13 @@
           return r.json();
         })
         .then(function (data) {
+          if (!Array.isArray(data)) throw new Error("invalid search index");
           indexCache = data;
           indexPending = null;
           return data;
         })
-        .catch(function (err) {
+        .catch(function () {
           indexPending = null;
-          console.warn("search index unavailable:", err);
           return null;
         });
       return indexPending;
@@ -139,13 +139,18 @@
     }
 
     function applyFilter(query) {
+      var revision = ++searchRevision;
       var groups = document.querySelectorAll(".group");
       var cards = document.querySelectorAll(".skill-card");
 
-      if (!query) {
+      function showAll() {
         for (var c = 0; c < cards.length; c++) cards[c].hidden = false;
         for (var g = 0; g < groups.length; g++) groups[g].hidden = false;
-        statusEl.textContent = "";
+      }
+
+      if (!query) {
+        showAll();
+        if (statusEl) statusEl.textContent = "";
         if (clearBtn) clearBtn.hidden = true;
         return;
       }
@@ -154,7 +159,12 @@
       if (!statusEl) return;
 
       loadIndex().then(function (records) {
-        if (!records) return;
+        if (revision !== searchRevision) return;
+        if (!records) {
+          showAll();
+          statusEl.textContent = searchErrorMsg;
+          return;
+        }
         var tokens = tokenize(query);
         var matchedSlugs = {};
         var matchCount = 0;
@@ -188,6 +198,7 @@
 
     var debounceTimer = null;
     input.addEventListener("input", function () {
+      searchRevision++;
       var query = input.value.trim();
       clearTimeout(debounceTimer);
       debounceTimer = setTimeout(function () {
@@ -196,8 +207,11 @@
     });
 
     searchForm.addEventListener("reset", function () {
-      setTimeout(function () { applyFilter(""); }, 0);
+      searchRevision++;
+      clearTimeout(debounceTimer);
+      setTimeout(function () { applyFilter(input.value.trim()); }, 0);
     });
+    reveal(searchForm);
 
     // Prefill from ?q=... — supports the SearchAction urlTemplate
     // (`/<lang>/?q={search_term_string}#skills`) and any shared link.
@@ -209,9 +223,18 @@
   }
 
   // ----- clipboard ------------------------------------------------------
+  var copyStatusEl = document.querySelector("[data-copy-status]");
+  var copyStates = new WeakMap();
+
+  function announceCopy(message) {
+    if (!copyStatusEl) return;
+    copyStatusEl.textContent = "";
+    setTimeout(function () { copyStatusEl.textContent = message; }, 0);
+  }
+
   document.addEventListener("click", function (event) {
     var btn = event.target.closest(".copy-btn");
-    if (!btn) return;
+    if (!btn || btn.disabled) return;
 
     var target = null;
     var targetId = btn.getAttribute("data-copy-target");
@@ -222,7 +245,7 @@
       // body[data-install-mode]. CSS hides the others; we look them up by class.
       var mode = document.body.getAttribute("data-install-mode") || "claude-code";
       var container = btn.closest(".skill-card__installs");
-      if (container) target = container.querySelector(".install--" + mode);
+      if (container) target = container.querySelector("code.install--" + mode);
     }
     if (!target) return;
 
@@ -231,26 +254,32 @@
     if (navigator.clipboard && navigator.clipboard.writeText) {
       navigator.clipboard.writeText(text).then(
         function () { flashCopied(btn); },
-        function () { fallbackPrompt(text); }
+        function () { fallbackPrompt(text, btn); }
       );
     } else {
-      fallbackPrompt(text);
+      fallbackPrompt(text, btn);
     }
   });
+  updateCardCopies(document.body.getAttribute("data-install-mode") || "claude-code");
+  document.querySelectorAll(".copy-btn[data-enhance-only]").forEach(reveal);
 
   function flashCopied(btn) {
     var label = btn.querySelector(".copy-btn__label") || btn;
-    var original = label.textContent;
-    var copiedText = btn.getAttribute("data-copied-label") || "Copied";
+    var state = copyStates.get(btn) || { original: label.textContent, timer: null };
+    clearTimeout(state.timer);
+    var copiedText = btn.getAttribute("data-copied-label") || state.original;
     label.textContent = copiedText;
     btn.setAttribute("data-state", "copied");
-    setTimeout(function () {
-      label.textContent = original;
+    announceCopy(copiedText);
+    state.timer = setTimeout(function () {
+      label.textContent = state.original;
       btn.removeAttribute("data-state");
     }, 1500);
+    copyStates.set(btn, state);
   }
 
-  function fallbackPrompt(text) {
-    window.prompt("Copy install command:", text);
+  function fallbackPrompt(text, btn) {
+    announceCopy(btn.getAttribute("data-copy-failed-label") || "");
+    window.prompt(btn.getAttribute("data-copy-prompt-label") || "", text);
   }
 })();
