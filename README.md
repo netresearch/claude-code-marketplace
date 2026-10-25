@@ -39,6 +39,12 @@ Source packages may include several skills and additional components such as hoo
 
 The first command registers the catalog; the second installs one example plugin. Use `/plugin` to browse and choose other packages. Adding the marketplace does not install all entries.
 
+### ChatGPT workspace (GitHub marketplace sync)
+
+Workspace admins can import `https://github.com/netresearch/claude-code-marketplace` under **Admin > Plugins > Add > Import marketplace**. Leave **Path** empty and select **main** to follow catalog updates. After merging a catalog update, choose **Sync now** under **Plugins > Marketplaces** to request an import without waiting for the daily sync.
+
+The native catalog is [`.agents/plugins/marketplace.json`](.agents/plugins/marketplace.json). It references the same source repositories using ChatGPT-supported URL sources; the Claude catalog remains available for Claude Code. The GitHub account authorizing import must be able to read every referenced repository. Review the per-plugin import results and configure workspace installation policies after import. See the [official workspace import documentation](https://learn.chatgpt.com/docs/enterprise/plugin-management#supported-formats).
+
 ### npx (Skill Instructions)
 
 ```bash
@@ -143,7 +149,7 @@ The GitHub Pages site is built from [`site/`](site/README.md); the design decisi
 
 ## Adding a Skill
 
-Add an entry to `.claude-plugin/marketplace.json`:
+Add an entry to `.claude-plugin/marketplace.json` (the canonical catalog):
 
 ```json
 {
@@ -156,6 +162,15 @@ Add an entry to `.claude-plugin/marketplace.json`:
   "category": "development"
 }
 ```
+
+Regenerate the ChatGPT/Codex catalog, then validate both catalogs:
+
+```bash
+./scripts/sync-codex-marketplace.sh
+./scripts/validate.sh
+```
+
+Commit both manifest files. The validator checks that the native catalog matches the canonical catalog, including plugin names, categories, repository URLs and any source revision pins.
 
 ## Internal Marketplace
 
@@ -193,7 +208,7 @@ Checks that run on every pull request to `main`:
 - DCO (`.github/workflows/dco.yml`): every commit carries a `Signed-off-by` line.
 - Site build (`.github/workflows/pages.yml`): installs `site/` with `npm ci --ignore-scripts`, runs the catalogue checks and the unit tests (`npm run check`), builds the site and checks the language pairs; Lighthouse and Playwright visual regression then test the built site.
 
-`scripts/validate.sh` and the advisory overlap report (`.github/workflows/validate.yml`) run on pull requests that change `.claude-plugin/marketplace.json`, the two scripts or that workflow. The pre-commit hook (`.githooks/pre-commit`, enabled by `.envrc`) runs `scripts/validate.sh`.
+`scripts/validate.sh` and the advisory overlap report (`.github/workflows/validate.yml`) run on pull requests that change either marketplace manifest, the validation, catalog generation or overlap-report scripts, or that workflow. The pre-commit hook (`.githooks/pre-commit`, enabled by `.envrc`) runs `scripts/validate.sh`.
 
 A ruleset on `main` requires the DCO check, and branch protection of `main` requires signed commits. The other checks run on every pull request but are not required checks.
 

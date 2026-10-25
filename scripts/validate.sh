@@ -139,6 +139,9 @@ if [ -f README.md ]; then
     echo "✓ Every plugin has a README catalog row"
 fi
 
+# ChatGPT/Codex uses a generated native catalog with supported URL sources.
+./scripts/sync-codex-marketplace.sh --check
+
 # Summary
 COUNT=$(jq '.plugins | length' "$MARKETPLACE")
 echo ""
