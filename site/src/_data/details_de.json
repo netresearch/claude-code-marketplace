@@ -901,14 +901,15 @@
       "Umsetzbare Retro-Vorschläge, geordnet nach ihrem vorgesehenen Ziel; dauerhafte Änderungen werden erst nach Freigabe des jeweiligen Vorschlags vorgenommen."
     ],
     "contextRequirements": [
-      "Das Quell-README beschreibt Claude Code als Laufzeit. Die Hilfsskripte brauchen Python 3.11+, Bash, Git und jq.",
-      "uv lädt für bestimmte Analyseschritte die deklarierten Parser-Abhängigkeiten; für PRs oder MRs werden gh beziehungsweise glab benötigt.",
+      "Das Quell-README beschreibt Claude Code als Laufzeit. Die Shell-Hilfen benötigen Bash, Git, jq und uv.",
+      "Python-Skripte werden mit uv gestartet; ihre Skriptmetadaten verlangen Python 3.11 oder neuer. uv wählt oder lädt einen passenden Interpreter und installiert für bestimmte Analyseschritte die deklarierten Parser-Abhängigkeiten.",
+      "Für GitHub-PRs beziehungsweise GitLab-MRs werden gh oder glab benötigt.",
       "Jede Umsetzung eines Vorschlags braucht eine ausdrückliche Freigabe; Zugangsdaten und Quellen richten sich nach dem gewählten Ziel."
     ],
     "provenance": {
       "reviewedAt": "2026-10-25",
       "sourceUrl": "https://github.com/netresearch/retro-skill#readme",
-      "sourceSnapshotSha256": "911066d98e58bec377b138daf6c20488625c2e818675c470b415bdd3e1660949",
+      "sourceSnapshotSha256": "2bf295a08e85b23bf1a8ecd4f45641589bd644d5a69c54e47941c1371c0fb328",
       "basis": {
         "useCases": "What it does, Usage — the six modes, How it stays safe",
         "expectedOutputs": "What it does, How it stays safe",

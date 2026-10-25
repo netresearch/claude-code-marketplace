@@ -55,10 +55,18 @@ for (const lang of ["en", "de"]) {
     await page.goto(`${prefix}/${lang}/`);
     const card = page.locator(".skill-card").filter({ has: page.locator('a[href$="/skills/cli-tools/"]') });
     const copy = card.locator("[data-copy-active-install]");
+    const unavailable = card.locator("p.install--composer-require");
+    await expect(unavailable).toBeHidden();
     await page.getByRole("button", { name: /composer require/ }).click();
-    await expect(card.locator("p.install--composer-require")).toBeVisible();
+    await expect(unavailable).toBeVisible();
+    await expect(card.locator("code.install--claude-code")).toBeHidden();
     await expect(copy).toBeDisabled();
+    await page.getByRole("button", { name: /^composer skills:add/ }).click();
+    await expect(unavailable).toBeHidden();
+    await expect(card.locator("code.install--composer-skills")).toBeVisible();
     await page.getByRole("button", { name: /^npx / }).click();
+    await expect(unavailable).toBeHidden();
+    await expect(card.locator("code.install--npx")).toBeVisible();
     await expect(copy).toBeEnabled();
     const label = await copy.getAttribute("aria-label");
     await copy.click();
@@ -72,6 +80,7 @@ for (const lang of ["en", "de"]) {
     const page = await context.newPage();
     await page.goto(`${test.info().project.use.baseURL || "http://localhost:8081"}${prefix}/${lang}/`);
     await expect(visibleCards(page)).toHaveCount(marketplace.plugins.length);
+    await expect(page.locator(".skill-card__unavailable:visible")).toHaveCount(0);
     await expect(page.locator("[data-enhance-only]:visible")).toHaveCount(0);
     await page.locator("[data-nr-mobile-menu] > summary").click();
     await expect(page.locator("[data-nr-mobile-menu]")).toHaveAttribute("open", "");

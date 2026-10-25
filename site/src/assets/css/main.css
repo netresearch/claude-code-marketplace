@@ -631,7 +631,8 @@ body[data-install-mode="composer-skills"] .install-mode__hint--composer-skills {
   min-width: 0;
 }
 
-.skill-card__installs > .skill-card__install {
+.skill-card__installs > .skill-card__install,
+.skill-card__installs > .skill-card__unavailable {
   display: none;
 }
 
