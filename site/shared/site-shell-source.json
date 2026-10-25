@@ -1,16 +1,16 @@
 {
-  "source": "https://github.com/netresearch/netresearch.github.io/tree/da4e340a4833da995eda02fd350876a6c806bd6a/shared/site-shell",
+  "source": "https://github.com/netresearch/netresearch.github.io/tree/d977b58ef66ae23e7f1e6c3d7f553b4194b1dec2/shared/site-shell",
   "imported_for": "Identical family header; project content lives in the separate page navigation.",
   "files": {
     ".gitignore": "862263fa1f46c20f0d1e4dac5ffcc75abd55c08211b2c3864c5f8764b9d87793",
     "netresearch-symbol-only.svg": "ca88779a6d008b4606bbe8d45f4640d6967f82b66b302d95b9153dcf2cfb9e29",
     "page-navigation.html": "7bb3bcd86f137039b6c77afd5ba46697005b4681e7ab411daa94ee8d15c684ee",
-    "render-site-shell.mjs": "34c602c3930bb60b22002e18559e5b3644c3add39d39fac5f3f0cc512d63ecf8",
-    "site-shell.copy.json": "3741168e49fd774d28213a0197f5c4c6e9d927ee97002fb44adf921fd712378c",
+    "render-site-shell.mjs": "d34c3757815428ae2c5c5f226e27fc4f4f9645f771c29035bc08ef69a4689859",
+    "site-shell.copy.json": "2a3ce1f37f4caadff34f8b9737d42f9eb315eb03364d83636b59ce6496e6bf81",
     "site-shell.css": "bb02cb6e7a386c55edcf8320b11adb692ce4c575bd52d12944d7f9ece0ee8a5d",
     "site-shell.html": "6a9c918381cba363e876bab0b9387ab023f7cc907d183baf7baf415e2a333d0d",
     "site-shell.js": "c3453cb1b47ab92dd8014d0f4778ea21ef8fc4136c7f17193b0cee2e5bdd029b",
-    "site_shell.py": "03a6f4e6190531201afbdaab8f8e877eddf42b843746accc591db06254b3353a",
+    "site_shell.py": "fc2c8b7c8d0687ac594e11fc5fdc7ca44a01852f4bbe84b5b787021ac46b1147",
     "theme-bootstrap.js": "f564d8ae93f2130c238017642d601044e6f19f87b25f362b2286f69024d81ef9"
   }
 }

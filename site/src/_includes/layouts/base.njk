@@ -60,7 +60,8 @@
     {% set isHome = page.url == ('/' ~ (lang or 'en') ~ '/') %}
     {% set enUrl = (page.url if lang == 'en' else hreflangAlternate.url) | url %}
     {% set deUrl = (page.url if lang == 'de' else hreflangAlternate.url) | url %}
-    {{ {lang: lang, assetBase: '/assets/site-shell' | url, languageUrls: {en: enUrl, de: deUrl}, contactHref: 'https://www.netresearch.de/kontakt/'} | renderSiteHeader | safe }}
+    {% set contactUrl = 'https://www.netresearch.de/kontakt/' if lang == 'de' else 'https://www.netresearch.de/en/contact/' %}
+    {{ {lang: lang, assetBase: '/assets/site-shell' | url, languageUrls: {en: enUrl, de: deUrl}, active: 'skills', contactHref: contactUrl} | renderSiteHeader | safe }}
     {{ {lang: lang, title: site.title, titleHref: homeUrl, links: [{href: homeUrl ~ '#skills', label: t.nav.skills}, {href: site.repoUrl, label: t.skill.viewSource}]} | renderPageNavigation | safe }}
 
     <main id="main" tabindex="-1">
