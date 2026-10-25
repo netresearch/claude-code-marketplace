@@ -23,6 +23,12 @@ trap 'rm -f "$GENERATED"' EXIT HUP INT TERM
 # Workspace sync accepts native URL sources, not Claude's github/repo form.
 # Only emit documented native fields; keep source revision pins when present.
 jq '
+    # Native entry names must match the referenced package manifests. Keep
+    # the established Claude/site catalog IDs through these two aliases.
+    def codex_name:
+        if .name == "jira-integration" then "jira"
+        elif .name == "orocommerce" then "orocommerce-skills"
+        else .name end;
     def codex_source:
         . as $source |
         (if .source == "github" and
@@ -37,8 +43,11 @@ jq '
     {
         name: .name,
         interface: {displayName: "Netresearch Agent Skills"},
-        plugins: [.plugins[] | {name, source: (.source | codex_source), category}]
+        plugins: [.plugins[] | {name: codex_name, source: (.source | codex_source), category}]
     }
+    | if (.plugins | map(.name) | unique | length) != (.plugins | length) then
+        error("Duplicate native plugin names after applying package-name aliases")
+      else . end
 ' "$SOURCE" > "$GENERATED"
 
 if [ "${1:-}" = --check ]; then
