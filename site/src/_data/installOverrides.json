@@ -1,5 +1,16 @@
 {
-  "_doc": "Per-skill installation exceptions owned by the marketplace. The PHP override follows the source guide updated in https://github.com/netresearch/php-ast-edit-skill/pull/29; publish this override after that source change merges. Default methods for every other skill remain unchanged.",
+  "_doc": "Marketplace installation exceptions and component-coverage hints. Commands follow verified source repositories; package availability was checked against the primary Packagist registry on 2026-10-25. Runtime instructions remain in source repositories.",
+  "_provenance": {
+    "reviewedAt": "2026-10-25",
+    "marketplaceBaseCommit": "aaa5e7deafc587ea16007b448d6928ed437535b5",
+    "reason": "Explain installer component differences and suppress an unavailable Composer package. PHP 2.0.0 is published; the former mandatory dev-main/VCS assumption is obsolete.",
+    "sources": [
+      "https://repo.packagist.org/p2/netresearch/php-ast-edit-skill.json",
+      "https://repo.packagist.org/p2/netresearch/coding_agent_cli_toolset.json",
+      "https://github.com/netresearch/php-ast-edit-skill/blob/a4fcd34ef342ee563d95d6aada2cf523d5381f91/docs/installation.md",
+      "https://github.com/netresearch/coding_agent_cli_toolset/tree/b0fc6d2a016a827c7e9eb1b22fe0f85730bf6390"
+    ]
+  },
   "php-structured-edit": {
     "linkLabel": {
       "en": "Engine and skill setup",
@@ -9,65 +20,218 @@
       "claude-code": {
         "hint": {
           "en": {
-            "text": "Installs the agent instructions. The PHP editing engine is set up separately:",
+            "text": "Registers the plugin's agent instructions. Set up the PHP editing engine separately:",
             "linkText": "engine installation guide",
-            "linkUrl": "https://github.com/netresearch/php-ast-edit-skill#installation",
-            "suffix": "Requires PHP 8.2+, ext-json and ext-tokenizer."
+            "linkUrl": "https://github.com/netresearch/php-ast-edit-skill/blob/main/docs/installation.md",
+            "suffix": "Requires PHP 8.2+, JSON and tokenizer. A source plugin install does not install Composer dependencies."
           },
           "de": {
-            "text": "Installiert die Agent-Anweisungen. Die PHP-Engine wird getrennt eingerichtet:",
+            "text": "Bindet die Agent-Anweisungen des Plugins ein. Die PHP-Engine wird getrennt eingerichtet:",
             "linkText": "Engine installieren",
-            "linkUrl": "https://github.com/netresearch/php-ast-edit-skill#installation",
-            "suffix": "Benötigt PHP 8.2+, ext-json und ext-tokenizer."
+            "linkUrl": "https://github.com/netresearch/php-ast-edit-skill/blob/main/docs/installation.md",
+            "suffix": "Benötigt PHP 8.2+, JSON und Tokenizer. Die Plugin-Installation aus dem Repository installiert keine Composer-Abhängigkeiten."
           }
         }
       },
       "npx": {
         "hint": {
           "en": {
-            "text": "Installs the agent instructions. The PHP editing engine is set up separately:",
+            "text": "Installs skill instructions; the PHP engine is a separate component:",
             "linkText": "engine installation guide",
-            "linkUrl": "https://github.com/netresearch/php-ast-edit-skill#installation",
-            "suffix": "Requires PHP 8.2+, ext-json and ext-tokenizer."
+            "linkUrl": "https://github.com/netresearch/php-ast-edit-skill/blob/main/docs/installation.md",
+            "suffix": "Check the installed wrapper and engine before assigning an editing task."
           },
           "de": {
-            "text": "Installiert die Agent-Anweisungen. Die PHP-Engine wird getrennt eingerichtet:",
+            "text": "Installiert die Skill-Anweisungen. Die PHP-Engine ist ein eigener Bestandteil:",
             "linkText": "Engine installieren",
-            "linkUrl": "https://github.com/netresearch/php-ast-edit-skill#installation",
-            "suffix": "Benötigt PHP 8.2+, ext-json und ext-tokenizer."
+            "linkUrl": "https://github.com/netresearch/php-ast-edit-skill/blob/main/docs/installation.md",
+            "suffix": "Vor einem Änderungsauftrag prüfen, ob Wrapper und Engine eingerichtet sind."
           }
         }
       },
       "composer-require": {
-        "command": "composer config repositories.php-ast-edit vcs https://github.com/netresearch/php-ast-edit-skill.git && composer require --dev --no-plugins --no-scripts netresearch/php-ast-edit-skill:dev-main",
+        "command": "composer require --dev --no-plugins --no-scripts netresearch/php-ast-edit-skill:^2.0",
         "hint": {
           "en": {
-            "text": "Installs the PHP engine from the development branch with Composer plugins and scripts disabled. For release status and separate skill registration, see",
+            "text": "Installs the published 2.x PHP engine with Composer plugins and project scripts disabled. Agent instructions are registered separately; see",
             "linkText": "source installation guide",
-            "linkUrl": "https://github.com/netresearch/php-ast-edit-skill#installation",
-            "suffix": "No Packagist publication or plugin activation is required for this engine path."
+            "linkUrl": "https://github.com/netresearch/php-ast-edit-skill/blob/main/docs/installation.md",
+            "suffix": "Requires Composer 2.2+ and PHP 8.2+ with JSON and tokenizer. Commit the consuming project's composer.lock for reproducible resolution.",
+            "prerequisite": null
           },
           "de": {
-            "text": "Installiert die PHP-Engine aus dem Entwicklungszweig; Composer-Plugins und -Skripte bleiben deaktiviert. Releasestand und separate Skill-Registrierung:",
+            "text": "Installiert die veröffentlichte PHP-Engine aus der 2.x-Reihe; Composer-Plugins und Projektskripte bleiben für diesen Befehl deaktiviert. Die Agent-Anweisungen werden getrennt eingebunden:",
             "linkText": "Installationsanleitung",
-            "linkUrl": "https://github.com/netresearch/php-ast-edit-skill#installation",
-            "suffix": "Dieser Weg benötigt weder eine Packagist-Veröffentlichung noch ein aktiviertes Composer-Plugin."
+            "linkUrl": "https://github.com/netresearch/php-ast-edit-skill/blob/main/docs/installation.md",
+            "suffix": "Benötigt Composer 2.2+ und PHP 8.2+ mit JSON und Tokenizer. Die composer.lock des Zielprojekts hält die aufgelösten Versionen fest.",
+            "prerequisite": null
           }
         }
       },
       "composer-skills": {
         "hint": {
           "en": {
-            "text": "Requires the Composer skill installer and registers the agent instructions. Set up the PHP engine separately:",
+            "text": "Requires the Composer skill installer and registers instructions, without installing the engine's PHP dependencies:",
             "linkText": "engine installation guide",
-            "linkUrl": "https://github.com/netresearch/php-ast-edit-skill#installation",
-            "suffix": "The skills:add command does not install the engine dependencies."
+            "linkUrl": "https://github.com/netresearch/php-ast-edit-skill/blob/main/docs/installation.md",
+            "suffix": "Set up and verify the engine separately."
           },
           "de": {
-            "text": "Benötigt den Composer-Skill-Installer und registriert die Agent-Anweisungen. Die PHP-Engine wird getrennt eingerichtet:",
+            "text": "Benötigt den Composer-Skill-Installer und bindet Anweisungen ein. Die PHP-Abhängigkeiten der Engine werden dabei nicht installiert:",
             "linkText": "Engine installieren",
-            "linkUrl": "https://github.com/netresearch/php-ast-edit-skill#installation",
-            "suffix": "skills:add installiert die Abhängigkeiten der Engine nicht."
+            "linkUrl": "https://github.com/netresearch/php-ast-edit-skill/blob/main/docs/installation.md",
+            "suffix": "Die Engine getrennt einrichten und prüfen."
+          }
+        }
+      }
+    }
+  },
+  "cli-tools": {
+    "methods": {
+      "composer-require": {
+        "command": null,
+        "hint": {
+          "en": {
+            "text": "No Composer package is published under this repository name. Choose a supported source route; see",
+            "linkText": "source README",
+            "linkUrl": "https://github.com/netresearch/coding_agent_cli_toolset#readme",
+            "suffix": "The repository has no root composer.json and the generated package name is unavailable on Packagist.",
+            "prerequisite": null
+          },
+          "de": {
+            "text": "Unter diesem Repository-Namen ist kein Composer-Paket veröffentlicht. Verwende einen unterstützten Weg aus der Quelle:",
+            "linkText": "Quell-README",
+            "linkUrl": "https://github.com/netresearch/coding_agent_cli_toolset#readme",
+            "suffix": "Das Repository hat keine composer.json im Hauptverzeichnis; der entsprechende Paketname ist auf Packagist nicht verfügbar.",
+            "prerequisite": null
+          }
+        }
+      },
+      "npx": {
+        "hint": {
+          "en": {
+            "text": "Installs skill instructions. The audit and installer scripts live in the source repository and need separate setup:",
+            "linkText": "CLI setup and requirements",
+            "linkUrl": "https://github.com/netresearch/coding_agent_cli_toolset#claude-code-plugin",
+            "suffix": "Skill registration alone does not install Python, uv or the audited tools."
+          },
+          "de": {
+            "text": "Installiert Skill-Anweisungen. Die Audit- und Installationsskripte liegen im Quell-Repository und brauchen eine eigene Einrichtung:",
+            "linkText": "CLI-Einrichtung und Voraussetzungen",
+            "linkUrl": "https://github.com/netresearch/coding_agent_cli_toolset#claude-code-plugin",
+            "suffix": "Die Skill-Einbindung installiert weder Python und uv noch die geprüften Werkzeuge."
+          }
+        }
+      },
+      "composer-skills": {
+        "hint": {
+          "en": {
+            "text": "Registers instructions from the direct source. For the repository scripts and their runtime environment, follow",
+            "linkText": "CLI setup and requirements",
+            "linkUrl": "https://github.com/netresearch/coding_agent_cli_toolset#claude-code-plugin",
+            "suffix": "This route does not install the audited tools or their dependencies."
+          },
+          "de": {
+            "text": "Bindet Anweisungen aus der direkten Quelle ein. Die Repository-Skripte und ihre Laufzeitumgebung werden separat eingerichtet:",
+            "linkText": "CLI-Einrichtung und Voraussetzungen",
+            "linkUrl": "https://github.com/netresearch/coding_agent_cli_toolset#claude-code-plugin",
+            "suffix": "Die geprüften Werkzeuge und deren Abhängigkeiten werden dabei nicht installiert."
+          }
+        }
+      }
+    }
+  },
+  "jira-integration": {
+    "methods": {
+      "npx": {
+        "hint": {
+          "en": {
+            "text": "The source package contains jira-communication and jira-syntax. Select the instructions you need; extra plugin hooks require a plugin-capable route:",
+            "linkText": "Jira installation guide",
+            "linkUrl": "https://github.com/netresearch/jira-skill#installation",
+            "suffix": "Jira access and script dependencies are configured separately."
+          },
+          "de": {
+            "text": "Das Quellpaket enthält jira-communication und jira-syntax. Wähle die benötigten Anweisungen; zusätzliche Plugin-Hooks brauchen einen dafür geeigneten Installationsweg:",
+            "linkText": "Jira installieren",
+            "linkUrl": "https://github.com/netresearch/jira-skill#installation",
+            "suffix": "Jira-Zugriff und Skriptabhängigkeiten werden getrennt eingerichtet."
+          }
+        }
+      }
+    }
+  },
+  "orocommerce": {
+    "methods": {
+      "npx": {
+        "hint": {
+          "en": {
+            "text": "This package contains 14 oro-* skills rather than a single orocommerce skill. Choose one or more in the installer; see",
+            "linkText": "source skill list",
+            "linkUrl": "https://github.com/netresearch/orocommerce-skill#skills",
+            "suffix": "Project tools and dependencies depend on the selected OroCommerce task."
+          },
+          "de": {
+            "text": "Dieses Paket enthält 14 oro-*-Skills statt eines einzelnen Skills namens orocommerce. Im Installer kannst du einen oder mehrere auswählen:",
+            "linkText": "Skills im Quellpaket",
+            "linkUrl": "https://github.com/netresearch/orocommerce-skill#skills",
+            "suffix": "Projektwerkzeuge und Abhängigkeiten richten sich nach der gewählten OroCommerce-Aufgabe."
+          }
+        }
+      }
+    }
+  },
+  "matrix-communication": {
+    "methods": {
+      "npx": {
+        "hint": {
+          "en": {
+            "text": "The source offers separate chat, administration and announcement skills; npx installs their instructions, without the plugin's extra command:",
+            "linkText": "Matrix installation guide",
+            "linkUrl": "https://github.com/netresearch/matrix-skill#installation",
+            "suffix": "Chat runtime and E2EE setup are separate. Administration requires Synapse."
+          },
+          "de": {
+            "text": "Die Quelle bietet getrennte Skills für Chat, Administration und Ankündigungen. npx installiert deren Anweisungen, ohne den zusätzlichen Plugin-Befehl:",
+            "linkText": "Matrix installieren",
+            "linkUrl": "https://github.com/netresearch/matrix-skill#installation",
+            "suffix": "Chat-Laufzeit und E2EE werden getrennt eingerichtet. Die Administration benötigt Synapse."
+          }
+        }
+      },
+      "composer-require": {
+        "hint": {
+          "en": {
+            "text": "The current Composer metadata registers the chat and administration skills; the Claude plugin also includes the announcement skill and an extra command. Compare",
+            "linkText": "source package contents",
+            "linkUrl": "https://github.com/netresearch/matrix-skill#installation",
+            "suffix": "Runtime dependencies and homeserver access are separate."
+          },
+          "de": {
+            "text": "Die aktuelle Composer-Konfiguration bindet Chat und Administration ein. Das Claude-Plugin enthält außerdem den Ankündigungs-Skill und einen zusätzlichen Befehl:",
+            "linkText": "Paketumfang vergleichen",
+            "linkUrl": "https://github.com/netresearch/matrix-skill#installation",
+            "suffix": "Laufzeitabhängigkeiten und Homeserver-Zugriff werden getrennt eingerichtet."
+          }
+        }
+      }
+    }
+  },
+  "automated-assessment": {
+    "methods": {
+      "npx": {
+        "hint": {
+          "en": {
+            "text": "The source ships automated-assessment and the separate add-checkpoints companion skill. Select the required instructions; see",
+            "linkText": "assessment installation guide",
+            "linkUrl": "https://github.com/netresearch/automated-assessment-skill#installation",
+            "suffix": "The assessment evaluates only applicable published checkpoints and does not guarantee factual correctness."
+          },
+          "de": {
+            "text": "Die Quelle enthält automated-assessment und den eigenständigen Begleit-Skill add-checkpoints. Wähle die benötigten Anweisungen:",
+            "linkText": "Assessment installieren",
+            "linkUrl": "https://github.com/netresearch/automated-assessment-skill#installation",
+            "suffix": "Assessment wertet passende veröffentlichte Checkpoints aus; ein grüner Check belegt nicht jede inhaltliche Aussage."
           }
         }
       }

@@ -12,7 +12,7 @@ for (const language of ["en", "de"]) {
       });
     });
     await page.goto(`/claude-code-marketplace/${language}/`);
-    await page.getByRole("tab", { name: /composer require/ }).click();
+    await page.getByRole("button", { name: /composer require/ }).click();
     const card = page.locator(".skill-card").filter({
       has: page.getByRole("link", { name: "PHP Structured Edit", exact: true }),
     });

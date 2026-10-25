@@ -24,7 +24,9 @@ import categories from "./categories.js";
 import valueTypes from "./valueTypes.js";
 import groups from "./groups.js";
 import descriptionsDe from "./descriptions_de.json" with { type: "json" };
+import detailsDe from "./details_de.json" with { type: "json" };
 import { displayName } from "./_helpers/display-name.js";
+import { resolveInstallCommand } from "./_helpers/install-command.js";
 import installMethods from "./installMethods.js";
 import installOverrides from "./installOverrides.json" with { type: "json" };
 
@@ -63,12 +65,37 @@ function deriveTagsFromCategoryAndGroup(skill) {
   return [...tags];
 }
 
+
+function resolveInstallHint(method, override) {
+  if (!override || !Object.hasOwn(override, "hint")) return method.hint;
+  if (override.hint === null) return null;
+  if (typeof override.hint !== "object" || Array.isArray(override.hint)) {
+    throw new TypeError(`Invalid installation hint for ${method.id}`);
+  }
+  // Keep generic prerequisites when a package replaces its explanatory copy.
+  // An engine-only route can explicitly clear prerequisite with null.
+  return Object.fromEntries(["en", "de"].map((lang) => [lang, {
+    ...method.hint?.[lang],
+    ...override.hint[lang],
+  }]));
+}
+
 export default function () {
   const marketplace = JSON.parse(readFileSync(MARKETPLACE, "utf8"));
 
   const skills = marketplace.plugins.map((plugin) => {
     const cache = loadCache(plugin.name);
     const parsed = cache?.parsed || null;
+    const localized = detailsDe[plugin.name];
+    if (typeof descriptionsDe[plugin.name] !== "string" || !descriptionsDe[plugin.name].trim()) {
+      throw new Error(`Missing German description for ${plugin.name}`);
+    }
+    for (const field of ["useCases", "expectedOutputs", "contextRequirements"]) {
+      if (!Array.isArray(localized?.[field]) || !localized[field].length
+          || !localized[field].every((item) => typeof item === "string" && item.trim())) {
+        throw new Error(`Missing German detail field ${plugin.name}/${field}`);
+      }
+    }
 
     // Build install-command map once per skill so templates can just key by
     // method id instead of recomputing strings per render.
@@ -80,11 +107,11 @@ export default function () {
     const installCommands = Object.fromEntries(
       installMethods.methods.map((m) => [
         m.id,
-        installOverride.methods?.[m.id]?.command ?? m.command(skillStub, marketplace),
+        resolveInstallCommand(m, skillStub, marketplace, installOverride.methods?.[m.id]),
       ])
     );
     const installHints = Object.fromEntries(
-      installMethods.methods.map((m) => [m.id, installOverride.methods?.[m.id]?.hint ?? m.hint])
+      installMethods.methods.map((m) => [m.id, resolveInstallHint(m, installOverride.methods?.[m.id])])
     );
 
     return {
@@ -92,7 +119,7 @@ export default function () {
       displayName: displayName(plugin.name),
       description: plugin.description,
       descriptionEn: plugin.description,
-      descriptionDe: descriptionsDe[plugin.name] || plugin.description,
+      descriptionDe: descriptionsDe[plugin.name],
       readmeLead: parsed?.readmeLead || null,
       category: plugin.category,
       categoryLabelEn: categories.labels.en[plugin.category],
@@ -121,6 +148,13 @@ export default function () {
       contextRequirements: parsed?.contextRequirements?.length
         ? parsed.contextRequirements
         : [],
+      hasSourceUseCases: Boolean(parsed?.useCases?.length),
+      hasSourceExpectedOutputs: Boolean(parsed?.expectedOutputs?.length),
+      hasSourceContextRequirements: Boolean(parsed?.contextRequirements?.length),
+      useCasesDe: localized.useCases,
+      expectedOutputsDe: localized.expectedOutputs,
+      contextRequirementsDe: localized.contextRequirements,
+      detailProvenanceDe: localized.provenance,
       tags: parsed?.tags?.length ? parsed.tags : [],
       relatedSkills: parsed?.relatedSkills?.length ? parsed.relatedSkills : [],
       readmeFetchedAt: cache?.fetchedAt || null,

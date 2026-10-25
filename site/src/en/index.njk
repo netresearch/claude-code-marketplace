@@ -3,8 +3,10 @@
 # SPDX-FileCopyrightText: Netresearch DTT GmbH
 layout: layouts/base.njk
 permalink: /en/
-title: "Netresearch Skills Marketplace — 40 curated Agent Skills for AI-assisted development"
-description: "Curated Agent Skills for TYPO3, PHP, Go, Docker, security, and documentation. One install. Forty skills. Portable across Claude Code, Cursor, Copilot, Codex, Gemini CLI, and 30+ more agents."
+eleventyComputed:
+  title: Agent Skills Marketplace — {{ marketplace.count }} curated packages | Netresearch
+  description: Find {{ marketplace.count }} curated packages for TYPO3, PHP, Go, Docker, security and documentation. Compare installation methods and choose the skills
+    you need.
 ---
 
 <script type="application/ld+json">
@@ -26,14 +28,17 @@ description: "Curated Agent Skills for TYPO3, PHP, Go, Docker, security, and doc
 </script>
 
 
-<section class="hero">
-  <h1>{{ t.hero.h1 }}</h1>
+<section class="hero" id="install" aria-labelledby="hero-title">
+  <div class="hero__content">
+  <p class="hero__eyebrow">{{ t.hero.eyebrow }}</p>
+  <h1 id="hero-title">{{ t.hero.h1 }}</h1>
   <p class="lead">{{ t.hero.lead }}</p>
 
   {% from "partials/install-block.njk" import installBlock %}
   <div class="hero__ctas">
-    {{ installBlock("hero-install", marketplace.addCommand, t.hero.primaryCta, t.ui.copyCopied) }}
+    {{ installBlock("hero-install", marketplace.addCommand, t.hero.primaryCta, t.ui.copyCopied, t.ui.copyFailed, t.ui.copyPrompt) }}
     <a class="btn btn--secondary" href="#skills">{{ t.hero.secondaryCta }}</a>
+  </div>
   </div>
 </section>
 
@@ -113,7 +118,7 @@ description: "Curated Agent Skills for TYPO3, PHP, Go, Docker, security, and doc
   {% from "partials/install-mode-switcher.njk" import switcher as installModeSwitcher %}
   {{ installModeSwitcher('en', installMethods, t) }}
 
-  <form class="site-search" role="search" data-search data-index-url="{{ '/en/search-index.json' | url }}" data-no-results="{{ t.ui.searchNoResults }}" data-results-template="{{ t.ui.searchResults }}">
+  <form class="site-search" role="search" data-search hidden data-enhance-only data-search-error="{{ t.ui.searchError }}" data-index-url="{{ '/en/search-index.json' | url }}" data-no-results="{{ t.ui.searchNoResults }}" data-results-template="{{ t.ui.searchResults }}">
     <label for="skills-search" class="site-search__label">{{ t.ui.searchLabel }}</label>
     <div class="site-search__row">
       <input id="skills-search" name="q" type="search" autocomplete="off" placeholder="{{ t.ui.searchPlaceholder }}" data-search-input />
@@ -168,7 +173,7 @@ description: "Curated Agent Skills for TYPO3, PHP, Go, Docker, security, and doc
     {% for step in t.howItWorks.steps %}
       <li>
         <h3>{{ step.title }}</h3>
-        <pre><code>{{ step.code }}</code></pre>
+        <pre tabindex="0"><code>{{ step.code }}</code></pre>
       </li>
     {% endfor %}
   </ol>

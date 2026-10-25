@@ -3,6 +3,7 @@
 export default {
   lang: "de",
   ogLocale: "de_DE",
+  ogImage: "/assets/og/landing-de.png",
   hreflangAlternate: {
     lang: "en",
     url: "/en/",

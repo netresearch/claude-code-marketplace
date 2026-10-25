@@ -28,7 +28,7 @@ export default function () {
       categorySlug: skill.category,
       group: skill.group,
       tags: skill.tags,
-      useCases: skill.useCases,
+      useCases: lang === "de" ? skill.useCasesDe : skill.useCases,
       url: urlFor(lang, skill.slug, pathPrefix),
     }));
   }

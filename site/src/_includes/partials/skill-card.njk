@@ -1,23 +1,25 @@
 {# SPDX-License-Identifier: MIT -#}
 {# SPDX-FileCopyrightText: Netresearch DTT GmbH -#}
 <article class="skill-card">
-  <span class="skill-card__category" aria-label="Category">{{ categoryLabels[skill.category] or skill.category }}</span>
+  <span class="skill-card__category">{{ categoryLabels[skill.category] or skill.category }}</span>
   {% if skill.valueType %}
-    <span class="skill-card__value-type" aria-label="Value type">{{ valueTypeLabels[skill.valueType] or skill.valueType }}</span>
+    <span class="skill-card__value-type">{{ valueTypeLabels[skill.valueType] or skill.valueType }}</span>
   {% endif %}
   <h3 class="skill-card__title">
     <a href="{{ ('/' ~ lang ~ '/skills/' ~ skill.slug ~ '/') | url }}">{{ skill.displayName }}</a>
   </h3>
-  <p class="skill-card__description">{{ skill.description }}</p>
+  <p class="skill-card__description">{{ skill.descriptionDe if lang == 'de' else skill.descriptionEn }}</p>
   <footer class="skill-card__footer">
-    <div class="skill-card__installs" aria-label="Install command">
+    <div class="skill-card__installs" role="group" aria-label="{{ t.ui.installCommandsLabel }}">
       {% for method in installMethods.methods %}
         {% if skill.installCommands[method.id] %}
-          <code class="skill-card__install install--{{ method.id }}" id="install-{{ method.id }}-{{ skill.slug }}">{{ skill.installCommands[method.id] }}</code>
+          <code class="skill-card__install install--{{ method.id }}" tabindex="0" id="install-{{ method.id }}-{{ skill.slug }}">{{ skill.installCommands[method.id] }}</code>
+        {% else %}
+          <p class="skill-card__unavailable install--{{ method.id }}">{{ t.ui.installUnavailable }}</p>
         {% endif %}
       {% endfor %}
       <button type="button" class="copy-btn"
-              data-copy-active-install
+              hidden data-enhance-only data-copy-failed-label="{{ t.ui.copyFailed }}" data-copy-prompt-label="{{ t.ui.copyPrompt }}" data-copy-active-install
               data-copied-label="{{ t.ui.copyCopied }}"
               aria-label="{{ t.skill.copyInstall }} {{ skill.slug }}">{{ t.ui.copyShort }}</button>
     </div>

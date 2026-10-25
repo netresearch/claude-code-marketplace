@@ -10,9 +10,17 @@
  * marketplace.json catalog.
  */
 import { isSafeHref } from "./scripts/safe-href.js";
+import { readFileSync } from "node:fs";
+import { renderSiteHeader, renderPageNavigation } from "./shared/site-shell/render-site-shell.mjs";
 
 export default function (eleventyConfig) {
   eleventyConfig.addPassthroughCopy({ "src/assets": "assets" });
+  for (const name of ["site-shell.css", "site-shell.js", "netresearch-symbol-only.svg"]) {
+    eleventyConfig.addPassthroughCopy({ [`shared/site-shell/${name}`]: `assets/site-shell/${name}` });
+  }
+  eleventyConfig.addGlobalData("siteThemeBootstrap", readFileSync(new URL("./shared/site-shell/theme-bootstrap.js", import.meta.url), "utf8"));
+  eleventyConfig.addFilter("renderSiteHeader", renderSiteHeader);
+  eleventyConfig.addFilter("renderPageNavigation", renderPageNavigation);
 
   eleventyConfig.addFilter("titleCase", (slug) =>
     String(slug)

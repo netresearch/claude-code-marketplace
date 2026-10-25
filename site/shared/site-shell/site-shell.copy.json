@@ -1,0 +1,8 @@
+{
+  "de": {
+    "navigation": "Globale Navigation", "home": "Open Source", "projects": "Projekte", "stack": "KI-Stack", "impact": "Impact", "contact": "Kontakt", "languages": "Sprache", "appearance": "Darstellung", "system": "System", "light": "Hell", "dark": "Dunkel", "menu": "Navigation", "page": "Auf dieser Seite"
+  },
+  "en": {
+    "navigation": "Global navigation", "home": "Open Source", "projects": "Projects", "stack": "AI stack", "impact": "Impact", "contact": "Contact", "languages": "Language", "appearance": "Appearance", "system": "System", "light": "Light", "dark": "Dark", "menu": "Navigation", "page": "On this page"
+  }
+}

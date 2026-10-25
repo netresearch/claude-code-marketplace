@@ -14,10 +14,13 @@ const SECTION_ALIASES = {
   useCases: [
     "use cases",
     "use case",
+    "use when",
     "when to use",
     "when to use this skill",
     "when this skill helps",
     "scenarios",
+  ],
+  useCasesFallback: [
     "examples",
     "what it does",
     "what this skill does",
@@ -114,6 +117,26 @@ function findSection(markdown, aliases) {
   return captured.join("\n").trim() || null;
 }
 
+// README examples are not discovery facts. In particular, a Markdown example
+// may itself contain headings and list items that look like our target sections.
+function withoutExamples(markdown) {
+  let fence = null;
+  return markdown.replace(/^[ \t]*<!--[\s\S]*?-->[ \t]*(?:\r?\n|$)/gm, "").split(/\r?\n/).map((line) => {
+    const marker = line.match(/^\s*(`{3,}|~{3,})(.*)$/);
+    if (fence) {
+      if (marker && marker[1][0] === fence[0] && marker[1].length >= fence.length && !marker[2].trim()) {
+        fence = null;
+      }
+      return "";
+    }
+    if (marker) {
+      fence = marker[1];
+      return "";
+    }
+    return line;
+  }).join("\n");
+}
+
 function parseBullet(line) {
   let i = 0;
   while (i < line.length && (line[i] === " " || line[i] === "\t")) i++;
@@ -130,14 +153,82 @@ function parseBullet(line) {
   return line.slice(j, end);
 }
 
-function bulletsFromBlock(block) {
+function bulletItems(block) {
   if (!block) return [];
-  return block
-    .split(/\r?\n/)
-    .map(parseBullet)
-    .filter((text) => text !== null)
-    .map((text) => text.replace(/`/g, "").trim())
-    .filter((text) => text.length > 0);
+  const items = [];
+  let baseIndent = 0;
+  let active = false;
+  const tableLines = new Set(tableItems(block).flatMap(({ line, headerLine }) => [headerLine, headerLine + 1, line]));
+  for (const [lineNumber, line] of block.split(/\r?\n/).entries()) {
+    // Tables are emitted once as normalized rows, including when a Markdown
+    // table is indented beneath a list item rather than standing on its own.
+    if (tableLines.has(lineNumber)) continue;
+    const text = parseBullet(line);
+    const indent = line.length - line.trimStart().length;
+    if (text !== null) {
+      if (!active || indent <= baseIndent) {
+        items.push({ text, line: lineNumber });
+        baseIndent = indent;
+      } else {
+        // Arrays are our public metadata shape. Keep nested qualifiers with
+        // their parent rather than presenting them as independent use cases.
+        const separator = items.at(-1).text.endsWith(":") ? " " : "; ";
+        items[items.length - 1].text += separator + text;
+      }
+      active = true;
+    } else if (active && line.trim()) {
+      if (indent > baseIndent) items[items.length - 1].text += " " + line.trim();
+      else active = false;
+    }
+  }
+  return items;
+}
+
+function bulletsFromBlock(block) {
+  return bulletItems(block).map(({ text }) => text);
+}
+
+function tableCells(line) {
+  const cells = [""];
+  let codeTicks = 0;
+  for (let i = 0; i < line.length; i++) {
+    if (line[i] === "\\" && line[i + 1] === "|") {
+      cells[cells.length - 1] += "|";
+      i++;
+    } else if (line[i] === "`") {
+      const ticks = line.slice(i).match(/^`+/)[0];
+      if (!codeTicks) codeTicks = ticks.length;
+      else if (codeTicks === ticks.length) codeTicks = 0;
+      cells[cells.length - 1] += ticks;
+      i += ticks.length - 1;
+    } else if (line[i] === "|" && !codeTicks) {
+      cells.push("");
+    } else cells[cells.length - 1] += line[i];
+  }
+  if (!cells[0].trim()) cells.shift();
+  if (cells.length && !cells.at(-1).trim()) cells.pop();
+  return cells.map((cell) => cell.trim());
+}
+
+function tableItems(block) {
+  if (!block) return [];
+  const lines = block.split(/\r?\n/);
+  const items = [];
+  for (let i = 0; i < lines.length - 1; i++) {
+    const headers = tableCells(lines[i]);
+    const separator = tableCells(lines[i + 1]);
+    if (headers.length < 2 || separator.length !== headers.length || !separator.every((cell) => /^:?-{3,}:?$/.test(cell))) continue;
+    const headerLine = i;
+    i += 2;
+    for (; i < lines.length; i++) {
+      const cells = tableCells(lines[i]);
+      if (cells.length !== headers.length) break;
+      const values = cells.slice(1).map((cell, col) => headers.length === 2 ? cell : `${headers[col + 1]}: ${cell}`);
+      items.push({ text: `${cells[0]}: ${values.join("; ")}`, line: i, headerLine });
+    }
+    i--;
+  }
+  return items;
 }
 
 function leadParagraph(block) {
@@ -148,10 +239,25 @@ function leadParagraph(block) {
     if (!cleaned) continue;
     if (cleaned.startsWith("[!") || cleaned.startsWith("[![")) continue;
     if (cleaned.startsWith("---")) continue;
+    if (cleaned.startsWith("|")) continue;
     if (/^[\[\!]/.test(cleaned)) continue;
+    if (cleaned.endsWith(":")) {
+      // A concrete prerequisite can stand alone after its platform-specific
+      // setup block is omitted (Matrix: "For E2EE support ..., install libolm:").
+      // Generic lead-ins such as "Run the following:" cannot.
+      if (/\b(?:install|requires?|needs?)\s+\S/i.test(cleaned) && !/\b(?:following|below|these|commands?)\s*:$/i.test(cleaned)) return cleaned.slice(0, -1) + ".";
+      continue;
+    }
     return cleaned;
   }
   return null;
+}
+
+function summaryItems(block) {
+  const items = [...bulletItems(block), ...tableItems(block)];
+  if (items.length) return items.sort((a, b) => a.line - b.line).map(({ text }) => text);
+  const paragraph = leadParagraph(block);
+  return paragraph ? [paragraph] : [];
 }
 
 function stripH1(text) {
@@ -196,7 +302,9 @@ export function parseReadme(markdown) {
     };
   }
 
-  const useCasesBlock = findSection(markdown, SECTION_ALIASES.useCases);
+  markdown = withoutExamples(markdown);
+  const useCasesBlock = findSection(markdown, SECTION_ALIASES.useCases)
+    ?? findSection(markdown, SECTION_ALIASES.useCasesFallback);
   const expectedOutputsBlock = findSection(markdown, SECTION_ALIASES.expectedOutputs);
   // A dedicated "Context requirements" section takes priority over an earlier
   // generic alias. It is excluded from the second lookup so an empty one cannot
@@ -208,16 +316,12 @@ export function parseReadme(markdown) {
   const relatedBlock = findSection(markdown, SECTION_ALIASES.relatedSkills);
   const tagsBlock = findSection(markdown, SECTION_ALIASES.tags);
 
-  const intro = stripH1(markdown.split(/^##\s+/m)[0]).trim();
+  const intro = stripH1(markdown.split(/^##\s+/m)[0].trim()).trim();
 
   return {
     useCases: bulletsFromBlock(useCasesBlock),
-    expectedOutputs: bulletsFromBlock(expectedOutputsBlock).length
-      ? bulletsFromBlock(expectedOutputsBlock)
-      : (leadParagraph(expectedOutputsBlock) ? [leadParagraph(expectedOutputsBlock)] : []),
-    contextRequirements: bulletsFromBlock(contextBlock).length
-      ? bulletsFromBlock(contextBlock)
-      : (leadParagraph(contextBlock) ? [leadParagraph(contextBlock)] : []),
+    expectedOutputs: summaryItems(expectedOutputsBlock),
+    contextRequirements: summaryItems(contextBlock),
     // Related-skill links are rendered as <a href> without further checks,
     // so a target outside the allowlist (e.g. `javascript:`) is dropped here.
     relatedSkills: extractLinks(relatedBlock).filter((l) => isSafeHref(l.href)).map((l) => ({

@@ -31,7 +31,7 @@ export default {
       },
       de: {
         title: "Skill-Skills",
-        lead: "Eine kleine Familie von Skills, deren Gegenstand andere Skills sind. Im Zentrum läuft eine Schleife — Harness, Assessment, Retro — drumherum stehen Autoren- und Host-seitige Werkzeuge, die in die Schleife einspeisen.",
+        lead: "Skills für Projektanweisungen, überprüfbare Checkpoints und die Pflege anderer Skills. Ergänzt durch Werkzeuge für ihre Installation.",
       },
       slugs: [
         "agent-harness",
@@ -43,9 +43,10 @@ export default {
     },
     typo3: {
       en: { title: "TYPO3 Development", lead: "Stack-aware skills for TYPO3 extensions and projects." },
-      de: { title: "TYPO3-Entwicklung", lead: "Stack-spezifische Skills für TYPO3-Extensions und -Projekte." },
+      de: { title: "TYPO3-Entwicklung", lead: "Skills für Extensions, deploybare Projekte, Tests und Dokumentation." },
       slugs: [
         "typo3-conformance",
+        "typo3-site-conformance",
         "typo3-testing",
         "typo3-docs",
         "typo3-ddev",
@@ -61,12 +62,12 @@ export default {
     },
     orocommerce: {
       en: { title: "OroCommerce", lead: "Entities, datagrids, REST API, workflows, frontend, security." },
-      de: { title: "OroCommerce", lead: "Entities, Datagrids, REST-API, Workflows, Frontend, Security." },
+      de: { title: "OroCommerce", lead: "Entwicklung, Schnittstellen und Tests für OroCommerce 6.1." },
       slugs: ["orocommerce"],
     },
     "quality-security": {
       en: { title: "Code Quality & Security", lead: "Modernization, audits, supply-chain hardening." },
-      de: { title: "Code-Qualität & Sicherheit", lead: "Modernisierung, Audits, Supply-Chain-Härtung." },
+      de: { title: "Codequalität und Sicherheit", lead: "PHP modernisieren, Änderungen prüfen und Lieferketten absichern." },
       slugs: [
         "php-modernization",
         "php-structured-edit",
@@ -84,11 +85,12 @@ export default {
         "git-workflow",
         "github-project",
         "github-release",
+        "jujutsu-workflow",
       ],
     },
     productivity: {
       en: { title: "Productivity & Integration", lead: "Daily-driver tooling for engineers and teams." },
-      de: { title: "Produktivität & Integration", lead: "Alltags-Werkzeuge für Engineering-Teams." },
+      de: { title: "Werkzeuge und Zusammenarbeit", lead: "Skills für Daten, Suche, Kommunikation und die tägliche Projektarbeit." },
       slugs: [
         "jira-integration",
         "matrix-communication",
@@ -96,7 +98,6 @@ export default {
         "context7",
         "data-tools",
         "file-search",
-        "coach",
         "german-technical-writing",
         "peer-qa-review",
         "markdown-to-pdf",
@@ -104,7 +105,7 @@ export default {
     },
     brand: {
       en: { title: "Brand & visual identity", lead: "Visual conventions for Netresearch artifacts." },
-      de: { title: "Brand & visuelle Identität", lead: "Visuelle Konventionen für Netresearch-Artefakte." },
+      de: { title: "Netresearch-Gestaltung", lead: "Farben, Typografie und Vorlagen für Beiträge und Materialien von Netresearch." },
       slugs: ["netresearch-branding"],
     },
   },

@@ -1,0 +1,11 @@
+<nav class="nr-pagebar" data-nr-page-navigation data-nr-has-links="{{hasLinks}}" aria-label="{{title}} – {{page}}">
+  <div class="nr-pagebar-inner">
+    <div class="nr-pagebar-heading" data-nr-duplicate-title="{{duplicateTitle}}">{{titleMarkup}}</div>
+    <div class="nr-pagebar-desktop">{{pageLinks}}</div>
+    <details class="nr-pagebar-mobile" data-nr-page-menu>
+      <summary class="nr-pagebar-summary">{{page}}<svg class="nr-pagebar-chevron" viewBox="0 0 24 24" aria-hidden="true"><path d="m7 10 5 5 5-5"/></svg></summary>
+      <div class="nr-pagebar-menu">{{pageLinks}}</div>
+    </details>
+    {{toolsMarkup}}
+  </div>
+</nav>

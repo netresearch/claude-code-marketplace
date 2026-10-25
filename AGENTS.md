@@ -133,7 +133,7 @@ Record intentional deviations from a source skill repo. Empty by default.
 
 | Slug | Field | Marketplace value | Reason | Decided |
 |---|---|---|---|---|
-| php-structured-edit | Installation commands and hints | `site/src/_data/installOverrides.json` | The PHP engine needs a VCS install until Packagist publication; skill registration alone does not install its runtime. Commands follow the source installation guide. | 2026-09-06 |
+| php-structured-edit; cli-tools; jira-integration; orocommerce; matrix-communication; automated-assessment | Installation commands and component-coverage hints | `site/src/_data/installOverrides.json` | Source manifests and registry metadata determine supported routes. PHP 2.0.0 is published; skill registration still does not install its engine. CLI Tools has no Composer package at its source-repository name. Bundle and client-component differences follow the linked source guides. | 2026-10-25 |
 
 ---
 

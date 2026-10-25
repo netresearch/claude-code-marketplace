@@ -5,10 +5,10 @@
 
 > **You ship code. Your agent should know your stack.**
 
-39 curated Agent Skills for TYPO3, PHP, Go, Docker, Jira, security, and documentation — portable across Claude Code, Cursor, Copilot, Codex, Gemini CLI, and 30+ other agents.
+40 curated catalog entries for TYPO3, PHP, Go, Docker, Jira, security, and documentation. Each entry points to a source package; some packages contain several Agent Skills. Instructions follow the Agent Skills format, while tools and client-specific components depend on the package and installer.
 
 [![Marketplace site](https://img.shields.io/badge/marketplace-netresearch.github.io-2F99A4)](https://netresearch.github.io/claude-code-marketplace/)
-[![Skills](https://img.shields.io/badge/skills-39-2F99A4)](https://netresearch.github.io/claude-code-marketplace/en/skills/)
+[![Catalog entries](https://img.shields.io/badge/catalog_entries-40-2F99A4)](https://netresearch.github.io/claude-code-marketplace/en/#skills)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 [![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/netresearch/claude-code-marketplace/badge)](https://scorecard.dev/viewer/?uri=github.com/netresearch/claude-code-marketplace)
 
@@ -18,7 +18,7 @@
 
 **Agentic Skills** are portable packages of procedural knowledge that work across any AI coding agent supporting the [Agent Skills specification](https://agentskills.io).
 
-Every listed repository is also an [Agent Plugins 1.0.0](https://agent-plugins.org) package: a `plugin.json` at the repository root plus the `skills/` directory, which conformant clients load directly from the source repository. This marketplace stays the Claude Code install path — Agent Plugins standardizes packaging, not distribution.
+Source packages may include several skills and additional components such as hooks or commands. [Agent Plugins](https://agent-plugins.org) standardizes portable packaging; component support and installation remain client-specific. The per-package detail pages link to the source README and explain available installation routes.
 
 **Supported Platforms:**
 - Claude Code (Anthropic)
@@ -34,17 +34,22 @@ Every listed repository is also an [Agent Plugins 1.0.0](https://agent-plugins.o
 
 ```bash
 /plugin marketplace add netresearch/claude-code-marketplace
+/plugin install typo3-conformance@netresearch-claude-code-marketplace
 ```
 
-Then use `/plugin` to browse and install individual skills.
+The first command registers the catalog; the second installs one example plugin. Use `/plugin` to browse and choose other packages. Adding the marketplace does not install all entries.
 
-### npx (Any Agent)
+### npx (Skill Instructions)
 
 ```bash
 npx skills add https://github.com/netresearch/{repo-name} --skill {skill-name}
 ```
 
 Browse all skills at [skills.sh/netresearch](https://skills.sh/netresearch).
+
+Use a skill name from the source repository, which can differ from its catalog entry ID. For example, the Jira package contains `jira-communication` and `jira-syntax`; OroCommerce contains multiple `oro-*` skills. The [skills CLI installation guide](https://github.com/vercel-labs/skills#install-a-skill) currently requires Node.js 22.20+.
+
+A skill-only installer does not install a plugin's extra hooks or commands, and registration does not set up external runtime tools. Check the package's detail page and source installation guide. Composer skill registration uses the [Composer skill installer](https://github.com/netresearch/composer-agent-skill-plugin); an engine-only installation may deliberately disable it. Package availability and direct-source setup differ by entry.
 
 ## Available Skills
 
@@ -79,14 +84,15 @@ Host-side tooling (not Agent Skills themselves, but part of the same family):
 | typo3-ckeditor5 | [typo3-ckeditor5-skill](https://github.com/netresearch/typo3-ckeditor5-skill) | CKEditor 5 plugin development for TYPO3 v12+ |
 | typo3-core-contributions | [typo3-core-contributions-skill](https://github.com/netresearch/typo3-core-contributions-skill) | Guide TYPO3 core contributions via Gerrit |
 | typo3-typoscript-ref | [typo3-typoscript-ref-skill](https://github.com/netresearch/typo3-typoscript-ref-skill) | Version-aware TypoScript, TSconfig, and Fluid reference lookup |
-| typo3-a11y | [typo3-a11y-skill](https://github.com/netresearch/typo3-a11y-skill) | WCAG 2.1 AA accessibility patterns for TYPO3 projects |
+| typo3-a11y | [typo3-a11y-skill](https://github.com/netresearch/typo3-a11y-skill) | WCAG 2.2 AA accessibility patterns for TYPO3 sitepackages |
 | typo3-vite | [typo3-vite-skill](https://github.com/netresearch/typo3-vite-skill) | Vite build setup, SCSS architecture, Bootstrap 5 theming |
+| typo3-upgrade-effort-model | [typo3-upgrade-effort-model-skill](https://github.com/netresearch/typo3-upgrade-effort-model-skill) | TYPO3 LTS upgrade effort model: risk multipliers, baselines, version compatibility, Rector coverage, 7-phase workflow |
 
 ### OroCommerce
 
 | Skill | Repository | Description |
 |-------|-----------|-------------|
-| orocommerce | [orocommerce-skill](https://github.com/netresearch/orocommerce-skill) | OroCommerce development: entities, datagrids, REST API, workflows, frontend, security, integration, bundle scaffolding |
+| orocommerce | [orocommerce-skill](https://github.com/netresearch/orocommerce-skill) | Fourteen OroCommerce 6.1 skills covering development, integration, security, Behat, functional tests and performance tests |
 
 ### Code Quality & Security
 
@@ -107,23 +113,21 @@ Host-side tooling (not Agent Skills themselves, but part of the same family):
 | git-workflow | [git-workflow-skill](https://github.com/netresearch/git-workflow-skill) | Branching strategies, Conventional Commits, PR workflows |
 | github-project | [github-project-skill](https://github.com/netresearch/github-project-skill) | GitHub repo setup: branch protection, CODEOWNERS, auto-merge |
 | github-release | [github-release-skill](https://github.com/netresearch/github-release-skill) | Safe, automated GitHub releases with supply chain security. Prevents dangerous gh release commands, orchestrates version bumps, signed tags, and CI-driven releases across ecosystems. |
-| jujutsu-workflow | [jujutsu-workflow-skill](https://github.com/netresearch/jujutsu-workflow-skill) | Agent-safe version control with Jujutsu (jj): jj as the local change layer (reversible op-log undo, conflicts-as-data, non-interactive history surgery), Git as the canonical remote/PR/CI interface; proven with evals to beat pure git for agents |
+| jujutsu-workflow | [jujutsu-workflow-skill](https://github.com/netresearch/jujutsu-workflow-skill) | Local change management with Jujutsu (jj), reversible history and a Git-based handoff to reviews and CI |
 
 ### Productivity & Integration
 
 | Skill | Repository | Description |
 |-------|-----------|-------------|
 | jira-integration | [jira-skill](https://github.com/netresearch/jira-skill) | Jira API operations and wiki markup (two sub-skills) |
-| matrix-communication | [matrix-skill](https://github.com/netresearch/matrix-skill) | Send messages to Matrix rooms |
+| matrix-communication | [matrix-skill](https://github.com/netresearch/matrix-skill) | Separate skills for Matrix chat, Synapse administration and announcement composition; component coverage varies by installer |
 | cli-tools | [coding_agent_cli_toolset](https://github.com/netresearch/coding_agent_cli_toolset) | Auto-install missing CLI tools (100+ tool catalog) |
 | context7 | [context7-skill](https://github.com/netresearch/context7-skill) | Library documentation lookup via Context7 REST API |
 | data-tools | [data-tools-skill](https://github.com/netresearch/data-tools-skill) | Structured data manipulation with jq, yq, dasel, qsv |
 | file-search | [file-search-skill](https://github.com/netresearch/file-search-skill) | Efficient code search with ripgrep, ast-grep, fd |
-| coach | [claude-coach-plugin](https://github.com/netresearch/claude-coach-plugin) | Self-improving learning system with hooks and commands |
 | german-technical-writing | [german-technical-writing-skill](https://github.com/netresearch/german-technical-writing-skill) | Natural German technical register for Jira, internal docs, team chat — catches anglicisms, enforces lexicon |
 | peer-qa-review | [peer-qa-review-skill](https://github.com/netresearch/peer-qa-review-skill) | Round-1 IT QA peer-review runbook: lifecycle, severity vocabulary, structured Jira comment template, edge cases, anti-patterns |
 | markdown-to-pdf | [markdown-to-pdf-skill](https://github.com/netresearch/markdown-to-pdf-skill) | Convert Markdown files to styled PDFs via WeasyPrint; CSS-overridable for branded output |
-| typo3-upgrade-effort-model | [typo3-upgrade-effort-model-skill](https://github.com/netresearch/typo3-upgrade-effort-model-skill) | TYPO3 LTS upgrade effort model: risk multipliers, baselines, version compatibility, Rector coverage, 7-phase workflow |
 
 ### Brand & visual identity
 
@@ -133,7 +137,7 @@ Host-side tooling (not Agent Skills themselves, but part of the same family):
 
 ## Architecture
 
-This marketplace uses **source references** — it contains only a `marketplace.json` catalog that points to individual skill repositories. Claude Code fetches skills directly from their source repos when installed.
+This marketplace uses **source references**: `marketplace.json` points to source package repositories. Claude Code fetches a selected plugin from its source repository when installed. A plugin can contain several skills and additional components.
 
 The GitHub Pages site is built from [`site/`](site/README.md); the design decisions behind it are recorded as [ADRs in `docs/decisions/`](docs/decisions/README.md).
 

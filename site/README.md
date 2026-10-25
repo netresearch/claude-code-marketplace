@@ -97,3 +97,12 @@ site/
   machine-echo translations of the English text
   (see [ADR-0002](../docs/decisions/0002-bilingual-en-de-with-independent-german-copy.md)).
 - Commits: Conventional Commits with `(site)`/`(pages)` scope, DCO sign-off, signed.
+
+
+## Verification and localized catalog data
+
+Run `npm ci`, then `npm run build:all`. `npm run check` includes the exact catalog metadata check and `npm run test:unit` (parsing, installation routes, interactions and social-image rendering). `npm run test:visual` also exercises delayed search, unavailable installation routes, theme persistence and navigation without JavaScript. Screenshot baselines must still come from the CI renderer as described in `AGENTS.md`.
+
+`src/_data/details_de.json` contains independently written German summaries and explicit source-guide references where the upstream README does not enumerate a result or prerequisite. Each row records its reviewed raw-README hash and source URL. These identify the reviewed snapshot; they do not require unrelated future README edits to keep the same hash. English sections continue to come from the source parser. Update both language records when relevant source facts change.
+
+The family navigation is copied without alteration under `shared/site-shell/`; its source and byte hashes are recorded in `shared/site-shell-source.json`. Keep local content and links in the separate page navigation. Public WOFF2 fonts are self-hosted under `src/assets/fonts/`. The licensed TTF derivatives under `shared/fonts/` are build inputs for social images, not browser downloads; conversion provenance and licenses are next to them.

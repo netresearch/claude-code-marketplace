@@ -17,9 +17,22 @@ export default {
         en: { tab: "Claude Code", subtitle: "via this marketplace" },
         de: { tab: "Claude Code", subtitle: "über diesen Marketplace" },
       },
-      // Claude Code's `/plugin install` is the marketplace's native flow —
-      // already explained in the hero. No extra hint needed.
-      hint: null,
+      hint: {
+        en: {
+          prerequisite: "First add the marketplace once in Claude Code: `/plugin marketplace add netresearch/claude-code-marketplace`.",
+          text: "Then install the selected plugin. For setup and installation scopes, see",
+          linkText: "Claude Code plugin setup",
+          linkUrl: "https://code.claude.com/docs/en/discover-plugins#add-a-marketplace",
+          suffix: "A plugin can include several skills and additional components.",
+        },
+        de: {
+          prerequisite: "Zuerst den Marketplace einmal in Claude Code hinzufügen: `/plugin marketplace add netresearch/claude-code-marketplace`.",
+          text: "Danach das gewünschte Plugin installieren. Einrichtung und Geltungsbereich beschreibt die",
+          linkText: "Claude-Code-Anleitung",
+          linkUrl: "https://code.claude.com/docs/en/discover-plugins#add-a-marketplace",
+          suffix: "Ein Plugin kann mehrere Skills und zusätzliche Bestandteile enthalten.",
+        },
+      },
       command(skill, marketplace) {
         return `/plugin install ${skill.slug}@${marketplace.name}`;
       },
@@ -27,26 +40,28 @@ export default {
     {
       id: "npx",
       labels: {
-        en: { tab: "npx", subtitle: "any Agent Skills CLI" },
-        de: { tab: "npx", subtitle: "beliebige Agent-Skills-CLI" },
+        en: { tab: "npx", subtitle: "interactive skill selection" },
+        de: { tab: "npx", subtitle: "Skills gezielt auswählen" },
       },
       hint: {
         en: {
-          text: "Universal Agent Skills CLI from",
+          prerequisite: "Requires Node.js 22.20+. Run from the target project, then choose the source skills and agents in the installer.",
+          text: "Uses the skills CLI from",
           linkText: "skills.sh",
           linkUrl: "https://skills.sh",
-          suffix: "— works across Claude Code, Cursor, GitHub Copilot, Codex, Gemini CLI and 30+ more agents.",
+          suffix: "Installs skill instructions. Extra plugin hooks, commands and external runtime tools are not installed by this route.",
         },
         de: {
-          text: "Universelle Agent-Skills-CLI von",
+          prerequisite: "Benötigt Node.js 22.20+. Im Zielprojekt ausführen und anschließend Skills und Agents im Installer auswählen.",
+          text: "Verwendet den skills-Installer von",
           linkText: "skills.sh",
           linkUrl: "https://skills.sh",
-          suffix: "— funktioniert in Claude Code, Cursor, GitHub Copilot, Codex, Gemini CLI und 30+ weiteren Agents.",
+          suffix: "Installiert Skill-Anweisungen. Zusätzliche Plugin-Hooks, Befehle und externe Laufzeitwerkzeuge werden damit nicht eingerichtet.",
         },
       },
       command(skill) {
         if (!skill.repo) return null;
-        return `npx skills add https://github.com/${skill.repo} --skill ${skill.slug}`;
+        return `npx skills add https://github.com/${skill.repo}`;
       },
     },
     {
@@ -57,16 +72,18 @@ export default {
       },
       hint: {
         en: {
+          prerequisite: "Allow the Composer skill installer to activate and approve skill registration when prompted.",
           text: "Requires",
           linkText: "netresearch/composer-agent-skill-plugin",
           linkUrl: "https://github.com/netresearch/composer-agent-skill-plugin",
-          suffix: "— resolves Agent Skills as Composer dependencies in PHP projects, auto-discovers skills, generates AGENTS.md.",
+          suffix: "Discovers trusted skill packages and registers their instructions in AGENTS.md. Runtime tools may need separate setup.",
         },
         de: {
+          prerequisite: "Den Composer-Skill-Installer aktivieren und die Skill-Einbindung auf Nachfrage freigeben.",
           text: "Setzt",
           linkText: "netresearch/composer-agent-skill-plugin",
           linkUrl: "https://github.com/netresearch/composer-agent-skill-plugin",
-          suffix: "voraus — bindet Agent Skills als Composer-Dependencies in PHP-Projekte ein, erkennt Skills automatisch, generiert AGENTS.md.",
+          suffix: "voraus. Erkennt freigegebene Skill-Pakete und trägt ihre Anweisungen in AGENTS.md ein. Laufzeitwerkzeuge können eine eigene Einrichtung benötigen.",
         },
       },
       command(skill) {
@@ -82,21 +99,23 @@ export default {
       },
       hint: {
         en: {
+          prerequisite: "Install and activate netresearch/composer-agent-skill-plugin first; approve the selected source's skill registration.",
           text: "Provided by",
           linkText: "netresearch/composer-agent-skill-plugin",
           linkUrl: "https://github.com/netresearch/composer-agent-skill-plugin",
-          suffix: "— pins skill repos directly without going through Packagist, locks them in `composer.skills.lock`.",
+          suffix: "Pins source repositories without a Packagist package and records them in `composer.skills.lock`. Runtime dependencies remain separate.",
         },
         de: {
-          text: "Kommt aus",
+          prerequisite: "Zuerst netresearch/composer-agent-skill-plugin installieren und aktivieren; die Skill-Einbindung der gewählten Quelle freigeben.",
+          text: "Wird bereitgestellt von",
           linkText: "netresearch/composer-agent-skill-plugin",
           linkUrl: "https://github.com/netresearch/composer-agent-skill-plugin",
-          suffix: "— pinnt Skill-Repos direkt ohne Packagist-Veröffentlichung, persistiert in `composer.skills.lock`.",
+          suffix: "Bezieht Quell-Repositories ohne Packagist-Paket und hält sie in composer.skills.lock fest. Laufzeitabhängigkeiten werden getrennt eingerichtet.",
         },
       },
       command(skill) {
         if (!skill.repo) return null;
-        return `composer skills:add github:${skill.repo}`;
+        return `composer skills:add ${skill.repo}`;
       },
     },
   ],
