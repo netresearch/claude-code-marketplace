@@ -1,13 +1,13 @@
 {
-  "source": "https://github.com/netresearch/netresearch.github.io/tree/d977b58ef66ae23e7f1e6c3d7f553b4194b1dec2/shared/site-shell",
-  "imported_for": "Identical family header; project content lives in the separate page navigation.",
+  "source": "https://github.com/netresearch/netresearch.github.io/tree/2cd85dfdbeb7186b5ab9964cafee93393bf0d006/shared/site-shell",
+  "imported_for": "Shared global and project navigation with a common landing-page header family.",
   "files": {
     ".gitignore": "862263fa1f46c20f0d1e4dac5ffcc75abd55c08211b2c3864c5f8764b9d87793",
     "netresearch-symbol-only.svg": "ca88779a6d008b4606bbe8d45f4640d6967f82b66b302d95b9153dcf2cfb9e29",
     "page-navigation.html": "7bb3bcd86f137039b6c77afd5ba46697005b4681e7ab411daa94ee8d15c684ee",
     "render-site-shell.mjs": "d34c3757815428ae2c5c5f226e27fc4f4f9645f771c29035bc08ef69a4689859",
     "site-shell.copy.json": "2a3ce1f37f4caadff34f8b9737d42f9eb315eb03364d83636b59ce6496e6bf81",
-    "site-shell.css": "bb02cb6e7a386c55edcf8320b11adb692ce4c575bd52d12944d7f9ece0ee8a5d",
+    "site-shell.css": "6c7012fb5a0c946ba87319eb82437ad1c85d24f6d228fa79c41005b821d74783",
     "site-shell.html": "6a9c918381cba363e876bab0b9387ab023f7cc907d183baf7baf415e2a333d0d",
     "site-shell.js": "c3453cb1b47ab92dd8014d0f4778ea21ef8fc4136c7f17193b0cee2e5bdd029b",
     "site_shell.py": "fc2c8b7c8d0687ac594e11fc5fdc7ca44a01852f4bbe84b5b787021ac46b1147",

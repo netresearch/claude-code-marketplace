@@ -28,20 +28,23 @@ eleventyComputed:
 </script>
 
 
-<section class="hero" id="install" aria-labelledby="hero-title">
-  <div class="hero__content">
-  <p class="hero__eyebrow">{{ t.hero.eyebrow }}</p>
-  <h1 id="hero-title">{{ t.hero.h1 }}</h1>
-  <p class="lead">{{ t.hero.lead }}</p>
+<section class="nr-hero" data-nr-hero id="install" aria-labelledby="hero-title">
+  <div class="nr-hero-inner">
+  <div class="nr-hero-content">
+  <p class="nr-hero-eyebrow">{{ t.hero.eyebrow }}</p>
+  <h1 class="nr-hero-title" id="hero-title">{{ t.hero.h1 }}</h1>
+  <p class="nr-hero-lead">{{ t.hero.lead }}</p>
 
   {% from "partials/install-block.njk" import installBlock %}
-  <div class="hero__ctas">
-    {{ installBlock("hero-install", marketplace.addCommand, t.hero.primaryCta, t.ui.copyCopied, t.ui.copyFailed, t.ui.copyPrompt) }}
+  <div class="nr-hero-actions">
+    {{ installBlock("hero-install", marketplace.addCommand, t.hero.primaryCta, t.ui.copyCopied, t.ui.copyFailed, t.ui.copyPrompt, "nr-hero-primary") }}
     <a class="btn btn--secondary" href="#skills">{{ t.hero.secondaryCta }}</a>
+  </div>
   </div>
   </div>
 </section>
 
+<div class="marketplace-content">
 <section class="section">
   <h2>{{ t.problem.h2 }}</h2>
   <div class="problem-grid">
@@ -193,3 +196,4 @@ eleventyComputed:
     <li><a href="{{ site.repoUrl }}/fork" rel="noopener">{{ t.cta.links.contribute }}</a></li>
   </ul>
 </section>
+</div>

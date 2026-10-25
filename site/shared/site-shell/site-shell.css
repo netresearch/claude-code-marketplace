@@ -157,3 +157,79 @@ html[data-theme="dark"] .nr-pagebar {
   .nr-pagebar-tools { flex: 1 0 100%; padding: 4px 0; }
 }
 @media print { .nr-pagebar { display: none; } }
+
+/* Landing-page title family. Articles and error pages do not opt into this. */
+body main.nr-hero-page { box-sizing: border-box; width: 100%; max-width: none; margin: 0; padding: 0; }
+body .nr-hero {
+  --nr-hero-fg: #fff;
+  --nr-hero-link: #15585e;
+  --nr-focus: #fff;
+  position: relative;
+  box-sizing: border-box;
+  width: calc(100% - 48px);
+  max-width: 1200px;
+  margin: 24px auto 48px;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+  border-radius: 24px;
+  color: var(--nr-hero-fg);
+  background: linear-gradient(135deg, #15585e, #0a5057);
+  text-align: left;
+  box-shadow: none;
+}
+body .nr-hero::before { content: none; }
+body .nr-hero::after {
+  content: "";
+  position: absolute;
+  top: -24px;
+  right: -24px;
+  width: 360px;
+  height: 360px;
+  pointer-events: none;
+  opacity: .25;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 600' fill='none' stroke='%23FFFFFF' stroke-opacity='.14' stroke-width='3'%3E%3Crect x='70' y='70' width='460' height='460' rx='64'/%3E%3Crect x='150' y='150' width='300' height='300' rx='44'/%3E%3Crect x='230' y='230' width='140' height='140' rx='26'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+body .nr-hero-inner { position: relative; z-index: 1; display: grid; grid-template-columns: minmax(0, 1fr); align-items: start; gap: 32px; box-sizing: border-box; width: 100%; max-width: none; margin: 0; padding: 48px; }
+body .nr-hero-content { box-sizing: border-box; width: 100%; min-width: 0; max-width: 52rem; margin: 0; text-align: left; }
+body .nr-hero-eyebrow { display: flex; align-items: center; gap: 10px; margin: 0; color: var(--nr-hero-fg); font: 700 14px/1.5 Raleway, Arial, sans-serif; letter-spacing: .06em; text-transform: uppercase; }
+body .nr-hero-eyebrow::before { content: ""; flex: none; width: 6px; height: 6px; border-radius: 50%; background: #ff4d00; }
+body .nr-hero-title { max-width: 26ch; margin: 12px 0 0; color: var(--nr-hero-fg); font: 700 clamp(36px, 4vw, 56px)/1.2 Raleway, Arial, sans-serif; letter-spacing: -.025em; text-align: left; text-wrap: balance; overflow-wrap: break-word; word-break: normal; hyphens: auto; }
+body .nr-hero-lead { max-width: 65ch; margin: 24px 0 0; color: var(--nr-hero-fg); font: 400 18px/1.6 'Open Sans', Arial, sans-serif; text-align: left; }
+body .nr-hero-actions { display: flex; flex-wrap: wrap; align-items: stretch; gap: 12px; margin: 24px 0 0; }
+body .nr-hero-actions > * { min-width: 0; max-width: 100%; }
+body .nr-hero[data-nr-hero] .nr-hero-actions :is(a, button):where(:not([hidden])) { display: inline-flex; align-items: center; justify-content: center; box-sizing: border-box; min-height: 48px; max-width: 100%; height: auto; padding: 12px 20px; border: 1px solid #fff; border-radius: 10px; color: var(--nr-hero-fg); background: transparent; font: 700 16px/1.4 Raleway, Arial, sans-serif; text-align: center; text-decoration: none; white-space: normal; }
+body .nr-hero[data-nr-hero] .nr-hero-actions :is([data-cta="business"], .nr-hero-primary) { color: var(--nr-hero-link); background: #fff; }
+body .nr-hero[data-nr-hero] .nr-hero-actions :is(a, button):hover { color: var(--nr-hero-link); background: #f5f5f5; }
+body .nr-hero :focus-visible { outline: 3px solid var(--nr-focus); outline-offset: 4px; }
+body .nr-hero-aside { --nr-focus: #15585e; --nr-bg: #fff; --nr-bg-alt: #f5f5f5; --nr-tint: #e6f2f3; --nr-text: #4d4f57; --nr-text-primary: #4d4f57; --nr-text-strong: #4d4f57; --nr-text-secondary: #4d4f57; --nr-text-muted: #4d4f57; --nr-primary-text: #15585e; --surface: #fff; --ink: #4d4f57; --ink-strong: #4d4f57; --muted: #4d4f57; --link: #15585e; --link-hover: #0a5057; box-sizing: border-box; min-width: 0; max-width: 100%; margin: 0; padding: 24px; border: 1px solid #e5e5e5; border-radius: 16px; color: #4d4f57; background: #fff; font: 400 16px/1.6 'Open Sans', Arial, sans-serif; }
+body .nr-hero-aside a { color: #15585e; }
+body .nr-hero-aside h2 { margin: 0 0 16px; color: #4d4f57; font: 700 22px/1.3 Raleway, Arial, sans-serif; letter-spacing: -.01em; text-align: left; }
+body .nr-hero-aside h3 { margin: 16px 0 8px; color: #4d4f57; font: 700 18px/1.4 Raleway, Arial, sans-serif; text-align: left; }
+body .nr-hero-facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 160px), 1fr)); gap: 16px 24px; margin: 24px 0 16px; padding: 0; border: 0; border-radius: 0; background: transparent; box-shadow: none; }
+body .nr-hero-facts > div { min-width: 0; }
+body .nr-hero-facts dt { margin: 0; color: #4d4f57; font: 400 14px/1.6 'Open Sans', Arial, sans-serif; letter-spacing: .04em; text-transform: uppercase; }
+body .nr-hero-facts dd { margin: 4px 0 0; color: #4d4f57; font: 700 16px/1.6 Raleway, Arial, sans-serif; overflow-wrap: anywhere; }
+@media (min-width: 960px) {
+  body .nr-hero[data-nr-hero-layout="split"] .nr-hero-inner { grid-template-columns: minmax(0, 1.55fr) minmax(16rem, 1fr); gap: 48px; }
+}
+@media (max-width: 767.98px) {
+  body .nr-hero { width: calc(100% - 32px); margin: 16px auto 32px; }
+  body .nr-hero::after { display: none; }
+  body .nr-hero-inner { gap: 24px; padding: 24px; }
+  body .nr-hero-actions { flex-direction: column; }
+}
+@media (forced-colors: active) {
+  body .nr-hero, body .nr-hero-aside { color: CanvasText; background: Canvas; border: 1px solid CanvasText; }
+  body .nr-hero::after { display: none; }
+  body .nr-hero :is(.nr-hero-title, .nr-hero-lead, .nr-hero-eyebrow) { color: CanvasText; }
+  body .nr-hero-eyebrow::before { background: CanvasText; }
+  body .nr-hero[data-nr-hero] .nr-hero-actions :is(a, button, [data-cta], .nr-hero-primary) { color: ButtonText; background: ButtonFace; border-color: ButtonText; }
+  body .nr-hero :focus-visible { outline-color: Highlight; }
+}
+@media print {
+  body .nr-hero { width: 100%; max-width: none; margin: 0 0 24px; color: #000; background: #fff; border: 1px solid #8a8b93; break-inside: avoid; }
+  body .nr-hero::after { display: none; }
+  body .nr-hero :is(.nr-hero-title, .nr-hero-lead, .nr-hero-eyebrow) { color: #000; }
+  body .nr-hero[data-nr-hero] .nr-hero-actions :is(a, button, [data-cta], .nr-hero-primary) { color: #000; background: #fff; border-color: #585961; }
+}

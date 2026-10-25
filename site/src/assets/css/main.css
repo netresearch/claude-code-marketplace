@@ -121,13 +121,16 @@ body {
   overflow-wrap: anywhere;
 }
 
-main {
+main, .marketplace-content {
   width: 100%;
   max-width: 1200px;
   min-width: 0;
   margin: 0 auto;
   padding: 32px 24px;
 }
+
+.marketplace-content { padding-top: 0; }
+.marketplace-content > .section:first-child { margin-top: 0; }
 
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-headline);
@@ -358,22 +361,6 @@ pre {
   flex-wrap: wrap;
   gap: var(--spacing-sm);
   margin-top: var(--spacing-md);
-}
-
-.hero {
-  position: relative;
-  padding: 40px;
-  border-radius: 24px;
-  background: linear-gradient(120deg, #15585E, #0A5057);
-  color: #fff;
-}
-
-.hero__ctas {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--spacing-md);
-  align-items: stretch;
-  margin-top: var(--spacing-xl);
 }
 
 .btn {
@@ -1169,18 +1156,9 @@ body[data-install-mode="composer-skills"] .skill-card__installs > .install--comp
 main > * { min-width: 0; }
 :focus-visible { outline: 3px solid var(--color-focus); outline-offset: 3px; }
 :target { scroll-margin-top: 96px; }
-.hero__content { position: relative; z-index: 1; }
-.hero h1, .hero .lead { color: #fff; }
-.hero .lead { max-width: 64ch; }
-.hero__eyebrow { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; font-family: var(--font-headline); font-size: 0.875rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
-.hero__eyebrow::before { content: ""; flex: none; width: 7px; height: 7px; border-radius: 50%; background: #FF4D00; }
-.hero .install-block { width: 100%; }
-.hero .install-block__code { background: #0A5057; border: 1px solid #8A8B93; color: #fff; }
-.hero .install-block__code code { background: transparent; color: inherit; white-space: pre-wrap; overflow-wrap: anywhere; }
-.hero .copy-btn, .hero .btn { background: #fff; color: #15585E; border: 1px solid #fff; }
-.hero .copy-btn:hover, .hero .btn:hover { background: #F5F5F5; }
-.hero :focus-visible { outline-color: #fff; }
-.hero__ctas > .btn { display: inline-flex; align-items: center; min-height: 48px; }
+.nr-hero .install-block { width: 100%; }
+.nr-hero .install-block__code { background: #0A5057; border: 1px solid #8A8B93; color: #fff; }
+.nr-hero .install-block__code code { background: transparent; color: inherit; white-space: pre-wrap; overflow-wrap: anywhere; }
 .problem-item, .stats__item, .how-list li { border: 1px solid var(--color-border-light); box-shadow: var(--shadow-sm); border-radius: 16px; }
 .skill-card__unavailable { margin: 0; font-size: 0.875rem; }
 .copy-btn, .install-mode__tab, .site-search__clear { min-width: 48px; min-height: 48px; }
@@ -1192,24 +1170,19 @@ main > * { min-width: 0; }
 .site-footer :focus-visible { outline-color: #fff; }
 .install-block, .install-methods__item { min-width: 0; }
 .breadcrumbs li { min-width: 0; }
-@media (min-width: 1100px) {
-  .hero__content { max-width: calc(100% - 180px); }
-  .hero::after { content: ""; position: absolute; right: 32px; top: 32px; width: 112px; height: 112px; border: 1px solid rgb(255 255 255 / 24%); border-radius: 16px; box-shadow: 0 0 0 16px rgb(255 255 255 / 6%), 0 0 0 32px rgb(255 255 255 / 3%); pointer-events: none; }
-}
 @media (max-width: 600px) {
-  main { padding: 24px 16px; }
-  .hero { padding: 24px 20px; }
-  .hero .install-block { flex-direction: column; flex-wrap: nowrap; }
-  .hero .install-block__code { flex: 0 1 auto; }
-  .hero .copy-btn { width: 100%; flex: 0 0 auto; }
-  .hero__ctas > .btn { justify-content: center; width: 100%; }
+  main, .marketplace-content { padding: 24px 16px; }
+  .marketplace-content { padding-top: 0; }
+  .nr-hero .install-block { flex-direction: column; flex-wrap: nowrap; }
+  .nr-hero .install-block__code { flex: 0 1 auto; }
+  .nr-hero .copy-btn { width: 100%; flex: 0 0 auto; }
   .skill-card { padding: 20px; }
   .install-mode__tabs { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .section--accent { padding: 20px 16px; }
 }
 @media (forced-colors: active) {
   :focus-visible { outline-color: Highlight; }
-  .hero, .site-footer { border: 1px solid CanvasText; }
+  .site-footer { border: 1px solid CanvasText; }
 }
 
 /* Match component transition specificity after all interaction rules. */

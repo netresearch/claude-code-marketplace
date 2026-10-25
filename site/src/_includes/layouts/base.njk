@@ -64,7 +64,7 @@
     {{ {lang: lang, assetBase: '/assets/site-shell' | url, languageUrls: {en: enUrl, de: deUrl}, active: 'skills', contactHref: contactUrl} | renderSiteHeader | safe }}
     {{ {lang: lang, title: site.title, titleHref: homeUrl, links: [{href: homeUrl ~ '#skills', label: t.nav.skills}, {href: site.repoUrl, label: t.skill.viewSource}]} | renderPageNavigation | safe }}
 
-    <main id="main" tabindex="-1">
+    <main id="main" tabindex="-1"{% if isHome %} class="nr-hero-page"{% endif %}>
       {{ content | safe }}
     </main>
 
