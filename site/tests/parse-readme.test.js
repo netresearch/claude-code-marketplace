@@ -116,6 +116,89 @@ test("a requirements table between list blocks does not reorder or discard eithe
   ]);
 });
 
+test("standalone Python prerequisite before a tool table remains discovery metadata", () => {
+  // Reproduce the reviewed mixed-form Requirements section without network I/O.
+  const parsed = parseReadme([
+    "## Requirements", "", "Python 3.11 is required.", "",
+    "| Tool | Purpose |", "| --- | --- |", "| uv | Run scripts. |",
+  ].join("\n"));
+  assert.deepEqual(parsed.contextRequirements, [
+    "Python 3.11 is required.",
+    "uv: Run scripts.",
+  ]);
+});
+
+test("mixed prerequisite prose before, after and between tables and lists stays in source order", () => {
+  const parsed = parseReadme([
+    "## Context requirements", "", "Python 3.11 is required.",
+    "Network access is needed on the first run.", "",
+    "| Tool | Purpose |", "| --- | --- |", "| uv | Run scripts. |", "",
+    "A writable project directory is required.", "",
+    "- Read access to the repository,", "  including source code and tests.", "",
+    "The selected repository must contain", "a composer.json file.", "",
+    "| Tool | Minimum version |", "| --- | --- |", "| PHP | 8.2+ |", "",
+    "Credentials must permit reading project issues.",
+  ].join("\n"));
+  assert.deepEqual(parsed.contextRequirements, [
+    "Python 3.11 is required. Network access is needed on the first run.",
+    "uv: Run scripts.",
+    "A writable project directory is required.",
+    "Read access to the repository, including source code and tests.",
+    "The selected repository must contain a composer.json file.",
+    "PHP: 8.2+",
+    "Credentials must permit reading project issues.",
+  ]);
+});
+
+test("mixed output summaries retain standalone deliverables and do not duplicate nested qualifiers", () => {
+  const parsed = parseReadme([
+    "## Expected outputs", "", "A report records every checked file.",
+    "| Artifact | Purpose |", "| --- | --- |", "| findings.json | Machine-readable evidence. |",
+    "A summary names the remaining risks.", "",
+    "- A proposed patch with:", "  - File and line evidence", "    for each change.", "",
+    "A reviewer receives the final action list.",
+  ].join("\n"));
+  assert.deepEqual(parsed.expectedOutputs, [
+    "A report records every checked file.",
+    "findings.json: Machine-readable evidence.",
+    "A summary names the remaining risks.",
+    "A proposed patch with: File and line evidence for each change.",
+    "A reviewer receives the final action list.",
+  ]);
+});
+
+test("mixed requirements exclude generic introductions and fenced examples while keeping concrete prose", () => {
+  const parsed = parseReadme([
+    "## Requirements", "", "The following tools are required:", "",
+    "| Tool | Purpose |", "| --- | --- |", "| uv | Run scripts. |", "",
+    "Run the following:", "", "```sh", "install example-only-tool", "```", "",
+    "- Read access to the repository:", "  - Include tests", "    and configuration files.", "",
+    "For E2EE support, install libolm:", "", "```sh", "sudo apt install libolm-dev", "```", "",
+    "Network access is required for the first download.",
+  ].join("\n"));
+  assert.deepEqual(parsed.contextRequirements, [
+    "uv: Run scripts.",
+    "Read access to the repository: Include tests and configuration files.",
+    "For E2EE support, install libolm.",
+    "Network access is required for the first download.",
+  ]);
+});
+
+test("generic installation and requirement table lead-ins never become prerequisites", () => {
+  for (const intro of [
+    "This skill requires the following tools:",
+    "Install these tools:",
+    "The skill needs the following dependencies:",
+    "Install the following packages:",
+  ]) {
+    const parsed = parseReadme([
+      "## Requirements", "", intro, "",
+      "| Tool | Purpose |", "| --- | --- |", "| uv | Run scripts. |",
+    ].join("\n"));
+    assert.deepEqual(parsed.contextRequirements, ["uv: Run scripts."], intro);
+  }
+});
+
 test("a nested requirement table appears once without raw pipe syntax in its parent bullet", () => {
   // Tool names and purpose text are the frozen Retro README's requirement rows;
   // nesting them under a list item exercises the independently reported failure.

@@ -184,12 +184,13 @@ function parseBullet(line) {
 
 function appendBullet(items, state, text, indent, lineNumber) {
   if (!state.active || indent <= state.indent) {
-    items.push({ text, line: lineNumber });
+    items.push({ text, line: lineNumber, sourceLines: [lineNumber] });
     state.indent = indent;
   } else {
     // Preserve nested qualifiers in the flat public metadata arrays.
     const parent = items.at(-1);
     parent.text += (parent.text.endsWith(":") ? " " : "; ") + text;
+    parent.sourceLines.push(lineNumber);
   }
   state.active = true;
 }
@@ -210,8 +211,10 @@ function bulletItems(block) {
       continue;
     }
     if (!state.active || !line.trim()) continue;
-    if (indent > state.indent) items.at(-1).text += " " + line.trim();
-    else state.active = false;
+    if (indent > state.indent) {
+      items.at(-1).text += " " + line.trim();
+      items.at(-1).sourceLines.push(lineNumber);
+    } else state.active = false;
   }
   return items;
 }
@@ -275,7 +278,8 @@ function isParagraph(text) {
 function completeSummaryLead(text) {
   if (!text.endsWith(":")) return text;
   const concrete = /\b(?:install|requires?|needs?)\s+\S/i.test(text);
-  const generic = /\b(?:following|below|these|commands?)\s*:$/i.test(text);
+  const generic = /\b(?:following|below|these|commands?)\s*:$/i.test(text)
+    || /\b(?:following|these)\s+(?:tools|commands|requirements|prerequisites|dependencies|packages|components)\s*:$/i.test(text);
   return concrete && !generic ? text.slice(0, -1) + "." : null;
 }
 
@@ -286,26 +290,50 @@ function paragraphText(paragraph) {
   return prose.join(" ").trim();
 }
 
-function leadParagraph(block, { skipLeadIns = false } = {}) {
+function leadParagraph(block) {
   if (!block) return null;
   const paragraphs = block.split(/\r?\n\s*\r?\n/);
   for (const para of paragraphs) {
     const cleaned = paragraphText(para);
-    if (!isParagraph(cleaned)) continue;
-    const paragraph = skipLeadIns ? completeSummaryLead(cleaned) : cleaned;
-    if (paragraph) return paragraph;
+    if (isParagraph(cleaned)) return cleaned;
   }
   return null;
 }
 
-function summaryItems(block) {
-  const items = [...bulletItems(block), ...tableItems(block)];
-  if (items.length) {
-    items.sort((a, b) => a.line - b.line);
-    return items.map(({ text }) => text);
+/** Keep standalone summary prose without duplicating list-owned continuations. */
+function paragraphItems(block, excludedLines) {
+  const items = [];
+  let paragraph = [];
+  let startLine = 0;
+  function flush() {
+    const text = paragraph.join(" ").trim();
+    const complete = isParagraph(text) ? completeSummaryLead(text) : null;
+    if (complete) items.push({ text: complete, line: startLine });
+    paragraph = [];
   }
-  const paragraph = leadParagraph(block, { skipLeadIns: true });
-  return paragraph ? [paragraph] : [];
+  for (const [lineNumber, line] of block.split(/\r?\n/).entries()) {
+    if (excludedLines.has(lineNumber) || !line.trim()) {
+      flush();
+      continue;
+    }
+    if (!paragraph.length) startLine = lineNumber;
+    paragraph.push(line.trim());
+  }
+  flush();
+  return items;
+}
+
+function summaryItems(block) {
+  if (!block) return [];
+  const bullets = bulletItems(block);
+  const tables = tableItems(block);
+  const excludedLines = new Set([
+    ...bullets.flatMap(({ sourceLines }) => sourceLines),
+    ...tables.flatMap(({ line, headerLine }) => [headerLine, headerLine + 1, line]),
+  ]);
+  const items = [...bullets, ...tables, ...paragraphItems(block, excludedLines)];
+  items.sort((a, b) => a.line - b.line);
+  return items.map(({ text }) => text);
 }
 
 function stripH1(text) {
