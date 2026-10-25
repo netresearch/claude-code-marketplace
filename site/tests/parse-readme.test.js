@@ -233,6 +233,35 @@ test("standalone comments are hidden, while inline code markers remain source te
   assert.deepEqual(parsed.expectedOutputs, ["Preserve `<!-- SLOT -->` markers in the template."]);
 });
 
+test("a closed comment followed by prose never consumes a later genuine section", () => {
+  const parsed = parseReadme([
+    "# Tool", "", "<!-- note --> A genuine source description.", "",
+    "## Requirements", "", "- PHP 8.2 and read access.", "",
+    "<!-- A separate later comment. -->",
+  ].join("\n"));
+  assert.deepEqual(parsed.contextRequirements, ["PHP 8.2 and read access."]);
+  assert.equal(parsed.readmeLead, "A genuine source description.");
+});
+
+test("intro lead-ins remain descriptions while summary lead-ins stay deliberately filtered", () => {
+  const parsed = parseReadme([
+    "# Tool", "", "This package contains three skills:", "", "- A source skill.", "",
+    "## Prerequisites", "", "Run the following:", "", "```sh", "install tool", "```",
+  ].join("\n"));
+  assert.equal(parsed.readmeLead, "This package contains three skills:");
+  assert.deepEqual(parsed.contextRequirements, []);
+});
+
+test("an intro paragraph stops before an immediately following Markdown list", () => {
+  const parsed = parseReadme([
+    "# Tool", "", "This package contains three skills:",
+    "- A source skill.", "- Another source skill.", "",
+    "## Requirements", "", "- PHP 8.2.",
+  ].join("\n"));
+  assert.equal(parsed.readmeLead, "This package contains three skills:");
+  assert.deepEqual(parsed.contextRequirements, ["PHP 8.2."]);
+});
+
 test("missing sections do not acquire invented outputs or requirements", () => {
   assert.deepEqual(parseReadme("# Tool\n\nA source description.\n\n## Installation\n\n- Setup command.\n"), {
     useCases: [], expectedOutputs: [], contextRequirements: [], relatedSkills: [], tags: [],

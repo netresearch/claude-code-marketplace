@@ -1,6 +1,6 @@
 {
   "nav": {
-    "home": "Home",
+    "home": "Skill catalog",
     "skills": "Skills",
     "about": "About",
     "switchLang": "Deutsch",
@@ -191,5 +191,12 @@
     "viewReadme": "Open full README",
     "sourceGuidance": "Check the source README for current examples, requirements and limitations.",
     "requirementsCoverage": "Source documentation"
+  },
+  "notFound": {
+    "title": "Page not found — Netresearch Skills Marketplace",
+    "description": "This address does not exist. Browse the skills catalog in English or German.",
+    "heading": "Page not found",
+    "lead": "This address does not exist. Find a package in the skills catalog.",
+    "catalogLink": "Browse the catalog in English"
   }
 }

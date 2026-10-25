@@ -10,7 +10,7 @@ import sharp from "sharp";
 const HERE = dirname(fileURLToPath(import.meta.url));
 const FONT_DIR = resolve(HERE, "../shared/fonts");
 const FONTS = {
-  heading: { family: "Raleway Thin, Bold", file: resolve(FONT_DIR, "raleway-latin-700-normal.ttf") },
+  heading: { family: "Netresearch OG Display, Bold", file: resolve(FONT_DIR, "netresearch-og-display-bold.ttf") },
   body: { family: "Open Sans, Regular", file: resolve(FONT_DIR, "open-sans-latin-400-normal.ttf") },
 };
 const LOGO = resolve(HERE, "../shared/site-shell/netresearch-symbol-only.svg");
@@ -47,7 +47,7 @@ export function imageCards(skills) {
 }
 
 function escapeMarkup(value) {
-  return value.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  return value.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;");
 }
 
 async function fitText(value, { font, size, minSize = size, width, height, color }) {
@@ -61,25 +61,28 @@ async function fitText(value, { font, size, minSize = size, width, height, color
     return { png: result.data, text: candidate, size: fontSize, width: result.info.width, height: result.info.height };
   }
 
-  let rendered;
-  for (; size >= minSize; size -= 2) {
-    rendered = await render(text, size);
-    if (rendered.height <= height && rendered.width <= width) return rendered;
+  function fits(candidate) {
+    return candidate.height <= height && candidate.width <= width;
   }
+  async function fitSize(fontSize) {
+    const candidate = await render(text, fontSize);
+    if (fits(candidate)) return candidate;
+    return fontSize - 2 >= minSize ? fitSize(fontSize - 2) : null;
+  }
+  const rendered = await fitSize(size);
+  if (rendered) return rendered;
 
   // Measure actual glyph layout rather than guessing a character count. Keep
   // a visible ellipsis when a long source description cannot fit at readable size.
-  let low = 0;
-  let high = text.length;
-  let fitted = await render("…", minSize);
-  while (low <= high) {
+  async function fitPrefix(low, high, best) {
+    if (low > high) return best;
     const middle = Math.floor((low + high) / 2);
     const candidate = await render(text.slice(0, middle).trimEnd() + "…", minSize);
-    if (candidate.height <= height && candidate.width <= width) {
-      fitted = candidate;
-      low = middle + 1;
-    } else high = middle - 1;
+    return fits(candidate)
+      ? fitPrefix(middle + 1, high, candidate)
+      : fitPrefix(low, middle - 1, best);
   }
+  let fitted = await fitPrefix(0, text.length, await render("…", minSize));
   const prefix = fitted.text.slice(0, -1);
   const wordEnd = prefix.lastIndexOf(" ");
   if (wordEnd > 0 && !/\s/.test(text[prefix.length] || "")) {
@@ -106,18 +109,18 @@ export async function renderCard(card) {
   logo ||= sharp(LOGO).resize(84, 84).png().toBuffer();
   const overlays = [{ input: await logo, left: 64, top: 44 }];
   const layout = [];
-  async function add(name, text, left, top, maxWidth, maxHeight, font, size, minSize = size, color = "#FFFFFF") {
+  async function add(name, text, { left, top, maxWidth, maxHeight, font, size, minSize = size, color = "#FFFFFF" }) {
     const layer = await fitText(text, { font, size, minSize, width: maxWidth, height: maxHeight, color });
     overlays.push({ input: layer.png, left, top });
     layout.push({ name, text: layer.text, left, top, width: layer.width, height: layer.height, maxWidth, maxHeight });
   }
-  await add("brand", "Netresearch", 168, 51, 740, 38, FONTS.heading, 30);
-  await add("marketplace", "Skills Marketplace", 168, 96, 740, 30, FONTS.body, 22);
-  await add("locale", card.locale.toUpperCase(), 1084, 71, 52, 30, FONTS.body, 22);
-  await add("category", card.category.toUpperCase(), 88, 167, 856, 30, FONTS.body, 19, 19, "#D8EFF0");
-  await add("title", card.title, 64, 218, 880, 176, FONTS.heading, 66, 48);
-  await add("subtitle", card.subtitle, 64, 423, 880, 104, FONTS.body, 26, 26, "#E4F2F3");
-  await add("address", "netresearch.github.io/claude-code-marketplace", 64, 583, 1040, 25, FONTS.body, 17, 17, "#D8EFF0");
+  await add("brand", "Netresearch", { left: 168, top: 51, maxWidth: 740, maxHeight: 38, font: FONTS.heading, size: 30 });
+  await add("marketplace", "Skills Marketplace", { left: 168, top: 96, maxWidth: 740, maxHeight: 30, font: FONTS.body, size: 22 });
+  await add("locale", card.locale.toUpperCase(), { left: 1084, top: 71, maxWidth: 52, maxHeight: 30, font: FONTS.body, size: 22 });
+  await add("category", card.category.toUpperCase(), { left: 88, top: 167, maxWidth: 856, maxHeight: 30, font: FONTS.body, size: 19, color: "#D8EFF0" });
+  await add("title", card.title, { left: 64, top: 218, maxWidth: 880, maxHeight: 176, font: FONTS.heading, size: 66, minSize: 48 });
+  await add("subtitle", card.subtitle, { left: 64, top: 423, maxWidth: 880, maxHeight: 104, font: FONTS.body, size: 26, color: "#E4F2F3" });
+  await add("address", "netresearch.github.io/claude-code-marketplace", { left: 64, top: 583, maxWidth: 1040, maxHeight: 25, font: FONTS.body, size: 17, color: "#D8EFF0" });
   return { png: await sharp(BACKGROUND).composite(overlays).png({ compressionLevel: 9 }).toBuffer(), layout };
 }
 
@@ -126,10 +129,12 @@ async function main() {
   const { default: skillsLoader } = await import("../src/_data/skills.js");
   const cards = imageCards(skillsLoader());
   mkdirSync(outDir, { recursive: true });
-  for (const card of cards) {
+  // Each link finishes rendering and writing before the next one starts, so
+  // the batch never holds 82 Sharp render pipelines or their PNGs in memory.
+  await cards.reduce((previous, card) => previous.then(async () => {
     const { png } = await renderCard(card);
     writeFileSync(resolve(outDir, card.filename), png);
-  }
+  }), Promise.resolve());
   console.log(`Rendered ${cards.length} EN/DE OG images to ${outDir}`);
 }
 

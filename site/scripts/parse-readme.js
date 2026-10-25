@@ -119,18 +119,47 @@ function findSection(markdown, aliases) {
 
 // README examples are not discovery facts. In particular, a Markdown example
 // may itself contain headings and list items that look like our target sections.
+function fencedLine(line) {
+  const text = line.trimStart();
+  const character = text[0];
+  if ((character !== "`" && character !== "~") || !text.startsWith(character.repeat(3))) return null;
+  let end = 3;
+  while (text[end] === character) end++;
+  return { marker: text.slice(0, end), trailing: text.slice(end) };
+}
+
+/**
+ * Remove line-leading HTML comments through their first closing delimiter.
+ * Content after that delimiter survives; inline code markers remain literal.
+ */
+function stripStandaloneComments(line, state) {
+  let remaining = line;
+  while (state.comment || remaining.trimStart().startsWith("<!--")) {
+    if (!state.comment) {
+      remaining = remaining.trimStart().slice(4);
+      state.comment = true;
+    }
+    const end = remaining.indexOf("-->");
+    if (end === -1) return "";
+    remaining = remaining.slice(end + 3);
+    state.comment = false;
+  }
+  return remaining;
+}
+
+/** Keep source lines outside fenced examples and standalone comment blocks. */
 function withoutExamples(markdown) {
-  let fence = null;
-  return markdown.replace(/^[ \t]*<!--[\s\S]*?-->[ \t]*(?:\r?\n|$)/gm, "").split(/\r?\n/).map((line) => {
-    const marker = line.match(/^\s*(`{3,}|~{3,})(.*)$/);
-    if (fence) {
-      if (marker && marker[1][0] === fence[0] && marker[1].length >= fence.length && !marker[2].trim()) {
-        fence = null;
-      }
+  const state = { fence: null, comment: false };
+  return markdown.split(/\r?\n/).map((rawLine) => {
+    if (state.fence) {
+      const closing = fencedLine(rawLine);
+      if (closing?.marker.startsWith(state.fence) && !closing.trailing.trim()) state.fence = null;
       return "";
     }
-    if (marker) {
-      fence = marker[1];
+    const line = stripStandaloneComments(rawLine, state);
+    const opening = fencedLine(line);
+    if (opening) {
+      state.fence = opening.marker;
       return "";
     }
     return line;
@@ -142,7 +171,7 @@ function parseBullet(line) {
   while (i < line.length && (line[i] === " " || line[i] === "\t")) i++;
   if (i >= line.length) return null;
   // Ordered list items ("1. ", "2) ") count as bullets too.
-  const ordered = line.slice(i).match(/^\d{1,3}[.)]/);
+  const ordered = /^\d{1,3}[.)]/.exec(line.slice(i));
   if (ordered) i += ordered[0].length - 1;
   else if (line[i] !== "-" && line[i] !== "*" && line[i] !== "+") return null;
   if (i + 1 >= line.length || (line[i + 1] !== " " && line[i + 1] !== "\t")) return null;
@@ -153,11 +182,22 @@ function parseBullet(line) {
   return line.slice(j, end);
 }
 
+function appendBullet(items, state, text, indent, lineNumber) {
+  if (!state.active || indent <= state.indent) {
+    items.push({ text, line: lineNumber });
+    state.indent = indent;
+  } else {
+    // Preserve nested qualifiers in the flat public metadata arrays.
+    const parent = items.at(-1);
+    parent.text += (parent.text.endsWith(":") ? " " : "; ") + text;
+  }
+  state.active = true;
+}
+
 function bulletItems(block) {
   if (!block) return [];
   const items = [];
-  let baseIndent = 0;
-  let active = false;
+  const state = { indent: 0, active: false };
   const tableLines = new Set(tableItems(block).flatMap(({ line, headerLine }) => [headerLine, headerLine + 1, line]));
   for (const [lineNumber, line] of block.split(/\r?\n/).entries()) {
     // Tables are emitted once as normalized rows, including when a Markdown
@@ -166,20 +206,12 @@ function bulletItems(block) {
     const text = parseBullet(line);
     const indent = line.length - line.trimStart().length;
     if (text !== null) {
-      if (!active || indent <= baseIndent) {
-        items.push({ text, line: lineNumber });
-        baseIndent = indent;
-      } else {
-        // Arrays are our public metadata shape. Keep nested qualifiers with
-        // their parent rather than presenting them as independent use cases.
-        const separator = items.at(-1).text.endsWith(":") ? " " : "; ";
-        items[items.length - 1].text += separator + text;
-      }
-      active = true;
-    } else if (active && line.trim()) {
-      if (indent > baseIndent) items[items.length - 1].text += " " + line.trim();
-      else active = false;
+      appendBullet(items, state, text, indent, lineNumber);
+      continue;
     }
+    if (!state.active || !line.trim()) continue;
+    if (indent > state.indent) items.at(-1).text += " " + line.trim();
+    else state.active = false;
   }
   return items;
 }
@@ -196,7 +228,7 @@ function tableCells(line) {
       cells[cells.length - 1] += "|";
       i++;
     } else if (line[i] === "`") {
-      const ticks = line.slice(i).match(/^`+/)[0];
+      const ticks = /^`+/.exec(line.slice(i))[0];
       if (!codeTicks) codeTicks = ticks.length;
       else if (codeTicks === ticks.length) codeTicks = 0;
       cells[cells.length - 1] += ticks;
@@ -210,53 +242,69 @@ function tableCells(line) {
   return cells.map((cell) => cell.trim());
 }
 
+/** Attach source positions so mixed lists/tables can be emitted in document order. */
 function tableItems(block) {
   if (!block) return [];
   const lines = block.split(/\r?\n/);
   const items = [];
-  for (let i = 0; i < lines.length - 1; i++) {
+  let i = 0;
+  while (i < lines.length - 1) {
     const headers = tableCells(lines[i]);
     const separator = tableCells(lines[i + 1]);
-    if (headers.length < 2 || separator.length !== headers.length || !separator.every((cell) => /^:?-{3,}:?$/.test(cell))) continue;
+    if (headers.length < 2 || separator.length !== headers.length || !separator.every((cell) => /^:?-{3,}:?$/.test(cell))) {
+      i++;
+      continue;
+    }
     const headerLine = i;
     i += 2;
-    for (; i < lines.length; i++) {
+    while (i < lines.length) {
       const cells = tableCells(lines[i]);
       if (cells.length !== headers.length) break;
       const values = cells.slice(1).map((cell, col) => headers.length === 2 ? cell : `${headers[col + 1]}: ${cell}`);
       items.push({ text: `${cells[0]}: ${values.join("; ")}`, line: i, headerLine });
+      i++;
     }
-    i--;
   }
   return items;
 }
 
-function leadParagraph(block) {
+function isParagraph(text) {
+  return Boolean(text) && !["[", "!", "---", "|"].some((prefix) => text.startsWith(prefix));
+}
+
+function completeSummaryLead(text) {
+  if (!text.endsWith(":")) return text;
+  const concrete = /\b(?:install|requires?|needs?)\s+\S/i.test(text);
+  const generic = /\b(?:following|below|these|commands?)\s*:$/i.test(text);
+  return concrete && !generic ? text.slice(0, -1) + "." : null;
+}
+
+function paragraphText(paragraph) {
+  const lines = paragraph.split(/\r?\n/);
+  const listStart = lines.findIndex((line) => parseBullet(line) !== null);
+  const prose = listStart < 0 ? lines : lines.slice(0, listStart);
+  return prose.join(" ").trim();
+}
+
+function leadParagraph(block, { skipLeadIns = false } = {}) {
   if (!block) return null;
   const paragraphs = block.split(/\r?\n\s*\r?\n/);
   for (const para of paragraphs) {
-    const cleaned = para.replace(/\n/g, " ").trim();
-    if (!cleaned) continue;
-    if (cleaned.startsWith("[!") || cleaned.startsWith("[![")) continue;
-    if (cleaned.startsWith("---")) continue;
-    if (cleaned.startsWith("|")) continue;
-    if (/^[\[\!]/.test(cleaned)) continue;
-    if (cleaned.endsWith(":")) {
-      // A concrete prerequisite can stand alone after its platform-specific
-      // setup block is omitted (Matrix: "For E2EE support ..., install libolm:").
-      // Generic lead-ins such as "Run the following:" cannot.
-      if (/\b(?:install|requires?|needs?)\s+\S/i.test(cleaned) && !/\b(?:following|below|these|commands?)\s*:$/i.test(cleaned)) return cleaned.slice(0, -1) + ".";
-      continue;
-    }
-    return cleaned;
+    const cleaned = paragraphText(para);
+    if (!isParagraph(cleaned)) continue;
+    const paragraph = skipLeadIns ? completeSummaryLead(cleaned) : cleaned;
+    if (paragraph) return paragraph;
   }
   return null;
 }
 
 function summaryItems(block) {
   const items = [...bulletItems(block), ...tableItems(block)];
-  if (items.length) return items.sort((a, b) => a.line - b.line).map(({ text }) => text);
-  const paragraph = leadParagraph(block);
+  if (items.length) {
+    items.sort((a, b) => a.line - b.line);
+    return items.map(({ text }) => text);
+  }
+  const paragraph = leadParagraph(block, { skipLeadIns: true });
   return paragraph ? [paragraph] : [];
 }
 
@@ -290,6 +338,13 @@ function extractLinks(block) {
   return out;
 }
 
+/**
+ * Extract bounded discovery summaries from README sections without executing them.
+ * Missing sections remain empty; this is not a general Markdown renderer or a
+ * check that the source's claims are true. Related URLs retain the shared allowlist.
+ * @param {unknown} markdown Source README text; absent/non-string input is empty.
+ * @returns {{useCases: string[], expectedOutputs: string[], contextRequirements: string[], relatedSkills: object[], tags: string[], readmeLead: string|null}}
+ */
 export function parseReadme(markdown) {
   if (!markdown || typeof markdown !== "string") {
     return {
@@ -327,7 +382,7 @@ export function parseReadme(markdown) {
     relatedSkills: extractLinks(relatedBlock).filter((l) => isSafeHref(l.href)).map((l) => ({
       label: l.label,
       href: l.href,
-      slug: (l.href.match(/netresearch\/([a-z0-9-]+)-skill/) || [])[1] || null,
+      slug: (/netresearch\/([a-z0-9-]+)-skill/.exec(l.href) || [])[1] || null,
     })),
     tags: bulletsFromBlock(tagsBlock).length
       ? bulletsFromBlock(tagsBlock)

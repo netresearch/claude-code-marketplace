@@ -17,7 +17,7 @@
     "prebuild": "npm run check:categories && npm run og:generate",
     "build:once": "eleventy",
     "build": "npm run build:once",
-    "build:all": "npm run fetch:readmes && npm run check && npm run build:once && npm run check:hreflang",
+    "build:all": "npm run fetch:readmes && npm run og:generate && npm run check && npm run build:once && npm run check:hreflang",
     "dev": "eleventy --serve --port=8080",
     "preview": "npx http-server _site -p 8080 -c-1",
     "clean": "rm -rf _site",

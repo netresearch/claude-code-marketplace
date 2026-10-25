@@ -1,11 +1,11 @@
 {# SPDX-License-Identifier: MIT -#}
 {# SPDX-FileCopyrightText: Netresearch DTT GmbH -#}
 <section class="section section--cta">
-  <h1>Page not found</h1>
-  <p class="lead">This address does not exist. Find a package in the skills catalog.</p>
-  <p lang="de">Diese Adresse existiert nicht. Im Katalog findest du die verfügbaren Pakete.</p>
+  <h1>{{ t.notFound.heading }}</h1>
+  <p class="lead">{{ t.notFound.lead }}</p>
+  <p lang="de">{{ i18n.de.notFound.lead }}</p>
   <ul class="cta-links">
-    <li><a href="{{ '/en/' | url }}" hreflang="en">Browse the catalog in English</a></li>
-    <li><a href="{{ '/de/' | url }}" hreflang="de" lang="de">Katalog auf Deutsch ansehen</a></li>
+    <li><a href="{{ '/en/' | url }}" hreflang="en">{{ i18n.en.notFound.catalogLink }}</a></li>
+    <li><a href="{{ '/de/' | url }}" hreflang="de" lang="de">{{ i18n.de.notFound.catalogLink }}</a></li>
   </ul>
 </section>

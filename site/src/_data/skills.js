@@ -25,6 +25,7 @@ import valueTypes from "./valueTypes.js";
 import groups from "./groups.js";
 import descriptionsDe from "./descriptions_de.json" with { type: "json" };
 import detailsDe from "./details_de.json" with { type: "json" };
+import outputsEn from "./outputs_en.json" with { type: "json" };
 import { displayName } from "./_helpers/display-name.js";
 import { resolveInstallCommand } from "./_helpers/install-command.js";
 import installMethods from "./installMethods.js";
@@ -87,6 +88,11 @@ export default function () {
     const cache = loadCache(plugin.name);
     const parsed = cache?.parsed || null;
     const localized = detailsDe[plugin.name];
+    const outputSummary = outputsEn[plugin.name];
+    if (!Array.isArray(outputSummary?.expectedOutputs) || !outputSummary.expectedOutputs.length
+        || !outputSummary.expectedOutputs.every((item) => typeof item === "string" && item.trim())) {
+      throw new Error(`Missing English output summary for ${plugin.name}`);
+    }
     if (typeof descriptionsDe[plugin.name] !== "string" || !descriptionsDe[plugin.name].trim()) {
       throw new Error(`Missing German description for ${plugin.name}`);
     }
@@ -144,7 +150,7 @@ export default function () {
       canonicalUrlEn: `/en/skills/${plugin.name}/`,
       canonicalUrlDe: `/de/skills/${plugin.name}/`,
       useCases: parsed?.useCases?.length ? parsed.useCases : [],
-      expectedOutputs: parsed?.expectedOutputs?.length ? parsed.expectedOutputs : [],
+      expectedOutputs: parsed?.expectedOutputs?.length ? parsed.expectedOutputs : outputSummary.expectedOutputs,
       contextRequirements: parsed?.contextRequirements?.length
         ? parsed.contextRequirements
         : [],
@@ -155,6 +161,7 @@ export default function () {
       expectedOutputsDe: localized.expectedOutputs,
       contextRequirementsDe: localized.contextRequirements,
       detailProvenanceDe: localized.provenance,
+      outputProvenanceEn: outputSummary.provenance,
       tags: parsed?.tags?.length ? parsed.tags : [],
       relatedSkills: parsed?.relatedSkills?.length ? parsed.relatedSkills : [],
       readmeFetchedAt: cache?.fetchedAt || null,

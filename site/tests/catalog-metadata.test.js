@@ -23,6 +23,10 @@ function completeCatalog() {
     displayNames: { _doc: "Curated labels", alpha: "Alpha", beta: "Beta" },
     descriptionsDe: { _doc: "Deutsche Beschreibungen", alpha: "Prüft ein Projekt.", beta: "Bereitet Ergebnisse vor." },
     detailsDe: { _doc: "German presentation", _provenance: { reviewedAt: "2026-10-25" }, alpha: detail("alpha"), beta: detail("beta") },
+    outputsEn: Object.fromEntries(["alpha", "beta"].map((slug) => [slug, {
+      expectedOutputs: ["A review report with source evidence."],
+      provenance: { ...detail(slug).provenance, basis: "Expected outputs" },
+    }])),
     groups: { order: ["engineering"], groups: { engineering: { slugs: ["alpha", "beta"] } } },
     readme: [
       "# Marketplace", "", "## Available Skills", "", "### Engineering", "",
@@ -170,4 +174,29 @@ test("an illustrative comment opener inside a code fence cannot hide the real ca
   const data = completeCatalog();
   data.readme = data.readme.replace("# Marketplace", "# Marketplace\n\n```html\n<!-- an unclosed example comment\n```\n");
   assert.deepEqual(checkCatalogMetadata(data), []);
+});
+
+test("a malformed table row cannot satisfy canonical README membership", () => {
+  const data = completeCatalog();
+  data.readme = data.readme.replace("| alpha | [Source](https://github.com/example/alpha-skill) | Checks projects. |", "| alpha |");
+  assert.ok(checkCatalogMetadata(data).length > 0);
+});
+
+test("English outcome coverage is mandatory and missing rows cannot be omitted silently", () => {
+  const missingMap = completeCatalog();
+  delete missingMap.outputsEn;
+  assert.ok(checkCatalogMetadata(missingMap).some(({path}) => path === "outputs_en"));
+  const missingRow = completeCatalog();
+  delete missingRow.outputsEn.beta;
+  assert.ok(checkCatalogMetadata(missingRow).some(({path}) => path === "outputs_en.beta"));
+});
+
+test("English outcomes require actual text and source review provenance", () => {
+  for (const field of ["expectedOutputs", "basis", "sourceSnapshotSha256"]) {
+    const data = completeCatalog();
+    if (field === "expectedOutputs") data.outputsEn.beta.expectedOutputs = [];
+    else data.outputsEn.beta.provenance[field] = "";
+    const path = field === "expectedOutputs" ? "outputs_en.beta.expectedOutputs" : `outputs_en.beta.provenance.${field}`;
+    assert.ok(checkCatalogMetadata(data).some(issue => issue.path === path), field);
+  }
 });

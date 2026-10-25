@@ -302,7 +302,7 @@
     },
     {
       "name": "typo3-a11y",
-      "description": "Provides WCAG 2.2 AA accessibility patterns for TYPO3 projects: skip links, navigation, forms, filters, disclosure widgets, clickable cards, responsive tables, sticky header, lazy loading, breadcrumb, language switcher, animations, scroll-to-anchor, skeleton loading, toast notifications, back-to-top.",
+      "description": "Build accessible TYPO3 interfaces using WCAG 2.2 AA patterns for skip links, navigation, forms, filters, disclosures, cards, tables, language switching, reduced motion and notifications.",
       "source": {
         "source": "github",
         "repo": "netresearch/typo3-a11y-skill"

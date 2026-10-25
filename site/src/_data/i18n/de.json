@@ -1,6 +1,6 @@
 {
   "nav": {
-    "home": "Start",
+    "home": "Skill-Katalog",
     "skills": "Skills",
     "about": "Über Netresearch",
     "switchLang": "English",
@@ -191,5 +191,12 @@
     "viewReadme": "Quell-README lesen",
     "sourceGuidance": "Aktuelle Beispiele, Voraussetzungen und Grenzen stehen im Quell-README.",
     "requirementsCoverage": "Angaben aus der Quelldokumentation"
+  },
+  "notFound": {
+    "title": "Seite nicht gefunden — Netresearch Skills Marketplace",
+    "description": "Diese Adresse existiert nicht. Der Skill-Katalog ist auf Deutsch und Englisch verfügbar.",
+    "heading": "Seite nicht gefunden",
+    "lead": "Diese Adresse existiert nicht. Im Katalog findest du die verfügbaren Pakete.",
+    "catalogLink": "Katalog auf Deutsch ansehen"
   }
 }

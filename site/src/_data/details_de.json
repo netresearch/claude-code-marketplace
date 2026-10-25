@@ -11,7 +11,7 @@
       "Prüfungen für Lieferketten, SBOMs, Signaturen und Qualitätskriterien vorbereiten."
     ],
     "expectedOutputs": [
-      "Ein eigener Ergebnisabschnitt fehlt im ausgewerteten Quell-README. [Anleitung und Beispiele lesen](https://github.com/netresearch/enterprise-readiness-skill#readme)."
+      "Eine Bewertung von Projektsicherheit, Lieferketten-Kontrollen und Qualitätskriterien mit Empfehlungen für die ausgewählten Standards."
     ],
     "contextRequirements": [
       "Die Voraussetzungen sind hier nicht gesondert zusammengefasst. [Werkzeuge und Projektzugriffe im Quell-README prüfen](https://github.com/netresearch/enterprise-readiness-skill#readme)."
@@ -22,7 +22,7 @@
       "sourceSnapshotSha256": "bf95aa64a344e13a8acaefd3ab7e71bda5f13bd3b6c1156373d2b71d0f058ecd",
       "basis": {
         "useCases": "Features, Usage",
-        "expectedOutputs": "Source guidance: no dedicated result section reviewed",
+        "expectedOutputs": "Features, Usage / Example Prompts",
         "contextRequirements": "Source guidance: no complete prerequisite summary adopted"
       }
     }
@@ -33,7 +33,7 @@
       "Dokumentation lokal rendern, prüfen und die Veröffentlichung auf docs.typo3.org vorbereiten."
     ],
     "expectedOutputs": [
-      "Ein eigener Ergebnisabschnitt fehlt im ausgewerteten Quell-README. [Anleitung und Beispiele lesen](https://github.com/netresearch/typo3-docs-skill#readme)."
+      "TYPO3-Dokumentation in reStructuredText, eine Lückenanalyse und Ergebnisse des lokalen Renderings oder der Validierung, je nach Auftrag."
     ],
     "contextRequirements": [
       "Je nach Skript werden Bash, Git, PHP, Python, jq oder weitere im Quell-README genannte Werkzeuge benötigt; lokales Rendering verwendet Docker.",
@@ -45,7 +45,7 @@
       "sourceSnapshotSha256": "9866d1064500f4fc6f3e21cdcc79ffd48325bfaae8970086eab8a554e8955e08",
       "basis": {
         "useCases": "Overview, Features, Usage",
-        "expectedOutputs": "Source guidance: no dedicated result section reviewed",
+        "expectedOutputs": "Overview, Features, Contents / scripts",
         "contextRequirements": "Automatic Documentation Deployment / Prerequisites, Dependencies"
       }
     }
@@ -56,7 +56,7 @@
       "Testkonfiguration, Hilfsskripte und CI-Einbindung prüfen und passende Testarten wählen."
     ],
     "expectedOutputs": [
-      "Ein eigener Ergebnisabschnitt fehlt im ausgewerteten Quell-README. [Anleitung und Beispiele lesen](https://github.com/netresearch/typo3-testing-skill#readme)."
+      "Unit-, Functional- oder Browser-Tests mit den benötigten Fixtures, der Testkonfiguration und einer CI-Einbindung für den gewählten Prüfumfang."
     ],
     "contextRequirements": [
       "Das Requirements-Kapitel des eingefrorenen Quell-README nennt PHP 8.1+, Composer und TYPO3 v12 oder v13.",
@@ -68,7 +68,7 @@
       "sourceSnapshotSha256": "11d9ef233edbfb6c80ad3206e5cf8cb9832645fbc1888a119aa7ffcc849d7eb4",
       "basis": {
         "useCases": "Features, Test Types",
-        "expectedOutputs": "Source guidance: no dedicated result section reviewed",
+        "expectedOutputs": "Features, Quick Start",
         "contextRequirements": "Requirements (version scope retained without widening), Dependencies"
       }
     }
@@ -103,7 +103,7 @@
       "Lokale Entwicklungsumgebung, Tests und die Metadaten des Beitrags prüfen."
     ],
     "expectedOutputs": [
-      "Ein eigener Ergebnisabschnitt fehlt im ausgewerteten Quell-README. [Anleitung und Beispiele lesen](https://github.com/netresearch/typo3-core-contributions-skill#readme)."
+      "Ein vorbereiteter TYPO3-Core-Patch mit passender Commit-Nachricht und Prüfungen vor der Einreichung oder eine Diagnose einer fehlgeschlagenen Beitrags-Pipeline."
     ],
     "contextRequirements": [
       "Git mit der TYPO3.org-E-Mail-Adresse und ein bei review.typo3.org hinterlegter SSH-Schlüssel.",
@@ -115,7 +115,7 @@
       "sourceSnapshotSha256": "3fac1df800e60af8540a5eeab8e7d6f968091f4fb430396fb09a158b9baa5396",
       "basis": {
         "useCases": "Overview, Features, Quick Start",
-        "expectedOutputs": "Source guidance: no dedicated result section reviewed",
+        "expectedOutputs": "Overview, Features, Key Workflows",
         "contextRequirements": "Quick Start / Prerequisites, Dependencies"
       }
     }
@@ -126,7 +126,7 @@
       "Befunde anhand der dokumentierten Prüfbereiche priorisieren und passende Werkzeuge auswählen."
     ],
     "expectedOutputs": [
-      "Ein eigener Ergebnisabschnitt fehlt im ausgewerteten Quell-README. [Anleitung und Beispiele lesen](https://github.com/netresearch/typo3-conformance-skill#readme)."
+      "Ein Konformitätsbericht zur Extension mit einer Übersicht und einer Maßnahmenliste für die durchgeführten Prüfungen."
     ],
     "contextRequirements": [
       "Die Voraussetzungen sind hier nicht gesondert zusammengefasst. [Werkzeuge und Projektzugriffe im Quell-README prüfen](https://github.com/netresearch/typo3-conformance-skill#readme)."
@@ -137,7 +137,7 @@
       "sourceSnapshotSha256": "12ab50d957c657f8ad46075970f0b5f6cab83e47f54ca2d71abd2dbd6800079a",
       "basis": {
         "useCases": "Overview, Features, Conformance Areas",
-        "expectedOutputs": "Source guidance: no dedicated result section reviewed",
+        "expectedOutputs": "Contributing / Tests: check-conformance.sh and generate-report.sh",
         "contextRequirements": "Source guidance: no complete prerequisite summary adopted"
       }
     }
@@ -172,7 +172,7 @@
       "Vorlagen für Webseiten, Komponenten und soziale Medien passend zur Marke auswählen."
     ],
     "expectedOutputs": [
-      "Ein eigener Ergebnisabschnitt fehlt im ausgewerteten Quell-README. [Anleitung und Beispiele lesen](https://github.com/netresearch/netresearch-branding-skill#readme)."
+      "Seiten- oder Komponentenentwürfe, HTML/CSS-Beispiele und Empfehlungen aus der Markenprüfung für das gewählte Netresearch-Profil."
     ],
     "contextRequirements": [
       "Die Voraussetzungen sind hier nicht gesondert zusammengefasst. [Werkzeuge und Projektzugriffe im Quell-README prüfen](https://github.com/netresearch/netresearch-branding-skill#readme)."
@@ -183,7 +183,7 @@
       "sourceSnapshotSha256": "b7a79614e37fa0fcae2d5384aaae20e3ee94650aa3bd407332c011a281c5af3e",
       "basis": {
         "useCases": "Why this skill is public, Overview, Features",
-        "expectedOutputs": "Source guidance: no dedicated result section reviewed",
+        "expectedOutputs": "Features, Usage / Example Workflows, Quality Checklist",
         "contextRequirements": "Source guidance: no complete prerequisite summary adopted"
       }
     }
@@ -194,7 +194,7 @@
       "Anweisungen für einzelne Verzeichnisse pflegen und an vorhandene Konventionen anpassen."
     ],
     "expectedOutputs": [
-      "Ein eigener Ergebnisabschnitt fehlt im ausgewerteten Quell-README. [Anleitung und Beispiele lesen](https://github.com/netresearch/agent-rules-skill#readme)."
+      "Eine kompakte AGENTS.md im Projektstamm und Regeln für Teilbereiche mit Befehlen und Konventionen aus den Projektmetadaten."
     ],
     "contextRequirements": [
       "Die Voraussetzungen sind hier nicht gesondert zusammengefasst. [Werkzeuge und Projektzugriffe im Quell-README prüfen](https://github.com/netresearch/agent-rules-skill#readme)."
@@ -205,7 +205,7 @@
       "sourceSnapshotSha256": "b9f14e810ab50859a3a815a54f8481a10a4937c565b397d349aedf687cc8a16f",
       "basis": {
         "useCases": "Features, Usage",
-        "expectedOutputs": "Source guidance: no dedicated result section reviewed",
+        "expectedOutputs": "Features, Supported Projects",
         "contextRequirements": "Source guidance: no complete prerequisite summary adopted"
       }
     }
@@ -216,7 +216,7 @@
       "Fehlende AGENTS.md-Struktur, Hooks oder CI-Prüfungen gezielt ergänzen."
     ],
     "expectedOutputs": [
-      "Ein eigener Ergebnisabschnitt fehlt im ausgewerteten Quell-README. [Anleitung und Beispiele lesen](https://github.com/netresearch/agent-harness-skill#readme)."
+      "Eine Bewertung der Harness-Konsistenz oder fehlende Projektartefakte wie ein AGENTS.md-Index, Dokumentation, Hooks und eine CI-Prüfung."
     ],
     "contextRequirements": [
       "Die Voraussetzungen sind hier nicht gesondert zusammengefasst. [Werkzeuge und Projektzugriffe im Quell-README prüfen](https://github.com/netresearch/agent-harness-skill#readme)."
@@ -227,7 +227,7 @@
       "sourceSnapshotSha256": "f3db402672291048814ce2f107e5e955d7dcac565a1b65b5d594927a6b038035",
       "basis": {
         "useCases": "What is Agent Harness?, Usage",
-        "expectedOutputs": "Source guidance: no dedicated result section reviewed",
+        "expectedOutputs": "What is Agent Harness?, Usage, Maturity Levels",
         "contextRequirements": "Source guidance: no complete prerequisite summary adopted"
       }
     }
@@ -261,7 +261,7 @@
       "Extension Scanner, Rector, Fractor, PHPStan und Tests je nach Änderung kombinieren; Upgrades ganzer Instanzen gehören zum Schwesterpaket."
     ],
     "expectedOutputs": [
-      "Ein eigener Ergebnisabschnitt fehlt im ausgewerteten Quell-README. [Anleitung und Beispiele lesen](https://github.com/netresearch/typo3-extension-upgrade-skill#readme)."
+      "Migrierter Extension-Code und angepasste Konfiguration sowie Ergebnisse von Scanner, statischer Analyse und Tests für das angestrebte TYPO3-Upgrade."
     ],
     "contextRequirements": [
       "Die Voraussetzungen sind hier nicht gesondert zusammengefasst. [Werkzeuge und Projektzugriffe im Quell-README prüfen](https://github.com/netresearch/typo3-extension-upgrade-skill#readme)."
@@ -272,7 +272,7 @@
       "sourceSnapshotSha256": "e301cdcb3ea99df9d28a557c512b51c0b343b61fbdb847c32f169f23fce434c4",
       "basis": {
         "useCases": "Overview, Scope, Supported Upgrade Paths",
-        "expectedOutputs": "Source guidance: no dedicated result section reviewed",
+        "expectedOutputs": "Overview, Scope, Usage",
         "contextRequirements": "Source guidance: no complete prerequisite summary adopted"
       }
     }
@@ -283,7 +283,7 @@
       "Jobplanung mit go-cron, Docker- oder LDAP-Anbindungen und Nebenläufigkeit bearbeiten."
     ],
     "expectedOutputs": [
-      "Ein eigener Ergebnisabschnitt fehlt im ausgewerteten Quell-README. [Anleitung und Beispiele lesen](https://github.com/netresearch/go-development-skill#readme)."
+      "Go-Service- oder Integrationscode und Tests für die gewählte Aufgabe mit Zeitplanung, Ausfallsicherheit, Docker oder LDAP."
     ],
     "contextRequirements": [
       "Die Voraussetzungen sind hier nicht gesondert zusammengefasst. [Werkzeuge und Projektzugriffe im Quell-README prüfen](https://github.com/netresearch/go-development-skill#readme)."
@@ -294,7 +294,7 @@
       "sourceSnapshotSha256": "76237bd19d70c569fdacf03bc9b56432d78dead0de69b9192982f537dd6bd063",
       "basis": {
         "useCases": "Features, Expertise Areas",
-        "expectedOutputs": "Source guidance: no dedicated result section reviewed",
+        "expectedOutputs": "Features, Usage / Example queries",
         "contextRequirements": "Source guidance: no complete prerequisite summary adopted"
       }
     }
@@ -353,7 +353,7 @@
       "Befunde mit Risikobewertung, Nachweisen und passenden Maßnahmen dokumentieren."
     ],
     "expectedOutputs": [
-      "Ein eigener Ergebnisabschnitt fehlt im ausgewerteten Quell-README. [Anleitung und Beispiele lesen](https://github.com/netresearch/security-audit-skill#readme)."
+      "Sicherheitsbefunde mit Risikobewertung und Empfehlungen zur Behebung für den geprüften Code und die konfigurierten Prüfungen."
     ],
     "contextRequirements": [
       "Die Voraussetzungen sind hier nicht gesondert zusammengefasst. [Werkzeuge und Projektzugriffe im Quell-README prüfen](https://github.com/netresearch/security-audit-skill#readme)."
@@ -364,7 +364,7 @@
       "sourceSnapshotSha256": "4faad34df452d3746efaaee9384ec6acec1be1b67149d160ce475c1f76d07ada",
       "basis": {
         "useCases": "Features, Expertise Areas",
-        "expectedOutputs": "Source guidance: no dedicated result section reviewed",
+        "expectedOutputs": "Features, Usage / Example queries",
         "contextRequirements": "Source guidance: no complete prerequisite summary adopted"
       }
     }
@@ -375,7 +375,7 @@
       "TYPO3-RTE-Konfigurationen prüfen oder Anpassungen von CKEditor 4 auf 5 migrieren."
     ],
     "expectedOutputs": [
-      "Ein eigener Ergebnisabschnitt fehlt im ausgewerteten Quell-README. [Anleitung und Beispiele lesen](https://github.com/netresearch/typo3-ckeditor5-skill#readme)."
+      "CKEditor-5-Plugin-Code, YAML-RTE-Vorgaben oder Migrationsänderungen für die gewünschte TYPO3-Editor-Integration."
     ],
     "contextRequirements": [
       "Die Voraussetzungen sind hier nicht gesondert zusammengefasst. [Werkzeuge und Projektzugriffe im Quell-README prüfen](https://github.com/netresearch/typo3-ckeditor5-skill#readme)."
@@ -386,7 +386,7 @@
       "sourceSnapshotSha256": "c686a7e90f11b918ec45f9b4b45a78188e9bea0e11b1a9af623ef3d15bfc6d2c",
       "basis": {
         "useCases": "Features, Expertise Areas",
-        "expectedOutputs": "Source guidance: no dedicated result section reviewed",
+        "expectedOutputs": "Features, Usage / Example queries",
         "contextRequirements": "Source guidance: no complete prerequisite summary adopted"
       }
     }
@@ -397,7 +397,7 @@
       "Änderungen für Reviews vorbereiten und Konflikte oder missglückte Git-Operationen bearbeiten."
     ],
     "expectedOutputs": [
-      "Ein eigener Ergebnisabschnitt fehlt im ausgewerteten Quell-README. [Anleitung und Beispiele lesen](https://github.com/netresearch/git-workflow-skill#readme)."
+      "Anpassungen an Branch-, Commit-, Hook- oder Pull-Request-Abläufen mit Review- und CI-Nachweisen für die beauftragte Git-Aufgabe."
     ],
     "contextRequirements": [
       "Die Voraussetzungen sind hier nicht gesondert zusammengefasst. [Werkzeuge und Projektzugriffe im Quell-README prüfen](https://github.com/netresearch/git-workflow-skill#readme)."
@@ -408,7 +408,7 @@
       "sourceSnapshotSha256": "ebea632c1fbfcf2be43bdc582405dac38cf0a6f8a09e4839047d98017b9e9334",
       "basis": {
         "useCases": "Features, Expertise Areas",
-        "expectedOutputs": "Source guidance: no dedicated result section reviewed",
+        "expectedOutputs": "Features, Usage, Commands / pr-finish",
         "contextRequirements": "Source guidance: no complete prerequisite summary adopted"
       }
     }
@@ -419,7 +419,7 @@
       "Issues, Pull Requests, Review-Threads und Aktualisierungen durch Dependabot oder Renovate verwalten."
     ],
     "expectedOutputs": [
-      "Ein eigener Ergebnisabschnitt fehlt im ausgewerteten Quell-README. [Anleitung und Beispiele lesen](https://github.com/netresearch/github-project-skill#readme)."
+      "Eine GitHub-Repository-Konfiguration oder Änderungen an Issue- und Review-Abläufen für die gewünschte Plattformaufgabe."
     ],
     "contextRequirements": [
       "Die Voraussetzungen sind hier nicht gesondert zusammengefasst. [Werkzeuge und Projektzugriffe im Quell-README prüfen](https://github.com/netresearch/github-project-skill#readme)."
@@ -430,7 +430,7 @@
       "sourceSnapshotSha256": "3e46c42ed8df61b35993fcf02d4e24e82e3939065e69b72e3f4d593fdce55454",
       "basis": {
         "useCases": "Scope Boundaries, Triggers, Workflows",
-        "expectedOutputs": "Source guidance: no dedicated result section reviewed",
+        "expectedOutputs": "Scope Boundaries, Triggers",
         "contextRequirements": "Source guidance: no complete prerequisite summary adopted"
       }
     }
@@ -492,7 +492,7 @@
       "Jira-Beschreibungen und Kommentare mit dem getrennten Skill jira-syntax formatieren und prüfen."
     ],
     "expectedOutputs": [
-      "Ein eigener Ergebnisabschnitt fehlt im ausgewerteten Quell-README. [Anleitung und Beispiele lesen](https://github.com/netresearch/jira-skill#readme)."
+      "Jira-Suchergebnisse oder freigegebene Ticketänderungen mit Beschreibungen und Kommentaren im benötigten Jira-Wiki-Format."
     ],
     "contextRequirements": [
       "Die Voraussetzungen sind hier nicht gesondert zusammengefasst. [Werkzeuge und Projektzugriffe im Quell-README prüfen](https://github.com/netresearch/jira-skill#readme)."
@@ -503,7 +503,7 @@
       "sourceSnapshotSha256": "fc47d19c15022d7731045bff196d2c6db382551d876d6350212f0f7f5a0fb700",
       "basis": {
         "useCases": "Plugin Structure, Features, Quick Start",
-        "expectedOutputs": "Source guidance: no dedicated result section reviewed",
+        "expectedOutputs": "Plugin Structure, Features, Quick Start",
         "contextRequirements": "Source guidance: no complete prerequisite summary adopted"
       }
     }
@@ -514,7 +514,7 @@
       "Die Anfrage auf ein Thema wie Hooks, Routing oder Middleware eingrenzen."
     ],
     "expectedOutputs": [
-      "Ein eigener Ergebnisabschnitt fehlt im ausgewerteten Quell-README. [Anleitung und Beispiele lesen](https://github.com/netresearch/context7-skill#readme)."
+      "Aus Context7 abgerufene Bibliotheksdokumentation, eingegrenzt auf die gewünschte Bibliothek und das Thema."
     ],
     "contextRequirements": [
       "Die Voraussetzungen sind hier nicht gesondert zusammengefasst. [Werkzeuge und Projektzugriffe im Quell-README prüfen](https://github.com/netresearch/context7-skill#readme)."
@@ -525,7 +525,7 @@
       "sourceSnapshotSha256": "d46e4ec3c092242ed3a9dacf6ed924b769b3693a748c0a5dab6a82b53be9c300",
       "basis": {
         "useCases": "Features, Usage",
-        "expectedOutputs": "Source guidance: no dedicated result section reviewed",
+        "expectedOutputs": "Features, Usage",
         "contextRequirements": "Source guidance: no complete prerequisite summary adopted"
       }
     }
@@ -536,7 +536,7 @@
       "Daten konvertieren oder zusammenführen, ohne ihre Struktur durch einfache Textverarbeitung zu beschädigen."
     ],
     "expectedOutputs": [
-      "Ein eigener Ergebnisabschnitt fehlt im ausgewerteten Quell-README. [Anleitung und Beispiele lesen](https://github.com/netresearch/data-tools-skill#readme)."
+      "Abfragen, Transformationen oder Formatumwandlungen strukturierter Daten mit einem passenden Werkzeug für JSON, YAML, TOML, XML oder Tabellendaten."
     ],
     "contextRequirements": [
       "Die Voraussetzungen sind hier nicht gesondert zusammengefasst. [Werkzeuge und Projektzugriffe im Quell-README prüfen](https://github.com/netresearch/data-tools-skill#readme)."
@@ -547,7 +547,7 @@
       "sourceSnapshotSha256": "5ba28401589c23d06f78837c74269281634d1870ca43194d5d39081e10347a86",
       "basis": {
         "useCases": "Tools Covered, Core Principle",
-        "expectedOutputs": "Source guidance: no dedicated result section reviewed",
+        "expectedOutputs": "Tools Covered, Core Principle",
         "contextRequirements": "Source guidance: no complete prerequisite summary adopted"
       }
     }
@@ -558,7 +558,7 @@
       "Container-Builds, Parallelisierung und Pipelines für mehrere Branches prüfen oder Fehler untersuchen."
     ],
     "expectedOutputs": [
-      "Ein eigener Ergebnisabschnitt fehlt im ausgewerteten Quell-README. [Anleitung und Beispiele lesen](https://github.com/netresearch/concourse-ci-skill#readme)."
+      "Eine Concourse-Pipeline- und Ressourcen-Konfiguration, Validierungsergebnisse oder eine Diagnose des gemeldeten Pipeline-Fehlers."
     ],
     "contextRequirements": [
       "Die Voraussetzungen sind hier nicht gesondert zusammengefasst. [Werkzeuge und Projektzugriffe im Quell-README prüfen](https://github.com/netresearch/concourse-ci-skill#readme)."
@@ -569,7 +569,7 @@
       "sourceSnapshotSha256": "48455d7b0a70f697f683e09148f8030e29939f759aef1f46b092c2c7ff5a8bc9",
       "basis": {
         "useCases": "Features, Key Topics Covered",
-        "expectedOutputs": "Source guidance: no dedicated result section reviewed",
+        "expectedOutputs": "Features, Usage, Skill Contents",
         "contextRequirements": "Source guidance: no complete prerequisite summary adopted"
       }
     }
@@ -580,7 +580,7 @@
       "Container in CI testen und Besonderheiten von Entrypoints, Netzwerken oder WSL berücksichtigen."
     ],
     "expectedOutputs": [
-      "Ein eigener Ergebnisabschnitt fehlt im ausgewerteten Quell-README. [Anleitung und Beispiele lesen](https://github.com/netresearch/docker-development-skill#readme)."
+      "Dockerfiles, Compose- oder Bake-Konfiguration und angepasste Container-Tests für die gewählte Build- oder Orchestrierungsaufgabe."
     ],
     "contextRequirements": [
       "Die Voraussetzungen sind hier nicht gesondert zusammengefasst. [Werkzeuge und Projektzugriffe im Quell-README prüfen](https://github.com/netresearch/docker-development-skill#readme)."
@@ -591,7 +591,7 @@
       "sourceSnapshotSha256": "5e35b54482756e4b6f70cc91d69cbb4bacf502f7aa8f586616a52d0d110345ff",
       "basis": {
         "useCases": "Features, Skills, Key Patterns",
-        "expectedOutputs": "Source guidance: no dedicated result section reviewed",
+        "expectedOutputs": "Features, Skills, Usage / Example Prompts",
         "contextRequirements": "Source guidance: no complete prerequisite summary adopted"
       }
     }
@@ -624,7 +624,7 @@
       "Je nach Aufgabe Textsuche, Struktursuche, Dokumentensuche oder Code-Statistik wählen."
     ],
     "expectedOutputs": [
-      "Ein eigener Ergebnisabschnitt fehlt im ausgewerteten Quell-README. [Anleitung und Beispiele lesen](https://github.com/netresearch/file-search-skill#readme)."
+      "Passende Code- oder Dateifundstellen, Suchergebnisse aus Dokumenten oder Code-Statistiken aus dem gewählten Suchwerkzeug."
     ],
     "contextRequirements": [
       "Die Voraussetzungen sind hier nicht gesondert zusammengefasst. [Werkzeuge und Projektzugriffe im Quell-README prüfen](https://github.com/netresearch/file-search-skill#readme)."
@@ -635,7 +635,7 @@
       "sourceSnapshotSha256": "cd0e89c644fa5d5392ba3828bb3c796c5ebf7d295dd5103b8cf8df8a4224c29c",
       "basis": {
         "useCases": "Tools Covered, Key Principles",
-        "expectedOutputs": "Source guidance: no dedicated result section reviewed",
+        "expectedOutputs": "Tools Covered, Key Principles",
         "contextRequirements": "Source guidance: no complete prerequisite summary adopted"
       }
     }
@@ -646,7 +646,7 @@
       "Mit den weiteren Skills Ankündigungen verfassen oder einen Synapse-Homeserver administrieren."
     ],
     "expectedOutputs": [
-      "Ein eigener Ergebnisabschnitt fehlt im ausgewerteten Quell-README. [Anleitung und Beispiele lesen](https://github.com/netresearch/matrix-skill#readme)."
+      "Gelesene Raumereignisse, freigegebene Nachrichtenaktionen oder Ergebnisse der Serververwaltung wie Raum-Snapshots und Graphviz-Karten, je nach gewähltem Skill des Pakets."
     ],
     "contextRequirements": [
       "Für verschlüsselte Räume ist laut Quell-README libolm erforderlich; die Installation hängt vom Betriebssystem ab.",
@@ -658,7 +658,7 @@
       "sourceSnapshotSha256": "b9239231c8fe9f9dc048268a7a1b08252174289fef76fb1646ca382a21ff473e",
       "basis": {
         "useCases": "Introduction, matrix-communication — Features, matrix-administration — Features, matrix-announcement — Features",
-        "expectedOutputs": "Source guidance: no dedicated result section reviewed",
+        "expectedOutputs": "Skill table, matrix-communication — Features, matrix-administration",
         "contextRequirements": "Prerequisites, Introduction"
       }
     }
@@ -694,7 +694,7 @@
       "Site Sets, Bootstrap Package, Infrastruktur und Bereinigungen prüfen; Extension-API-Migrationen gesondert behandeln."
     ],
     "expectedOutputs": [
-      "Ein eigener Ergebnisabschnitt fehlt im ausgewerteten Quell-README. [Anleitung und Beispiele lesen](https://github.com/netresearch/typo3-project-upgrade-skill#readme)."
+      "Änderungen an Projektkonfiguration, Templates, Infrastruktur oder Datenbankmigration sowie strukturelle und visuelle Prüfungen für den gewählten Upgrade-Umfang."
     ],
     "contextRequirements": [
       "Die Voraussetzungen sind hier nicht gesondert zusammengefasst. [Werkzeuge und Projektzugriffe im Quell-README prüfen](https://github.com/netresearch/typo3-project-upgrade-skill#readme)."
@@ -705,7 +705,7 @@
       "sourceSnapshotSha256": "882f14c622e07a515e16c9f6ee9f8e8adce526f0e41d469ef90fd437e0219685",
       "basis": {
         "useCases": "Scope, What It Covers",
-        "expectedOutputs": "Source guidance: no dedicated result section reviewed",
+        "expectedOutputs": "Scope, What It Covers, Assessment Checkpoints",
         "contextRequirements": "Source guidance: no complete prerequisite summary adopted"
       }
     }
@@ -716,7 +716,7 @@
       "Behat-, Functional- oder Lasttests vorbereiten, ausführen und untersuchen; das Paket enthält 14 eigenständige Skills."
     ],
     "expectedOutputs": [
-      "Ein eigener Ergebnisabschnitt fehlt im ausgewerteten Quell-README. [Anleitung und Beispiele lesen](https://github.com/netresearch/orocommerce-skill#readme)."
+      "Aufgabenbezogener OroCommerce-6.1-Code, Konfiguration oder Tests nach den Vorgaben des passenden Skills aus dem Paket mit 14 Skills."
     ],
     "contextRequirements": [
       "Das Quell-README nennt Claude Code als Client und richtet die Anleitung an Entwickler mit OroCommerce-Erfahrung.",
@@ -728,7 +728,7 @@
       "sourceSnapshotSha256": "89bbf0923f2b9b4e3c7140e648a7091db6ce1f52d6d63cb5a7b6338c0be501d7",
       "basis": {
         "useCases": "Introduction, Skills",
-        "expectedOutputs": "Source guidance: no dedicated result section reviewed",
+        "expectedOutputs": "Introduction, Skills",
         "contextRequirements": "Introduction, Requirements, Skills"
       }
     }
@@ -739,7 +739,7 @@
       "Fokus, Skip-Links, ARIA und reduzierte Bewegung anhand der WCAG-2.2-AA-Muster prüfen."
     ],
     "expectedOutputs": [
-      "Ein eigener Ergebnisabschnitt fehlt im ausgewerteten Quell-README. [Anleitung und Beispiele lesen](https://github.com/netresearch/typo3-a11y-skill#readme)."
+      "HTML/ARIA-Muster, SCSS- und TypeScript-Beispiele sowie Barrierefreiheitsprüfungen für die gewünschte TYPO3-Frontend-Komponente."
     ],
     "contextRequirements": [
       "Die Anleitung richtet sich an TYPO3-Sitepackages ab Version 13.",
@@ -751,7 +751,7 @@
       "sourceSnapshotSha256": "f7a266974cac3ef072812b10507b23cc47066259c03051e95aa593c7f2572bc0",
       "basis": {
         "useCases": "Introduction, References",
-        "expectedOutputs": "Source guidance: no dedicated result section reviewed",
+        "expectedOutputs": "Introduction, References",
         "contextRequirements": "Introduction, Tests"
       }
     }
@@ -762,7 +762,7 @@
       "Bootstrap-Theming, SVG-Verarbeitung und die im Quell-README verlinkten Konfigurationsmuster anwenden."
     ],
     "expectedOutputs": [
-      "Ein eigener Ergebnisabschnitt fehlt im ausgewerteten Quell-README. [Anleitung und Beispiele lesen](https://github.com/netresearch/typo3-vite-skill#readme)."
+      "Vite-Konfiguration und Einstiegspunkte, eine SCSS-Struktur und Beispiele für das Bootstrap-Theming eines TYPO3-Sitepackages."
     ],
     "contextRequirements": [
       "Ein TYPO3-Sitepackage ab Version 13; Vite, zugehörige Plugins, SVGO, Bootstrap und vite-asset-collector sind Pakete des Zielprojekts.",
@@ -774,7 +774,7 @@
       "sourceSnapshotSha256": "ea5de37e242fa1197917b932b06ae1641072c02624894b903181a6d4e309837a",
       "basis": {
         "useCases": "Introduction, References",
-        "expectedOutputs": "Source guidance: no dedicated result section reviewed",
+        "expectedOutputs": "Introduction, References",
         "contextRequirements": "Introduction, Dependencies"
       }
     }
@@ -785,7 +785,7 @@
       "Release-Konfiguration und Status prüfen; enthaltene Schutz-Hooks nur über einen dafür geeigneten Installer nutzen."
     ],
     "expectedOutputs": [
-      "Ein eigener Ergebnisabschnitt fehlt im ausgewerteten Quell-README. [Anleitung und Beispiele lesen](https://github.com/netresearch/github-release-skill#readme)."
+      "Ein Pull Request zur Versionsänderung oder ein koordinierter Release mit signiertem Tag und CI-Veröffentlichung sowie Ergebnisse der Release-Statusprüfung für den gewählten Befehl."
     ],
     "contextRequirements": [
       "Die Voraussetzungen sind hier nicht gesondert zusammengefasst. [Werkzeuge und Projektzugriffe im Quell-README prüfen](https://github.com/netresearch/github-release-skill#readme)."
@@ -796,7 +796,7 @@
       "sourceSnapshotSha256": "2fa90df09a91585d8ee24385e6b9f7611338e29d2765aadb03cc65cd246844e0",
       "basis": {
         "useCases": "Features, Commands, Installation",
-        "expectedOutputs": "Source guidance: no dedicated result section reviewed",
+        "expectedOutputs": "Features, Commands",
         "contextRequirements": "Source guidance: no complete prerequisite summary adopted"
       }
     }
@@ -807,7 +807,7 @@
       "Unpassende Übertragungen aus dem Englischen, mehrdeutige Verweise und unnötig komplizierte Sätze überarbeiten."
     ],
     "expectedOutputs": [
-      "Ein eigener Ergebnisabschnitt fehlt im ausgewerteten Quell-README. [Anleitung und Beispiele lesen](https://github.com/netresearch/german-technical-writing-skill#readme)."
+      "Überarbeiteter deutscher Fachtext mit eindeutigen Verweisen, passender Terminologie und den Konventionen der gewünschten Textart."
     ],
     "contextRequirements": [
       "Die Voraussetzungen sind hier nicht gesondert zusammengefasst. [Werkzeuge und Projektzugriffe im Quell-README prüfen](https://github.com/netresearch/german-technical-writing-skill#readme)."
@@ -818,7 +818,7 @@
       "sourceSnapshotSha256": "a1e65b6833576839528aa2a38714fbde8b335dedf122439055e3ebf9b4d11201",
       "basis": {
         "useCases": "Features, Usage",
-        "expectedOutputs": "Source guidance: no dedicated result section reviewed",
+        "expectedOutputs": "Introduction, Features, Usage",
         "contextRequirements": "Source guidance: no complete prerequisite summary adopted"
       }
     }
@@ -852,7 +852,7 @@
       "Für ein eigenes Erscheinungsbild eine CSS-Datei anstelle der neutralen Standardgestaltung verwenden."
     ],
     "expectedOutputs": [
-      "Ein eigener Ergebnisabschnitt fehlt im ausgewerteten Quell-README. [Anleitung und Beispiele lesen](https://github.com/netresearch/markdown-to-pdf-skill#readme)."
+      "Gestaltete PDF-Dateien aus den übergebenen Markdown-Dateien mit der neutralen Standardgestaltung oder einer vorgegebenen CSS-Datei."
     ],
     "contextRequirements": [
       "uv lädt die in convert.py deklarierten Python-Pakete markdown und weasyprint.",
@@ -864,7 +864,7 @@
       "sourceSnapshotSha256": "1e4569e769884436d17a851b35769f4b496aaa27fcc79de76a6dc59d486c857a",
       "basis": {
         "useCases": "Introduction, Usage, Branded output",
-        "expectedOutputs": "Source guidance: no dedicated result section reviewed",
+        "expectedOutputs": "Introduction, Usage, Branded output",
         "contextRequirements": "Usage, Dependencies"
       }
     }
@@ -898,7 +898,7 @@
       "Konkrete Verbesserungen für Projektregeln, Skills, Checkpoints oder Memory vorschlagen und freigegebene Vorschläge umsetzen."
     ],
     "expectedOutputs": [
-      "Ein eigener Ergebnisabschnitt fehlt im ausgewerteten Quell-README. [Anleitung und Beispiele lesen](https://github.com/netresearch/retro-skill#readme)."
+      "Umsetzbare Retro-Vorschläge, geordnet nach ihrem vorgesehenen Ziel; dauerhafte Änderungen werden erst nach Freigabe des jeweiligen Vorschlags vorgenommen."
     ],
     "contextRequirements": [
       "Das Quell-README beschreibt Claude Code als Laufzeit. Die Hilfsskripte brauchen Python 3.11+, Bash, Git und jq.",
@@ -911,7 +911,7 @@
       "sourceSnapshotSha256": "911066d98e58bec377b138daf6c20488625c2e818675c470b415bdd3e1660949",
       "basis": {
         "useCases": "What it does, Usage — the six modes, How it stays safe",
-        "expectedOutputs": "Source guidance: no dedicated result section reviewed",
+        "expectedOutputs": "What it does, How it stays safe",
         "contextRequirements": "Requirements, Dependencies, How it stays safe"
       }
     }

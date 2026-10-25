@@ -80,6 +80,27 @@ for (const lang of ["en", "de"]) {
     expect(width.document).toBeLessThanOrEqual(width.viewport);
     await context.close();
   });
+
+  test(`reduced motion removes component transitions and preserves the visible skip link (${lang})`, async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    await page.goto(`${prefix}/${lang}/`, { waitUntil: "networkidle" });
+    await page.evaluate(() => document.fonts.ready);
+    await expect(page.locator("html")).toHaveCSS("scroll-behavior", "auto");
+    const moving = await page.locator("body *").evaluateAll(elements => elements.filter(element => {
+      const style = getComputedStyle(element);
+      return style.transitionDuration.split(",").some(value => Number.parseFloat(value) > 0)
+        || (style.animationName !== "none" && style.animationDuration.split(",").some(value => Number.parseFloat(value) > 0));
+    }).map(element => element.className));
+    expect(moving).toEqual([]);
+    await page.keyboard.press("Tab");
+    const skip = page.locator(".skip-link");
+    await expect(skip).toBeFocused();
+    await expect(skip).toHaveCSS("transition-duration", "0s");
+    const rect = await skip.boundingBox();
+    expect(rect.y).toBeGreaterThanOrEqual(0);
+    await page.locator(".hero .copy-btn").hover();
+    await expect(page.locator(".hero .copy-btn")).toHaveCSS("transition-duration", "0s");
+  });
 }
 
 test("theme choice changes page colors, survives a locale change and follows the system", async ({ page }) => {

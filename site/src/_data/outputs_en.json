@@ -1,0 +1,442 @@
+{
+  "enterprise-readiness": {
+    "expectedOutputs": [
+      "An assessment of project security, supply-chain controls and quality gates, with recommendations for the selected standards."
+    ],
+    "provenance": {
+      "reviewedAt": "2026-10-25",
+      "sourceUrl": "https://github.com/netresearch/enterprise-readiness-skill#readme",
+      "sourceSnapshotSha256": "bf95aa64a344e13a8acaefd3ab7e71bda5f13bd3b6c1156373d2b71d0f058ecd",
+      "basis": "Features, Usage / Example Prompts"
+    }
+  },
+  "typo3-docs": {
+    "expectedOutputs": [
+      "TYPO3 documentation in reStructuredText, a gap analysis and local rendering or validation results, depending on the task."
+    ],
+    "provenance": {
+      "reviewedAt": "2026-10-25",
+      "sourceUrl": "https://github.com/netresearch/typo3-docs-skill#readme",
+      "sourceSnapshotSha256": "9866d1064500f4fc6f3e21cdcc79ffd48325bfaae8970086eab8a554e8955e08",
+      "basis": "Overview, Features, Contents / scripts"
+    }
+  },
+  "typo3-testing": {
+    "expectedOutputs": [
+      "Unit, functional or browser tests with the required fixtures, test configuration and CI integration for the selected test scope."
+    ],
+    "provenance": {
+      "reviewedAt": "2026-10-25",
+      "sourceUrl": "https://github.com/netresearch/typo3-testing-skill#readme",
+      "sourceSnapshotSha256": "11d9ef233edbfb6c80ad3206e5cf8cb9832645fbc1888a119aa7ffcc849d7eb4",
+      "basis": "Features, Quick Start"
+    }
+  },
+  "typo3-ddev": {
+    "expectedOutputs": [
+      "A DDEV configuration with web-server and installation files tailored to the extension."
+    ],
+    "provenance": {
+      "reviewedAt": "2026-10-25",
+      "sourceUrl": "https://github.com/netresearch/typo3-ddev-skill#readme",
+      "sourceSnapshotSha256": "2c3463a26abd7226168961eb93b03521f35fcbdc39a25d84c9116a1f81bd496c",
+      "basis": "Usage / What You'll Get"
+    }
+  },
+  "typo3-core-contributions": {
+    "expectedOutputs": [
+      "A prepared TYPO3 Core patch with the required commit message and pre-submission checks, or a diagnosis of a failing contribution pipeline."
+    ],
+    "provenance": {
+      "reviewedAt": "2026-10-25",
+      "sourceUrl": "https://github.com/netresearch/typo3-core-contributions-skill#readme",
+      "sourceSnapshotSha256": "3fac1df800e60af8540a5eeab8e7d6f968091f4fb430396fb09a158b9baa5396",
+      "basis": "Overview, Features, Key Workflows"
+    }
+  },
+  "typo3-conformance": {
+    "expectedOutputs": [
+      "An extension conformance report with a summary table and an action checklist for the checks performed."
+    ],
+    "provenance": {
+      "reviewedAt": "2026-10-25",
+      "sourceUrl": "https://github.com/netresearch/typo3-conformance-skill#readme",
+      "sourceSnapshotSha256": "12ab50d957c657f8ad46075970f0b5f6cab83e47f54ca2d71abd2dbd6800079a",
+      "basis": "Contributing / Tests: check-conformance.sh and generate-report.sh"
+    }
+  },
+  "typo3-site-conformance": {
+    "expectedOutputs": [
+      "A verdict for each reviewed rule family with file and line evidence covering project structure, containers, CI, deployment, dependencies, security and documentation."
+    ],
+    "provenance": {
+      "reviewedAt": "2026-10-25",
+      "sourceUrl": "https://github.com/netresearch/typo3-site-conformance-skill#readme",
+      "sourceSnapshotSha256": "e7fefa6074a87130ee6363558b7b09e81fde5cb4604ff536f31c9942ca784572",
+      "basis": "Expected outputs"
+    }
+  },
+  "netresearch-branding": {
+    "expectedOutputs": [
+      "Page or component designs, HTML/CSS examples and brand review recommendations using the selected Netresearch artifact profile."
+    ],
+    "provenance": {
+      "reviewedAt": "2026-10-25",
+      "sourceUrl": "https://github.com/netresearch/netresearch-branding-skill#readme",
+      "sourceSnapshotSha256": "b7a79614e37fa0fcae2d5384aaae20e3ee94650aa3bd407332c011a281c5af3e",
+      "basis": "Features, Usage / Example Workflows, Quality Checklist"
+    }
+  },
+  "agent-rules": {
+    "expectedOutputs": [
+      "A concise root AGENTS.md and scoped instruction files with commands and project conventions extracted from repository metadata."
+    ],
+    "provenance": {
+      "reviewedAt": "2026-10-25",
+      "sourceUrl": "https://github.com/netresearch/agent-rules-skill#readme",
+      "sourceSnapshotSha256": "b9f14e810ab50859a3a815a54f8481a10a4937c565b397d349aedf687cc8a16f",
+      "basis": "Features, Supported Projects"
+    }
+  },
+  "agent-harness": {
+    "expectedOutputs": [
+      "A harness consistency assessment or missing repository artifacts such as an AGENTS.md index, documentation, hooks and CI verification."
+    ],
+    "provenance": {
+      "reviewedAt": "2026-10-25",
+      "sourceUrl": "https://github.com/netresearch/agent-harness-skill#readme",
+      "sourceSnapshotSha256": "f3db402672291048814ce2f107e5e955d7dcac565a1b65b5d594927a6b038035",
+      "basis": "What is Agent Harness?, Usage, Maturity Levels"
+    }
+  },
+  "cli-tools": {
+    "expectedOutputs": [
+      "A table or JSON report listing each tool, installed and available versions, installation method and status."
+    ],
+    "provenance": {
+      "reviewedAt": "2026-10-25",
+      "sourceUrl": "https://github.com/netresearch/coding_agent_cli_toolset#readme",
+      "sourceSnapshotSha256": "e4a0fff67f9b35e22e992bc1033876b26b59db57864a6b2050e102f4028ffca4",
+      "basis": "Output Format"
+    }
+  },
+  "typo3-extension-upgrade": {
+    "expectedOutputs": [
+      "Migrated extension code and configuration, with scanner, static-analysis and test results for the targeted TYPO3 upgrade."
+    ],
+    "provenance": {
+      "reviewedAt": "2026-10-25",
+      "sourceUrl": "https://github.com/netresearch/typo3-extension-upgrade-skill#readme",
+      "sourceSnapshotSha256": "e301cdcb3ea99df9d28a557c512b51c0b343b61fbdb847c32f169f23fce434c4",
+      "basis": "Overview, Scope, Usage"
+    }
+  },
+  "go-development": {
+    "expectedOutputs": [
+      "Go service or integration code and tests for the chosen scheduling, resilience, Docker or LDAP task."
+    ],
+    "provenance": {
+      "reviewedAt": "2026-10-25",
+      "sourceUrl": "https://github.com/netresearch/go-development-skill#readme",
+      "sourceSnapshotSha256": "76237bd19d70c569fdacf03bc9b56432d78dead0de69b9192982f537dd6bd063",
+      "basis": "Features, Usage / Example queries"
+    }
+  },
+  "php-modernization": {
+    "expectedOutputs": [
+      "Structured assessment reports in JSON, SARIF or JUnit XML, with machine-readable action recommendations."
+    ],
+    "provenance": {
+      "reviewedAt": "2026-10-25",
+      "sourceUrl": "https://github.com/netresearch/php-modernization-skill#readme",
+      "sourceSnapshotSha256": "09202aa5726b9d5f323324e490eedb0e1b207ddf67151bdd263e7d1f61e30b75",
+      "basis": "Agent Contract, Output formats"
+    }
+  },
+  "php-structured-edit": {
+    "expectedOutputs": [
+      "A guarded source change, a diff and separate parser, lint and configured project-check results."
+    ],
+    "provenance": {
+      "reviewedAt": "2026-10-25",
+      "sourceUrl": "https://github.com/netresearch/php-ast-edit-skill#readme",
+      "sourceSnapshotSha256": "1d1b0e0ab118fe1fb8d3191e6fa2d1e8e89f6ae88fbcb3aeb7bbef139e00f4d6",
+      "basis": "Expected outputs"
+    }
+  },
+  "security-audit": {
+    "expectedOutputs": [
+      "Security findings with risk assessment and remediation recommendations for the reviewed code and configured checks."
+    ],
+    "provenance": {
+      "reviewedAt": "2026-10-25",
+      "sourceUrl": "https://github.com/netresearch/security-audit-skill#readme",
+      "sourceSnapshotSha256": "4faad34df452d3746efaaee9384ec6acec1be1b67149d160ce475c1f76d07ada",
+      "basis": "Features, Usage / Example queries"
+    }
+  },
+  "typo3-ckeditor5": {
+    "expectedOutputs": [
+      "CKEditor 5 plugin code, YAML RTE presets or migration changes for the requested TYPO3 editor integration."
+    ],
+    "provenance": {
+      "reviewedAt": "2026-10-25",
+      "sourceUrl": "https://github.com/netresearch/typo3-ckeditor5-skill#readme",
+      "sourceSnapshotSha256": "c686a7e90f11b918ec45f9b4b45a78188e9bea0e11b1a9af623ef3d15bfc6d2c",
+      "basis": "Features, Usage / Example queries"
+    }
+  },
+  "git-workflow": {
+    "expectedOutputs": [
+      "Branch, commit, hook or pull-request workflow changes, with review and CI status evidence for the requested Git task."
+    ],
+    "provenance": {
+      "reviewedAt": "2026-10-25",
+      "sourceUrl": "https://github.com/netresearch/git-workflow-skill#readme",
+      "sourceSnapshotSha256": "ebea632c1fbfcf2be43bdc582405dac38cf0a6f8a09e4839047d98017b9e9334",
+      "basis": "Features, Usage, Commands / pr-finish"
+    }
+  },
+  "github-project": {
+    "expectedOutputs": [
+      "GitHub repository configuration or issue and review workflow changes for the requested platform task."
+    ],
+    "provenance": {
+      "reviewedAt": "2026-10-25",
+      "sourceUrl": "https://github.com/netresearch/github-project-skill#readme",
+      "sourceSnapshotSha256": "3e46c42ed8df61b35993fcf02d4e24e82e3939065e69b72e3f4d593fdce55454",
+      "basis": "Scope Boundaries, Triggers"
+    }
+  },
+  "jujutsu-workflow": {
+    "expectedOutputs": [
+      "Changes recorded or described with jj, kept separate from unrelated work."
+    ],
+    "provenance": {
+      "reviewedAt": "2026-10-25",
+      "sourceUrl": "https://github.com/netresearch/jujutsu-workflow-skill#readme",
+      "sourceSnapshotSha256": "6ee3660931fc5f91718464f9c48f87b1e82879627da5245dfb7309843a826130",
+      "basis": "Expected outputs"
+    }
+  },
+  "skill-repo": {
+    "expectedOutputs": [
+      "A documented directory structure and templates for new skill repositories."
+    ],
+    "provenance": {
+      "reviewedAt": "2026-10-25",
+      "sourceUrl": "https://github.com/netresearch/skill-repo-skill#readme",
+      "sourceSnapshotSha256": "31f025d1953b4b264e94b5b6a58a25f2d7d8781921fdd2ef8868aa59d2aea7b5",
+      "basis": "Expected outputs"
+    }
+  },
+  "jira-integration": {
+    "expectedOutputs": [
+      "Jira query results or authorized issue updates, with descriptions and comments formatted in Jira wiki markup when required."
+    ],
+    "provenance": {
+      "reviewedAt": "2026-10-25",
+      "sourceUrl": "https://github.com/netresearch/jira-skill#readme",
+      "sourceSnapshotSha256": "fc47d19c15022d7731045bff196d2c6db382551d876d6350212f0f7f5a0fb700",
+      "basis": "Plugin Structure, Features, Quick Start"
+    }
+  },
+  "context7": {
+    "expectedOutputs": [
+      "Library documentation retrieved from Context7 and narrowed to the requested library and topic."
+    ],
+    "provenance": {
+      "reviewedAt": "2026-10-25",
+      "sourceUrl": "https://github.com/netresearch/context7-skill#readme",
+      "sourceSnapshotSha256": "d46e4ec3c092242ed3a9dacf6ed924b769b3693a748c0a5dab6a82b53be9c300",
+      "basis": "Features, Usage"
+    }
+  },
+  "data-tools": {
+    "expectedOutputs": [
+      "Queries, transformations or format conversions for structured data using a tool suited to JSON, YAML, TOML, XML or tabular records."
+    ],
+    "provenance": {
+      "reviewedAt": "2026-10-25",
+      "sourceUrl": "https://github.com/netresearch/data-tools-skill#readme",
+      "sourceSnapshotSha256": "5ba28401589c23d06f78837c74269281634d1870ca43194d5d39081e10347a86",
+      "basis": "Tools Covered, Core Principle"
+    }
+  },
+  "concourse-ci": {
+    "expectedOutputs": [
+      "Concourse pipeline and resource configuration, validation results or a diagnosis of the reported pipeline failure."
+    ],
+    "provenance": {
+      "reviewedAt": "2026-10-25",
+      "sourceUrl": "https://github.com/netresearch/concourse-ci-skill#readme",
+      "sourceSnapshotSha256": "48455d7b0a70f697f683e09148f8030e29939f759aef1f46b092c2c7ff5a8bc9",
+      "basis": "Features, Usage, Skill Contents"
+    }
+  },
+  "docker-development": {
+    "expectedOutputs": [
+      "Dockerfiles, Compose or Bake configuration and container test changes for the selected build or orchestration task."
+    ],
+    "provenance": {
+      "reviewedAt": "2026-10-25",
+      "sourceUrl": "https://github.com/netresearch/docker-development-skill#readme",
+      "sourceSnapshotSha256": "5e35b54482756e4b6f70cc91d69cbb4bacf502f7aa8f586616a52d0d110345ff",
+      "basis": "Features, Skills, Usage / Example Prompts"
+    }
+  },
+  "automated-assessment": {
+    "expectedOutputs": [
+      "Structured checkpoint results and a summary of detected gaps, limited to the checkpoints actually assessed."
+    ],
+    "provenance": {
+      "reviewedAt": "2026-10-25",
+      "sourceUrl": "https://github.com/netresearch/automated-assessment-skill#readme",
+      "sourceSnapshotSha256": "023323a60bd9c63947b03128ce68bcae73ebf0677a64278118a00e70896da3a4",
+      "basis": "Example Assessment Output"
+    }
+  },
+  "file-search": {
+    "expectedOutputs": [
+      "Matching code or file locations, document search results or code statistics from the selected search tool."
+    ],
+    "provenance": {
+      "reviewedAt": "2026-10-25",
+      "sourceUrl": "https://github.com/netresearch/file-search-skill#readme",
+      "sourceSnapshotSha256": "cd0e89c644fa5d5392ba3828bb3c796c5ebf7d295dd5103b8cf8df8a4224c29c",
+      "basis": "Tools Covered, Key Principles"
+    }
+  },
+  "matrix-communication": {
+    "expectedOutputs": [
+      "Read room events, authorized message actions, or homeserver administration results such as room snapshots and Graphviz maps, depending on the selected bundled skill."
+    ],
+    "provenance": {
+      "reviewedAt": "2026-10-25",
+      "sourceUrl": "https://github.com/netresearch/matrix-skill#readme",
+      "sourceSnapshotSha256": "b9239231c8fe9f9dc048268a7a1b08252174289fef76fb1646ca382a21ff473e",
+      "basis": "Skill table, matrix-communication — Features, matrix-administration"
+    }
+  },
+  "typo3-typoscript-ref": {
+    "expectedOutputs": [
+      "Version-specific excerpts from official TYPO3 documentation with an explanation of their context and ready-to-use recipes."
+    ],
+    "provenance": {
+      "reviewedAt": "2026-10-25",
+      "sourceUrl": "https://github.com/netresearch/typo3-typoscript-ref-skill#readme",
+      "sourceSnapshotSha256": "fd7775b2741be22bf9da1c363d3f722061eaedb27fdff259124c5adc2d67f73f",
+      "basis": "Expected outputs"
+    }
+  },
+  "typo3-project-upgrade": {
+    "expectedOutputs": [
+      "Project configuration, template, infrastructure or database migration changes, plus structural and visual verification for the selected upgrade scope."
+    ],
+    "provenance": {
+      "reviewedAt": "2026-10-25",
+      "sourceUrl": "https://github.com/netresearch/typo3-project-upgrade-skill#readme",
+      "sourceSnapshotSha256": "882f14c622e07a515e16c9f6ee9f8e8adce526f0e41d469ef90fd437e0219685",
+      "basis": "Scope, What It Covers, Assessment Checkpoints"
+    }
+  },
+  "orocommerce": {
+    "expectedOutputs": [
+      "Task-specific OroCommerce 6.1 code, configuration or tests, guided by the relevant skill from the 14-skill bundle."
+    ],
+    "provenance": {
+      "reviewedAt": "2026-10-25",
+      "sourceUrl": "https://github.com/netresearch/orocommerce-skill#readme",
+      "sourceSnapshotSha256": "89bbf0923f2b9b4e3c7140e648a7091db6ce1f52d6d63cb5a7b6338c0be501d7",
+      "basis": "Introduction, Skills"
+    }
+  },
+  "typo3-a11y": {
+    "expectedOutputs": [
+      "HTML/ARIA patterns, SCSS and TypeScript examples, and accessibility checks for the requested TYPO3 frontend component."
+    ],
+    "provenance": {
+      "reviewedAt": "2026-10-25",
+      "sourceUrl": "https://github.com/netresearch/typo3-a11y-skill#readme",
+      "sourceSnapshotSha256": "f7a266974cac3ef072812b10507b23cc47066259c03051e95aa593c7f2572bc0",
+      "basis": "Introduction, References"
+    }
+  },
+  "typo3-vite": {
+    "expectedOutputs": [
+      "Vite configuration and entrypoints, SCSS organization and Bootstrap theming examples for a TYPO3 sitepackage."
+    ],
+    "provenance": {
+      "reviewedAt": "2026-10-25",
+      "sourceUrl": "https://github.com/netresearch/typo3-vite-skill#readme",
+      "sourceSnapshotSha256": "ea5de37e242fa1197917b932b06ae1641072c02624894b903181a6d4e309837a",
+      "basis": "Introduction, References"
+    }
+  },
+  "github-release": {
+    "expectedOutputs": [
+      "A version-bump pull request or a coordinated signed-tag and CI release, with release health-check results for the chosen command."
+    ],
+    "provenance": {
+      "reviewedAt": "2026-10-25",
+      "sourceUrl": "https://github.com/netresearch/github-release-skill#readme",
+      "sourceSnapshotSha256": "2fa90df09a91585d8ee24385e6b9f7611338e29d2765aadb03cc65cd246844e0",
+      "basis": "Features, Commands"
+    }
+  },
+  "german-technical-writing": {
+    "expectedOutputs": [
+      "Revised German technical text with clearer references, appropriate terminology and the conventions of the requested document type."
+    ],
+    "provenance": {
+      "reviewedAt": "2026-10-25",
+      "sourceUrl": "https://github.com/netresearch/german-technical-writing-skill#readme",
+      "sourceSnapshotSha256": "a1e65b6833576839528aa2a38714fbde8b335dedf122439055e3ebf9b4d11201",
+      "basis": "Introduction, Features, Usage"
+    }
+  },
+  "peer-qa-review": {
+    "expectedOutputs": [
+      "A structured QA comment with severity, supporting evidence and a clear verdict on the next ticket status."
+    ],
+    "provenance": {
+      "reviewedAt": "2026-10-25",
+      "sourceUrl": "https://github.com/netresearch/peer-qa-review-skill#readme",
+      "sourceSnapshotSha256": "d894c2e1969073e0fa152fc9cbb8f81f7b1581639d4dd230b4bcf23db4663c6e",
+      "basis": "What this skill is for (explicit output statement)"
+    }
+  },
+  "markdown-to-pdf": {
+    "expectedOutputs": [
+      "Styled PDF files generated from the supplied Markdown files, using the neutral default or a supplied CSS stylesheet."
+    ],
+    "provenance": {
+      "reviewedAt": "2026-10-25",
+      "sourceUrl": "https://github.com/netresearch/markdown-to-pdf-skill#readme",
+      "sourceSnapshotSha256": "1e4569e769884436d17a851b35769f4b496aaa27fcc79de76a6dc59d486c857a",
+      "basis": "Introduction, Usage, Branded output"
+    }
+  },
+  "typo3-upgrade-effort-model": {
+    "expectedOutputs": [
+      "Effort ranges per extension and project from the documented workflow, with the team's calibration factor applied separately."
+    ],
+    "provenance": {
+      "reviewedAt": "2026-10-25",
+      "sourceUrl": "https://github.com/netresearch/typo3-upgrade-effort-model-skill#readme",
+      "sourceSnapshotSha256": "432bfd078368fa253eb7d02659b9d3c189fd62696f801e399c6a6438f2d3f385",
+      "basis": "Usage (explicit output statement)"
+    }
+  },
+  "retro": {
+    "expectedOutputs": [
+      "Actionable retrospective proposals grouped by their intended destination; durable changes are applied only after each proposal is approved."
+    ],
+    "provenance": {
+      "reviewedAt": "2026-10-25",
+      "sourceUrl": "https://github.com/netresearch/retro-skill#readme",
+      "sourceSnapshotSha256": "911066d98e58bec377b138daf6c20488625c2e818675c470b415bdd3e1660949",
+      "basis": "What it does, How it stays safe"
+    }
+  }
+}

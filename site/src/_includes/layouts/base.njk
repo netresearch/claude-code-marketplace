@@ -9,7 +9,7 @@
     <meta name="description" content="{{ description or site.tagline }}" />
     <meta name="theme-color" content="#2F99A4" />
     <meta name="color-scheme" content="light dark" />
-    <script>{{ siteThemeBootstrap | safe }}</script>
+    {{ siteThemeBootstrapMarkup | safe }}
     {% if robots %}<meta name="robots" content="{{ robots }}" />{% endif %}
 
     <link rel="canonical" href="{{ site.url }}{{ page.url | url }}" />

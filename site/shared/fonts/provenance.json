@@ -1,5 +1,5 @@
 {
-  "conversion": "TTFont(source, recalcBBoxes=False, recalcTimestamp=False); flavor=None; save(output, reorderTables=False)",
+  "conversion": "TTFont(source, recalcBBoxes=False, recalcTimestamp=False); rename reserved primary display names to Netresearch OG Display; flavor=None; save(output, reorderTables=False)",
   "tools": {
     "fonttools": "4.60.1",
     "brotli": "1.2.0"
@@ -14,16 +14,36 @@
     {
       "source": "../../src/assets/fonts/raleway-latin-700-normal.woff2",
       "sourceSha256": "05844cd75b25917a8463edbffc9a952205d327775c54a6697745ababb14a10d7",
-      "output": "raleway-latin-700-normal.ttf",
-      "outputSha256": "03ae4bf8107a496771941ae93a16b798a7b60188bd6f1ce99a3d0de0ef893ad1",
+      "output": "netresearch-og-display-bold.ttf",
+      "outputSha256": "3e886fc8f51bd1e62bcf2f3861bae57dd40bedaa666f05c14e7184910afa3f2b",
       "license": "raleway-OFL.txt",
       "licenseSha256": "7bda8fcb7cfe5a162bb615e16bf4f94c7ef78de6f82ee44d219bf24a013b7ba2",
       "names": {
+        "1": [
+          "Netresearch OG Display"
+        ],
+        "2": [
+          "Bold"
+        ],
+        "3": [
+          "Netresearch OG Display Bold;4.026"
+        ],
+        "4": [
+          "Netresearch OG Display Bold"
+        ],
+        "6": [
+          "NetresearchOGDisplay-Bold"
+        ]
+      },
+      "sourceNames": {
         "1": [
           "Raleway Thin"
         ],
         "2": [
           "Bold"
+        ],
+        "3": [
+          "4.026;NONE;RalewayThin-Bold"
         ],
         "4": [
           "Raleway Thin Bold"
@@ -48,6 +68,26 @@
         "2": [
           "Regular"
         ],
+        "3": [
+          "3.003;GOOG;OpenSans-Regular"
+        ],
+        "4": [
+          "Open Sans Regular"
+        ],
+        "6": [
+          "OpenSans-Regular"
+        ]
+      },
+      "sourceNames": {
+        "1": [
+          "Open Sans"
+        ],
+        "2": [
+          "Regular"
+        ],
+        "3": [
+          "3.003;GOOG;OpenSans-Regular"
+        ],
         "4": [
           "Open Sans Regular"
         ],
@@ -57,5 +97,15 @@
       },
       "glyphCount": 280
     }
-  ]
+  ],
+  "reservedNamePolicy": {
+    "displayFamily": "Netresearch OG Display",
+    "reason": "The source license reserves Raleway. Equivalence to the committed Latin subset does not establish equivalence to the copyright holder's Original Version. The build derivative uses distinct primary names while preserving original attribution and OFL notices.",
+    "guidance": "https://openfontlicense.org/ofl-faq/",
+    "sections": [
+      "2.2",
+      "2.8",
+      "5.3"
+    ]
+  }
 }

@@ -93,6 +93,24 @@ test("the German search index uses German use cases while English records keep s
   }
 });
 
+test("every package describes an outcome in both locales and keeps parsed English outputs first", () => {
+  const summaries = JSON.parse(readFileSync(new URL("../src/_data/outputs_en.json", import.meta.url)));
+  for (const skill of skills) {
+    for (const items of [skill.expectedOutputs, skill.expectedOutputsDe]) {
+      assert.ok(items.length > 0, skill.slug);
+      assert.ok(items.every((item) => typeof item === "string" && item.trim()), skill.slug);
+      assert.ok(items.every((item) => !item.startsWith("Ein eigener Ergebnisabschnitt")), skill.slug);
+    }
+    if (skill.hasSourceExpectedOutputs) {
+      const cache = JSON.parse(readFileSync(new URL(`../cache/skills-readme/${skill.slug}.json`, import.meta.url)));
+      assert.deepEqual(skill.expectedOutputs, cache.parsed.expectedOutputs, skill.slug);
+    } else {
+      assert.deepEqual(skill.expectedOutputs, summaries[skill.slug].expectedOutputs, skill.slug);
+    }
+    assert.match(skill.outputProvenanceEn.sourceSnapshotSha256, /^[a-f0-9]{64}$/);
+  }
+});
+
 test("explicit context requirements take priority over earlier installation notices", () => {
   const parsed = parseReadme(`# PHP editing tool
 
