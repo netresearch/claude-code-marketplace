@@ -1,0 +1,328 @@
+{
+  "name": "netresearch-claude-code-marketplace",
+  "interface": {
+    "displayName": "Netresearch Agent Skills"
+  },
+  "plugins": [
+    {
+      "name": "enterprise-readiness",
+      "source": {
+        "source": "url",
+        "url": "https://github.com/netresearch/enterprise-readiness-skill.git"
+      },
+      "category": "security"
+    },
+    {
+      "name": "typo3-docs",
+      "source": {
+        "source": "url",
+        "url": "https://github.com/netresearch/typo3-docs-skill.git"
+      },
+      "category": "development"
+    },
+    {
+      "name": "typo3-testing",
+      "source": {
+        "source": "url",
+        "url": "https://github.com/netresearch/typo3-testing-skill.git"
+      },
+      "category": "development"
+    },
+    {
+      "name": "typo3-ddev",
+      "source": {
+        "source": "url",
+        "url": "https://github.com/netresearch/typo3-ddev-skill.git"
+      },
+      "category": "development"
+    },
+    {
+      "name": "typo3-core-contributions",
+      "source": {
+        "source": "url",
+        "url": "https://github.com/netresearch/typo3-core-contributions-skill.git"
+      },
+      "category": "development"
+    },
+    {
+      "name": "typo3-conformance",
+      "source": {
+        "source": "url",
+        "url": "https://github.com/netresearch/typo3-conformance-skill.git"
+      },
+      "category": "development"
+    },
+    {
+      "name": "typo3-site-conformance",
+      "source": {
+        "source": "url",
+        "url": "https://github.com/netresearch/typo3-site-conformance-skill.git"
+      },
+      "category": "development"
+    },
+    {
+      "name": "netresearch-branding",
+      "source": {
+        "source": "url",
+        "url": "https://github.com/netresearch/netresearch-branding-skill.git"
+      },
+      "category": "design"
+    },
+    {
+      "name": "agent-rules",
+      "source": {
+        "source": "url",
+        "url": "https://github.com/netresearch/agent-rules-skill.git"
+      },
+      "category": "development"
+    },
+    {
+      "name": "agent-harness",
+      "source": {
+        "source": "url",
+        "url": "https://github.com/netresearch/agent-harness-skill.git"
+      },
+      "category": "development"
+    },
+    {
+      "name": "cli-tools",
+      "source": {
+        "source": "url",
+        "url": "https://github.com/netresearch/coding_agent_cli_toolset.git"
+      },
+      "category": "development"
+    },
+    {
+      "name": "typo3-extension-upgrade",
+      "source": {
+        "source": "url",
+        "url": "https://github.com/netresearch/typo3-extension-upgrade-skill.git"
+      },
+      "category": "development"
+    },
+    {
+      "name": "go-development",
+      "source": {
+        "source": "url",
+        "url": "https://github.com/netresearch/go-development-skill.git"
+      },
+      "category": "development"
+    },
+    {
+      "name": "php-modernization",
+      "source": {
+        "source": "url",
+        "url": "https://github.com/netresearch/php-modernization-skill.git"
+      },
+      "category": "development"
+    },
+    {
+      "name": "php-structured-edit",
+      "source": {
+        "source": "url",
+        "url": "https://github.com/netresearch/php-ast-edit-skill.git"
+      },
+      "category": "development"
+    },
+    {
+      "name": "security-audit",
+      "source": {
+        "source": "url",
+        "url": "https://github.com/netresearch/security-audit-skill.git"
+      },
+      "category": "security"
+    },
+    {
+      "name": "typo3-ckeditor5",
+      "source": {
+        "source": "url",
+        "url": "https://github.com/netresearch/typo3-ckeditor5-skill.git"
+      },
+      "category": "development"
+    },
+    {
+      "name": "git-workflow",
+      "source": {
+        "source": "url",
+        "url": "https://github.com/netresearch/git-workflow-skill.git"
+      },
+      "category": "development"
+    },
+    {
+      "name": "github-project",
+      "source": {
+        "source": "url",
+        "url": "https://github.com/netresearch/github-project-skill.git"
+      },
+      "category": "development"
+    },
+    {
+      "name": "jujutsu-workflow",
+      "source": {
+        "source": "url",
+        "url": "https://github.com/netresearch/jujutsu-workflow-skill.git"
+      },
+      "category": "development"
+    },
+    {
+      "name": "skill-repo",
+      "source": {
+        "source": "url",
+        "url": "https://github.com/netresearch/skill-repo-skill.git"
+      },
+      "category": "development"
+    },
+    {
+      "name": "jira-integration",
+      "source": {
+        "source": "url",
+        "url": "https://github.com/netresearch/jira-skill.git"
+      },
+      "category": "workflow"
+    },
+    {
+      "name": "context7",
+      "source": {
+        "source": "url",
+        "url": "https://github.com/netresearch/context7-skill.git"
+      },
+      "category": "development"
+    },
+    {
+      "name": "data-tools",
+      "source": {
+        "source": "url",
+        "url": "https://github.com/netresearch/data-tools-skill.git"
+      },
+      "category": "development"
+    },
+    {
+      "name": "concourse-ci",
+      "source": {
+        "source": "url",
+        "url": "https://github.com/netresearch/concourse-ci-skill.git"
+      },
+      "category": "devops"
+    },
+    {
+      "name": "docker-development",
+      "source": {
+        "source": "url",
+        "url": "https://github.com/netresearch/docker-development-skill.git"
+      },
+      "category": "devops"
+    },
+    {
+      "name": "automated-assessment",
+      "source": {
+        "source": "url",
+        "url": "https://github.com/netresearch/automated-assessment-skill.git"
+      },
+      "category": "development"
+    },
+    {
+      "name": "file-search",
+      "source": {
+        "source": "url",
+        "url": "https://github.com/netresearch/file-search-skill.git"
+      },
+      "category": "development"
+    },
+    {
+      "name": "matrix-communication",
+      "source": {
+        "source": "url",
+        "url": "https://github.com/netresearch/matrix-skill.git"
+      },
+      "category": "workflow"
+    },
+    {
+      "name": "typo3-typoscript-ref",
+      "source": {
+        "source": "url",
+        "url": "https://github.com/netresearch/typo3-typoscript-ref-skill.git"
+      },
+      "category": "development"
+    },
+    {
+      "name": "typo3-project-upgrade",
+      "source": {
+        "source": "url",
+        "url": "https://github.com/netresearch/typo3-project-upgrade-skill.git"
+      },
+      "category": "development"
+    },
+    {
+      "name": "orocommerce",
+      "source": {
+        "source": "url",
+        "url": "https://github.com/netresearch/orocommerce-skill.git"
+      },
+      "category": "development"
+    },
+    {
+      "name": "typo3-a11y",
+      "source": {
+        "source": "url",
+        "url": "https://github.com/netresearch/typo3-a11y-skill.git"
+      },
+      "category": "development"
+    },
+    {
+      "name": "typo3-vite",
+      "source": {
+        "source": "url",
+        "url": "https://github.com/netresearch/typo3-vite-skill.git"
+      },
+      "category": "development"
+    },
+    {
+      "name": "github-release",
+      "source": {
+        "source": "url",
+        "url": "https://github.com/netresearch/github-release-skill.git"
+      },
+      "category": "devops"
+    },
+    {
+      "name": "german-technical-writing",
+      "source": {
+        "source": "url",
+        "url": "https://github.com/netresearch/german-technical-writing-skill.git"
+      },
+      "category": "workflow"
+    },
+    {
+      "name": "peer-qa-review",
+      "source": {
+        "source": "url",
+        "url": "https://github.com/netresearch/peer-qa-review-skill.git"
+      },
+      "category": "workflow"
+    },
+    {
+      "name": "markdown-to-pdf",
+      "source": {
+        "source": "url",
+        "url": "https://github.com/netresearch/markdown-to-pdf-skill.git"
+      },
+      "category": "document"
+    },
+    {
+      "name": "typo3-upgrade-effort-model",
+      "source": {
+        "source": "url",
+        "url": "https://github.com/netresearch/typo3-upgrade-effort-model-skill.git"
+      },
+      "category": "development"
+    },
+    {
+      "name": "retro",
+      "source": {
+        "source": "url",
+        "url": "https://github.com/netresearch/retro-skill.git"
+      },
+      "category": "productivity"
+    }
+  ]
+}

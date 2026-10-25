@@ -9,12 +9,16 @@ on:
       - 'scripts/validate.sh'
       - 'scripts/overlap-report.py'
       - '.github/workflows/validate.yml'
+      - .agents/plugins/marketplace.json
+      - scripts/sync-codex-marketplace.sh
   pull_request:
     paths:
       - '.claude-plugin/marketplace.json'
       - 'scripts/validate.sh'
       - 'scripts/overlap-report.py'
       - '.github/workflows/validate.yml'
+      - .agents/plugins/marketplace.json
+      - scripts/sync-codex-marketplace.sh
 
 permissions: {}
 
