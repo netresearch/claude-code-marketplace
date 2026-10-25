@@ -45,6 +45,8 @@ Workspace admins can import `https://github.com/netresearch/claude-code-marketpl
 
 The native catalog is [`.agents/plugins/marketplace.json`](.agents/plugins/marketplace.json). It references the same source repositories using ChatGPT-supported URL sources; the Claude catalog remains available for Claude Code. The GitHub account authorizing import must be able to read every referenced repository. Review the per-plugin import results and configure workspace installation policies after import. See the [official workspace import documentation](https://learn.chatgpt.com/docs/enterprise/plugin-management#supported-formats).
 
+ChatGPT requires each catalog entry name to match the referenced plugin manifest. The generator maps `jira-integration` to the package name `jira` and `orocommerce` to `orocommerce-skills`. The Claude catalog and website keep their established IDs.
+
 ### npx (Skill Instructions)
 
 ```bash
@@ -170,7 +172,7 @@ Regenerate the ChatGPT/Codex catalog, then validate both catalogs:
 ./scripts/validate.sh
 ```
 
-Commit both manifest files. The validator checks that the native catalog matches the canonical catalog, including plugin names, categories, repository URLs and any source revision pins.
+Commit both manifest files. The validator checks that the native catalog matches the canonical catalog after applying the documented package-name aliases, including categories, repository URLs and any source revision pins. Generation fails if aliases produce duplicate native plugin names.
 
 ## Internal Marketplace
 

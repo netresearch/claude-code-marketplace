@@ -173,7 +173,7 @@
       "category": "development"
     },
     {
-      "name": "jira-integration",
+      "name": "jira",
       "source": {
         "source": "url",
         "url": "https://github.com/netresearch/jira-skill.git"
@@ -253,7 +253,7 @@
       "category": "development"
     },
     {
-      "name": "orocommerce",
+      "name": "orocommerce-skills",
       "source": {
         "source": "url",
         "url": "https://github.com/netresearch/orocommerce-skill.git"
