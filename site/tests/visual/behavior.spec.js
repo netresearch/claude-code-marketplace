@@ -7,6 +7,29 @@ const prefix = "/claude-code-marketplace";
 const visibleCards = page => page.locator(".skill-card:not([hidden])");
 
 for (const lang of ["en", "de"]) {
+  test(`global links preserve the selected language on catalog and detail pages (${lang})`, async ({ page }) => {
+    const origin = "https://netresearch.github.io";
+    const destinations = lang === "de"
+      ? ["/de/", "/de/projekte/", "/modularer-ki-stack-page/", `${prefix}/de/`, "/maint/de/"]
+      : ["/", "/projects/", "/modularer-ki-stack-page/en/", `${prefix}/en/`, "/maint/"];
+    const expected = destinations.map(path => origin + path);
+    const contact = `https://www.netresearch.de${lang === "de" ? "/kontakt/" : "/en/contact/"}`;
+    for (const suffix of ["", "skills/typo3-conformance/"]) {
+      await page.goto(`${prefix}/${lang}/${suffix}`);
+      for (const selector of [".nr-shell-desktop", ".nr-shell-menu-panel"]) {
+        const links = page.locator(`${selector} .nr-shell-link`);
+        expect(await links.evaluateAll(elements => elements.map(link => link.href))).toEqual(expected);
+        await expect(links.filter({ hasText: /^Skills$/ })).toHaveAttribute("aria-current", "page");
+      }
+      await expect(page.locator(".nr-shell-contact")).toHaveAttribute("href", contact);
+      await expect(page.locator(".nr-shell-menu-contact")).toHaveAttribute("href", contact);
+      await page.setViewportSize({ width: 320, height: 844 });
+      await page.locator("[data-nr-mobile-menu] > summary").click();
+      await expect(page.locator(".nr-shell-menu-panel .nr-shell-link").filter({ hasText: /^Skills$/ })).toBeVisible();
+      expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(320);
+    }
+  });
+
   for (const scheme of ["light", "dark"]) {
     test(`fresh narrow landing keeps the enabled hero copy action on screen (${lang}, ${scheme})`, async ({ page }) => {
       await page.setViewportSize({ width: 320, height: 844 });
@@ -85,6 +108,7 @@ for (const lang of ["en", "de"]) {
     await page.locator("[data-nr-mobile-menu] > summary").click();
     await expect(page.locator("[data-nr-mobile-menu]")).toHaveAttribute("open", "");
     await expect(page.locator("[data-nr-mobile-menu] nav")).toBeVisible();
+    await expect(page.locator(".nr-shell-menu-panel .nr-shell-link").filter({ hasText: /^Skills$/ })).toHaveAttribute("href", `https://netresearch.github.io${prefix}/${lang}/`);
     const width = await page.evaluate(() => ({ viewport: innerWidth, document: document.documentElement.scrollWidth }));
     expect(width.document).toBeLessThanOrEqual(width.viewport);
     await context.close();

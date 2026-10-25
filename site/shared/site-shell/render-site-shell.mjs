@@ -3,8 +3,8 @@ import copy from './site-shell.copy.json' with { type: 'json' };
 
 const escapeHtml = value => String(value).replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#x27;' })[char]);
 const destinations = {
-  de: { home: 'https://netresearch.github.io/de/', projects: 'https://netresearch.github.io/de/projekte/', stack: 'https://netresearch.github.io/modularer-ki-stack-page/', impact: 'https://netresearch.github.io/maint/de/' },
-  en: { home: 'https://netresearch.github.io/', projects: 'https://netresearch.github.io/projects/', stack: 'https://netresearch.github.io/modularer-ki-stack-page/en/', impact: 'https://netresearch.github.io/maint/' },
+  de: { home: 'https://netresearch.github.io/de/', projects: 'https://netresearch.github.io/de/projekte/', stack: 'https://netresearch.github.io/modularer-ki-stack-page/', skills: 'https://netresearch.github.io/claude-code-marketplace/de/', impact: 'https://netresearch.github.io/maint/de/' },
+  en: { home: 'https://netresearch.github.io/', projects: 'https://netresearch.github.io/projects/', stack: 'https://netresearch.github.io/modularer-ki-stack-page/en/', skills: 'https://netresearch.github.io/claude-code-marketplace/en/', impact: 'https://netresearch.github.io/maint/' },
 };
 
 function safeUrl(value) {
