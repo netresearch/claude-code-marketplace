@@ -1,9 +1,9 @@
 {# SPDX-License-Identifier: MIT -#}
 {# SPDX-FileCopyrightText: Netresearch DTT GmbH -#}
-{% macro installBlock(id, command, copyLabel, copiedLabel, failedLabel, promptLabel) %}
+{% macro installBlock(id, command, copyLabel, copiedLabel, failedLabel, promptLabel, buttonClass="") %}
 <div class="install-block">
   <pre class="install-block__code" tabindex="0" id="{{ id }}"><code>{{ command }}</code></pre>
-  <button type="button" class="copy-btn copy-btn--lg" hidden data-enhance-only data-copy-failed-label="{{ failedLabel }}" data-copy-prompt-label="{{ promptLabel }}" data-copy-target="{{ id }}" data-copied-label="{{ copiedLabel }}" aria-label="{{ copyLabel }}">
+  <button type="button" class="copy-btn copy-btn--lg{% if buttonClass %} {{ buttonClass }}{% endif %}" hidden data-enhance-only data-copy-failed-label="{{ failedLabel }}" data-copy-prompt-label="{{ promptLabel }}" data-copy-target="{{ id }}" data-copied-label="{{ copiedLabel }}" aria-label="{{ copyLabel }}">
     <span class="copy-btn__label">{{ copyLabel }}</span>
   </button>
 </div>

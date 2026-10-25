@@ -131,8 +131,8 @@ for (const lang of ["en", "de"]) {
     await expect(skip).toHaveCSS("transition-duration", "0s");
     const rect = await skip.boundingBox();
     expect(rect.y).toBeGreaterThanOrEqual(0);
-    await page.locator(".hero .copy-btn").hover();
-    await expect(page.locator(".hero .copy-btn")).toHaveCSS("transition-duration", "0s");
+    await page.locator(".nr-hero .copy-btn").hover();
+    await expect(page.locator(".nr-hero .copy-btn")).toHaveCSS("transition-duration", "0s");
   });
 }
 
