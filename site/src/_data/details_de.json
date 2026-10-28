@@ -916,5 +916,31 @@
         "contextRequirements": "Requirements, Dependencies, How it stays safe"
       }
     }
+  },
+  "formal-model-checking": {
+    "useCases": [
+      "Unterbrochene Schreibvorgänge auf eine fehlende Zuordnung zwischen Mutation und Audit prüfen.",
+      "Leases, Wiederholungen und den Abschluss konkurrierender Worker anhand eines endlichen Modells untersuchen.",
+      "Prüfen, ob ein grüner Modelllauf nur durch unerreichbaren Erfolg oder ungeeignete Gegenproben zustande kommt."
+    ],
+    "expectedOutputs": [
+      "Ein endliches Modell mit konkreter Eigenschaft, Konfiguration, Grenzen und Annahmen; dazu ein vollständiges Suchergebnis oder ein nachvollziehbares Gegenbeispiel.",
+      "Bei beauftragter Implementierungsprüfung: eine Zuordnung zwischen Modell und Code sowie getrennte Ergebnisse von Laufzeittests. Offene Pfade und fehlende Prüfungen bleiben benannt."
+    ],
+    "contextRequirements": [
+      "Eine konkrete Behauptung oder ein Protokoll; für den Bezug zum Code zusätzlich Quellcode und die relevante Speicher- und Transaktionssemantik.",
+      "Ein passender verfügbarer Modellprüfer oder Interpreter. Die Einbindung der Skill-Anweisungen stellt diese Werkzeuge nicht bereit.",
+      "Die Fixturetests des Quell-Repositories benötigen Python 3.11 oder neuer und die Standardbibliothek."
+    ],
+    "provenance": {
+      "reviewedAt": "2026-10-28",
+      "sourceUrl": "https://github.com/netresearch/formal-model-checking-skill/blob/8972bd5e2afafc3f1517daa081120a9ba8643ecb/README.md",
+      "sourceSnapshotSha256": "624a9677b374a1e0c46e0e4fc836ac4c6501d0a22ff97362ad6af7075cc31fb9",
+      "basis": {
+        "useCases": "Use when, Use cases",
+        "expectedOutputs": "Expected outputs, Context requirements",
+        "contextRequirements": "Context requirements, Installation"
+      }
+    }
   }
 }

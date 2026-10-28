@@ -71,6 +71,7 @@ export default {
       slugs: [
         "php-modernization",
         "php-structured-edit",
+        "formal-model-checking",
         "security-audit",
         "enterprise-readiness",
       ],

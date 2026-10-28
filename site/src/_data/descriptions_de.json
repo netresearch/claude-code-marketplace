@@ -43,5 +43,6 @@
   "peer-qa-review": "Strukturiert die interne IT-Qualitätsprüfung vor der Kundenabnahme. Behandelt Nachweise, erneute Verifikation, Dokumentation und ein nachvollziehbares Prüfurteil.",
   "markdown-to-pdf": "Wandelt Markdown-Dateien mit WeasyPrint in PDFs um. Eigene CSS-Dateien können die neutrale Standardgestaltung ersetzen.",
   "typo3-upgrade-effort-model": "Schätzt Aufwand und Risiken von TYPO3-LTS-Upgrades. Das Modell braucht die Projektdaten und Erfahrungswerte des jeweiligen Teams.",
-  "retro": "Untersucht Reibungspunkte in Agent-Sitzungen und schlägt Verbesserungen vor. Änderungen an Memory, Regeln oder Skills brauchen eine ausdrückliche Freigabe."
+  "retro": "Untersucht Reibungspunkte in Agent-Sitzungen und schlägt Verbesserungen vor. Änderungen an Memory, Regeln oder Skills brauchen eine ausdrückliche Freigabe.",
+  "formal-model-checking": "Prüft nebenläufige Abläufe, Wiederholungen und Prozessabbrüche mit endlichen Zustandsmodellen. Hält Grenzen und Gegenbeispiele fest und leitet bei beauftragter Implementierungsprüfung passende Tests ab."
 }

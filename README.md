@@ -5,10 +5,10 @@
 
 > **You ship code. Your agent should know your stack.**
 
-40 curated catalog entries for TYPO3, PHP, Go, Docker, Jira, security, and documentation. Each entry points to a source package; some packages contain several Agent Skills. Instructions follow the Agent Skills format, while tools and client-specific components depend on the package and installer.
+41 curated catalog entries for TYPO3, PHP, Go, Docker, Jira, model checking, security, and documentation. Each entry points to a source package; some packages contain several Agent Skills. Instructions follow the Agent Skills format, while tools and client-specific components depend on the package and installer.
 
 [![Marketplace site](https://img.shields.io/badge/marketplace-netresearch.github.io-2F99A4)](https://netresearch.github.io/claude-code-marketplace/)
-[![Catalog entries](https://img.shields.io/badge/catalog_entries-40-2F99A4)](https://netresearch.github.io/claude-code-marketplace/en/#skills)
+[![Catalog entries](https://img.shields.io/badge/catalog_entries-41-2F99A4)](https://netresearch.github.io/claude-code-marketplace/en/#skills)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 [![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/netresearch/claude-code-marketplace/badge)](https://scorecard.dev/viewer/?uri=github.com/netresearch/claude-code-marketplace)
 
@@ -108,6 +108,7 @@ Host-side tooling (not Agent Skills themselves, but part of the same family):
 |-------|-----------|-------------|
 | php-modernization | [php-modernization-skill](https://github.com/netresearch/php-modernization-skill) | PHP 8.x modernization: type safety, enums, DTOs, PHPStan, Rector |
 | php-structured-edit | [php-ast-edit-skill](https://github.com/netresearch/php-ast-edit-skill) | Select PHP symbols, apply typed edits in guarded batches, and review the diff; project tests remain necessary |
+| formal-model-checking | [formal-model-checking-skill](https://github.com/netresearch/formal-model-checking-skill) | Check bounded models of concurrency, retries and crashes; retain counterexamples and connect them to implementation tests |
 | security-audit | [security-audit-skill](https://github.com/netresearch/security-audit-skill) | OWASP security audit patterns for PHP applications |
 | enterprise-readiness | [enterprise-readiness-skill](https://github.com/netresearch/enterprise-readiness-skill) | Supply chain security, SLSA, OpenSSF, SBOMs, quality gates |
 
