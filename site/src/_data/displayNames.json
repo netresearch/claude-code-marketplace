@@ -39,5 +39,6 @@
   "peer-qa-review": "Peer QA Review",
   "markdown-to-pdf": "Markdown to PDF",
   "typo3-site-conformance": "TYPO3 Site Conformance",
-  "jujutsu-workflow": "Jujutsu Workflow"
+  "jujutsu-workflow": "Jujutsu Workflow",
+  "formal-model-checking": "Formal Model Checking"
 }

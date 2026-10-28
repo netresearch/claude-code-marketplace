@@ -125,6 +125,14 @@
       "category": "development"
     },
     {
+      "name": "formal-model-checking",
+      "source": {
+        "source": "url",
+        "url": "https://github.com/netresearch/formal-model-checking-skill.git"
+      },
+      "category": "development"
+    },
+    {
       "name": "security-audit",
       "source": {
         "source": "url",

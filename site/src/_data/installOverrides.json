@@ -236,5 +236,28 @@
         }
       }
     }
+  },
+  "formal-model-checking": {
+    "methods": {
+      "composer-require": {
+        "command": null,
+        "hint": {
+          "en": {
+            "text": "No Composer package is currently published under this repository name. Use a supported source route; see",
+            "linkText": "source installation guide",
+            "linkUrl": "https://github.com/netresearch/formal-model-checking-skill#installation",
+            "suffix": "Registering the skill instructions does not install a model checker or its runtime.",
+            "prerequisite": null
+          },
+          "de": {
+            "text": "Unter diesem Repository-Namen ist derzeit kein Composer-Paket veröffentlicht. Die Anleitung nennt die unterstützten Wege aus dem Quell-Repository:",
+            "linkText": "Installationsanleitung",
+            "linkUrl": "https://github.com/netresearch/formal-model-checking-skill#installation",
+            "suffix": "Die Einbindung der Skill-Anweisungen installiert weder einen Modellprüfer noch dessen Laufzeitumgebung.",
+            "prerequisite": null
+          }
+        }
+      }
+    }
   }
 }

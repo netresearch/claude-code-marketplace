@@ -145,6 +145,15 @@
       "category": "development"
     },
     {
+      "name": "formal-model-checking",
+      "description": "Concurrency, retries and crashes can break invariants that ordinary tests miss. Check small finite-state models, retain counterexamples and bounds, and connect useful traces to implementation tests without claiming a whole-program proof.",
+      "source": {
+        "source": "github",
+        "repo": "netresearch/formal-model-checking-skill"
+      },
+      "category": "development"
+    },
+    {
       "name": "security-audit",
       "description": "Security audit patterns for PHP applications following OWASP guidelines. Covers XXE, SQL injection, XSS, CSRF detection, CVSS v3.1 scoring, and secure coding practices. By Netresearch.",
       "source": {

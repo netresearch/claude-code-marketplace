@@ -438,5 +438,17 @@
       "sourceSnapshotSha256": "2bf295a08e85b23bf1a8ecd4f45641589bd644d5a69c54e47941c1371c0fb328",
       "basis": "What it does, How it stays safe"
     }
+  },
+  "formal-model-checking": {
+    "expectedOutputs": [
+      "A bounded executable model with its property, configuration and assumptions, plus a completed search or an interpretable counterexample.",
+      "Negative controls and reachability evidence for positive claims; a model-to-code mapping and separately reported runtime evidence when implementation verification is requested."
+    ],
+    "provenance": {
+      "reviewedAt": "2026-10-28",
+      "sourceUrl": "https://github.com/netresearch/formal-model-checking-skill/blob/0b689b25b6f77c7eaa5cb1084eba9b1311e8cd65/README.md",
+      "sourceSnapshotSha256": "624a9677b374a1e0c46e0e4fc836ac4c6501d0a22ff97362ad6af7075cc31fb9",
+      "basis": "Expected outputs, Use when, Context requirements (initial contribution; merge pending)"
+    }
   }
 }
