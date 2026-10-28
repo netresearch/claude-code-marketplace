@@ -934,10 +934,10 @@
     ],
     "provenance": {
       "reviewedAt": "2026-10-28",
-      "sourceUrl": "https://github.com/netresearch/formal-model-checking-skill/blob/0b689b25b6f77c7eaa5cb1084eba9b1311e8cd65/README.md",
+      "sourceUrl": "https://github.com/netresearch/formal-model-checking-skill/blob/8972bd5e2afafc3f1517daa081120a9ba8643ecb/README.md",
       "sourceSnapshotSha256": "624a9677b374a1e0c46e0e4fc836ac4c6501d0a22ff97362ad6af7075cc31fb9",
       "basis": {
-        "useCases": "Use when, Use cases (initial contribution; merge pending)",
+        "useCases": "Use when, Use cases",
         "expectedOutputs": "Expected outputs, Context requirements",
         "contextRequirements": "Context requirements, Installation"
       }

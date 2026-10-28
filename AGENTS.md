@@ -134,7 +134,7 @@ Record intentional deviations from a source skill repo. Empty by default.
 | Slug | Field | Marketplace value | Reason | Decided |
 |---|---|---|---|---|
 | php-structured-edit; cli-tools; jira-integration; orocommerce; matrix-communication; automated-assessment | Installation commands and component-coverage hints | `site/src/_data/installOverrides.json` | Source manifests and registry metadata determine supported routes. PHP 2.0.0 is published; skill registration still does not install its engine. CLI Tools has no Composer package at its source-repository name. Bundle and client-component differences follow the linked source guides. | 2026-10-25 |
-| formal-model-checking | Composer package installation | `site/src/_data/installOverrides.json` | The Packagist package endpoint returned HTTP 404 on review. Source routes remain available after the initial skill contribution lands; model-checker runtimes are separate dependencies. | 2026-10-28 |
+| formal-model-checking | Composer package installation | `site/src/_data/installOverrides.json` | The Packagist package endpoint returned HTTP 404 on review. Source installation routes are available; model-checker runtimes are separate dependencies. | 2026-10-28 |
 
 ---
 
