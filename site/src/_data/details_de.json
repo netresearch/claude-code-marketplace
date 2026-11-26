@@ -166,28 +166,6 @@
       }
     }
   },
-  "netresearch-branding": {
-    "useCases": [
-      "Netresearch-Farben, Typografie und Gestaltungsvorgaben in Beiträgen oder Oberflächen anwenden.",
-      "Vorlagen für Webseiten, Komponenten und soziale Medien passend zur Marke auswählen."
-    ],
-    "expectedOutputs": [
-      "Seiten- oder Komponentenentwürfe, HTML/CSS-Beispiele und Empfehlungen aus der Markenprüfung für das gewählte Netresearch-Profil."
-    ],
-    "contextRequirements": [
-      "Die Voraussetzungen sind hier nicht gesondert zusammengefasst. [Werkzeuge und Projektzugriffe im Quell-README prüfen](https://github.com/netresearch/netresearch-branding-skill#readme)."
-    ],
-    "provenance": {
-      "reviewedAt": "2026-10-25",
-      "sourceUrl": "https://github.com/netresearch/netresearch-branding-skill#readme",
-      "sourceSnapshotSha256": "b7a79614e37fa0fcae2d5384aaae20e3ee94650aa3bd407332c011a281c5af3e",
-      "basis": {
-        "useCases": "Why this skill is public, Overview, Features",
-        "expectedOutputs": "Features, Usage / Example Workflows, Quality Checklist",
-        "contextRequirements": "Source guidance: no complete prerequisite summary adopted"
-      }
-    }
-  },
   "agent-rules": {
     "useCases": [
       "AGENTS.md und weitere Agent-Regeldateien aus belegbaren Projektinformationen erstellen.",

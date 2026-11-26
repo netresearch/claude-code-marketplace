@@ -61,14 +61,6 @@
       "category": "development"
     },
     {
-      "name": "netresearch-branding",
-      "source": {
-        "source": "url",
-        "url": "https://github.com/netresearch/netresearch-branding-skill.git"
-      },
-      "category": "design"
-    },
-    {
       "name": "agent-rules",
       "source": {
         "source": "url",

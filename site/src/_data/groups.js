@@ -21,7 +21,6 @@ export default {
     "quality-security",
     "devops",
     "productivity",
-    "brand",
   ],
   groups: {
     "skill-skills": {
@@ -103,11 +102,6 @@ export default {
         "peer-qa-review",
         "markdown-to-pdf",
       ],
-    },
-    brand: {
-      en: { title: "Brand & visual identity", lead: "Visual conventions for Netresearch artifacts." },
-      de: { title: "Netresearch-Gestaltung", lead: "Farben, Typografie und Vorlagen für Beiträge und Materialien von Netresearch." },
-      slugs: ["netresearch-branding"],
     },
   },
 };

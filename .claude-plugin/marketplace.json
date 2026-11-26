@@ -73,15 +73,6 @@
       "category": "development"
     },
     {
-      "name": "netresearch-branding",
-      "description": "Implement Netresearch brand guidelines in web projects with comprehensive color system, typography (Raleway, Open Sans, Calibri), responsive component library, and production-ready templates. WCAG AA accessibility compliance, social media specs, and complete web design patterns.",
-      "source": {
-        "source": "github",
-        "repo": "netresearch/netresearch-branding-skill"
-      },
-      "category": "design"
-    },
-    {
       "name": "agent-rules",
       "description": "Generate and maintain AGENTS.md, copilot-instructions.md, and other agent rule files. Extracts CI rules, architecture boundaries, ADRs, and GitHub rulesets. Supports Go, PHP, TYPO3, Symfony, Python, TypeScript, and skill repos.",
       "source": {
