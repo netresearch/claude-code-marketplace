@@ -138,12 +138,6 @@ Host-side tooling (not Agent Skills themselves, but part of the same family):
 | peer-qa-review | [peer-qa-review-skill](https://github.com/netresearch/peer-qa-review-skill) | Round-1 IT QA peer-review runbook: lifecycle, severity vocabulary, structured Jira comment template, edge cases, anti-patterns |
 | markdown-to-pdf | [markdown-to-pdf-skill](https://github.com/netresearch/markdown-to-pdf-skill) | Convert Markdown files to styled PDFs via WeasyPrint; CSS-overridable for branded output |
 
-### Brand & visual identity
-
-| Skill | Repository | Description |
-|-------|-----------|-------------|
-| netresearch-branding | [netresearch-branding-skill](https://github.com/netresearch/netresearch-branding-skill) | Netresearch brand guidelines: colors, typography, components |
-
 ## Architecture
 
 This marketplace uses **source references**: `marketplace.json` points to source package repositories. Claude Code fetches a selected plugin from its source repository when installed. A plugin can contain several skills and additional components.
